@@ -107,6 +107,43 @@ input[type=text]{font:inherit;color:var(--ink);background:var(--card);border:2px
 @keyframes pop{0%{transform:scale(.3) rotate(-20deg);opacity:0}70%{transform:scale(1.25)}100%{transform:scale(1);opacity:1}}
 .pop{animation:pop .5s both}
 @media (prefers-reduced-motion:reduce){.pop{animation:none}.tile,.track i,.track svg{transition:none}}
+/* Seekarte */
+.maphead{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:22px 0 10px}
+.map{display:block;width:100%;height:auto}
+.map .sea{fill:var(--sea-soft)}
+.map .route{fill:none;stroke:var(--sea);stroke-width:2;stroke-dasharray:4 5;opacity:.55}
+.map .sand{fill:#f1d58c}
+.map .green{fill:#4caf6a}
+.map .pole{stroke:var(--ink);stroke-width:1.5}
+.map .mapboat{color:var(--ink)}
+.map text{fill:var(--ink);font:700 10px var(--f-body);text-anchor:middle}
+.isl{cursor:pointer;outline:none}
+.isl:hover .sand,.isl:focus-visible .sand{stroke:var(--coral);stroke-width:3}
+.treasure{display:flex;align-items:center;justify-content:center;gap:10px;font-weight:800;color:var(--sea);margin:4px 0 10px}
+/* Satzbaukasten */
+.line{min-height:56px;border:2px dashed var(--line);border-radius:14px;padding:6px;display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.line.right{border-style:solid;border-color:var(--good);background:var(--good-soft)}
+.line.wrong{border-style:solid;border-color:var(--bad);background:var(--bad-soft)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;min-height:44px}
+.chip{background:var(--card);border:2px solid var(--sea);color:var(--ink);border-radius:12px;padding:8px 14px;font-weight:800;font-size:1.05rem}
+.chip:disabled{cursor:default}
+/* Memory und Blitzrunde */
+.memo{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media (min-width:520px){.memo{grid-template-columns:repeat(4,1fr)}}
+.card{min-height:86px;background:var(--sea);color:var(--card);border:2px solid var(--sea);border-radius:14px;padding:6px;font-weight:800;font-size:1rem;overflow-wrap:anywhere;transition:background .2s}
+.card.up{background:var(--card);color:var(--ink)}
+.card.found{background:var(--good-soft);color:var(--good);border-color:var(--good);cursor:default}
+.timer i{background:var(--coral)}
+.bignum{font-family:var(--f-display);font-size:4rem;font-weight:700;color:var(--sea);line-height:1;margin:8px 0}
+.fb .row{gap:10px}
+.prompt .btn{font-size:1.1rem}
+@media (prefers-reduced-motion:reduce){.card{transition:none}}
+/* Druck: Satzbaukasten-Schreiblinie und Memory-Karten zum Ausschneiden */
+.sheet small{color:#555}
+.sheet .wline{border-bottom:1px solid #999;height:2em}
+.sheet .cards{display:grid;grid-template-columns:repeat(4,1fr)}
+.sheet .cards div{position:relative;border:1px dashed #888;min-height:3cm;display:flex;align-items:center;justify-content:center;text-align:center;padding:14px 6px 6px;font-size:1.05rem;break-inside:avoid;overflow-wrap:anywhere}
+.sheet .cards small{position:absolute;top:4px;left:6px;font-size:.7rem}
 /* Arbeitsblatt: auf dem Bildschirm als Vorschau, im Druck nur Blatt oder nur Lösungen (data-print am html-Element) */
 .form{display:grid;gap:14px;margin-top:14px}
 .form label{font-weight:800;display:grid;gap:6px}
@@ -229,28 +266,28 @@ const W = [
  ['saetze','on the way to ...','auf dem Weg zu ...']
 ];
 const TOPICS = [
- {id:'zahlen',name:'Zahlen-Insel',sub:'one bis twenty'},
- {id:'zeit',name:'Uhren-Insel',sub:'Wochentage, Uhrzeit, Termine'},
- {id:'farben',name:'Farben-Insel',sub:'Farben und was man anzieht'},
- {id:'beschreiben',name:'Wie-ist-das-Insel',sub:'groß, kurz, albern, freundlich ...'},
- {id:'tiere',name:'Tier-Insel',sub:'vom Meerschweinchen bis zum Wal'},
- {id:'klasse',name:'Klassenzimmer-Insel',sub:'Tafel, Lineal, Radiergummi ...'},
- {id:'schule',name:'Schul-Insel',sub:'Lehrer, Unterricht, Sprache ...'},
- {id:'leute',name:'Familien-Insel',sub:'Mama, Papa, Geschwister, Zuhause'},
- {id:'stadt',name:'Hafen-Insel',sub:'Meer, Burg, Riesenrad ...'},
- {id:'verben',name:'Tu-Wörter-Insel',sub:'sehen, sagen, geben, vergessen ...'},
- {id:'kleine',name:'Mini-Wörter-Insel',sub:'mit, ohne, aber, wer, wo ...'},
- {id:'hallo',name:'Hallo-Insel',sub:'Sich vorstellen und begrüßen'},
- {id:'saetze',name:'Plauder-Insel',sub:'Sätze für jeden Tag'}
+ {id:'zahlen',name:'Zahlen-Insel',map:'Zahlen',sub:'one bis twenty'},
+ {id:'zeit',name:'Uhren-Insel',map:'Uhren',sub:'Wochentage, Uhrzeit, Termine'},
+ {id:'farben',name:'Farben-Insel',map:'Farben',sub:'Farben und was man anzieht'},
+ {id:'beschreiben',name:'Wie-ist-das-Insel',map:'Wie ist das?',sub:'groß, kurz, albern, freundlich ...'},
+ {id:'tiere',name:'Tier-Insel',map:'Tiere',sub:'vom Meerschweinchen bis zum Wal'},
+ {id:'klasse',name:'Klassenzimmer-Insel',map:'Klasse',sub:'Tafel, Lineal, Radiergummi ...'},
+ {id:'schule',name:'Schul-Insel',map:'Schule',sub:'Lehrer, Unterricht, Sprache ...'},
+ {id:'leute',name:'Familien-Insel',map:'Familie',sub:'Mama, Papa, Geschwister, Zuhause'},
+ {id:'stadt',name:'Hafen-Insel',map:'Hafen',sub:'Meer, Burg, Riesenrad ...'},
+ {id:'verben',name:'Tu-Wörter-Insel',map:'Tu-Wörter',sub:'sehen, sagen, geben, vergessen ...'},
+ {id:'kleine',name:'Mini-Wörter-Insel',map:'Mini',sub:'mit, ohne, aber, wer, wo ...'},
+ {id:'hallo',name:'Hallo-Insel',map:'Hallo',sub:'Sich vorstellen und begrüßen'},
+ {id:'saetze',name:'Plauder-Insel',map:'Plaudern',sub:'Sätze für jeden Tag'}
 ];
-const NOTYPE=['hallo','saetze']; // Satz-Inseln nur mit Antwortauswahl, nicht zum Tippen
+const NOTYPE=['hallo','saetze']; // Satz-Inseln: nicht zum Tippen, dafür Satzbaukasten
 const RANKS=[[0,'Leichtmatrose'],[100,'Matrose'],[300,'Steuermann/-frau'],[600,'Kapitän/in'],[1000,'Admiral/in']];
-const ROUND=10;
+const ROUND=10, BLITZ=60, PAIRS=6;
 const CHEER=['Richtig!','Super!','Genau!','Stark!','Yes!','Perfekt!','Great!'];
 const OOPS=['Fast!','Nicht schlimm.','Merk dir das gut.','Beim nächsten Mal klappt es.'];
 
 /* ---------- Speicher (nur Komfort, darf ausfallen) ---------- */
-let save={name:'',xp:0,best:{},weak:{}};
+let save={name:'',xp:0,best:{},weak:{},sound:true,blitz:0,memo:0};
 try{const s=localStorage.getItem('en5-v1');if(s)save=Object.assign(save,JSON.parse(s));
   else for(const k of ['hwg-v1','u1-v1']){ // Umzug von den früheren Einzelseiten: Name, Punkte, Übungswörter
     const o=JSON.parse(localStorage.getItem(k)||'null');if(!o)continue;
@@ -263,7 +300,7 @@ const idx=e=>W.indexOf(e);
 function packRound(){
   if(!G||!G.queue.length)return null;
   return {topic:G.topic,total:G.total,done:G.done,first:G.first,xp:G.xp,streak:G.streak,best:G.best,missed:G.missed.map(idx),
-    queue:G.queue.map(q=>({i:idx(q.e),type:q.type,dir:q.dir,redo:q.redo,options:q.options,correct:q.correct}))};
+    queue:G.queue.map(q=>{const {e,...r}=q;r.i=idx(e);return r})};
 }
 function unpackRound(r){
   try{
@@ -281,25 +318,75 @@ const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',
 const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
 const enShow=e=>e[1].split('|')[0];
 const deShow=e=>e[2].replace(/ \/ /g,' / ');
+const allEn=e=>e[1].split('|').join(' / ');
 const norm=t=>t.replace(/[‘’´`]/g,"'").replace(/[.!?]+$/,'').replace(/\s+/g,' ').trim();
 const key=e=>e[1];
+const pick=a=>a[Math.floor(Math.random()*a.length)];
 function rank(){let r=RANKS[0];for(const x of RANKS)if(save.xp>=x[0])r=x;return r[1]}
 function starsHtml(n){return '<span class="stars">'+[1,2,3].map(i=>i<=n?'<b>★</b>':'★').join('')+'</span>'}
 const boat='<svg viewBox="0 0 34 30" aria-hidden="true"><path d="M17 2v18" stroke="currentColor" stroke-width="2"/><path d="M18 3l11 15H18z" fill="#ffc93c"/><path d="M3 21h28l-5 7H8z" fill="#ff5a4e"/></svg>';
 const hero='<svg viewBox="0 0 130 90" aria-hidden="true"><path d="M0 62q16-14 32 0t32 0 32 0 34 0v28H0z" fill="#ffffff" opacity=".28"/><path d="M0 74q16-14 32 0t32 0 32 0 34 0v16H0z" fill="#ffffff" opacity=".4"/><path d="M62 10v34" stroke="#fff" stroke-width="3"/><path d="M65 12l30 30H65z" fill="#ffc93c"/><path d="M40 48h70l-12 16H52z" fill="#ff5a4e"/></svg>';
+const chest=(x,y)=>`<g transform="translate(${x} ${y})" aria-hidden="true"><rect y="5" width="18" height="11" rx="2" fill="#a0522d"/><path d="M0 7Q9-2 18 7z" fill="#7a3b17"/><rect x="7.5" y="7" width="3" height="5" fill="#ffc93c"/></g>`;
+const flag=(x,y)=>`<g transform="translate(${x} ${y})" aria-hidden="true"><path d="M0 0v17" class="pole"/><path d="M1 1h11l-3 4 3 4H1z" fill="#ff5a4e"/></g>`;
+
+// Wörter für Satzbaukasten: Satzzeichen und "..." als eigene Kärtchen
+const toks=s=>s.match(/\.\.\.|[\wÀ-ÿ'’\/]+|[?!.,]/g)||[];
+const canBuild=e=>NOTYPE.includes(e[0])&&toks(enShow(e)).filter(t=>/\w/.test(t)).length>=3;
+function scramble(t){let s=t;for(let i=0;i<10&&s.join(' ')===t.join(' ');i++)s=shuffle(t);return s}
+function distractors(e,label){ // bis zu 3 andere Antworten, zuerst von derselben Insel
+  const mine=label(e),seen=new Set([mine]),d=[];
+  for(const x of shuffle(W.filter(x=>x!==e&&x[0]===e[0])).concat(shuffle(W.filter(x=>x[0]!==e[0])))){const l=label(x);if(!seen.has(l)){seen.add(l);d.push(l)}if(d.length>=3)break}
+  return d;
+}
+const tfShown=e=>Math.random()<.5?deShow(e):distractors(e,deShow)[0]; // halb stimmt es, halb nicht
+
+/* ---------- Stimme ---------- */
+// Nur Stimmen, die auf dem Gerät selbst laufen (localService). Online-Stimmen (z. B. "Google ..." in Chrome) würden den Text an fremde Server schicken.
+let VOICE=null;
+// Apple liefert auch Spaß-Stimmen mit (singend, flüsternd, Roboter), die fürs Lernen nicht taugen.
+const ODD=/^(Albert|Bad News|Bahh|Bells|Boing|Bubbles|Cellos|Deranged|Good News|Hysterical|Jester|Junior|Organ|Pipe Organ|Ralph|Fred|Kathy|Superstar|Trinoids|Whisper|Wobble|Zarvox)\b/i;
+function pickVoice(){
+  try{
+    const score=v=>(/^en[-_]GB/i.test(v.lang)?4:/^en[-_](US|IE|AU)/i.test(v.lang)?2:0)+(/Enhanced|Premium|verbessert/i.test(v.name)?3:0)+(v.default?1:0);
+    const vs=speechSynthesis.getVoices().filter(v=>v.localService&&/^en[-_]/i.test(v.lang)&&!ODD.test(v.name));
+    VOICE=vs.sort((a,b)=>score(b)-score(a))[0]||null;
+  }catch(e){VOICE=null}
+}
+if('speechSynthesis' in window){pickVoice();speechSynthesis.onvoiceschanged=()=>{const had=!!VOICE;pickVoice();if(!had&&VOICE&&$('#nm')&&document.activeElement.id!=='nm')home()}}
+const canSpeak=()=>!!VOICE&&save.sound;
+function say(t,slow){
+  if(!canSpeak())return;
+  try{if(speechSynthesis.speaking)speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t.replace(/\.\.\./g,' ').replace(/\//g,', '));u.voice=VOICE;u.lang=VOICE.lang;u.rate=slow?.55:.9;speechSynthesis.speak(u)}catch(e){}
+}
 
 /* ---------- Ansichten ---------- */
-let G=null; // laufende Runde
+let G=null, B=null, M=null; // laufende Runde, Blitzrunde, Memory
 // ponytail: Export mit Lösungen nur über den Eltern-Link (#eltern), schützt vor Neugier, nicht vor Quelltext-Lesern. Bewusst nicht gespeichert, damit es auf dem Kindergerät nicht hängen bleibt.
 const PARENT=location.hash==='#eltern';
 function themeBtn(){return '<button class="theme" id="tg" aria-label="Hell oder dunkel wechseln">hell / dunkel</button>'}
 function bindTheme(){const b=$('#tg');if(!b)return;b.onclick=()=>{const r=document.documentElement;const dark=r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;r.dataset.theme=dark?'light':'dark'}}
+const topBar=()=>`<div class="top"><span class="brand">Vokabel-Inseln</span>${themeBtn()}</div>`;
+function mistList(list){return list.length?`<div class="mist"><h3>Diese Wörter üben wir weiter</h3><ul>${list.map(e=>`<li><b>${esc(enShow(e))}</b> = ${esc(deShow(e))}</li>`).join('')}</ul></div>`:'<div class="mist"><h3>Keine Fehler. Wow!</h3></div>'}
+
+function seaMap(){
+  // Inseln im Zickzack entlang einer Route. Drei Sterne = Schatztruhe, ein oder zwei = Fähnchen. Das Boot wartet an der ersten Insel ohne Schatz.
+  const P=[[40,40],[105,40],[170,40],[235,40],[300,40],[300,115],[235,115],[170,115],[105,115],[40,115],[70,190],[170,190],[270,190]];
+  const next=TOPICS.findIndex(t=>(save.best[t.id]||0)<3);
+  const isl=TOPICS.map((t,i)=>{const [x,y]=P[i],n=save.best[t.id]||0;
+    return `<g class="isl" data-t="${t.id}" tabindex="0" role="button" aria-label="${t.name}, ${n} von 3 Sternen">
+     <ellipse class="sand" cx="${x}" cy="${y}" rx="25" ry="11"/><ellipse class="green" cx="${x-5}" cy="${y-3}" rx="12" ry="5"/>
+     ${n>=3?chest(x-14,y-20):n>0?flag(x-12,y-22):''}<text x="${x}" y="${y+23}">${esc(t.map)}</text></g>`}).join('');
+  // Markierung links auf der Insel, Boot rechts daneben (an einer Insel mit Schatz steht nie das Boot)
+  const b=next>=0?boat.replace('<svg',`<svg x="${P[next][0]+2}" y="${P[next][1]-26}" width="26" height="23" class="mapboat"`):'';
+  return `<svg class="map" viewBox="0 0 340 222" role="group" aria-label="Seekarte"><rect class="sea" width="340" height="222" rx="18"/>
+   <path class="route" d="M${P.map(p=>p.join(' ')).join(' L')}"/>${isl}${b}</svg>`;
+}
 
 function home(){
-  G=null;
+  G=null;M=null;if(B){clearTimeout(B.timer);B=null}
   const hi=save.name?`Ahoi ${esc(save.name)}!`:'Ahoi!';
-  let tiles=TOPICS.map(t=>{const n=save.best[t.id]||0;return `<button class="tile" data-t="${t.id}"><h3>${t.name}</h3><span class="sub">${t.sub}</span>${starsHtml(n)}</button>`}).join('');
-  const mixN=save.best.mix||0;
+  const tiles=TOPICS.map(t=>`<button class="tile" data-t="${t.id}"><h3>${t.name}</h3><span class="sub">${t.sub}</span>${starsHtml(save.best[t.id]||0)}</button>`).join('');
+  const chests=TOPICS.filter(t=>(save.best[t.id]||0)>=3).length;
   let resume='';
   const rg=save.round?unpackRound(save.round):null;
   if(rg){const tn=rg.topic==='mix'?'Große Rundfahrt':(TOPICS.find(t=>t.id===rg.topic)||{}).name;
@@ -307,45 +394,68 @@ function home(){
   $('#app').innerHTML=`
   <div class="top"><a class="back" href="../../${PARENT?'#eltern':''}" style="text-decoration:none">Übersicht</a><span class="brand">Vokabel-Inseln</span>${themeBtn()}</div>
   <section class="hero"><h1>${hi} Welche Insel steuerst du an?</h1>
-   <p>Jede Insel ist ein Thema. Eine Fahrt hat ${ROUND} Fragen. Fehler sind okay, du bekommst sie gleich noch einmal.</p>
+   <p>Jede Insel ist ein Thema. Eine Fahrt hat ${ROUND} Fragen: antippen, tippen, ${VOICE?'zuhören, ':''}Sätze bauen. Fehler sind okay, du bekommst sie gleich noch einmal.</p>
    <div class="rank"><span class="pill sun">${save.xp} Punkte</span><span class="pill">Rang: ${rank()}</span></div>${hero}</section>
   <div class="namebox"><label for="nm">Dein Name</label><input type="text" id="nm" maxlength="16" value="${esc(save.name)}" placeholder="z. B. Mia" autocomplete="off"></div>
- ${resume}<div class="grid"><button class="tile mix" data-t="mix"><h3>Große Rundfahrt</h3><span class="sub">Alle Inseln auf einmal, die schwierigste Fahrt</span>${starsHtml(mixN)}</button></div>
+  ${resume}
+  <div class="maphead"><h2 class="sec" style="margin:0">Seekarte</h2><span class="pill">${chests} von ${TOPICS.length} Schätzen</span></div>
+  ${seaMap()}
+  <p class="tip" style="margin-top:4px">Drei Sterne auf einer Insel, und du findest ihren Schatz.</p>
+  <h2 class="sec">Spiele</h2><div class="grid">
+   <button class="tile mix" data-t="mix"><h3>Große Rundfahrt</h3><span class="sub">Alle Inseln auf einmal, die schwierigste Fahrt</span>${starsHtml(save.best.mix||0)}</button>
+   <button class="tile" id="gb"><h3>Blitzrunde</h3><span class="sub">${BLITZ} Sekunden: Wie viele schaffst du?</span><span class="sub">Rekord: ${save.blitz||0} richtig</span></button>
+   <button class="tile" id="gm"><h3>Memory</h3><span class="sub">Finde ${PAIRS} Wortpaare</span><span class="sub">${save.memo?'Rekord: '+save.memo+' Züge':'Noch kein Rekord'}</span></button>
+  </div>
   <h2 class="sec">Inseln</h2><div class="grid">${tiles}</div>
   <p class="tip">${storageOK?'Dein Fortschritt wird automatisch auf diesem Gerät gespeichert.':'Speichern geht in diesem Browser gerade nicht (privates Fenster?). Dein Fortschritt geht beim Schließen verloren.'}</p>
   <p class="tip">Sterne gibt es für richtige Antworten beim ersten Versuch: 5 richtig = 1 Stern, 7 = 2 Sterne, 9 = 3 Sterne.</p>
+  <p class="tip">${VOICE?`<button class="theme" id="snd">${save.sound?'🔊 Ton an':'🔇 Ton aus'}</button> Hör-Fragen und Vorlesen mit der Stimme dieses Geräts.`:'Auf diesem Gerät ist keine englische Stimme eingebaut, deshalb gibt es hier keine Hör-Fragen.'}</p>
   ${PARENT?'<p class="tip"><button class="theme" id="pdf">Arbeitsblatt als PDF (für Eltern und Lehrkräfte)</button></p>':''}
   <p class="tip"><button class="theme" id="rst">Alles zurücksetzen</button></p>`;
   if(PARENT)$('#pdf').onclick=sheetSetup;
+  if(VOICE)$('#snd').onclick=()=>{save.sound=!save.sound;persist();say("Hello! Let's go!");home()};
   bindTheme();
   $('#nm').oninput=e=>{save.name=e.target.value.trim();persist()};
-  document.querySelectorAll('.tile[data-t]').forEach(b=>b.onclick=()=>start(b.dataset.t));
+  document.querySelectorAll('[data-t]').forEach(b=>{b.onclick=()=>start(b.dataset.t);
+    if(b.tagName==='g')b.onkeydown=ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();start(b.dataset.t)}}});
+  $('#gb').onclick=blitz;$('#gm').onclick=()=>memory('words');
   if(rg)$('#rs').onclick=()=>{G=rg;show()};
-  let armed=false;$('#rst').onclick=ev=>{if(!armed){armed=true;ev.target.textContent='Wirklich alles löschen? Nochmal tippen.';return}save={name:'',xp:0,best:{},weak:{},round:null};persist();home()};
+  let armed=false;$('#rst').onclick=ev=>{if(!armed){armed=true;ev.target.textContent='Wirklich alles löschen? Nochmal tippen.';return}save={name:'',xp:0,best:{},weak:{},round:null,sound:save.sound,blitz:0,memo:0};persist();home()};
 }
 
-function pickEntries(topic){
-  const pool=W.filter(e=>topic==='mix'||e[0]===topic);
+const poolFor=topic=>W.filter(e=>topic==='mix'||(topic==='words'?!NOTYPE.includes(e[0]):e[0]===topic));
+function pickEntries(topic,n=ROUND){
+  const pool=poolFor(topic);
   // schwache Wörter häufiger ziehen
   const weighted=[];pool.forEach(e=>{const w=1+Math.min(3,save.weak[key(e)]||0);for(let i=0;i<w;i++)weighted.push(e)});
-  const out=[];for(const e of shuffle(weighted)){if(!out.includes(e))out.push(e);if(out.length>=Math.min(ROUND,pool.length))break}
+  const out=[];for(const e of shuffle(weighted)){if(!out.includes(e))out.push(e);if(out.length>=Math.min(n,pool.length))break}
   return out;
 }
-function makeQ(e,forceMC){
-  const sentence=NOTYPE.includes(e[0]);
-  const type=!forceMC&&!sentence&&Math.random()<0.4;
-  const dir=type?'de2en':(Math.random()<0.5?'en2de':'de2en');
-  const q={e,type,dir,redo:!!forceMC};
-  if(!type){
-    const same=W.filter(x=>x!==e&&x[0]===e[0]);
-    const rest=W.filter(x=>x!==e&&x[0]!==e[0]);
-    const label=x=>dir==='en2de'?deShow(x):enShow(x);
-    const mine=label(e);const seen=new Set([mine]);const d=[];
-    for(const x of shuffle(same).concat(shuffle(rest))){const l=label(x);if(!seen.has(l)){seen.add(l);d.push(l)}if(d.length>=3)break}
-    q.options=shuffle([mine].concat(d));q.correct=mine;
-  }
+function pickKind(e,quick){
+  // Gewichte je Fragetyp. quick = Blitzrunde, dort nur schnelle Typen.
+  const w=quick?{mc:3,tf:2}:NOTYPE.includes(e[0])?{mc:4,build:canBuild(e)?4:0,listen:2,tf:1}:{mc:3,type:3,listen:2,tf:2};
+  if(!canSpeak())w.listen=0;
+  let r=Math.random()*Object.values(w).reduce((a,b)=>a+b,0);
+  for(const k in w)if((r-=w[k])<0)return k;
+  return 'mc';
+}
+function makeQ(e,forceMC,quick){
+  const kind=forceMC?'mc':pickKind(e,quick);
+  const q={e,kind,type:kind==='type',redo:!!forceMC,dir:kind==='type'||kind==='listen'?'de2en':(Math.random()<.5?'en2de':'de2en')};
+  if(kind==='mc'||kind==='listen'){
+    const label=x=>q.dir==='en2de'?deShow(x):enShow(x);
+    q.correct=label(e);q.options=shuffle([q.correct].concat(distractors(e,label)));
+  }else if(kind==='tf'){
+    q.shown=tfShown(e);q.options=['Stimmt','Stimmt nicht'];q.correct=q.shown===deShow(e)?'Stimmt':'Stimmt nicht';
+  }else if(kind==='build')q.tiles=scramble(toks(enShow(e)));
   return q;
 }
+const kindOf=q=>q.kind||(q.type?'type':'mc'); // gespeicherte Runden von früher kennen nur type/mc
+const optsHtml=q=>`<div class="opts" role="group" aria-label="Antworten, mit Pfeiltasten wählen">${q.options.map((o,i)=>`<button class="opt nav" data-i="${i}">${esc(o)}</button>`).join('')}</div>`;
+const promptOf=(q,e)=>kindOf(q)==='tf'?`${enShow(e)} = ${q.shown}`:q.dir==='en2de'?enShow(e):deShow(e);
+const labelOf=q=>({type:'Tippe das englische Wort',listen:'Was hörst du?',tf:'Stimmt das?',build:'Bau den englischen Satz'}[kindOf(q)]||(q.dir==='en2de'?'Was heißt das auf Deutsch?':'Wie heißt das auf Englisch?'));
+function markOpts(q,i){document.querySelectorAll('.opt').forEach((b,k)=>{b.disabled=true;if(q.options[k]===q.correct)b.classList.add('right');else if(k===i)b.classList.add('wrong')})}
+
 function start(topic){
   const es=pickEntries(topic);
   G={topic,queue:es.map(e=>makeQ(e)),total:es.length,done:0,first:0,xp:0,streak:0,best:0,missed:[],answered:false};
@@ -354,48 +464,55 @@ function start(topic){
 function pillStreak(){return `<span class="pill streak">${G.streak>=2?'Serie '+G.streak:'Serie 0'}</span>`}
 function show(){
   if(!G.queue.length)return finish();
+  const q=G.queue[0],e=q.e,kind=kindOf(q);
+  if(kind==='listen'&&!canSpeak()){G.queue[0]=makeQ(e,true);return show()} // Ton inzwischen aus
   saveRound();
-  const q=G.queue[0],e=q.e;
   const pct=Math.round(G.done/G.total*100);
-  const prompt=q.dir==='en2de'?enShow(e):deShow(e);
-  const kind=q.redo?'Noch einmal üben':(q.type?'Tippe das englische Wort':(q.dir==='en2de'?'Was heißt das auf Deutsch?':'Wie heißt das auf Englisch?'));
-  let body;
-  if(q.type){
+  let prompt=esc(promptOf(q,e)),body;
+  if(kind==='listen')prompt=`<button class="btn" id="hear" type="button">🔊 Anhören</button> <button class="btn ghost small" id="slow" type="button">🐢 langsam</button>`;
+  if(kind==='type'){
     const target=enShow(e);
-    body=`<div class="slots" id="slots" aria-hidden="true">${target.split('').map(c=>c===' '?'  ':'_').join(' ')}</div>
+    body=`<div class="slots" id="slots" aria-hidden="true">${target.split('').map(c=>c===' '?'  ':'_').join(' ')}</div>
     <form class="typebox" id="tf" autocomplete="off"><input type="text" id="ti" aria-label="Englisches Wort" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="English"><button class="btn" type="submit">Prüfen</button></form>
     <p style="margin:12px 0 0"><button class="btn ghost small" id="hint" type="button">Tipp: erster Buchstabe</button></p>`;
-  }else{
-    body=`<div class="opts" role="group" aria-label="Antworten, mit Pfeiltasten wählen">${q.options.map((o,i)=>`<button class="opt" data-i="${i}">${esc(o)}</button>`).join('')}</div>`;
-  }
+  }else if(kind==='build'){
+    body=`<div class="line" id="bl" aria-label="Dein Satz"></div>
+    <div class="chips" id="bc" role="group" aria-label="Wörter, mit Pfeiltasten wählen">${q.tiles.map(t=>`<button class="chip nav" type="button">${esc(t)}</button>`).join('')}</div>
+    <p style="margin:12px 0 0"><button class="btn" id="bp" type="button">Prüfen</button></p>`;
+  }else body=optsHtml(q);
   $('#app').innerHTML=`
-  <div class="q-head"><button class="back" id="bk" aria-label="Zurück zur Auswahl">Ende</button>
+  <div class="q-head"><button class="back" id="bk" aria-label="Zurück zur Seekarte">Ende</button>
    <div class="track" role="progressbar" aria-valuenow="${G.done}" aria-valuemax="${G.total}"><i style="width:${pct}%"></i><span style="position:absolute;left:calc(${pct}% );top:0">${boat.replace('<svg','<svg style="position:absolute;top:-14px;left:-12px;width:34px;color:var(--ink)"')}</span></div>
    ${pillStreak()}</div>
-  <div class="qcard"><div class="kind ${q.redo?'redo':''}">${kind}</div><div class="prompt">${esc(prompt)}</div>${body}<div id="fb"></div></div>`;
+  <div class="qcard"><div class="kind ${q.redo?'redo':''}">${q.redo?'Noch einmal üben':labelOf(q)}</div><div class="prompt">${prompt}</div>${body}<div id="fb"></div></div>`;
   G.answered=false;G.hint=false;
   $('#bk').onclick=home;
-  if(q.type){
+  if(kind==='type'){
     $('#ti').focus();
     $('#tf').onsubmit=ev=>{ev.preventDefault();if(G.answered)return;answer(null,$('#ti').value)};
-    $('#hint').onclick=()=>{G.hint=true;const t=enShow(e);$('#slots').textContent=t[0]+' '+t.slice(1).split('').map(c=>c===' '?'  ':'_').join(' ');$('#hint').disabled=true;$('#ti').focus()};
+    $('#hint').onclick=()=>{G.hint=true;const t=enShow(e);$('#slots').textContent=t[0]+' '+t.slice(1).split('').map(c=>c===' '?'  ':'_').join(' ');$('#hint').disabled=true;$('#ti').focus()};
+  }else if(kind==='build'){
+    // Antippen schiebt ein Wort in den Satz, nochmal antippen schiebt es zurück
+    document.querySelectorAll('.chip').forEach(b=>b.onclick=()=>{if(G.answered)return;const from=b.parentNode;(from.id==='bc'?$('#bl'):$('#bc')).appendChild(b);(from.querySelector('.chip')||$('#bp')).focus()});
+    $('#bp').onclick=()=>{if(G.answered)return;if($('#bc').children.length){$('#fb').innerHTML='<p class="tip">Benutze alle Wörter.</p>';return}answer(null,[...$('#bl').children].map(c=>c.textContent).join(' '))};
   }else{
+    if(kind==='listen'){say(enShow(e));$('#hear').onclick=()=>say(enShow(e));$('#slow').onclick=()=>say(enShow(e),true)}
     document.querySelectorAll('.opt').forEach(b=>b.onclick=()=>answer(+b.dataset.i,null));
   }
 }
 function answer(i,text){
   if(G.answered)return;
-  const q=G.queue[0],e=q.e;let ok,caseOnly=false;
-  if(q.type){
+  const q=G.queue[0],e=q.e,kind=kindOf(q);let ok,caseOnly=false;
+  if(kind==='type'){
     const t=norm(text||'');if(!t){$('#ti').focus();return}
     const alts=e[1].split('|').map(norm);
     ok=alts.includes(t); // Groß- und Kleinschreibung zählt
     caseOnly=!ok&&alts.some(a=>a.toLowerCase()===t.toLowerCase());
     $('#ti').disabled=true;document.querySelector('#tf button').disabled=true;
-  }else{
-    ok=q.options[i]===q.correct;
-    document.querySelectorAll('.opt').forEach((b,k)=>{b.disabled=true;if(q.options[k]===q.correct)b.classList.add('right');else if(k===i)b.classList.add('wrong')});
-  }
+  }else if(kind==='build'){
+    ok=text===toks(enShow(e)).join(' ');
+    document.querySelectorAll('.chip').forEach(b=>b.disabled=true);$('#bp').disabled=true;$('#bl').classList.add(ok?'right':'wrong');
+  }else{ok=q.options[i]===q.correct;markOpts(q,i)}
   G.answered=true;
   const k=key(e);
   if(!q.redo){
@@ -404,74 +521,161 @@ function answer(i,text){
     G.done++;
   }else if(!ok){G.queue.push(makeQ(e,true))}
   persist();
-  const good=ok;
   const ans=`${esc(enShow(e))} = ${esc(deShow(e))}`;
-  $('#fb').innerHTML=`<div class="fb ${good?'ok':'no'}" role="status"><strong>${good?CHEER[Math.floor(Math.random()*CHEER.length)]:caseOnly?'Fast! Achte auf Groß- und Kleinschreibung.':OOPS[Math.floor(Math.random()*OOPS.length)]}</strong>
-   <span class="ans">${good?ans:'Richtig ist: '+ans}</span>
-   <div class="row"><button class="btn" id="nx">${G.queue.length>1?'Weiter':'Fertig'}</button></div></div>`;
+  $('#fb').innerHTML=`<div class="fb ${ok?'ok':'no'}" role="status"><strong>${ok?pick(CHEER):caseOnly?'Fast! Achte auf Groß- und Kleinschreibung.':pick(OOPS)}</strong>
+   <span class="ans">${ok?ans:'Richtig ist: '+ans}</span>
+   <div class="row">${canSpeak()?'<button class="btn ghost small" id="say" type="button" style="margin-right:auto">🔊 Anhören</button>':''}<button class="btn" id="nx">${G.queue.length>1?'Weiter':'Fertig'}</button></div></div>`;
+  if($('#say'))$('#say').onclick=()=>say(enShow(e));
   $('#nx').focus();
   $('#nx').onclick=()=>{G.queue.shift();show()};
-  // Kopf aktualisieren
   document.querySelector('.streak').textContent=G.streak>=2?'Serie '+G.streak:'Serie 0';
 }
 function finish(){
   const n=G.first,stars=n>=9?3:n>=7?2:n>=5?1:0;
-  const tk=G.topic;if(stars>(save.best[tk]||0))save.best[tk]=stars;
+  const tk=G.topic,before=save.best[tk]||0;if(stars>before)save.best[tk]=stars;
   const bonus=stars*10;G.xp+=bonus;save.xp+=bonus;save.round=null;persist();
-  const msg=stars===3?'Mission geschafft. Das war Spitze!':stars===2?'Sehr gut! Eine Runde noch für den dritten Stern?':stars===1?'Gut gemacht. Mit etwas Übung klappen mehr Sterne.':'Das war ein Anfang. Probiere es noch einmal, es wird jedes Mal leichter.';
-  const mist=G.missed.length?`<div class="mist"><h3>Diese Wörter üben wir weiter</h3><ul>${G.missed.map(e=>`<li><b>${esc(enShow(e))}</b> = ${esc(deShow(e))}</li>`).join('')}</ul></div>`:'<div class="mist"><h3>Keine Fehler. Wow!</h3></div>';
-  $('#app').innerHTML=`<div class="top"><span class="brand">Vokabel-Inseln</span>${themeBtn()}</div>
+  const msg=stars===3?'Insel erobert. Das war Spitze!':stars===2?'Sehr gut! Eine Runde noch für den dritten Stern?':stars===1?'Gut gemacht. Mit etwas Übung klappen mehr Sterne.':'Das war ein Anfang. Probiere es noch einmal, es wird jedes Mal leichter.';
+  const treasure=stars===3&&before<3&&tk!=='mix'?`<p class="treasure pop"><svg viewBox="0 0 18 16" width="40" aria-hidden="true">${chest(0,0)}</svg> Du hast den Schatz der ${esc(TOPICS.find(t=>t.id===tk).name)} gefunden!</p>`:'';
+  const memoTopic=tk==='mix'?'words':tk;
+  $('#app').innerHTML=`${topBar()}
   <div class="qcard end"><h2>${esc(msg)}</h2>
    <div class="bigstars" aria-label="${stars} von 3 Sternen">${[1,2,3].map(i=>i<=stars?`<b><span class="pop" style="animation-delay:${i*.25}s">★</span></b>`:'★').join('')}</div>
+   ${treasure}
    <div class="stats"><span class="pill">${n} von ${G.total} gleich richtig</span><span class="pill">Beste Serie ${G.best}</span><span class="pill sun">+${G.xp} Punkte</span></div>
-   ${mist}
-   <div class="actions"><button class="btn" id="again">Nochmal spielen</button><button class="btn ghost" id="hm">Andere Mission</button></div>
+   ${mistList(G.missed)}
+   <div class="actions"><button class="btn" id="again">Nochmal spielen</button>${NOTYPE.includes(tk)?'':'<button class="btn ghost" id="mm">Memory mit diesen Wörtern</button>'}<button class="btn ghost" id="hm">Zur Seekarte</button></div>
    <p class="tip">Rang: ${rank()} · ${save.xp} Punkte insgesamt</p></div>`;
   bindTheme();
-  $('#again').onclick=()=>start(tk);$('#hm').onclick=home;
+  $('#again').onclick=()=>start(tk);$('#hm').onclick=home;if($('#mm'))$('#mm').onclick=()=>memory(memoTopic);
 }
+
+/* ---------- Blitzrunde: 60 Sekunden, nur Antippen ---------- */
+function blitz(){
+  G=null;M=null;
+  B={end:Date.now()+BLITZ*1000,ok:0,missed:[],last:null};
+  B.timer=setTimeout(blitzEnd,BLITZ*1000);
+  blitzQ();
+}
+function blitzQ(){
+  if(!B)return;
+  let e;do e=pickEntries('mix',1)[0];while(e===B.last);B.last=e;
+  const q=makeQ(e,false,true),left=Math.max(0,B.end-Date.now()),busy={v:false};
+  $('#app').innerHTML=`<div class="q-head"><button class="back" id="bk" aria-label="Blitzrunde beenden">Ende</button>
+   <div class="track timer" role="timer" aria-label="Restzeit"><i id="tm" style="width:${left/BLITZ/10}%;transition:width ${left}ms linear"></i></div>
+   <span class="pill sun" id="bs">${B.ok} richtig</span></div>
+  <div class="qcard"><div class="kind">Blitzrunde · ${labelOf(q)}</div><div class="prompt">${esc(promptOf(q,e))}</div>${optsHtml(q)}</div>`;
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{const t=$('#tm');if(t)t.style.width='0%'}));
+  $('#bk').onclick=home;
+  document.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{
+    if(busy.v||!B)return;busy.v=true;
+    const i=+b.dataset.i,ok=q.options[i]===q.correct,k=key(e);markOpts(q,i);
+    if(ok){B.ok++;save.xp+=3;if(save.weak[k])save.weak[k]--}else{if(!B.missed.includes(e))B.missed.push(e);save.weak[k]=(save.weak[k]||0)+1}
+    persist();$('#bs').textContent=B.ok+' richtig';
+    setTimeout(()=>{if(B&&Date.now()<B.end)blitzQ()},ok?450:1300);
+  });
+}
+function blitzEnd(){
+  if(!B)return;const r=B;B=null;
+  const rec=r.ok>0&&r.ok>(save.blitz||0);if(rec)save.blitz=r.ok;persist();
+  $('#app').innerHTML=`${topBar()}
+  <div class="qcard end"><h2>${rec?'Neuer Rekord!':'Zeit ist um!'}</h2>
+   <div class="bignum pop">${r.ok}</div><p>richtige Antworten in ${BLITZ} Sekunden</p>
+   <div class="stats"><span class="pill">Rekord: ${save.blitz||0}</span><span class="pill sun">+${r.ok*3} Punkte</span></div>
+   ${mistList(r.missed)}
+   <div class="actions"><button class="btn" id="again">Nochmal</button><button class="btn ghost" id="hm">Zur Seekarte</button></div></div>`;
+  bindTheme();$('#again').onclick=blitz;$('#hm').onclick=home;$('#again').focus();
+}
+
+/* ---------- Memory: englisches Wort und deutsche Bedeutung als Paar ---------- */
+function memory(topic){
+  G=null;if(B){clearTimeout(B.timer);B=null}
+  const es=pickEntries(topic,PAIRS);
+  M={topic,tries:0,open:[],found:0,pairs:es.length,lock:false,cards:shuffle(es.flatMap(e=>[{e,t:enShow(e),en:true},{e,t:deShow(e),en:false}]))};
+  $('#app').innerHTML=`<div class="q-head"><button class="back" id="bk" aria-label="Memory beenden">Ende</button><span class="brand" style="flex:1;text-align:center">Memory</span><span class="pill" id="mt">0 Züge</span></div>
+   <p class="tip" style="margin:0 0 12px">Finde die Paare: englisches Wort und deutsche Bedeutung.</p>
+   <div class="memo" role="group" aria-label="Karten, mit Pfeiltasten wählen">${M.cards.map((c,i)=>`<button class="card nav" data-i="${i}" aria-label="Verdeckte Karte">?</button>`).join('')}</div>`;
+  $('#bk').onclick=home;
+  document.querySelectorAll('.card').forEach(b=>b.onclick=()=>flip(b));
+}
+function flip(b){
+  const c=M&&M.cards[+b.dataset.i];
+  if(!c||M.lock||c.found||M.open.includes(b))return;
+  b.textContent=c.t;b.classList.add('up');b.setAttribute('aria-label',c.t);if(c.en)say(c.t);
+  M.open.push(b);if(M.open.length<2)return;
+  M.tries++;$('#mt').textContent=M.tries+(M.tries===1?' Zug':' Züge');
+  const [x,y]=M.open.map(o=>M.cards[+o.dataset.i]);
+  if(x.e===y.e){x.found=y.found=true;M.open.forEach(o=>{o.classList.add('found');o.disabled=true});M.open=[];if(++M.found===M.pairs)setTimeout(memoEnd,700)}
+  else{M.lock=true;setTimeout(()=>{if(!M)return;M.open.forEach(o=>{o.textContent='?';o.classList.remove('up');o.setAttribute('aria-label','Verdeckte Karte')});M.open=[];M.lock=false},1100)}
+}
+function memoEnd(){
+  if(!M)return;const r=M;M=null;
+  const gain=10+r.pairs*2,rec=!save.memo||r.tries<save.memo;if(rec)save.memo=r.tries;save.xp+=gain;persist();
+  $('#app').innerHTML=`${topBar()}
+  <div class="qcard end"><h2>${rec?'Neuer Rekord!':'Alle Paare gefunden!'}</h2>
+   <div class="bignum pop">${r.tries}</div><p>Züge für ${r.pairs} Paare</p>
+   <div class="stats"><span class="pill">Rekord: ${save.memo} Züge</span><span class="pill sun">+${gain} Punkte</span></div>
+   <div class="mist"><h3>Deine Paare</h3><ul>${[...new Set(r.cards.map(c=>c.e))].map(e=>`<li><b>${esc(enShow(e))}</b> = ${esc(deShow(e))}</li>`).join('')}</ul></div>
+   <div class="actions"><button class="btn" id="again">Nochmal</button><button class="btn ghost" id="hm">Zur Seekarte</button></div></div>`;
+  bindTheme();$('#again').onclick=()=>memory(r.topic);$('#hm').onclick=home;$('#again').focus();
+}
+
 /* ---------- Arbeitsblatt drucken / als PDF sichern ---------- */
+const SHEETS={uebersetzen:'Übersetzen',diktat:'Diktat',tf:'Richtig oder falsch',build:'Satzbaukasten',memory:'Memory-Karten'};
 function sheetSetup(){
   G=null;
   $('#app').innerHTML=`<div class="top noprint"><span class="brand">Vokabel-Inseln</span>${themeBtn()}</div>
   <div class="qcard noprint"><h2>Arbeitsblatt als PDF</h2>
    <p>Erstellt ein Arbeitsblatt und ein separates Lösungsblatt mit denselben Wörtern. Jedes Blatt einzeln drucken oder im Druckdialog als PDF sichern (PC/Mac: „Als PDF speichern“; iPad/iPhone: im Druckdialog auf die Vorschau tippen, dann teilen oder sichern).</p>
    <form class="form" id="sf">
+    <label>Aufgabe<select id="sk"><option value="uebersetzen">Übersetzen</option><option value="diktat">Diktat (jemand liest vor)</option><option value="tf">Richtig oder falsch</option><option value="build">Satzbaukasten (Sätze ordnen)</option><option value="memory">Memory-Karten zum Ausschneiden</option></select></label>
     <label>Insel<select id="st"><option value="mix">Alle Inseln</option>${TOPICS.map(t=>`<option value="${t.id}">${t.name}</option>`).join('')}</select></label>
-    <label>Richtung<select id="sd"><option value="en2de">Englisch → Deutsch</option><option value="de2en">Deutsch → Englisch</option><option value="mix">gemischt</option></select></label>
-    <label>Anzahl Wörter<select id="sn"><option value="0">alle</option><option>10</option><option>20</option><option>30</option></select></label>
+    <label id="sdw">Richtung<select id="sd"><option value="en2de">Englisch → Deutsch</option><option value="de2en">Deutsch → Englisch</option><option value="mix">gemischt</option></select></label>
+    <label>Anzahl<select id="sn"><option value="0">alle</option><option>10</option><option>20</option><option>30</option></select></label>
     <div class="actions" style="justify-content:flex-start"><button class="btn" type="submit">Arbeitsblatt erstellen</button><button class="btn ghost" type="button" id="hm">Zurück</button></div>
    </form></div><div id="out"></div>`;
   bindTheme();
   $('#hm').onclick=home;
-  $('#sf').onsubmit=ev=>{ev.preventDefault();buildSheet($('#st').value,$('#sd').value,+$('#sn').value)};
+  $('#sk').onchange=()=>{$('#sdw').hidden=$('#sk').value!=='uebersetzen'};
+  $('#sf').onsubmit=ev=>{ev.preventDefault();buildSheet($('#sk').value,$('#st').value,$('#sd').value,+$('#sn').value)};
 }
-function buildSheet(topic,dir,n){
-  let es=shuffle(W.filter(e=>topic==='mix'||e[0]===topic));
+function buildSheet(kind,topic,dir,n){
+  let es=shuffle(poolFor(topic)),note='';
+  if(kind==='build'){es=es.filter(canBuild);if(!es.length){es=shuffle(W.filter(canBuild));note=' (Sätze von allen Inseln)'}}
   if(n)es=es.slice(0,n);
-  const rows=es.map(e=>{const d=dir==='mix'?(Math.random()<.5?'en2de':'de2en'):dir;
-    return d==='en2de'?[enShow(e),deShow(e)]:[deShow(e),e[1].split('|').join(' / ')]});
-  const title='Englisch 5: '+(topic==='mix'?'Alle Vokabeln':TOPICS.find(t=>t.id===topic).name);
-  const task=dir==='en2de'?'Schreibe das deutsche Wort daneben.':dir==='de2en'?'Schreibe das englische Wort daneben.':'Übersetze ins Deutsche oder ins Englische.';
-  const table=sol=>`<table>${rows.map((r,i)=>`<tr><td class="n">${i+1}.</td><td class="w">${esc(r[0])}</td><td>${sol?esc(r[1]):''}</td></tr>`).join('')}</table>`;
-  $('#out').innerHTML=`<div class="actions noprint" style="margin-top:16px"><button class="btn" id="pw">Arbeitsblatt drucken</button><button class="btn" id="pk">Lösungen drucken</button><button class="btn ghost" id="rx">Neu mischen</button></div>
-   <section class="sheet ws"><h2>${esc(title)}</h2><div class="meta"><span>Name: ________________________</span><span>Datum: ______________</span></div><p>${task}</p>${table(false)}</section>
-   <section class="sheet key"><h2>Lösungen: ${esc(title)}</h2>${table(true)}</section>`;
+  const title=`Englisch 5: ${topic==='mix'?'Alle Inseln':TOPICS.find(t=>t.id===topic).name}${note} · ${SHEETS[kind]}`;
+  let task,rows,stacked=false;
+  if(kind==='diktat'){task='Hör gut zu und schreibe das englische Wort oder den Satz auf.';rows=es.map(e=>({q:'',sol:`${allEn(e)}  (${deShow(e)})`}))}
+  else if(kind==='tf'){task='Stimmt die Übersetzung? Kreuze an.';rows=es.map(e=>{const s=tfShown(e),t=s===deShow(e);return {q:`${enShow(e)} = ${s}`,ws:'☐ richtig    ☐ falsch',sol:t?'richtig':'falsch, richtig ist: '+deShow(e)}})}
+  else if(kind==='build'){task='Bring die Wörter in die richtige Reihenfolge und schreibe den Satz auf.';stacked=true;rows=es.map(e=>({q:scramble(toks(enShow(e))).join('   /   '),hint:deShow(e),sol:enShow(e)}))}
+  else if(kind==='memory'){task='Karten ausschneiden, verdeckt mischen und Paare finden: englisches Wort und deutsche Bedeutung.';rows=es.map(e=>({q:enShow(e),sol:deShow(e)}))}
+  else{task=dir==='en2de'?'Schreibe das deutsche Wort daneben.':dir==='de2en'?'Schreibe das englische Wort daneben.':'Übersetze ins Deutsche oder ins Englische.';
+    rows=es.map(e=>{const d=dir==='mix'?(Math.random()<.5?'en2de':'de2en'):dir;return d==='en2de'?{q:enShow(e),sol:deShow(e)}:{q:deShow(e),sol:allEn(e)}})}
+  const cell=r=>esc(r.q)+(r.hint?`<br><small>${esc(r.hint)}</small>`:'');
+  const table=sol=>`<table>${rows.map((r,i)=>`<tr><td class="n">${i+1}.</td>${
+    stacked?`<td>${cell(r)}${sol?`<br><b>${esc(r.sol)}</b>`:'<div class="wline"></div>'}</td>`
+    :kind==='diktat'?`<td>${sol?esc(r.sol):''}</td>`
+    :`<td class="w">${cell(r)}</td><td>${sol?esc(r.sol):esc(r.ws||'')}</td>`}</tr>`).join('')}</table>`;
+  const cards=()=>`<div class="cards">${shuffle(rows.flatMap(r=>[[r.q,'EN'],[r.sol,'DE']])).map(([t,l])=>`<div><small>${l}</small>${esc(t)}</div>`).join('')}</div>`;
+  const [lw,lk,hk]=kind==='memory'?['Karten drucken','Paarliste drucken','Paarliste: ']:kind==='diktat'?['Arbeitsblatt drucken','Vorlese-Liste drucken','Zum Vorlesen (mit Lösungen): ']:['Arbeitsblatt drucken','Lösungen drucken','Lösungen: '];
+  $('#out').innerHTML=`<div class="actions noprint" style="margin-top:16px"><button class="btn" id="pw">${lw}</button><button class="btn" id="pk">${lk}</button><button class="btn ghost" id="rx">Neu mischen</button></div>
+   <section class="sheet ws"><h2>${esc(title)}</h2>${kind==='memory'?'':'<div class="meta"><span>Name: ________________________</span><span>Datum: ______________</span></div>'}<p>${task}</p>${kind==='memory'?cards():table(false)}</section>
+   <section class="sheet key"><h2>${hk}${esc(title)}</h2>${kind==='memory'?`<table>${rows.map((r,i)=>`<tr><td class="n">${i+1}.</td><td class="w">${esc(r.q)}</td><td>${esc(r.sol)}</td></tr>`).join('')}</table>`:table(true)}</section>`;
   // ohne Knopf (Strg+P) wird beides gedruckt, die Lösungen auf neuer Seite
   const pr=m=>{document.documentElement.dataset.print=m;window.print()};
   $('#pw').onclick=()=>pr('sheet');$('#pk').onclick=()=>pr('key');
-  $('#rx').onclick=()=>buildSheet(topic,dir,n);
+  $('#rx').onclick=()=>buildSheet(kind,topic,dir,n);
 }
+
+/* ---------- Tastatur ---------- */
 document.addEventListener('keydown',ev=>{
-  if(!G)return;
-  // Pfeiltasten wandern durch die Antworten (rundherum), Enter/Leertaste wählt wie bei jedem Knopf
-  const os=G.answered?[]:[...document.querySelectorAll('.opt')];
-  if(os.length&&/^Arrow(Up|Down|Left|Right)$/.test(ev.key)){
+  // Pfeiltasten wandern durch Antworten, Satzwörter und Memory-Karten (rundherum); Enter/Leertaste wählt wie bei jedem Knopf
+  const os=[...document.querySelectorAll('.nav:not(:disabled)')];
+  if(os.length&&/^Arrow(Up|Down|Left|Right)$/.test(ev.key)&&document.activeElement.tagName!=='INPUT'){
     const i=os.indexOf(document.activeElement),d=/Up|Left/.test(ev.key)?-1:1;
     ev.preventDefault();os[i<0?(d>0?0:os.length-1):(i+d+os.length)%os.length].focus();return;
   }
-  if(!G.answered)return;
-  if(ev.key==='Enter'){const b=$('#nx');if(b&&document.activeElement!==b){ev.preventDefault();b.click()}}
+  if(!G||!G.answered)return;
+  if(ev.key==='Enter'){const b=$('#nx');if(b&&document.activeElement!==b&&document.activeElement.id!=='say'){ev.preventDefault();b.click()}}
 });
 home();
 </script>
