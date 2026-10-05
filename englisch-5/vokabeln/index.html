@@ -190,7 +190,7 @@ const W = [
 
  ['farben','red','rot'],['farben','yellow','gelb'],['farben','blue','blau'],['farben','green','grün'],['farben','brown','braun'],
  ['farben','orange','orange'],['farben','grey|gray','grau'],['farben','pink','rosa / pink'],['farben','purple','lila / violett'],
- ['farben','white','weiß'],['farben','black','schwarz'],['farben','navy','marineblau'],['farben','dark','dunkel'],
+ ['farben','white','weiß'],['farben','black','schwarz'],['farben','navy','marineblau / Marine'],['farben','dark','dunkel'],
  ['farben','colour|color','Farbe'],['farben','uniform','Schuluniform / Uniform'],['farben','shoe','Schuh'],
  ['farben','trainer','Sportschuh / Turnschuh'],['farben','to wear|wear','tragen (Kleidung)'],
 
@@ -206,7 +206,7 @@ const W = [
  ['tiere','rabbit','Kaninchen / Hase'],['tiere','rat','Ratte'],
 
  ['klasse','classroom','Klassenraum / Klassenzimmer'],['klasse','board','Tafel'],['klasse','cupboard','Schrank'],['klasse','chair','Stuhl'],
- ['klasse','desk','Schreibtisch / Pult'],['klasse','door','Tür'],['klasse','window','Fenster'],['klasse','clock','Uhr (an der Wand oder am Turm)'],
+ ['klasse','desk','Schreibtisch / Pult'],['klasse','door','Tür'],['klasse','window','Fenster'],['klasse','clock','Uhr (Wanduhr, Turmuhr)'],
  ['klasse','watch','Armbanduhr'],['klasse','school bag|schoolbag','Schultasche / Schulranzen'],['klasse','book','Buch'],
  ['klasse','exercise book','Heft / Schulheft'],['klasse','ruler','Lineal'],['klasse','pen','Kuli / Füller / Stift'],['klasse','pencil','Bleistift'],
  ['klasse','pencil case','Federmäppchen / Mäppchen'],['klasse','glue stick','Klebestift'],['klasse','glue','Kleber / Klebstoff'],
@@ -256,7 +256,7 @@ const W = [
  ['saetze',"Yes, that's right.",'Ja, das stimmt.'],['saetze',"No, that's wrong.",'Nein, das ist falsch.'],
  ['saetze','Is it Monday?','Ist heute Montag?'],['saetze','What time is it?','Wie spät ist es?'],['saetze',"You're late.",'Du bist zu spät.'],
  ['saetze','Watch out!','Vorsicht! / Pass auf!'],['saetze',"Don't go.",'Geh nicht.'],['saetze','So?','Na und?'],
- ['saetze','Have a go.','Probier es mal.'],['saetze','Follow me.','Komm mit mir. / Folgt mir.'],['saetze','Simon says ...','Simon sagt ...'],
+ ['saetze','Have a go.','Probier es mal.'],['saetze','Follow me.','Folge mir. / Folgt mir.'],['saetze','Simon says ...','Simon sagt ...'],
  ['saetze','Let me show you ...','Ich zeige dir ...'],['saetze','This is ...','Das ist ...'],['saetze','Here are ...','Hier sind ...'],
  ['saetze','There are ...','Da sind ... / Es gibt ...'],['saetze',"There's ...",'Da ist ... / Es gibt ...'],
  ['saetze','my favourite colour','meine Lieblingsfarbe'],['saetze','I like ...','Ich mag ...'],['saetze',"I don't like ...",'Ich mag ... nicht.'],
@@ -390,15 +390,15 @@ function home(){
   let resume='';
   const rg=save.round?unpackRound(save.round):null;
   if(rg){const tn=rg.topic==='mix'?'Große Rundfahrt':(TOPICS.find(t=>t.id===rg.topic)||{}).name;
-    resume=`<div class="grid" style="margin-bottom:12px"><button class="tile resume" id="rs"><h3>Weiter spielen</h3><span class="sub">${esc(tn)}, Frage ${Math.min(rg.done+1,rg.total)} von ${rg.total}</span></button></div>`;}
+    resume=`<div class="grid" style="margin-bottom:12px"><button class="tile resume" id="rs"><h3>Weiterspielen</h3><span class="sub">${esc(tn)}, Frage ${Math.min(rg.done+1,rg.total)} von ${rg.total}</span></button></div>`;}
   $('#app').innerHTML=`
   <div class="top"><a class="back" href="../../${PARENT?'#eltern':''}" style="text-decoration:none">Übersicht</a><span class="brand">Vokabel-Inseln</span>${themeBtn()}</div>
   <section class="hero"><h1>${hi} Welche Insel steuerst du an?</h1>
-   <p>Jede Insel ist ein Thema. Eine Fahrt hat ${ROUND} Fragen: antippen, tippen, ${VOICE?'zuhören, ':''}Sätze bauen. Fehler sind okay, du bekommst sie gleich noch einmal.</p>
+   <p>Jede Insel ist ein Thema. Eine Fahrt hat ${ROUND} Fragen: auswählen, schreiben, ${VOICE?'zuhören, ':''}Sätze bauen. Fehler sind okay, du bekommst sie gleich noch einmal.</p>
    <div class="rank"><span class="pill sun">${save.xp} Punkte</span><span class="pill">Rang: ${rank()}</span></div>${hero}</section>
   <div class="namebox"><label for="nm">Dein Name</label><input type="text" id="nm" maxlength="16" value="${esc(save.name)}" placeholder="z. B. Mia" autocomplete="off"></div>
   ${resume}
-  <div class="maphead"><h2 class="sec" style="margin:0">Seekarte</h2><span class="pill">${chests} von ${TOPICS.length} Schätzen</span></div>
+  <div class="maphead"><h2 class="sec" style="margin:0">Seekarte</h2><span class="pill">Schätze: ${chests} von ${TOPICS.length}</span></div>
   ${seaMap()}
   <p class="tip" style="margin-top:4px">Drei Sterne auf einer Insel, und du findest ihren Schatz.</p>
   <h2 class="sec">Spiele</h2><div class="grid">
@@ -409,7 +409,7 @@ function home(){
   <h2 class="sec">Inseln</h2><div class="grid">${tiles}</div>
   <p class="tip">${storageOK?'Dein Fortschritt wird automatisch auf diesem Gerät gespeichert.':'Speichern geht in diesem Browser gerade nicht (privates Fenster?). Dein Fortschritt geht beim Schließen verloren.'}</p>
   <p class="tip">Sterne gibt es für richtige Antworten beim ersten Versuch: 5 richtig = 1 Stern, 7 = 2 Sterne, 9 = 3 Sterne.</p>
-  <p class="tip">${VOICE?`<button class="theme" id="snd">${save.sound?'🔊 Ton an':'🔇 Ton aus'}</button> Hör-Fragen und Vorlesen mit der Stimme dieses Geräts.${/Firefox/.test(navigator.userAgent)&&/Macintosh/.test(navigator.userAgent)?' In Firefox auf dem Mac knackt die Stimme am Ende, in Safari oder Chrome klingt sie sauber.':''}`:'Auf diesem Gerät ist keine englische Stimme eingebaut, deshalb gibt es hier keine Hör-Fragen.'}</p>
+  <p class="tip">${VOICE?`<button class="theme" id="snd">${save.sound?'🔊 Ton an':'🔇 Ton aus'}</button> Hör-Fragen und Vorlesen nutzen die Stimme dieses Geräts.${/Firefox/.test(navigator.userAgent)&&/Macintosh/.test(navigator.userAgent)?' In Firefox auf dem Mac knackt die Stimme am Ende, in Safari oder Chrome klingt sie sauber.':''}`:'Auf diesem Gerät ist keine englische Stimme eingebaut, deshalb gibt es hier keine Hör-Fragen.'}</p>
   ${PARENT?'<p class="tip"><button class="theme" id="pdf">Arbeitsblatt als PDF (für Eltern und Lehrkräfte)</button></p>':''}
   <p class="tip"><button class="theme" id="rst">Alles zurücksetzen</button></p>`;
   if(PARENT)$('#pdf').onclick=sheetSetup;
@@ -453,7 +453,7 @@ function makeQ(e,forceMC,quick){
 const kindOf=q=>q.kind||(q.type?'type':'mc'); // gespeicherte Runden von früher kennen nur type/mc
 const optsHtml=q=>`<div class="opts" role="group" aria-label="Antworten, mit Pfeiltasten wählen">${q.options.map((o,i)=>`<button class="opt nav" data-i="${i}">${esc(o)}</button>`).join('')}</div>`;
 const promptOf=(q,e)=>kindOf(q)==='tf'?`${enShow(e)} = ${q.shown}`:q.dir==='en2de'?enShow(e):deShow(e);
-const labelOf=q=>({type:'Tippe das englische Wort',listen:'Was hörst du?',tf:'Stimmt das?',build:'Bau den englischen Satz'}[kindOf(q)]||(q.dir==='en2de'?'Was heißt das auf Deutsch?':'Wie heißt das auf Englisch?'));
+const labelOf=q=>({type:'Schreibe das englische Wort',listen:'Was hörst du?',tf:'Stimmt das?',build:'Bau den englischen Satz'}[kindOf(q)]||(q.dir==='en2de'?'Was heißt das auf Deutsch?':'Wie heißt das auf Englisch?'));
 function markOpts(q,i){document.querySelectorAll('.opt').forEach((b,k)=>{b.disabled=true;if(q.options[k]===q.correct)b.classList.add('right');else if(k===i)b.classList.add('wrong')})}
 
 function start(topic){
