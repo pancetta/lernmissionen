@@ -352,7 +352,7 @@ function pickVoice(){
     VOICE=vs.sort((a,b)=>score(b)-score(a))[0]||null;
   }catch(e){VOICE=null}
 }
-if('speechSynthesis' in window){pickVoice();speechSynthesis.onvoiceschanged=()=>{const had=!!VOICE;pickVoice();if($('#vre'))soundTest();else if(!had&&VOICE&&$('#nm')&&document.activeElement.id!=='nm')home()}}
+if('speechSynthesis' in window){pickVoice();speechSynthesis.onvoiceschanged=()=>{const had=!!VOICE;pickVoice();if(!had&&VOICE&&$('#nm')&&document.activeElement.id!=='nm')home()}}
 const canSpeak=()=>!!VOICE&&save.sound;
 function say(t,slow){
   if(!canSpeak())return;
@@ -409,7 +409,7 @@ function home(){
   <h2 class="sec">Inseln</h2><div class="grid">${tiles}</div>
   <p class="tip">${storageOK?'Dein Fortschritt wird automatisch auf diesem Gerät gespeichert.':'Speichern geht in diesem Browser gerade nicht (privates Fenster?). Dein Fortschritt geht beim Schließen verloren.'}</p>
   <p class="tip">Sterne gibt es für richtige Antworten beim ersten Versuch: 5 richtig = 1 Stern, 7 = 2 Sterne, 9 = 3 Sterne.</p>
-  <p class="tip">${VOICE?`<button class="theme" id="snd">${save.sound?'🔊 Ton an':'🔇 Ton aus'}</button> Hör-Fragen und Vorlesen mit der Stimme dieses Geräts.`:'Auf diesem Gerät ist keine englische Stimme eingebaut, deshalb gibt es hier keine Hör-Fragen.'}</p>
+  <p class="tip">${VOICE?`<button class="theme" id="snd">${save.sound?'🔊 Ton an':'🔇 Ton aus'}</button> Hör-Fragen und Vorlesen mit der Stimme dieses Geräts.${/Firefox/.test(navigator.userAgent)&&/Macintosh/.test(navigator.userAgent)?' In Firefox auf dem Mac knackt die Stimme am Ende, in Safari oder Chrome klingt sie sauber.':''}`:'Auf diesem Gerät ist keine englische Stimme eingebaut, deshalb gibt es hier keine Hör-Fragen.'}</p>
   ${PARENT?'<p class="tip"><button class="theme" id="pdf">Arbeitsblatt als PDF (für Eltern und Lehrkräfte)</button></p>':''}
   <p class="tip"><button class="theme" id="rst">Alles zurücksetzen</button></p>`;
   if(PARENT)$('#pdf').onclick=sheetSetup;
@@ -678,41 +678,7 @@ document.addEventListener('keydown',ev=>{
   if(ev.key==='Enter'){const b=$('#nx');if(b&&document.activeElement!==b&&document.activeElement.id!=='say'){ev.preventDefault();b.click()}}
 });
 
-/* ---------- Vorübergehend: Tontest (#tontest) zur Suche nach dem Knacken am Ende ---------- */
-let AC=null;
-function keepAwake(){ // unhörbar leiser Ton hält den Audioausgang wach; gibt eine Stopp-Funktion zurück
-  try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();AC.resume();
-    const o=AC.createOscillator(),g=AC.createGain();g.gain.value=0.0001;o.connect(g);g.connect(AC.destination);o.start();
-    return ()=>setTimeout(()=>{try{o.stop()}catch(e){}},1200)}catch(e){return ()=>{}}
-}
-function soundTest(){ // wird bei jeder neuen Stimmenliste des Browsers neu gezeichnet (voiceschanged)
-  const all='speechSynthesis' in window?speechSynthesis.getVoices():[],vs=all.filter(v=>/^en[-_]/i.test(v.lang));
-  $('#app').innerHTML=`${topBar()}<div class="qcard"><h2>Tontest</h2>
-   <p>Gewählt wird sonst: <b>${VOICE?esc(VOICE.name+' ('+VOICE.lang+')'):'keine Stimme'}</b></p>
-   <p class="tip">Browser meldet ${all.length} Stimmen, davon ${vs.length} englisch. <button class="theme" id="vre" type="button">Stimmen neu laden</button><br>${esc(navigator.userAgent)}</p>
-   <form class="form" onsubmit="return false">
-    <label>Stimme<select id="vv">${vs.map((v,i)=>`<option value="${i}" ${v===VOICE?'selected':''}>${esc(v.name)} · ${esc(v.lang)}${v.localService?'':' · online'}</option>`).join('')}</select></label>
-    <label>Text<input type="text" id="vt" value="guinea pig"></label>
-    <label>Tempo<select id="vr"><option value="0.9">90 % (wie bisher)</option><option value="1">100 % (normal, wie say)</option></select></label>
-   </form>
-   <div class="actions" style="justify-content:flex-start;margin-top:14px">
-    <button class="btn" data-m="a">A: wie bisher</button><button class="btn" data-m="b">B: Punkt am Ende</button>
-    <button class="btn" data-m="c">C: Lautsprecher wach</button><button class="btn" data-m="d">D: B und C</button></div>
-   <p class="tip" id="vlog"></p></div>`;
-  bindTheme();$('#vre').onclick=()=>{pickVoice();soundTest()};
-  document.querySelectorAll('[data-m]').forEach(b=>b.onclick=()=>{
-    if(!vs.length){$('#vlog').textContent='Keine englische Stimme in der Liste. Bitte „Stimmen neu laden“ tippen.';return}
-    const m=b.dataset.m,v=vs[+$('#vv').value];let t=$('#vt').value.trim();
-    if(m==='b'||m==='d')t=/[.!?]$/.test(t)?t:t+'.';
-    const stop=m==='c'||m==='d'?keepAwake():()=>{};
-    speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.voice=v;u.lang=v.lang;u.rate=+$('#vr').value;
-    u.onend=u.onerror=()=>{stop();$('#vlog').textContent=`${m.toUpperCase()} fertig: „${t}“ mit ${v.name}, Tempo ${Math.round(u.rate*100)} %`};
-    speechSynthesis.speak(u);
-  });
-}
 home();
-if(location.hash==='#tontest')soundTest();
-addEventListener('hashchange',()=>{if(location.hash==='#tontest')soundTest()});
 </script>
 
 </body>
