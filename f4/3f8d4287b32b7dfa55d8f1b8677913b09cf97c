@@ -1,0 +1,21 @@
+README.md
+  s_3c4f92a9a3448a::t_476f05e866eadd 1-5
+index.html
+  s_3c4f92a9a3448a::t_500d776da81a79 1-340
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "f43f8d4287b32b7dfa55d8f1b8677913b09cf97c",
+  "prompts": {},
+  "sessions": {
+    "s_3c4f92a9a3448a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "148e3c62-ebd9-4979-bcbb-f355b652f644",
+        "model": "unknown"
+      },
+      "human_author": "Robert Speck <pancetta@users.noreply.github.com>"
+    }
+  }
+}
