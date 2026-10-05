@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Lernmissionen">
+<link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAIAAACyr5FlAAAD/ElEQVR4nO3dzU0cQRCG4cXizJ6ckmNAToEDhMIBUrAcg1PitBn4YGm0wvsN89Nd9VXP+5zsC1vdeqdAWPLcPTy/nYBbvmUPAF/EAYk4IBEHJOKARByQiAMScUAiDkjEAYk4IBEHJOKARByQiAMScUAiDkjEAYk4IBEHJOKARByQiAMScUAiDkj32QO4uLw+Xf/1/PKeNYkPNgck4oBEHJCIAxJx3Hb5+Tt7hHzEAYk4JJYHccw5eB/E8YUj90EckIjja4ddHsSxyDH7IA5IxLHUAZcHcaxwtD6IY51D9UEckIhjteMsD+LY4iB9EAck4tjoCMuDOLYbvg/igEQcu4y9PIhjr4H7II4GRu2DOCARRxtDLg/iaGa8PogDEnG0NNjyII7GRuqDONobpg/igEQcXYyxPIijlwH6IA5IxNFR9eVBHH2V7oM4uqvbB3FAIo4IRZcHcQSp2AdxQCKOOOWWB3GEqtUHcUQr1AdxQCKOBFWWB3HkKNEHcUAijjT+y4M4Mpn3QRzJnPsgDkjEkc92eRCHBc8+iAMScbgwXB7EYcStD+KARBxerJYHcdjx6YM4HJn0QRyQiMOUw/IgDl/pfRAHJOKwlrs8iMNdYh/EUUBWH8QBiThqSFkexFFGfB/EAYk4KgleHsRRTGQfxFFPWB/EAYk4SopZHvcBn1HR+ddj9gj52ByQiAMScUAiDkjEAenu4fktewaYYnNAIg5ICb8Eu3z8if/QMZy//4j8uITNEXzCYcTfG99WIOXEwfJYK+XG2ByQ0uJgeSyXdVeZm4M+lki8Jb6tQEqOg+UxL/d+2ByQ8uNgeSjpN5Mfx8ngFgw53IlFHPDkEofDg+LD5DZc4oAhozhMHpd0PvdgFMfJ6V6yWN2AVxywYheH1aMTzO3sdnHAh2Mcbg9QDMNTO8ZxsryprjzPaxoHHPjG4fkw9WB7Ut84kM46DttHqiHnM1rHcfK+u/3MT+ceBxIViMP88drM/1wF4kCWGnH4P2RrlThRmf+HtMRtDqbG5kAK4oBEHJCIAxJxQCIOSMQBadfvOS6vT9Ofzy/vu4fp6HrUSaGZU0Zlc0AiDki74rjedTf3tgm1nyvOHKnl5vC86/mpKs4cZm8cn6I2OdXk0zz/pq04c4oGm8P2rmduueLM8br8QOpw12tnqDhzby3f1PT/2VLCXzVGxZnDNH6Nl2o/4KibP7rizDHav+Ntfjc2P3aTj6s4c4BeLwBc/u1z1V10+rJdv3jXmbvq+3bIlJ+wdl5xxZk7CXp1aMCNBy//JjybmES/V7b5jSf+2LiZeROT/JcOr7p6k2utOPMG+XHAFv9kD4k4IBEHJOKARByQiAMScUAiDkh/ARSxEB9azzFAAAAAAElFTkSuQmCC">
+<link rel="icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAIAAACyr5FlAAAD/ElEQVR4nO3dzU0cQRCG4cXizJ6ckmNAToEDhMIBUrAcg1PitBn4YGm0wvsN89Nd9VXP+5zsC1vdeqdAWPLcPTy/nYBbvmUPAF/EAYk4IBEHJOKARByQiAMScUAiDkjEAYk4IBEHJOKARByQiAMScUAiDkjEAYk4IBEHJOKARByQiAMScUAiDkj32QO4uLw+Xf/1/PKeNYkPNgck4oBEHJCIAxJx3Hb5+Tt7hHzEAYk4JJYHccw5eB/E8YUj90EckIjja4ddHsSxyDH7IA5IxLHUAZcHcaxwtD6IY51D9UEckIhjteMsD+LY4iB9EAck4tjoCMuDOLYbvg/igEQcu4y9PIhjr4H7II4GRu2DOCARRxtDLg/iaGa8PogDEnG0NNjyII7GRuqDONobpg/igEQcXYyxPIijlwH6IA5IxNFR9eVBHH2V7oM4uqvbB3FAIo4IRZcHcQSp2AdxQCKOOOWWB3GEqtUHcUQr1AdxQCKOBFWWB3HkKNEHcUAijjT+y4M4Mpn3QRzJnPsgDkjEkc92eRCHBc8+iAMScbgwXB7EYcStD+KARBxerJYHcdjx6YM4HJn0QRyQiMOUw/IgDl/pfRAHJOKwlrs8iMNdYh/EUUBWH8QBiThqSFkexFFGfB/EAYk4KgleHsRRTGQfxFFPWB/EAYk4SopZHvcBn1HR+ddj9gj52ByQiAMScUAiDkjEAenu4fktewaYYnNAIg5ICb8Eu3z8if/QMZy//4j8uITNEXzCYcTfG99WIOXEwfJYK+XG2ByQ0uJgeSyXdVeZm4M+lki8Jb6tQEqOg+UxL/d+2ByQ8uNgeSjpN5Mfx8ngFgw53IlFHPDkEofDg+LD5DZc4oAhozhMHpd0PvdgFMfJ6V6yWN2AVxywYheH1aMTzO3sdnHAh2Mcbg9QDMNTO8ZxsryprjzPaxoHHPjG4fkw9WB7Ut84kM46DttHqiHnM1rHcfK+u/3MT+ceBxIViMP88drM/1wF4kCWGnH4P2RrlThRmf+HtMRtDqbG5kAK4oBEHJCIAxJxQCIOSMQBadfvOS6vT9Ofzy/vu4fp6HrUSaGZU0Zlc0AiDki74rjedTf3tgm1nyvOHKnl5vC86/mpKs4cZm8cn6I2OdXk0zz/pq04c4oGm8P2rmduueLM8br8QOpw12tnqDhzby3f1PT/2VLCXzVGxZnDNH6Nl2o/4KibP7rizDHav+Ntfjc2P3aTj6s4c4BeLwBc/u1z1V10+rJdv3jXmbvq+3bIlJ+wdl5xxZk7CXp1aMCNBy//JjybmES/V7b5jSf+2LiZeROT/JcOr7p6k2utOPMG+XHAFv9kD4k4IBEHJOKARByQiAMScUAiDkh/ARSxEB9azzFAAAAAAElFTkSuQmCC">
+<title>Lernmissionen</title>
+<style>
+/* Übersicht: ein Abschnitt pro Fach und Klasse, eine Kachel pro Mission. Neue Mission = neuer Ordner + neue Kachel. */
+:root{--bg:#eef6fa;--card:#fff;--ink:#10263b;--muted:#53697b;--line:#cfe0ea;--sea:#0e6f94;
+  --f-display:ui-rounded,'SF Pro Rounded','Arial Rounded MT Bold','Nunito','Trebuchet MS','Segoe UI',system-ui,sans-serif;color-scheme:light}
+@media (prefers-color-scheme: dark){:root{--bg:#0a1a28;--card:#12293c;--ink:#eaf3f9;--muted:#9db4c5;--line:#24435c;--sea:#4fc0e8;color-scheme:dark}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.45 system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;padding:20px 16px 48px;-webkit-text-size-adjust:100%}
+main{max-width:640px;margin:0 auto}
+h1,h2,h3{font-family:var(--f-display);font-weight:600;margin:0}
+h1{color:var(--sea);font-size:clamp(1.8rem,7vw,2.4rem)}
+h2{margin:26px 0 10px;font-size:1.1rem;color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.tile{display:grid;gap:4px;background:var(--card);border:2px solid var(--line);border-radius:18px;padding:14px 16px;color:inherit;text-decoration:none;transition:transform .12s,border-color .12s}
+.tile:hover,.tile:focus-visible{border-color:var(--sea);transform:translateY(-2px);outline:none}
+.tile span{color:var(--muted);font-size:.92rem}
+.tip{color:var(--muted);font-size:.9rem;margin-top:28px}
+@media (prefers-reduced-motion:reduce){.tile{transition:none}}
+</style>
+</head>
+<body>
+<main>
+<h1>Lernmissionen</h1>
+<p>Wähle dein Fach und deine Mission.</p>
+
+<h2>Englisch · Klasse 5</h2>
+<div class="grid">
+ <a class="tile" href="englisch-5/vokabeln/"><h3>Vokabel-Inseln</h3><span>Segle von Insel zu Insel: Zahlen, Tiere, Schule, Familie und mehr</span></a>
+</div>
+
+<p class="tip">Diese Seiten sammeln keine Daten. Der Lernfortschritt bleibt nur im Browser des jeweiligen Geräts.</p>
+</main>
+<script>/* Eltern-Link (#eltern) an alle Missionen weitergeben, dort gibt es dann den PDF-Export */
+if(location.hash==='#eltern')document.querySelectorAll('a.tile').forEach(a=>a.hash='eltern');</script>
+</body>
+</html>
