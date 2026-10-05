@@ -366,7 +366,7 @@ function show(){
     <form class="typebox" id="tf" autocomplete="off"><input type="text" id="ti" aria-label="Englisches Wort" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="English"><button class="btn" type="submit">Prüfen</button></form>
     <p style="margin:12px 0 0"><button class="btn ghost small" id="hint" type="button">Tipp: erster Buchstabe</button></p>`;
   }else{
-    body=`<div class="opts">${q.options.map((o,i)=>`<button class="opt" data-i="${i}">${esc(o)}</button>`).join('')}</div>`;
+    body=`<div class="opts" role="group" aria-label="Antworten, mit Pfeiltasten wählen">${q.options.map((o,i)=>`<button class="opt" data-i="${i}">${esc(o)}</button>`).join('')}</div>`;
   }
   $('#app').innerHTML=`
   <div class="q-head"><button class="back" id="bk" aria-label="Zurück zur Auswahl">Ende</button>
@@ -461,7 +461,14 @@ function buildSheet(topic,dir,n){
   $('#rx').onclick=()=>buildSheet(topic,dir,n);
 }
 document.addEventListener('keydown',ev=>{
-  if(!G||!G.answered)return;
+  if(!G)return;
+  // Pfeiltasten wandern durch die Antworten (rundherum), Enter/Leertaste wählt wie bei jedem Knopf
+  const os=G.answered?[]:[...document.querySelectorAll('.opt')];
+  if(os.length&&/^Arrow(Up|Down|Left|Right)$/.test(ev.key)){
+    const i=os.indexOf(document.activeElement),d=/Up|Left/.test(ev.key)?-1:1;
+    ev.preventDefault();os[i<0?(d>0?0:os.length-1):(i+d+os.length)%os.length].focus();return;
+  }
+  if(!G.answered)return;
   if(ev.key==='Enter'){const b=$('#nx');if(b&&document.activeElement!==b){ev.preventDefault();b.click()}}
 });
 home();
