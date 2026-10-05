@@ -693,6 +693,7 @@ function soundTest(tries=0){
    <form class="form" onsubmit="return false">
     <label>Stimme<select id="vv">${vs.map((v,i)=>`<option value="${i}" ${v===VOICE?'selected':''}>${esc(v.name)} · ${esc(v.lang)}${v.localService?'':' · online'}</option>`).join('')}</select></label>
     <label>Text<input type="text" id="vt" value="guinea pig"></label>
+    <label>Tempo<select id="vr"><option value="0.9">90 % (wie bisher)</option><option value="1">100 % (normal, wie say)</option></select></label>
    </form>
    <div class="actions" style="justify-content:flex-start;margin-top:14px">
     <button class="btn" data-m="a">A: wie bisher</button><button class="btn" data-m="b">B: Punkt am Ende</button>
@@ -703,8 +704,8 @@ function soundTest(tries=0){
     const m=b.dataset.m,v=vs[+$('#vv').value];let t=$('#vt').value.trim();
     if(m==='b'||m==='d')t=/[.!?]$/.test(t)?t:t+'.';
     const stop=m==='c'||m==='d'?keepAwake():()=>{};
-    speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.voice=v;u.lang=v.lang;u.rate=.9;
-    u.onend=u.onerror=()=>{stop();$('#vlog').textContent=`${m.toUpperCase()} fertig: „${t}“ mit ${v.name}`};
+    speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.voice=v;u.lang=v.lang;u.rate=+$('#vr').value;
+    u.onend=u.onerror=()=>{stop();$('#vlog').textContent=`${m.toUpperCase()} fertig: „${t}“ mit ${v.name}, Tempo ${Math.round(u.rate*100)} %`};
     speechSynthesis.speak(u);
   });
 }
