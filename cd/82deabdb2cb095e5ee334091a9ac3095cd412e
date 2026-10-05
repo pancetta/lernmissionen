@@ -1,0 +1,26 @@
+englisch-5/here-we-go/index.html
+  s_54261e8a499c43::t_a6da6e1f9a1945 243
+  s_54261e8a499c43::t_4a2666fddbabea 219-220
+  s_54261e8a499c43::t_5291d30578d4ef 245
+  s_54261e8a499c43::t_4a8765f331ef36 234
+index.html
+  s_54261e8a499c43::t_c53f0a878ec7a3 42-43
+README.md
+  s_54261e8a499c43::t_75d3432a3ecdbe 6
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "cd82deabdb2cb095e5ee334091a9ac3095cd412e",
+  "prompts": {},
+  "sessions": {
+    "s_54261e8a499c43": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "09d1c376-00da-4c7d-9fcd-87abfbea46f1",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Robert Speck <pancetta@users.noreply.github.com>"
+    }
+  }
+}
