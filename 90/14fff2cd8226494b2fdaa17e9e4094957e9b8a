@@ -1,0 +1,19 @@
+englisch-5/vokabeln/index.html
+  s_54261e8a499c43::t_fbdef539f7d672 192,194,228
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "9014fff2cd8226494b2fdaa17e9e4094957e9b8a",
+  "prompts": {},
+  "sessions": {
+    "s_54261e8a499c43": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "09d1c376-00da-4c7d-9fcd-87abfbea46f1",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Robert Speck <pancetta@users.noreply.github.com>"
+    }
+  }
+}
