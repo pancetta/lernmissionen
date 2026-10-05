@@ -281,7 +281,7 @@ const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',
 const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
 const enShow=e=>e[1].split('|')[0];
 const deShow=e=>e[2].replace(/ \/ /g,' / ');
-const norm=t=>t.toLowerCase().replace(/[‘’´`]/g,"'").replace(/[.!?]+$/,'').replace(/\s+/g,' ').trim();
+const norm=t=>t.replace(/[‘’´`]/g,"'").replace(/[.!?]+$/,'').replace(/\s+/g,' ').trim();
 const key=e=>e[1];
 function rank(){let r=RANKS[0];for(const x of RANKS)if(save.xp>=x[0])r=x;return r[1]}
 function starsHtml(n){return '<span class="stars">'+[1,2,3].map(i=>i<=n?'<b>★</b>':'★').join('')+'</span>'}
@@ -385,10 +385,12 @@ function show(){
 }
 function answer(i,text){
   if(G.answered)return;
-  const q=G.queue[0],e=q.e;let ok;
+  const q=G.queue[0],e=q.e;let ok,caseOnly=false;
   if(q.type){
     const t=norm(text||'');if(!t){$('#ti').focus();return}
-    ok=e[1].split('|').some(a=>norm(a)===t);
+    const alts=e[1].split('|').map(norm);
+    ok=alts.includes(t); // Groß- und Kleinschreibung zählt
+    caseOnly=!ok&&alts.some(a=>a.toLowerCase()===t.toLowerCase());
     $('#ti').disabled=true;document.querySelector('#tf button').disabled=true;
   }else{
     ok=q.options[i]===q.correct;
@@ -404,7 +406,7 @@ function answer(i,text){
   persist();
   const good=ok;
   const ans=`${esc(enShow(e))} = ${esc(deShow(e))}`;
-  $('#fb').innerHTML=`<div class="fb ${good?'ok':'no'}" role="status"><strong>${good?CHEER[Math.floor(Math.random()*CHEER.length)]:OOPS[Math.floor(Math.random()*OOPS.length)]}</strong>
+  $('#fb').innerHTML=`<div class="fb ${good?'ok':'no'}" role="status"><strong>${good?CHEER[Math.floor(Math.random()*CHEER.length)]:caseOnly?'Fast! Achte auf Groß- und Kleinschreibung.':OOPS[Math.floor(Math.random()*OOPS.length)]}</strong>
    <span class="ans">${good?ans:'Richtig ist: '+ans}</span>
    <div class="row"><button class="btn" id="nx">${G.queue.length>1?'Weiter':'Fertig'}</button></div></div>`;
   $('#nx').focus();
