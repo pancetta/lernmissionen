@@ -677,7 +677,39 @@ document.addEventListener('keydown',ev=>{
   if(!G||!G.answered)return;
   if(ev.key==='Enter'){const b=$('#nx');if(b&&document.activeElement!==b&&document.activeElement.id!=='say'){ev.preventDefault();b.click()}}
 });
+
+/* ---------- Vorübergehend: Tontest (#tontest) zur Suche nach dem Knacken am Ende ---------- */
+let AC=null;
+function keepAwake(){ // unhörbar leiser Ton hält den Audioausgang wach; gibt eine Stopp-Funktion zurück
+  try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();AC.resume();
+    const o=AC.createOscillator(),g=AC.createGain();g.gain.value=0.0001;o.connect(g);g.connect(AC.destination);o.start();
+    return ()=>setTimeout(()=>{try{o.stop()}catch(e){}},1200)}catch(e){return ()=>{}}
+}
+function soundTest(tries=0){
+  const vs=speechSynthesis.getVoices().filter(v=>/^en[-_]/i.test(v.lang));
+  if(!vs.length&&tries<10)return setTimeout(()=>soundTest(tries+1),300);
+  $('#app').innerHTML=`${topBar()}<div class="qcard"><h2>Tontest</h2>
+   <p>Gewählt wird sonst: <b>${VOICE?esc(VOICE.name+' ('+VOICE.lang+')'):'keine Stimme'}</b></p>
+   <form class="form" onsubmit="return false">
+    <label>Stimme<select id="vv">${vs.map((v,i)=>`<option value="${i}" ${v===VOICE?'selected':''}>${esc(v.name)} · ${esc(v.lang)}${v.localService?'':' · online'}</option>`).join('')}</select></label>
+    <label>Text<input type="text" id="vt" value="guinea pig"></label>
+   </form>
+   <div class="actions" style="justify-content:flex-start;margin-top:14px">
+    <button class="btn" data-m="a">A: wie bisher</button><button class="btn" data-m="b">B: Punkt am Ende</button>
+    <button class="btn" data-m="c">C: Lautsprecher wach</button><button class="btn" data-m="d">D: B und C</button></div>
+   <p class="tip" id="vlog"></p></div>`;
+  bindTheme();
+  document.querySelectorAll('[data-m]').forEach(b=>b.onclick=()=>{
+    const m=b.dataset.m,v=vs[+$('#vv').value];let t=$('#vt').value.trim();
+    if(m==='b'||m==='d')t=/[.!?]$/.test(t)?t:t+'.';
+    const stop=m==='c'||m==='d'?keepAwake():()=>{};
+    speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.voice=v;u.lang=v.lang;u.rate=.9;
+    u.onend=u.onerror=()=>{stop();$('#vlog').textContent=`${m.toUpperCase()} fertig: „${t}“ mit ${v.name}`};
+    speechSynthesis.speak(u);
+  });
+}
 home();
+if(location.hash==='#tontest')soundTest();
 </script>
 
 </body>
