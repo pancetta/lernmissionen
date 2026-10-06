@@ -22,8 +22,8 @@
 const BRAND='Pronomen-Inseln';
 const W=WORTSCHATZ.W;
 const TOPICS=[
- {id:'subjekt',name:'Ich-du-er-Insel',map:'ich, du, er',sub:'I, you, he, she, it, we, they'},
- {id:'objekt',name:'Mich-dich-ihn-Insel',map:'mich, dich',sub:'me, you, him, her, it, us, them'},
+ {id:'uebersetzen',name:'Ich-du-er-Insel',map:'ich, du, er',sub:'ich = I, wir = we, sie = they …'},
+ {id:'zuordnen',name:'Zuordnen-Insel',map:'Zuordnen',sub:'Lisa → she, Tom and I → we'},
  {id:'ersetzen',name:'Ersetz-Insel',map:'Ersetzen',sub:'Aus „Tom“ wird „he“'},
  {id:'luecken',name:'Lücken-Insel',map:'Lücken',sub:'Welches Pronomen fehlt im Satz?'},
  {id:'wer',name:'Wer-ist-das-Insel',map:'Wer ist das?',sub:'Wen meint „she“ im Satz?'},
@@ -33,20 +33,11 @@ const TOPICS=[
 const MAP=[[50,42],[130,42],[210,42],[290,42],[250,118],[170,118],[90,118]]; // Seekarte, Reihenfolge wie TOPICS
 
 /* ---------- Pronomen und Satzbausteine ---------- */
-// Personalpronomen. you steht zweimal (du und ihr), it hat in beiden Formen dieselbe Gestalt.
-const PR=[
- {s:'I',o:'me',ds:'ich',do:'mich / mir'},
- {s:'you',o:'you',ds:'du',do:'dich / dir'},
- {s:'he',o:'him',ds:'er',do:'ihn / ihm'},
- {s:'she',o:'her',ds:'sie (eine Person)',do:'sie / ihr (eine Person)'},
- {s:'it',o:'it',ds:'es',do:'es'},
- {s:'we',o:'us',ds:'wir',do:'uns'},
- {s:'you',o:'you',ds:'ihr (mehrere)',do:'euch'},
- {s:'they',o:'them',ds:'sie (mehrere)',do:'sie / ihnen (mehrere)'}
-];
-const FORMS=c=>[...new Set(PR.map(p=>p[c]))];                       // c = 's' (Subjekt) oder 'o' (Objekt)
-const de=(w,c)=>PR.filter(p=>p[c]===w).map(p=>p['d'+c]).join(' / ');
-const other=w=>{const p=PR.find(p=>p.s===w&&p.o!==w)||PR.find(p=>p.o===w&&p.s!==w);return p?(p.s===w?p.o:p.s):null}; // he <-> him
+// Nur Subjektpronomen (wer macht etwas?). Objektformen (me, him, them ...) kommen erst später im Unterricht.
+// you steht zweimal: du und ihr. Die Reihenfolge ist fest, n.p zeigt auf diese Liste.
+const PR=[{s:'I',de:'ich'},{s:'you',de:'du'},{s:'he',de:'er'},{s:'she',de:'sie (eine Person)'},{s:'it',de:'es'},{s:'we',de:'wir'},{s:'you',de:'ihr (mehrere)'},{s:'they',de:'sie (mehrere)'}];
+const FORMS=[...new Set(PR.map(p=>p.s))];
+const deOf=w=>PR.filter(p=>p.s===w).map(p=>p.de).join(' / ');
 const cap=t=>t[0].toUpperCase()+t.slice(1);
 const md=t=>esc(t).replace(/\*\*(.+?)\*\*/g,'<b>$1</b>');          // **fett** im Fragetext
 const plain=t=>t.replace(/\*\*/g,'');
@@ -56,140 +47,121 @@ const NAMES={he:['Tom','Ben','Max','Leo'],she:['Lisa','Emma','Mia','Anna']};
 const PERSON={boy:'he',girl:'she',mum:'she',mother:'she',dad:'he',father:'he',brother:'he',sister:'she'};
 // Dinge und Tiere: alle Nomen der Wortliste (deutsches Wort großgeschrieben), außer Personen, Zeit und Zahlen.
 const SKIP=['home','kid','people','colour','hometown'];
-const PHYS=['tiere','klasse','stadt','farben','leute']; // zum Ansehen und Anfassen: "is here", "Look at"
+const PHYS=['tiere','klasse','stadt','farben','leute']; // zum Ansehen und Anfassen: "is here", "is big"
 const isThing=e=>{const en=enShow(e);return /^[A-ZÄÖÜ]/.test(deShow(e))&&/^[a-z][a-z ]*$/.test(en)&&!/ of$/.test(en)
   &&!['zeit','zahlen'].includes(e[0])&&!PERSON[en]&&!SKIP.includes(en)&&!/(\S+) \/ \1in\b/.test(deShow(e))};
 const THINGS=W.filter(isThing);
+const petLike=n=>!!(n.e&&n.e[0]==='tiere'); // Tiere: in der Schule "it", als Haustier aber auch he/she möglich
 
 function personNP(){
   const fam=W.filter(e=>PERSON[enShow(e)]);
   if(Math.random()<.55||!fam.length){const g=pick(['he','she']);return {t:pick(NAMES[g]),p:g==='he'?2:3,person:true,name:true}}
   const w=enShow(pick(fam));return {t:(['boy','girl'].includes(w)?'the ':'my ')+w,p:PERSON[w]==='he'?2:3,person:true};
 }
-function thingNP(){const e=pick(THINGS);return {t:'the '+enShow(e),p:4,phys:PHYS.includes(e[0]),klasse:e[0]==='klasse',e}}
+function thingNP(){const e=pick(THINGS);return {t:'the '+enShow(e),p:4,phys:PHYS.includes(e[0]),e}}
 function npOf(k){
+  if(k==='I')return {t:'I',p:0,who:pick(NAMES[pick(['he','she'])])};        // "My name is Tom. I am ..."
+  if(k==='you')return {t:'you',p:1,who:pick(NAMES[pick(['he','she'])])};     // "Hello, Lisa! How old are you?"
   if(k==='it')return thingNP();
   if(k==='person')return personNP();
   if(k==='they-p'){const a=personNP(),fam=t=>t.startsWith('my ')?PERSON[t.slice(3)]:null;let b;do b=personNP();while(b.t===a.t||(fam(a.t)&&fam(a.t)===fam(b.t))); // nicht "my mum and my mother"
    return {t:a.t+' and '+b.t,p:7,person:true,pl:true}}
   if(k==='they-t'){const a=thingNP(),near=THINGS.filter(x=>x[0]===a.e[0]&&enShow(x)!==a.t.slice(4)),b=pick(near.length?near:THINGS.filter(x=>'the '+enShow(x)!==a.t));
     return {t:a.t+' and the '+enShow(b),p:7,pl:true,phys:a.phys&&PHYS.includes(b[0])}}
-  if(k==='we'){const a=personNP();return {t:a.t+' and I',to:a.t+' and me',p:5,person:true,pl:true}}
+  if(k==='we'){const a=personNP();return {t:a.t+' and I',p:5,person:true,pl:true}}
   if(k==='youpl'){const a=personNP();return {t:'you and '+a.t,p:6,person:true,pl:true}}
 }
-const SUBJ_T={
+const T={
+ I:['{} am ten years old.','{} am at school.','{} am late.','{} am from Germany.','{} am at home.'],
+ you:['How old are {}?','Where are {}?','{} are my friend.','{} are late.','{} are nice.'],
  person:['{} is at school.','{} is my friend.','{} is nice.','{} is late.','{} is at home.','{} is sad.','{} is friendly.','Where is {}?'],
  name:['{} is ten years old.','{} is from Germany.'],
  people:['{} are at school.','{} are nice.','{} are late.','{} are at home.','{} are sad.','{} are friendly.','Where are {}?'],
  thing:['{} is great.','{} is nice.'],physThing:['{} is here.','{} is there.','{} is big.','{} is new.','Where is {}?'],
  things:['{} are great.','{} are nice.'],physThings:['{} are here.','{} are there.','{} are big.','{} are new.','Where are {}?']
 };
-const OBJ_T={
- person:['I like {}.','Look at {}!','Can you see {}?','Wait for {}!',"Let's talk to {}.",'I know {}.','Give {} the book, please.'],
- us:['Look at {}!','Can you see {}?','Wait for {}!','Give {} the book, please.'],
- youpl:['I like {}.','I know {}.'], // "you and Tom" als Objekt klingt sonst schief
- thing:['I like {}.',"I don't like {}."],physThing:['Look at {}!','Can you see {}?'],klasse:['Give me {}, please.']
-};
-// Ein Satz mit Nomen, dazu derselbe Satz mit Pronomen. role: 'subj' oder 'obj'
-function sentence(role,k){
-  const n=npOf(k||pick(['person','person','it','it','they-p','they-t','we','youpl']));
-  const T=role==='subj'
-    ?(n.p===4?SUBJ_T.thing.concat(n.phys?SUBJ_T.physThing:[]):n.person&&n.pl?SUBJ_T.people.filter(t=>(n.p!==5&&n.p!==6)||!t.startsWith('Where'))
-      :n.pl?SUBJ_T.things.concat(n.phys?SUBJ_T.physThings:[]):SUBJ_T.person.concat(n.name?SUBJ_T.name:[]))
-    :(n.p===5?OBJ_T.us:n.p===6?OBJ_T.youpl:n.person?OBJ_T.person:OBJ_T.thing.concat(n.phys?OBJ_T.physThing:[],n.klasse?OBJ_T.klasse:[]));
-  const t=pick(T),at0=t.startsWith('{}'),put=x=>t.replace('{}',at0?cap(x):x);
-  const phrase=role==='obj'&&n.to?n.to:n.t,w=role==='subj'?PR[n.p].s:PR[n.p].o;
-  return {t,at0,put,n,w,phrase,orig:put(phrase),mark:t.replace('{}','**'+(at0?cap(phrase):phrase)+'**'),out:put(w),role};
+const ALL=['person','person','it','it','they-p','they-t','we','youpl'], NOUNS=ALL; // NOUNS: Satzteile, die man ersetzen kann
+// Ein Satz mit Nomen, dazu derselbe Satz mit Pronomen
+function sentence(kinds=ALL){
+  const n=npOf(pick(kinds));
+  const L=n.p===0?T.I:n.p===1?T.you:n.p===4?T.thing.concat(n.phys?T.physThing:[]):n.person&&n.pl?T.people.filter(t=>(n.p!==5&&n.p!==6)||!t.startsWith('Where'))
+    :n.pl?T.things.concat(n.phys?T.physThings:[]):T.person.concat(n.name?T.name:[]);
+  const t=pick(L),at0=t.startsWith('{}'),put=x=>t.replace('{}',at0||x==='I'?cap(x):x),w=PR[n.p].s;
+  return {t,at0,put,n,w,orig:put(n.t),mark:t.replace('{}','**'+(at0?cap(n.t):n.t)+'**'),out:put(w)};
 }
-const petLike=n=>!!(n.e&&n.e[0]==='tiere'); // Tiere: in der Schule "it", als Haustier aber auch he/she möglich
 const shown=(s,x)=>s.at0||x==='I'?cap(x):x;                       // so steht das Pronomen im Satz
-function choices(s,correct){ // richtige Form, die andere Form (him statt he) und zwei weitere derselben Art
-  const c=s.role==='subj'?'s':'o',o=other(s.w);
-  const rest=shuffle(FORMS(c).filter(x=>x!==s.w&&x!==o));
-  return shuffle([s.w].concat(o?[o]:[],rest).slice(0,4)).map(x=>shown(s,x));
-}
-const intro=n=>n.p===5||n.p===6?`**${cap(n.t)}** are friends.`:n.pl?`Here are **${n.t}**.`:n.person?`This is **${n.t}**.`:`Here is **${n.t}**.`;
+const choices=s=>shuffle([s.w].concat(shuffle(FORMS.filter(x=>x!==s.w)).slice(0,3))).map(x=>shown(s,x));
+const intro=n=>n.p===0?`My name is **${n.who}**.`:n.p===1?`Hello, **${n.who}**!`:n.p===5||n.p===6?`**${cap(n.t)}** are friends.`
+  :n.pl?`Here are **${n.t}**.`:n.person?`This is **${n.t}**.`:`Here is **${n.t}**.`;
 
 /* ---------- Fragen (alle als reine Daten, damit Runden gespeichert werden können) ---------- */
 // Felder: kind (mc|type|build|listen), label, prompt (**fett** erlaubt), options/correct, accept, tiles/target, sol, say, wk (Übungs-Schlüssel)
-function qTrans(c,quick){
-  if(Math.random()<.5){
-    const p=pick(PR),correct=p[c],opts=[correct].concat(shuffle(FORMS(c).filter(w=>w!==correct)).slice(0,3));
-    const q={kind:'mc',label:'Wie heißt das auf Englisch?',prompt:p['d'+c],options:shuffle(opts),correct,accept:[correct],sol:`${p['d'+c]} = ${correct}`,say:correct,wk:correct};
-    if(!quick&&Math.random()<.4)q.kind='type';
+function qTrans(quick){
+  if(Math.random()<.55){
+    const p=pick(PR),correct=p.s;
+    const q={kind:'mc',label:'Wie heißt das auf Englisch?',prompt:p.de,options:shuffle([correct].concat(shuffle(FORMS.filter(w=>w!==correct)).slice(0,3))),correct,accept:[correct],sol:`${p.de} = ${correct}`,say:correct,wk:correct};
+    if(!quick&&Math.random()<.4){q.kind='type';q.label='Schreibe das englische Pronomen'}
     return q;
   }
-  const w=pick(FORMS(c)),correct=de(w,c),opts=[correct].concat(shuffle(FORMS(c).filter(x=>x!==w).map(x=>de(x,c))).slice(0,3));
-  return {kind:'mc',label:'Was heißt das auf Deutsch?',prompt:w,options:shuffle(opts),correct,sol:`${w} = ${correct}`,say:w,wk:w};
+  const w=pick(FORMS),correct=deOf(w);
+  return {kind:'mc',label:'Was heißt das auf Deutsch?',prompt:w,options:shuffle([correct].concat(shuffle(FORMS.filter(x=>x!==w).map(deOf)).slice(0,3))),correct,sol:`${w} = ${correct}`,say:w,wk:w};
 }
-function qSimple(role){ // "Lisa → she", "Lisa and me → us"
-  const s=sentence(role),from=role==='obj'&&s.n.to?s.n.to:s.n.t;
-  return {kind:'mc',label:role==='subj'?'Welches Pronomen passt?':'Welches Pronomen passt als Objekt (wen? wem?)?',prompt:`${cap(from)} → ?`,
-    options:choices(Object.assign({},s,{at0:false}),s.w).map(x=>x==='I'?x:x.toLowerCase()),correct:s.w,sol:`${cap(from)} → ${s.w}`,say:s.out,wk:s.w};
+function qSimple(){ // "Lisa → she", "Tom and I → we"
+  const s=sentence(NOUNS);
+  return {kind:'mc',label:'Welches Pronomen passt?',prompt:`${cap(s.n.t)} → ?`,options:choices(Object.assign({},s,{at0:false})),correct:s.w,sol:`${cap(s.n.t)} → ${s.w}`,say:s.out,wk:s.w};
 }
-function qForm(){
-  const P=PR.filter(p=>p.s!==p.o),p=pick(P),toObj=Math.random()<.5,from=toObj?p.s:p.o,correct=toObj?p.o:p.s,c=toObj?'o':'s';
-  const opts=[correct].concat(shuffle(FORMS(c).filter(x=>x!==correct&&x!==p.s&&x!==p.o&&x!=='you'&&x!=='it')).slice(0,2),[from]);
-  return {kind:'mc',label:toObj?`Welche Objektform gehört zu „${from}“?`:`Welche Subjektform gehört zu „${from}“?`,prompt:`${from} → ?`,
-    options:shuffle([...new Set(opts)]),correct,sol:`${p.s} → ${p.o}`,say:`${p.s}, ${p.o}`,wk:correct};
-}
-function qReplace(quick){
-  const s=sentence(pick(['subj','obj'])),correct=shown(s,s.w);
-  return {kind:'mc',label:'Welches Pronomen ersetzt den fetten Teil?',prompt:s.mark,options:choices(s),correct,sol:s.out,say:s.out,wk:s.w};
+function qReplace(){
+  const s=sentence(NOUNS);
+  return {kind:'mc',label:'Welches Pronomen ersetzt den fetten Teil?',prompt:s.mark,options:choices(s),correct:shown(s,s.w),sol:s.out,say:s.out,wk:s.w};
 }
 function qGap(quick){
-  const s=sentence(pick(['subj','obj'])),correct=shown(s,s.w),i=intro(s.n);
+  const s=sentence(ALL.concat(['I','you'])),correct=shown(s,s.w),i=intro(s.n);
   const q={kind:'mc',label:'Welches Pronomen fehlt?',prompt:`${i} ${s.t.replace('{}','___')}`,options:choices(s),correct,accept:[correct],
     sol:`${plain(i)} ${s.out}`,say:`${plain(i)} ${s.out}`,wk:s.w};
   if(!quick&&Math.random()<.5){q.kind='type';q.label='Schreibe das fehlende Pronomen'}
   return q;
 }
 function qWho(){
-  const s=sentence(pick(['subj','obj'])),ans=s.role==='obj'&&s.n.to?s.n.to:s.n.t;
-  const kinds=['person','person','it','they-p','we'],opts=[ans],seen=new Set([s.n.p]);
-  for(let i=0;i<40&&opts.length<4;i++){const n=npOf(pick(kinds));if(seen.has(n.p)||(petLike(n)&&['he','she','him','her'].includes(s.w)))continue;seen.add(n.p);opts.push(s.role==='obj'&&n.to?n.to:n.t)}
-  return {kind:'mc',label:'Wen oder was kann das fette Pronomen meinen?',prompt:s.t.replace('{}','**'+shown(s,s.w)+'**'),options:shuffle(opts),correct:ans,
-    sol:`${shown(s,s.w)} = ${ans}`,say:s.out,wk:s.w};
+  const kinds=['person','person','it','they-p','they-t','we'],s=sentence(kinds),opts=[s.n.t],seen=new Set([s.n.p]);
+  for(let i=0;i<40&&opts.length<4;i++){const n=npOf(pick(kinds));if(seen.has(n.p)||(petLike(n)&&['he','she'].includes(s.w)))continue;seen.add(n.p);opts.push(n.t)}
+  return {kind:'mc',label:'Wen oder was kann das fette Pronomen meinen?',prompt:s.t.replace('{}','**'+shown(s,s.w)+'**'),options:shuffle(opts),correct:s.n.t,
+    sol:`${shown(s,s.w)} = ${s.n.t}`,say:s.out,wk:s.w};
 }
 function qFehler(){
-  const ok=Math.random()<.45;
-  if(Math.random()<.6){ // falsche Form: "Him is at school."
-    let s;do s=sentence(pick(['subj','obj']));while(!other(s.w));
-    return {kind:'mc',label:'Stimmt der Satz?',prompt:ok?s.out:s.put(other(s.w)),options:['Stimmt','Stimmt nicht'],correct:ok?'Stimmt':'Stimmt nicht',
-      sol:ok?s.out:'Richtig heißt es: '+s.out,say:s.out,wk:s.w};
+  const ok=Math.random()<.45,yes=ok?'Stimmt':'Stimmt nicht';
+  if(Math.random()<.15){ // I schreibt man immer groß
+    const s=sentence(['I']),i=intro(s.n);
+    return {kind:'mc',label:'Stimmt der Satz?',prompt:`${i} ${ok?s.out:s.out.replace(/^I /,'i ')}`,options:['Stimmt','Stimmt nicht'],correct:yes,
+      sol:(ok?'':'I schreibt man immer groß: ')+`${plain(i)} ${s.out}`,say:`${plain(i)} ${s.out}`,wk:'I'};
   }
-  // falsches Pronomen zum Satz davor: "This is Lisa. I like him." Ohne Tiere, denn Haustiere dürfen im Englischen auch he/she sein.
-  let s;do s=sentence(pick(['subj','obj']));while(petLike(s.n));
-  const c=s.role==='subj'?'s':'o',i=intro(s.n);
-  const wrong=pick(FORMS(c).filter(x=>x!==s.w&&x!=='I'&&x!=='you'&&(s.role==='obj'||(['we','they'].includes(x)===!!s.n.pl))));
-  return {kind:'mc',label:'Passt das Pronomen zum Satz davor?',prompt:`${i} ${ok?s.out:s.put(wrong)}`,options:['Stimmt','Stimmt nicht'],correct:ok?'Stimmt':'Stimmt nicht',
-    sol:ok?`${plain(i)} ${s.out}`:'Richtig heißt es: '+`${plain(i)} ${s.out}`,say:`${plain(i)} ${s.out}`,wk:s.w};
+  // falsches Pronomen zum Satz davor: "This is Lisa. He is nice." Ohne Tiere, denn Haustiere dürfen im Englischen auch he/she sein.
+  let s;do s=sentence(['person','person','it','they-p','they-t','we','you']);while(petLike(s.n));
+  const i=intro(s.n),same=s.n.p===1?['we','they']:s.n.pl?['we','they']:['he','she','it']; // gleiche Verbform (is/are), damit nur der Sinn entscheidet
+  const wrong=pick(same.filter(x=>x!==s.w));
+  return {kind:'mc',label:'Passt das Pronomen zum Satz davor?',prompt:`${i} ${ok?s.out:s.put(wrong)}`,options:['Stimmt','Stimmt nicht'],correct:yes,
+    sol:(ok?'':'Richtig heißt es: ')+`${plain(i)} ${s.out}`,say:`${plain(i)} ${s.out}`,wk:s.w};
 }
 function qBuild(){
-  const s=sentence(pick(['subj','obj'])),t=toks(s.out),o=other(s.w)||pick(FORMS(s.role==='subj'?'s':'o').filter(x=>x!==s.w));
+  const s=sentence(NOUNS),t=toks(s.out),o=pick((s.n.pl?['we','they','you']:['he','she','it']).filter(x=>x!==s.w));
   return {kind:'build',label:'Bau den Satz mit Pronomen',prompt:s.mark,tiles:scramble(t.concat([shown(s,o)])),target:t.join(' '),extra:1,sol:s.out,say:s.out,wk:s.w};
 }
-function qListen(){ // hören und den gehörten Satz wählen: him / her / them / us
-  const s=sentence(pick(['subj','obj'])),c=s.role==='subj'?'s':'o';
-  const pool=c==='o'?FORMS('o').filter(x=>x!=='you'&&!(x==='me'&&s.t.startsWith('I '))&&!(x==='it'&&s.t.startsWith('Give'))):(s.n.pl?['we','they','you']:['he','she','it']); // ohne "I know me", "Give it the book"
-  const opts=[s.w].concat(shuffle(pool.filter(x=>x!==s.w)).slice(0,3)).map(x=>s.put(x));
-  return {kind:'listen',label:'Was hörst du?',options:shuffle([...new Set(opts)]),correct:s.out,sol:s.out,say:s.out,wk:s.w};
+function qListen(){ // hören und den gehörten Satz wählen: He / She / It is ... oder We / They / You are ...
+  const s=sentence(ALL.concat(['you'])),pool=s.n.p===1||s.n.pl?['we','they','you']:['he','she','it'];
+  return {kind:'listen',label:'Was hörst du?',options:shuffle(pool.map(x=>s.put(x))),correct:s.out,sol:s.out,say:s.out,wk:s.w};
 }
 const GEN={
- subjekt:()=>Math.random()<.6?qTrans('s'):qSimple('subj'),
- objekt:()=>{const r=Math.random();return r<.4?qTrans('o'):r<.8?qForm():qSimple('obj')},
+ uebersetzen:()=>qTrans(), zuordnen:qSimple,
  ersetzen:()=>canSpeak()&&Math.random()<.25?qListen():qReplace(),
  luecken:()=>canSpeak()&&Math.random()<.2?qListen():qGap(),
  wer:qWho, fehler:qFehler, bauen:qBuild
 };
-const quickQ=()=>pick([()=>qTrans('s',true),()=>qTrans('o',true),qForm,()=>qSimple('subj'),()=>qReplace(true),qFehler,()=>qGap(true)])();
+const quickQ=()=>pick([()=>qTrans(true),qSimple,qReplace,qFehler,()=>qGap(true)])();
 function makeQ(topic){ // drei Kandidaten, der mit dem schwächsten Pronomen gewinnt
   const g=topic==='mix'?()=>GEN[pick(TOPICS).id]():GEN[topic];
   const c=[g(),g(),g()];return c.sort((a,b)=>(save.weak[b.wk]||0)-(save.weak[a.wk]||0)+Math.random()-.5)[0];
 }
-const MEMO=()=>{ // Paare mit eindeutigen Kartentexten: he ↔ him und Deutsch ↔ Englisch
-  const c=PR.filter(p=>p.s!==p.o).map(p=>({a:p.s,b:p.o}))
-    .concat(PR.filter(p=>p.s!=='you').flatMap(p=>[{a:p.s,b:p.ds},{a:p.o,b:p.do}]));
+const MEMO=()=>{ // Paare mit eindeutigen Kartentexten: Englisch ↔ Deutsch oder Pronomen ↔ Person
+  const c=FORMS.map(w=>({a:w,b:deOf(w)})).concat([...Array(12)].map(()=>{const s=sentence(NOUNS);return {a:s.w,b:s.n.t}}));
   const out=[],used=new Set();
   for(const x of shuffle(c)){if(used.has(x.a)||used.has(x.b))continue;out.push(x);used.add(x.a);used.add(x.b);if(out.length===PAIRS)break}
   return out;
@@ -197,19 +169,22 @@ const MEMO=()=>{ // Paare mit eindeutigen Kartentexten: he ↔ him und Deutsch �
 
 /* ---------- Speicher (nur Komfort, darf ausfallen) ---------- */
 let save={name:'',xp:0,best:{},weak:{},sound:true,blitz:0,memo:0};
-try{const s=localStorage.getItem('en5-pron-v1');if(s)save=Object.assign(save,JSON.parse(s));
-  else{const v=JSON.parse(localStorage.getItem('en5-v1')||'null');if(v){save.name=v.name||'';if(v.sound===false)save.sound=false}} // Name von den Vokabel-Inseln übernehmen
-}catch(e){}
+try{const s=localStorage.getItem('en5-pron-v2');if(s)save=Object.assign(save,JSON.parse(s));
+  else{ // v1 enthielt noch Objektpronomen: nur Name, Punkte, Ton und Rekorde übernehmen, sonst den Namen von den Vokabel-Inseln
+    const o=JSON.parse(localStorage.getItem('en5-pron-v1')||'null')||{},v=JSON.parse(localStorage.getItem('en5-v1')||'null')||{};
+    save.name=o.name||v.name||'';save.xp=o.xp||0;save.blitz=o.blitz||0;save.memo=o.memo||0;if(o.sound===false||v.sound===false)save.sound=false;
+  }}catch(e){}
 let storageOK=true;
-function persist(){try{localStorage.setItem('en5-pron-v1',JSON.stringify(save));storageOK=true}catch(e){storageOK=false}}
+function persist(){try{localStorage.setItem('en5-pron-v2',JSON.stringify(save));storageOK=true}catch(e){storageOK=false}}
 try{localStorage.setItem('en5-test','1');localStorage.removeItem('en5-test')}catch(e){storageOK=false}
 function saveRound(){save.round=G&&G.queue.length?{topic:G.topic,total:G.total,done:G.done,first:G.first,xp:G.xp,streak:G.streak,best:G.best,missed:G.missed,queue:G.queue}:null;persist()}
 
 /* ---------- Ansichten ---------- */
-const cheat=`<details class="mist"><summary><b>Spickzettel: alle Personalpronomen</b></summary>
- <table class="cheat"><tr><th>Deutsch</th><th>Subjekt<br><small>wer?</small></th><th>Objekt<br><small>wen? wem?</small></th></tr>
- ${PR.map(p=>`<tr><td>${esc(p.ds)}</td><td><b>${p.s}</b></td><td><b>${p.o}</b></td></tr>`).join('')}</table>
- <p class="tip">Das Subjekt macht etwas: <b>He</b> is late. Das Objekt bekommt etwas ab: I like <b>him</b>. Tiere und Dinge sind <b>it</b>. <b>I</b> schreibt man immer groß.</p></details>`;
+const cheat=`<details class="mist"><summary><b>Spickzettel: die Pronomen</b></summary>
+ <table class="cheat"><tr><th>Deutsch</th><th>Englisch</th><th>Beispiel</th></tr>
+ ${[['ich','I','I am ten.'],['du','you','You are nice.'],['er','he','Tom → he'],['sie (eine Person)','she','Lisa → she'],['es','it','the dog → it'],['wir','we','Tom and I → we'],['ihr (mehrere)','you','you and Tom → you'],['sie (mehrere)','they','Tom and Lisa → they']]
+   .map(([d,e,x])=>`<tr><td>${esc(d)}</td><td><b>${e}</b></td><td>${esc(x)}</td></tr>`).join('')}</table>
+ <p class="tip">Tiere und Dinge sind <b>it</b>. <b>I</b> schreibt man immer groß. Nach I kommt <b>am</b>, nach he, she, it kommt <b>is</b>, nach we, you, they kommt <b>are</b>.</p></details>`;
 function mistList(list){return list.length?`<div class="mist"><h3>Diese Sätze üben wir weiter</h3><ul>${list.map(t=>`<li>${md(t)}</li>`).join('')}</ul></div>`:'<div class="mist"><h3>Keine Fehler. Wow!</h3></div>'}
 function home(){
   G=null;M=null;if(B){clearTimeout(B.timer);B=null}
@@ -236,7 +211,7 @@ function home(){
   <h2 class="sec">Inseln</h2><div class="grid">${tiles}</div>
   <p class="tip">${storageOK?'Dein Fortschritt wird automatisch auf diesem Gerät gespeichert.':'Speichern geht in diesem Browser gerade nicht (privates Fenster?). Dein Fortschritt geht beim Schließen verloren.'}</p>
   <p class="tip">Sterne gibt es für richtige Antworten beim ersten Versuch: 5 von 10 = 1 Stern, 7 von 10 = 2 Sterne, 9 von 10 = 3 Sterne.</p>
-  <p class="tip">${VOICE?`<button class="theme" id="snd">${save.sound?'🔊 Ton an':'🔇 Ton aus'}</button> Hör-Fragen und Vorlesen nutzen die Stimme dieses Geräts.${/Firefox/.test(navigator.userAgent)&&/Macintosh/.test(navigator.userAgent)?' In Firefox auf dem Mac knackt die Stimme am Ende, in Safari oder Chrome klingt sie sauber.':''}`:'Auf diesem Gerät ist keine englische Stimme eingebaut, deshalb gibt es hier keine Hör-Fragen.'}</p>
+  <p class="tip">${VOICE?`<button class="theme" id="snd">${save.sound?'🔊 Ton an':'🔇 Ton aus'}</button> Hör-Fragen und Vorlesen nutzen die Stimme dieses Geräts.${/Firefox/.test(navigator.userAgent)&&/Macintosh/.test(navigator.userAgent)?' In Firefox auf dem Mac knackt die Stimme am Ende, in Safari oder Chrome klingt sie sauber.':''}${/iPhone/.test(navigator.userAgent)?' Kein Ton auf dem iPhone? Stummschalter ausschalten (Klingeln an) und lauter stellen.':''}`:'Auf diesem Gerät ist keine englische Stimme eingebaut, deshalb gibt es hier keine Hör-Fragen.'}</p>
   ${PARENT?'<p class="tip"><button class="theme" id="pdf">Arbeitsblatt als PDF (für Eltern und Lehrkräfte)</button></p>':''}
   <p class="tip"><button class="theme" id="rst">Alles zurücksetzen</button></p>`;
   if(PARENT)$('#pdf').onclick=sheetSetup;
@@ -372,7 +347,7 @@ function blitzEnd(){
    <div class="actions"><button class="btn" id="again">Nochmal</button><button class="btn ghost" id="hm">Zur Seekarte</button></div></div>`;
   bindTheme();$('#again').onclick=blitz;$('#hm').onclick=home;$('#again').focus();
 }
-function memory(){memoryGame(MEMO(),memory,'Finde die Paare: he gehört zu him, wir gehört zu we.')}
+function memory(){memoryGame(MEMO(),memory,'Finde die Paare: wir gehört zu we, Lisa gehört zu she.')}
 
 /* ---------- Arbeitsblatt drucken / als PDF sichern ---------- */
 const SHEETS={luecken:'Lückentext',ersetzen:'Nomen ersetzen',fehler:'Richtig oder falsch',tabelle:'Pronomen-Tabelle',bauen:'Satzbaukasten'};
@@ -398,8 +373,8 @@ function buildSheet(kind,n){
   let task,ws,key;
   if(kind==='tabelle'){
     task='Fülle die Tabelle aus. In jeder Zeile steht schon ein Wort.';
-    const give=PR.map(p=>p.s==='you'?'ds':pick(['ds','s','o'])); // bei you immer Deutsch vorgeben, sonst unklar: du oder ihr?
-    const tab=sol=>`<table class="ptab"><tr><th>Deutsch</th><th>Subjekt (wer?)</th><th>Objekt (wen? wem?)</th></tr>${PR.map((p,i)=>`<tr>${['ds','s','o'].map(c=>`<td>${sol||give[i]===c?esc(p[c]):''}</td>`).join('')}</tr>`).join('')}</table>`;
+    const give=PR.map(p=>p.s==='you'?'de':pick(['de','s'])); // bei you immer Deutsch vorgeben, sonst unklar: du oder ihr?
+    const tab=sol=>`<table class="ptab"><tr><th>Deutsch</th><th>Englisch</th></tr>${PR.map((p,i)=>`<tr>${['de','s'].map(c=>`<td>${sol||give[i]===c?esc(p[c]):''}</td>`).join('')}</tr>`).join('')}</table>`;
     ws=tab(false);key=tab(true);
   }else{
     let rows;
