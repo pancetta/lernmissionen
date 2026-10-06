@@ -1,0 +1,426 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Pronomen">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAIAAACyr5FlAAAD/ElEQVR4nO3dzU0cQRCG4cXizJ6ckmNAToEDhMIBUrAcg1PitBn4YGm0wvsN89Nd9VXP+5zsC1vdeqdAWPLcPTy/nYBbvmUPAF/EAYk4IBEHJOKARByQiAMScUAiDkjEAYk4IBEHJOKARByQiAMScUAiDkjEAYk4IBEHJOKARByQiAMScUAiDkj32QO4uLw+Xf/1/PKeNYkPNgck4oBEHJCIAxJx3Hb5+Tt7hHzEAYk4JJYHccw5eB/E8YUj90EckIjja4ddHsSxyDH7IA5IxLHUAZcHcaxwtD6IY51D9UEckIhjteMsD+LY4iB9EAck4tjoCMuDOLYbvg/igEQcu4y9PIhjr4H7II4GRu2DOCARRxtDLg/iaGa8PogDEnG0NNjyII7GRuqDONobpg/igEQcXYyxPIijlwH6IA5IxNFR9eVBHH2V7oM4uqvbB3FAIo4IRZcHcQSp2AdxQCKOOOWWB3GEqtUHcUQr1AdxQCKOBFWWB3HkKNEHcUAijjT+y4M4Mpn3QRzJnPsgDkjEkc92eRCHBc8+iAMScbgwXB7EYcStD+KARBxerJYHcdjx6YM4HJn0QRyQiMOUw/IgDl/pfRAHJOKwlrs8iMNdYh/EUUBWH8QBiThqSFkexFFGfB/EAYk4KgleHsRRTGQfxFFPWB/EAYk4SopZHvcBn1HR+ddj9gj52ByQiAMScUAiDkjEAenu4fktewaYYnNAIg5ICb8Eu3z8if/QMZy//4j8uITNEXzCYcTfG99WIOXEwfJYK+XG2ByQ0uJgeSyXdVeZm4M+lki8Jb6tQEqOg+UxL/d+2ByQ8uNgeSjpN5Mfx8ngFgw53IlFHPDkEofDg+LD5DZc4oAhozhMHpd0PvdgFMfJ6V6yWN2AVxywYheH1aMTzO3sdnHAh2Mcbg9QDMNTO8ZxsryprjzPaxoHHPjG4fkw9WB7Ut84kM46DttHqiHnM1rHcfK+u/3MT+ceBxIViMP88drM/1wF4kCWGnH4P2RrlThRmf+HtMRtDqbG5kAK4oBEHJCIAxJxQCIOSMQBadfvOS6vT9Ofzy/vu4fp6HrUSaGZU0Zlc0AiDki74rjedTf3tgm1nyvOHKnl5vC86/mpKs4cZm8cn6I2OdXk0zz/pq04c4oGm8P2rmduueLM8br8QOpw12tnqDhzby3f1PT/2VLCXzVGxZnDNH6Nl2o/4KibP7rizDHav+Ntfjc2P3aTj6s4c4BeLwBc/u1z1V10+rJdv3jXmbvq+3bIlJ+wdl5xxZk7CXp1aMCNBy//JjybmES/V7b5jSf+2LiZeROT/JcOr7p6k2utOPMG+XHAFv9kD4k4IBEHJOKARByQiAMScUAiDkh/ARSxEB9azzFAAAAAAElFTkSuQmCC">
+<link rel="icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAIAAACyr5FlAAAD/ElEQVR4nO3dzU0cQRCG4cXizJ6ckmNAToEDhMIBUrAcg1PitBn4YGm0wvsN89Nd9VXP+5zsC1vdeqdAWPLcPTy/nYBbvmUPAF/EAYk4IBEHJOKARByQiAMScUAiDkjEAYk4IBEHJOKARByQiAMScUAiDkjEAYk4IBEHJOKARByQiAMScUAiDkj32QO4uLw+Xf/1/PKeNYkPNgck4oBEHJCIAxJx3Hb5+Tt7hHzEAYk4JJYHccw5eB/E8YUj90EckIjja4ddHsSxyDH7IA5IxLHUAZcHcaxwtD6IY51D9UEckIhjteMsD+LY4iB9EAck4tjoCMuDOLYbvg/igEQcu4y9PIhjr4H7II4GRu2DOCARRxtDLg/iaGa8PogDEnG0NNjyII7GRuqDONobpg/igEQcXYyxPIijlwH6IA5IxNFR9eVBHH2V7oM4uqvbB3FAIo4IRZcHcQSp2AdxQCKOOOWWB3GEqtUHcUQr1AdxQCKOBFWWB3HkKNEHcUAijjT+y4M4Mpn3QRzJnPsgDkjEkc92eRCHBc8+iAMScbgwXB7EYcStD+KARBxerJYHcdjx6YM4HJn0QRyQiMOUw/IgDl/pfRAHJOKwlrs8iMNdYh/EUUBWH8QBiThqSFkexFFGfB/EAYk4KgleHsRRTGQfxFFPWB/EAYk4SopZHvcBn1HR+ddj9gj52ByQiAMScUAiDkjEAenu4fktewaYYnNAIg5ICb8Eu3z8if/QMZy//4j8uITNEXzCYcTfG99WIOXEwfJYK+XG2ByQ0uJgeSyXdVeZm4M+lki8Jb6tQEqOg+UxL/d+2ByQ8uNgeSjpN5Mfx8ngFgw53IlFHPDkEofDg+LD5DZc4oAhozhMHpd0PvdgFMfJ6V6yWN2AVxywYheH1aMTzO3sdnHAh2Mcbg9QDMNTO8ZxsryprjzPaxoHHPjG4fkw9WB7Ut84kM46DttHqiHnM1rHcfK+u/3MT+ceBxIViMP88drM/1wF4kCWGnH4P2RrlThRmf+HtMRtDqbG5kAK4oBEHJCIAxJxQCIOSMQBadfvOS6vT9Ofzy/vu4fp6HrUSaGZU0Zlc0AiDki74rjedTf3tgm1nyvOHKnl5vC86/mpKs4cZm8cn6I2OdXk0zz/pq04c4oGm8P2rmduueLM8br8QOpw12tnqDhzby3f1PT/2VLCXzVGxZnDNH6Nl2o/4KibP7rizDHav+Ntfjc2P3aTj6s4c4BeLwBc/u1z1V10+rJdv3jXmbvq+3bIlJ+wdl5xxZk7CXp1aMCNBy//JjybmES/V7b5jSf+2LiZeROT/JcOr7p6k2utOPMG+XHAFv9kD4k4IBEHJOKARByQiAMScUAiDkh/ARSxEB9azzFAAAAAAElFTkSuQmCC">
+<style>html{-webkit-text-size-adjust:100%;color-scheme:light}body{margin:0}[hidden]{display:none!important}</style>
+<title>Pronomen-Inseln</title>
+<link rel="stylesheet" href="../stil.css">
+
+</head>
+<body>
+<div id="app"></div>
+<script src="../wortschatz.js"></script>
+<script src="../gemeinsam.js"></script>
+<script>
+const BRAND='Pronomen-Inseln';
+const W=WORTSCHATZ.W;
+const TOPICS=[
+ {id:'subjekt',name:'Ich-du-er-Insel',map:'ich, du, er',sub:'I, you, he, she, it, we, they'},
+ {id:'objekt',name:'Mich-dich-ihn-Insel',map:'mich, dich',sub:'me, you, him, her, it, us, them'},
+ {id:'ersetzen',name:'Ersetz-Insel',map:'Ersetzen',sub:'Aus „Tom“ wird „he“'},
+ {id:'luecken',name:'Lücken-Insel',map:'Lücken',sub:'Welches Pronomen fehlt im Satz?'},
+ {id:'wer',name:'Wer-ist-das-Insel',map:'Wer ist das?',sub:'Wen meint „she“ im Satz?'},
+ {id:'fehler',name:'Fehler-Insel',map:'Fehler',sub:'Stimmt der Satz oder nicht?'},
+ {id:'bauen',name:'Satzbau-Insel',map:'Satzbau',sub:'Sätze mit Pronomen bauen'}
+];
+const MAP=[[50,42],[130,42],[210,42],[290,42],[250,118],[170,118],[90,118]]; // Seekarte, Reihenfolge wie TOPICS
+
+/* ---------- Pronomen und Satzbausteine ---------- */
+// Personalpronomen. you steht zweimal (du und ihr), it hat in beiden Formen dieselbe Gestalt.
+const PR=[
+ {s:'I',o:'me',ds:'ich',do:'mich / mir'},
+ {s:'you',o:'you',ds:'du',do:'dich / dir'},
+ {s:'he',o:'him',ds:'er',do:'ihn / ihm'},
+ {s:'she',o:'her',ds:'sie (eine Person)',do:'sie / ihr (eine Person)'},
+ {s:'it',o:'it',ds:'es',do:'es'},
+ {s:'we',o:'us',ds:'wir',do:'uns'},
+ {s:'you',o:'you',ds:'ihr (mehrere)',do:'euch'},
+ {s:'they',o:'them',ds:'sie (mehrere)',do:'sie / ihnen (mehrere)'}
+];
+const FORMS=c=>[...new Set(PR.map(p=>p[c]))];                       // c = 's' (Subjekt) oder 'o' (Objekt)
+const de=(w,c)=>PR.filter(p=>p[c]===w).map(p=>p['d'+c]).join(' / ');
+const other=w=>{const p=PR.find(p=>p.s===w&&p.o!==w)||PR.find(p=>p.o===w&&p.s!==w);return p?(p.s===w?p.o:p.s):null}; // he <-> him
+const cap=t=>t[0].toUpperCase()+t.slice(1);
+const md=t=>esc(t).replace(/\*\*(.+?)\*\*/g,'<b>$1</b>');          // **fett** im Fragetext
+const plain=t=>t.replace(/\*\*/g,'');
+
+// Personen: eigene Namen und Familienwörter aus der Wortliste. Neue Personen-Wörter hier mit he/she eintragen.
+const NAMES={he:['Tom','Ben','Max','Leo'],she:['Lisa','Emma','Mia','Anna']};
+const PERSON={boy:'he',girl:'she',mum:'she',mother:'she',dad:'he',father:'he',brother:'he',sister:'she'};
+// Dinge und Tiere: alle Nomen der Wortliste (deutsches Wort großgeschrieben), außer Personen, Zeit und Zahlen.
+const SKIP=['home','kid','people','colour','hometown'];
+const PHYS=['tiere','klasse','stadt','farben','leute']; // zum Ansehen und Anfassen: "is here", "Look at"
+const isThing=e=>{const en=enShow(e);return /^[A-ZÄÖÜ]/.test(deShow(e))&&/^[a-z][a-z ]*$/.test(en)&&!/ of$/.test(en)
+  &&!['zeit','zahlen'].includes(e[0])&&!PERSON[en]&&!SKIP.includes(en)&&!/(\S+) \/ \1in\b/.test(deShow(e))};
+const THINGS=W.filter(isThing);
+
+function personNP(){
+  const fam=W.filter(e=>PERSON[enShow(e)]);
+  if(Math.random()<.55||!fam.length){const g=pick(['he','she']);return {t:pick(NAMES[g]),p:g==='he'?2:3,person:true,name:true}}
+  const w=enShow(pick(fam));return {t:(['boy','girl'].includes(w)?'the ':'my ')+w,p:PERSON[w]==='he'?2:3,person:true};
+}
+function thingNP(){const e=pick(THINGS);return {t:'the '+enShow(e),p:4,phys:PHYS.includes(e[0]),klasse:e[0]==='klasse',e}}
+function npOf(k){
+  if(k==='it')return thingNP();
+  if(k==='person')return personNP();
+  if(k==='they-p'){const a=personNP(),fam=t=>t.startsWith('my ')?PERSON[t.slice(3)]:null;let b;do b=personNP();while(b.t===a.t||(fam(a.t)&&fam(a.t)===fam(b.t))); // nicht "my mum and my mother"
+   return {t:a.t+' and '+b.t,p:7,person:true,pl:true}}
+  if(k==='they-t'){const a=thingNP(),near=THINGS.filter(x=>x[0]===a.e[0]&&enShow(x)!==a.t.slice(4)),b=pick(near.length?near:THINGS.filter(x=>'the '+enShow(x)!==a.t));
+    return {t:a.t+' and the '+enShow(b),p:7,pl:true,phys:a.phys&&PHYS.includes(b[0])}}
+  if(k==='we'){const a=personNP();return {t:a.t+' and I',to:a.t+' and me',p:5,person:true,pl:true}}
+  if(k==='youpl'){const a=personNP();return {t:'you and '+a.t,p:6,person:true,pl:true}}
+}
+const SUBJ_T={
+ person:['{} is at school.','{} is my friend.','{} is nice.','{} is late.','{} is at home.','{} is sad.','{} is friendly.','Where is {}?'],
+ name:['{} is ten years old.','{} is from Germany.'],
+ people:['{} are at school.','{} are nice.','{} are late.','{} are at home.','{} are sad.','{} are friendly.','Where are {}?'],
+ thing:['{} is great.','{} is nice.'],physThing:['{} is here.','{} is there.','{} is big.','{} is new.','Where is {}?'],
+ things:['{} are great.','{} are nice.'],physThings:['{} are here.','{} are there.','{} are big.','{} are new.','Where are {}?']
+};
+const OBJ_T={
+ person:['I like {}.','Look at {}!','Can you see {}?','Wait for {}!',"Let's talk to {}.",'I know {}.','Give {} the book, please.'],
+ us:['Look at {}!','Can you see {}?','Wait for {}!','Give {} the book, please.'],
+ youpl:['I like {}.','I know {}.'], // "you and Tom" als Objekt klingt sonst schief
+ thing:['I like {}.',"I don't like {}."],physThing:['Look at {}!','Can you see {}?'],klasse:['Give me {}, please.']
+};
+// Ein Satz mit Nomen, dazu derselbe Satz mit Pronomen. role: 'subj' oder 'obj'
+function sentence(role,k){
+  const n=npOf(k||pick(['person','person','it','it','they-p','they-t','we','youpl']));
+  const T=role==='subj'
+    ?(n.p===4?SUBJ_T.thing.concat(n.phys?SUBJ_T.physThing:[]):n.person&&n.pl?SUBJ_T.people.filter(t=>(n.p!==5&&n.p!==6)||!t.startsWith('Where'))
+      :n.pl?SUBJ_T.things.concat(n.phys?SUBJ_T.physThings:[]):SUBJ_T.person.concat(n.name?SUBJ_T.name:[]))
+    :(n.p===5?OBJ_T.us:n.p===6?OBJ_T.youpl:n.person?OBJ_T.person:OBJ_T.thing.concat(n.phys?OBJ_T.physThing:[],n.klasse?OBJ_T.klasse:[]));
+  const t=pick(T),at0=t.startsWith('{}'),put=x=>t.replace('{}',at0?cap(x):x);
+  const phrase=role==='obj'&&n.to?n.to:n.t,w=role==='subj'?PR[n.p].s:PR[n.p].o;
+  return {t,at0,put,n,w,phrase,orig:put(phrase),mark:t.replace('{}','**'+(at0?cap(phrase):phrase)+'**'),out:put(w),role};
+}
+const petLike=n=>!!(n.e&&n.e[0]==='tiere'); // Tiere: in der Schule "it", als Haustier aber auch he/she möglich
+const shown=(s,x)=>s.at0||x==='I'?cap(x):x;                       // so steht das Pronomen im Satz
+function choices(s,correct){ // richtige Form, die andere Form (him statt he) und zwei weitere derselben Art
+  const c=s.role==='subj'?'s':'o',o=other(s.w);
+  const rest=shuffle(FORMS(c).filter(x=>x!==s.w&&x!==o));
+  return shuffle([s.w].concat(o?[o]:[],rest).slice(0,4)).map(x=>shown(s,x));
+}
+const intro=n=>n.p===5||n.p===6?`**${cap(n.t)}** are friends.`:n.pl?`Here are **${n.t}**.`:n.person?`This is **${n.t}**.`:`Here is **${n.t}**.`;
+
+/* ---------- Fragen (alle als reine Daten, damit Runden gespeichert werden können) ---------- */
+// Felder: kind (mc|type|build|listen), label, prompt (**fett** erlaubt), options/correct, accept, tiles/target, sol, say, wk (Übungs-Schlüssel)
+function qTrans(c,quick){
+  if(Math.random()<.5){
+    const p=pick(PR),correct=p[c],opts=[correct].concat(shuffle(FORMS(c).filter(w=>w!==correct)).slice(0,3));
+    const q={kind:'mc',label:'Wie heißt das auf Englisch?',prompt:p['d'+c],options:shuffle(opts),correct,accept:[correct],sol:`${p['d'+c]} = ${correct}`,say:correct,wk:correct};
+    if(!quick&&Math.random()<.4)q.kind='type';
+    return q;
+  }
+  const w=pick(FORMS(c)),correct=de(w,c),opts=[correct].concat(shuffle(FORMS(c).filter(x=>x!==w).map(x=>de(x,c))).slice(0,3));
+  return {kind:'mc',label:'Was heißt das auf Deutsch?',prompt:w,options:shuffle(opts),correct,sol:`${w} = ${correct}`,say:w,wk:w};
+}
+function qSimple(role){ // "Lisa → she", "Lisa and me → us"
+  const s=sentence(role),from=role==='obj'&&s.n.to?s.n.to:s.n.t;
+  return {kind:'mc',label:role==='subj'?'Welches Pronomen passt?':'Welches Pronomen passt als Objekt (wen? wem?)?',prompt:`${cap(from)} → ?`,
+    options:choices(Object.assign({},s,{at0:false}),s.w).map(x=>x==='I'?x:x.toLowerCase()),correct:s.w,sol:`${cap(from)} → ${s.w}`,say:s.out,wk:s.w};
+}
+function qForm(){
+  const P=PR.filter(p=>p.s!==p.o),p=pick(P),toObj=Math.random()<.5,from=toObj?p.s:p.o,correct=toObj?p.o:p.s,c=toObj?'o':'s';
+  const opts=[correct].concat(shuffle(FORMS(c).filter(x=>x!==correct&&x!==p.s&&x!==p.o&&x!=='you'&&x!=='it')).slice(0,2),[from]);
+  return {kind:'mc',label:toObj?`Welche Objektform gehört zu „${from}“?`:`Welche Subjektform gehört zu „${from}“?`,prompt:`${from} → ?`,
+    options:shuffle([...new Set(opts)]),correct,sol:`${p.s} → ${p.o}`,say:`${p.s}, ${p.o}`,wk:correct};
+}
+function qReplace(quick){
+  const s=sentence(pick(['subj','obj'])),correct=shown(s,s.w);
+  return {kind:'mc',label:'Welches Pronomen ersetzt den fetten Teil?',prompt:s.mark,options:choices(s),correct,sol:s.out,say:s.out,wk:s.w};
+}
+function qGap(quick){
+  const s=sentence(pick(['subj','obj'])),correct=shown(s,s.w),i=intro(s.n);
+  const q={kind:'mc',label:'Welches Pronomen fehlt?',prompt:`${i} ${s.t.replace('{}','___')}`,options:choices(s),correct,accept:[correct],
+    sol:`${plain(i)} ${s.out}`,say:`${plain(i)} ${s.out}`,wk:s.w};
+  if(!quick&&Math.random()<.5){q.kind='type';q.label='Schreibe das fehlende Pronomen'}
+  return q;
+}
+function qWho(){
+  const s=sentence(pick(['subj','obj'])),ans=s.role==='obj'&&s.n.to?s.n.to:s.n.t;
+  const kinds=['person','person','it','they-p','we'],opts=[ans],seen=new Set([s.n.p]);
+  for(let i=0;i<40&&opts.length<4;i++){const n=npOf(pick(kinds));if(seen.has(n.p)||(petLike(n)&&['he','she','him','her'].includes(s.w)))continue;seen.add(n.p);opts.push(s.role==='obj'&&n.to?n.to:n.t)}
+  return {kind:'mc',label:'Wen oder was kann das fette Pronomen meinen?',prompt:s.t.replace('{}','**'+shown(s,s.w)+'**'),options:shuffle(opts),correct:ans,
+    sol:`${shown(s,s.w)} = ${ans}`,say:s.out,wk:s.w};
+}
+function qFehler(){
+  const ok=Math.random()<.45;
+  if(Math.random()<.6){ // falsche Form: "Him is at school."
+    let s;do s=sentence(pick(['subj','obj']));while(!other(s.w));
+    return {kind:'mc',label:'Stimmt der Satz?',prompt:ok?s.out:s.put(other(s.w)),options:['Stimmt','Stimmt nicht'],correct:ok?'Stimmt':'Stimmt nicht',
+      sol:ok?s.out:'Richtig heißt es: '+s.out,say:s.out,wk:s.w};
+  }
+  // falsches Pronomen zum Satz davor: "This is Lisa. I like him." Ohne Tiere, denn Haustiere dürfen im Englischen auch he/she sein.
+  let s;do s=sentence(pick(['subj','obj']));while(petLike(s.n));
+  const c=s.role==='subj'?'s':'o',i=intro(s.n);
+  const wrong=pick(FORMS(c).filter(x=>x!==s.w&&x!=='I'&&x!=='you'&&(s.role==='obj'||(['we','they'].includes(x)===!!s.n.pl))));
+  return {kind:'mc',label:'Passt das Pronomen zum Satz davor?',prompt:`${i} ${ok?s.out:s.put(wrong)}`,options:['Stimmt','Stimmt nicht'],correct:ok?'Stimmt':'Stimmt nicht',
+    sol:ok?`${plain(i)} ${s.out}`:'Richtig heißt es: '+`${plain(i)} ${s.out}`,say:`${plain(i)} ${s.out}`,wk:s.w};
+}
+function qBuild(){
+  const s=sentence(pick(['subj','obj'])),t=toks(s.out),o=other(s.w)||pick(FORMS(s.role==='subj'?'s':'o').filter(x=>x!==s.w));
+  return {kind:'build',label:'Bau den Satz mit Pronomen',prompt:s.mark,tiles:scramble(t.concat([shown(s,o)])),target:t.join(' '),extra:1,sol:s.out,say:s.out,wk:s.w};
+}
+function qListen(){ // hören und den gehörten Satz wählen: him / her / them / us
+  const s=sentence(pick(['subj','obj'])),c=s.role==='subj'?'s':'o';
+  const pool=c==='o'?FORMS('o').filter(x=>x!=='you'&&!(x==='me'&&s.t.startsWith('I '))&&!(x==='it'&&s.t.startsWith('Give'))):(s.n.pl?['we','they','you']:['he','she','it']); // ohne "I know me", "Give it the book"
+  const opts=[s.w].concat(shuffle(pool.filter(x=>x!==s.w)).slice(0,3)).map(x=>s.put(x));
+  return {kind:'listen',label:'Was hörst du?',options:shuffle([...new Set(opts)]),correct:s.out,sol:s.out,say:s.out,wk:s.w};
+}
+const GEN={
+ subjekt:()=>Math.random()<.6?qTrans('s'):qSimple('subj'),
+ objekt:()=>{const r=Math.random();return r<.4?qTrans('o'):r<.8?qForm():qSimple('obj')},
+ ersetzen:()=>canSpeak()&&Math.random()<.25?qListen():qReplace(),
+ luecken:()=>canSpeak()&&Math.random()<.2?qListen():qGap(),
+ wer:qWho, fehler:qFehler, bauen:qBuild
+};
+const quickQ=()=>pick([()=>qTrans('s',true),()=>qTrans('o',true),qForm,()=>qSimple('subj'),()=>qReplace(true),qFehler,()=>qGap(true)])();
+function makeQ(topic){ // drei Kandidaten, der mit dem schwächsten Pronomen gewinnt
+  const g=topic==='mix'?()=>GEN[pick(TOPICS).id]():GEN[topic];
+  const c=[g(),g(),g()];return c.sort((a,b)=>(save.weak[b.wk]||0)-(save.weak[a.wk]||0)+Math.random()-.5)[0];
+}
+const MEMO=()=>{ // Paare mit eindeutigen Kartentexten: he ↔ him und Deutsch ↔ Englisch
+  const c=PR.filter(p=>p.s!==p.o).map(p=>({a:p.s,b:p.o}))
+    .concat(PR.filter(p=>p.s!=='you').flatMap(p=>[{a:p.s,b:p.ds},{a:p.o,b:p.do}]));
+  const out=[],used=new Set();
+  for(const x of shuffle(c)){if(used.has(x.a)||used.has(x.b))continue;out.push(x);used.add(x.a);used.add(x.b);if(out.length===PAIRS)break}
+  return out;
+};
+
+/* ---------- Speicher (nur Komfort, darf ausfallen) ---------- */
+let save={name:'',xp:0,best:{},weak:{},sound:true,blitz:0,memo:0};
+try{const s=localStorage.getItem('en5-pron-v1');if(s)save=Object.assign(save,JSON.parse(s));
+  else{const v=JSON.parse(localStorage.getItem('en5-v1')||'null');if(v){save.name=v.name||'';if(v.sound===false)save.sound=false}} // Name von den Vokabel-Inseln übernehmen
+}catch(e){}
+let storageOK=true;
+function persist(){try{localStorage.setItem('en5-pron-v1',JSON.stringify(save));storageOK=true}catch(e){storageOK=false}}
+try{localStorage.setItem('en5-test','1');localStorage.removeItem('en5-test')}catch(e){storageOK=false}
+function saveRound(){save.round=G&&G.queue.length?{topic:G.topic,total:G.total,done:G.done,first:G.first,xp:G.xp,streak:G.streak,best:G.best,missed:G.missed,queue:G.queue}:null;persist()}
+
+/* ---------- Ansichten ---------- */
+const cheat=`<details class="mist"><summary><b>Spickzettel: alle Personalpronomen</b></summary>
+ <table class="cheat"><tr><th>Deutsch</th><th>Subjekt<br><small>wer?</small></th><th>Objekt<br><small>wen? wem?</small></th></tr>
+ ${PR.map(p=>`<tr><td>${esc(p.ds)}</td><td><b>${p.s}</b></td><td><b>${p.o}</b></td></tr>`).join('')}</table>
+ <p class="tip">Das Subjekt macht etwas: <b>He</b> is late. Das Objekt bekommt etwas ab: I like <b>him</b>. Tiere und Dinge sind <b>it</b>. <b>I</b> schreibt man immer groß.</p></details>`;
+function mistList(list){return list.length?`<div class="mist"><h3>Diese Sätze üben wir weiter</h3><ul>${list.map(t=>`<li>${md(t)}</li>`).join('')}</ul></div>`:'<div class="mist"><h3>Keine Fehler. Wow!</h3></div>'}
+function home(){
+  G=null;M=null;if(B){clearTimeout(B.timer);B=null}
+  const hi=save.name?`Ahoi ${esc(save.name)}!`:'Ahoi!';
+  const tiles=TOPICS.map(t=>`<button class="tile" data-t="${t.id}"><h3>${t.name}</h3><span class="sub">${t.sub}</span>${starsHtml(save.best[t.id]||0)}</button>`).join('');
+  const chests=TOPICS.filter(t=>(save.best[t.id]||0)>=3).length;
+  const rg=save.round&&save.round.queue&&save.round.queue.length?save.round:null;
+  const resume=rg?`<div class="grid" style="margin-bottom:12px"><button class="tile resume" id="rs"><h3>Weiterspielen</h3><span class="sub">${esc(rg.topic==='mix'?'Große Rundfahrt':(TOPICS.find(t=>t.id===rg.topic)||{}).name)}, Frage ${Math.min(rg.done+1,rg.total)} von ${rg.total}</span></button></div>`:'';
+  $('#app').innerHTML=`
+  <div class="top"><a class="back" href="../../${PARENT?'#eltern':''}" style="text-decoration:none">Übersicht</a><span class="brand">${BRAND}</span>${themeBtn()}</div>
+  <section class="hero"><h1>${hi} Wer ist he, wer ist she?</h1>
+   <p>Pronomen sind kleine Wörter für Personen und Dinge: I, you, he, she, it, we, they. Jede Insel zeigt sie von einer anderen Seite. Eine Fahrt hat ${ROUND} Fragen.</p>
+   <div class="rank"><span class="pill sun">${save.xp} Punkte</span><span class="pill">Rang: ${rank()}</span></div>${hero}</section>
+  <div class="namebox"><label for="nm">Dein Name</label><input type="text" id="nm" maxlength="16" value="${esc(save.name)}" placeholder="z. B. Mia" autocomplete="off"></div>
+  ${resume}${cheat}
+  <div class="maphead"><h2 class="sec" style="margin:0">Seekarte</h2><span class="pill">Schätze: ${chests} von ${TOPICS.length}</span></div>
+  ${seaMap(MAP,170)}
+  <p class="tip" style="margin-top:4px">Drei Sterne auf einer Insel, und du findest ihren Schatz.</p>
+  <h2 class="sec">Spiele</h2><div class="grid">
+   <button class="tile mix" data-t="mix"><h3>Große Rundfahrt</h3><span class="sub">Alle Inseln auf einmal, die schwierigste Fahrt</span>${starsHtml(save.best.mix||0)}</button>
+   <button class="tile" id="gb"><h3>Blitzrunde</h3><span class="sub">${BLITZ} Sekunden: Wie viele schaffst du?</span><span class="sub">Rekord: ${save.blitz||0} richtig</span></button>
+   <button class="tile" id="gm"><h3>Memory</h3><span class="sub">Finde ${PAIRS} Pronomen-Paare</span><span class="sub">${save.memo?'Rekord: '+save.memo+' Züge':'Noch kein Rekord'}</span></button>
+  </div>
+  <h2 class="sec">Inseln</h2><div class="grid">${tiles}</div>
+  <p class="tip">${storageOK?'Dein Fortschritt wird automatisch auf diesem Gerät gespeichert.':'Speichern geht in diesem Browser gerade nicht (privates Fenster?). Dein Fortschritt geht beim Schließen verloren.'}</p>
+  <p class="tip">Sterne gibt es für richtige Antworten beim ersten Versuch: 5 von 10 = 1 Stern, 7 von 10 = 2 Sterne, 9 von 10 = 3 Sterne.</p>
+  <p class="tip">${VOICE?`<button class="theme" id="snd">${save.sound?'🔊 Ton an':'🔇 Ton aus'}</button> Hör-Fragen und Vorlesen nutzen die Stimme dieses Geräts.${/Firefox/.test(navigator.userAgent)&&/Macintosh/.test(navigator.userAgent)?' In Firefox auf dem Mac knackt die Stimme am Ende, in Safari oder Chrome klingt sie sauber.':''}`:'Auf diesem Gerät ist keine englische Stimme eingebaut, deshalb gibt es hier keine Hör-Fragen.'}</p>
+  ${PARENT?'<p class="tip"><button class="theme" id="pdf">Arbeitsblatt als PDF (für Eltern und Lehrkräfte)</button></p>':''}
+  <p class="tip"><button class="theme" id="rst">Alles zurücksetzen</button></p>`;
+  if(PARENT)$('#pdf').onclick=sheetSetup;
+  if(VOICE)$('#snd').onclick=()=>{save.sound=!save.sound;persist();say("Hello! Let's go!");home()};
+  bindTheme();
+  $('#nm').oninput=e=>{save.name=e.target.value.trim();persist()};
+  document.querySelectorAll('[data-t]').forEach(b=>{b.onclick=()=>start(b.dataset.t);
+    if(b.tagName==='g')b.onkeydown=ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();start(b.dataset.t)}}});
+  $('#gb').onclick=blitz;$('#gm').onclick=memory;
+  if(rg)$('#rs').onclick=()=>{G=Object.assign({answered:false},rg);show()};
+  let armed=false;$('#rst').onclick=ev=>{if(!armed){armed=true;ev.target.textContent='Wirklich alles löschen? Nochmal tippen.';return}save={name:'',xp:0,best:{},weak:{},round:null,sound:save.sound,blitz:0,memo:0};persist();home()};
+}
+
+/* ---------- Runde ---------- */
+function start(topic){
+  const qs=[],seen=new Set();
+  for(let i=0;i<60&&qs.length<ROUND;i++){const q=makeQ(topic),k=q.prompt+'|'+q.sol;if(!seen.has(k)){seen.add(k);qs.push(q)}}
+  G={topic,queue:qs,total:qs.length,done:0,first:0,xp:0,streak:0,best:0,missed:[],answered:false};
+  show();
+}
+const optsHtml=q=>`<div class="opts" role="group" aria-label="Antworten, mit Pfeiltasten wählen">${q.options.map((o,i)=>`<button class="opt nav" data-i="${i}">${md(o)}</button>`).join('')}</div>`;
+function markOpts(q,i){document.querySelectorAll('.opt').forEach((b,k)=>{b.disabled=true;if(q.options[k]===q.correct)b.classList.add('right');else if(k===i)b.classList.add('wrong')})}
+function show(){
+  if(!G.queue.length)return finish();
+  let q=G.queue[0];
+  if(q.kind==='listen'&&!canSpeak()){q=G.queue[0]=Object.assign(qReplace(),{redo:q.redo})} // Ton inzwischen aus
+  saveRound();
+  const pct=Math.round(G.done/G.total*100);
+  let prompt=q.kind==='listen'?`<button class="btn" id="hear" type="button">🔊 Anhören</button> <button class="btn ghost small" id="slow" type="button">🐢 langsam</button>`:md(q.prompt),body;
+  if(q.kind==='type'){
+    body=`<form class="typebox" id="tf" autocomplete="off"><input type="text" id="ti" aria-label="Pronomen" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="Pronomen"><button class="btn" type="submit">Prüfen</button></form>`;
+  }else if(q.kind==='build'){
+    body=`<div class="line" id="bl" aria-label="Dein Satz"></div>
+    <div class="chips" id="bc" role="group" aria-label="Wörter, mit Pfeiltasten wählen">${q.tiles.map(t=>`<button class="chip nav" type="button">${esc(t)}</button>`).join('')}</div>
+    <p class="tip" style="margin:8px 0 0">Ein Wort bleibt übrig.</p><p style="margin:12px 0 0"><button class="btn" id="bp" type="button">Prüfen</button></p>`;
+  }else body=optsHtml(q);
+  $('#app').innerHTML=`
+  <div class="q-head"><button class="back" id="bk" aria-label="Zurück zur Seekarte">Ende</button>
+   <div class="track" role="progressbar" aria-valuenow="${G.done}" aria-valuemax="${G.total}"><i style="width:${pct}%"></i><span style="position:absolute;left:calc(${pct}% );top:0">${boat.replace('<svg','<svg style="position:absolute;top:-14px;left:-12px;width:34px;color:var(--ink)"')}</span></div>
+   <span class="pill streak">${G.streak>=2?'Serie '+G.streak:'Serie 0'}</span></div>
+  <div class="qcard"><div class="kind ${q.redo?'redo':''}">${q.redo?'Noch einmal üben · ':''}${q.label}</div><div class="prompt sm">${prompt}</div>${body}<div id="fb"></div></div>`;
+  G.answered=false;
+  $('#bk').onclick=home;
+  if(q.kind==='type'){
+    $('#ti').focus();
+    $('#tf').onsubmit=ev=>{ev.preventDefault();if(!G.answered)answer(null,$('#ti').value)};
+  }else if(q.kind==='build'){
+    document.querySelectorAll('.chip').forEach(b=>b.onclick=()=>{if(G.answered)return;const from=b.parentNode;(from.id==='bc'?$('#bl'):$('#bc')).appendChild(b);(from.querySelector('.chip')||$('#bp')).focus()});
+    $('#bp').onclick=()=>{if(G.answered)return;if(!$('#bl').children.length){$('#fb').innerHTML='<p class="tip">Tippe die Wörter in der richtigen Reihenfolge an.</p>';return}answer(null,[...$('#bl').children].map(c=>c.textContent).join(' '))};
+  }else{
+    if(q.kind==='listen'){say(q.say);$('#hear').onclick=()=>say(q.say);$('#slow').onclick=()=>say(q.say,true)}
+    document.querySelectorAll('.opt').forEach(b=>b.onclick=()=>answer(+b.dataset.i,null));
+  }
+}
+function answer(i,text){
+  if(G.answered)return;
+  const q=G.queue[0];let ok,caseOnly=false;
+  if(q.kind==='type'){
+    const t=norm(text||'');if(!t){$('#ti').focus();return}
+    const alts=q.accept.map(norm);ok=alts.includes(t); // Groß- und Kleinschreibung zählt (I, Satzanfang)
+    caseOnly=!ok&&alts.some(a=>a.toLowerCase()===t.toLowerCase());
+    $('#ti').disabled=true;document.querySelector('#tf button').disabled=true;
+  }else if(q.kind==='build'){
+    ok=text===q.target;
+    document.querySelectorAll('.chip').forEach(b=>b.disabled=true);$('#bp').disabled=true;$('#bl').classList.add(ok?'right':'wrong');
+  }else{ok=q.options[i]===q.correct;markOpts(q,i)}
+  G.answered=true;
+  if(!q.redo){
+    if(ok){G.first++;G.streak++;G.best=Math.max(G.best,G.streak);const gain=10+Math.min(G.streak-1,5);G.xp+=gain;save.xp+=gain;if(save.weak[q.wk])save.weak[q.wk]--}
+    else{G.streak=0;save.weak[q.wk]=(save.weak[q.wk]||0)+1;G.missed.push(q.sol.replace(/^Richtig heißt es: /,''));G.queue.push(Object.assign({},q,{redo:true,kind:q.kind==='type'?'mc':q.kind}))}
+    G.done++;
+  }else if(!ok){G.queue.push(Object.assign({},q))}
+  persist();
+  $('#fb').innerHTML=`<div class="fb ${ok?'ok':'no'}" role="status"><strong>${ok?pick(CHEER):caseOnly?'Fast! Achte auf Groß- und Kleinschreibung.':pick(OOPS)}</strong>
+   <span class="ans">${ok?md(q.sol):(q.sol.startsWith('Richtig heißt es')?'':'Richtig ist: ')+md(q.sol)}</span>
+   <div class="row">${canSpeak()?'<button class="btn ghost small" id="say" type="button" style="margin-right:auto">🔊 Anhören</button>':''}<button class="btn" id="nx">${G.queue.length>1?'Weiter':'Fertig'}</button></div></div>`;
+  if($('#say'))$('#say').onclick=()=>say(q.say);
+  $('#nx').focus();
+  $('#nx').onclick=()=>{G.queue.shift();show()};
+  document.querySelector('.streak').textContent=G.streak>=2?'Serie '+G.streak:'Serie 0';
+}
+function finish(){
+  const n=G.first,need=p=>Math.ceil(G.total*p),stars=n>=need(.9)?3:n>=need(.7)?2:n>=need(.5)?1:0;
+  const tk=G.topic,before=save.best[tk]||0;if(stars>before)save.best[tk]=stars;
+  const bonus=stars*10;G.xp+=bonus;save.xp+=bonus;save.round=null;persist();
+  const msg=stars===3?'Insel erobert. Das war Spitze!':stars===2?'Sehr gut! Eine Runde noch für den dritten Stern?':stars===1?'Gut gemacht. Mit etwas Übung klappen mehr Sterne.':'Das war ein Anfang. Probiere es noch einmal, es wird jedes Mal leichter.';
+  const treasure=stars===3&&before<3&&tk!=='mix'?`<p class="treasure pop"><svg viewBox="0 0 18 16" width="40" aria-hidden="true">${chest(0,0)}</svg> Du hast den Schatz der ${esc(TOPICS.find(t=>t.id===tk).name)} gefunden!</p>`:'';
+  $('#app').innerHTML=`${topBar()}
+  <div class="qcard end"><h2>${esc(msg)}</h2>
+   <div class="bigstars" aria-label="${stars} von 3 Sternen">${[1,2,3].map(i=>i<=stars?`<b><span class="pop" style="animation-delay:${i*.25}s">★</span></b>`:'★').join('')}</div>
+   ${treasure}
+   <div class="stats"><span class="pill">${n} von ${G.total} gleich richtig</span><span class="pill">Beste Serie ${G.best}</span><span class="pill sun">+${G.xp} Punkte</span></div>
+   ${mistList([...new Set(G.missed)])}
+   <div class="actions"><button class="btn" id="again">Nochmal spielen</button><button class="btn ghost" id="hm">Zur Seekarte</button></div>
+   <p class="tip">Rang: ${rank()} · ${save.xp} Punkte insgesamt</p></div>`;
+  bindTheme();
+  $('#again').onclick=()=>start(tk);$('#hm').onclick=home;
+}
+
+/* ---------- Blitzrunde: 60 Sekunden, nur Antippen ---------- */
+function blitz(){
+  G=null;M=null;
+  B={end:Date.now()+BLITZ*1000,ok:0,missed:[],last:''};
+  B.timer=setTimeout(blitzEnd,BLITZ*1000);
+  blitzQ();
+}
+function blitzQ(){
+  if(!B)return;
+  let q;do q=quickQ();while(q.prompt===B.last);B.last=q.prompt;
+  const left=Math.max(0,B.end-Date.now()),busy={v:false};
+  $('#app').innerHTML=`<div class="q-head"><button class="back" id="bk" aria-label="Blitzrunde beenden">Ende</button>
+   <div class="track timer" role="timer" aria-label="Restzeit"><i id="tm" style="width:${left/BLITZ/10}%;transition:width ${left}ms linear"></i></div>
+   <span class="pill sun" id="bs">${B.ok} richtig</span></div>
+  <div class="qcard"><div class="kind">Blitzrunde · ${q.label}</div><div class="prompt sm">${md(q.prompt)}</div>${optsHtml(q)}</div>`;
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{const t=$('#tm');if(t)t.style.width='0%'}));
+  $('#bk').onclick=home;
+  document.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{
+    if(busy.v||!B)return;busy.v=true;
+    const i=+b.dataset.i,ok=q.options[i]===q.correct;markOpts(q,i);
+    if(ok){B.ok++;save.xp+=3;if(save.weak[q.wk])save.weak[q.wk]--}else{const m=q.sol.replace(/^Richtig heißt es: /,'');if(!B.missed.includes(m))B.missed.push(m);save.weak[q.wk]=(save.weak[q.wk]||0)+1}
+    persist();$('#bs').textContent=B.ok+' richtig';
+    setTimeout(()=>{if(B&&Date.now()<B.end)blitzQ()},ok?450:1300);
+  });
+}
+function blitzEnd(){
+  if(!B)return;const r=B;B=null;
+  const rec=r.ok>0&&r.ok>(save.blitz||0);if(rec)save.blitz=r.ok;persist();
+  $('#app').innerHTML=`${topBar()}
+  <div class="qcard end"><h2>${rec?'Neuer Rekord!':'Zeit ist um!'}</h2>
+   <div class="bignum pop">${r.ok}</div><p>richtige Antworten in ${BLITZ} Sekunden</p>
+   <div class="stats"><span class="pill">Rekord: ${save.blitz||0}</span><span class="pill sun">+${r.ok*3} Punkte</span></div>
+   ${mistList(r.missed)}
+   <div class="actions"><button class="btn" id="again">Nochmal</button><button class="btn ghost" id="hm">Zur Seekarte</button></div></div>`;
+  bindTheme();$('#again').onclick=blitz;$('#hm').onclick=home;$('#again').focus();
+}
+function memory(){memoryGame(MEMO(),memory,'Finde die Paare: he gehört zu him, wir gehört zu we.')}
+
+/* ---------- Arbeitsblatt drucken / als PDF sichern ---------- */
+const SHEETS={luecken:'Lückentext',ersetzen:'Nomen ersetzen',fehler:'Richtig oder falsch',tabelle:'Pronomen-Tabelle',bauen:'Satzbaukasten'};
+function sheetSetup(){
+  G=null;
+  $('#app').innerHTML=`<div class="top noprint"><span class="brand">${BRAND}</span>${themeBtn()}</div>
+  <div class="qcard noprint"><h2>Arbeitsblatt als PDF</h2>
+   <p>Erstellt ein Arbeitsblatt und ein separates Lösungsblatt mit denselben Aufgaben. Jedes Blatt einzeln drucken oder im Druckdialog als PDF sichern (PC/Mac: „Als PDF speichern“; iPad/iPhone: im Druckdialog auf die Vorschau tippen, dann teilen oder sichern).</p>
+   <form class="form" id="sf">
+    <label>Aufgabe<select id="sk">${Object.entries(SHEETS).map(([k,v])=>`<option value="${k}">${v}</option>`).join('')}</select></label>
+    <label id="snw">Anzahl<select id="sn"><option>10</option><option>15</option><option>20</option></select></label>
+    <div class="actions" style="justify-content:flex-start"><button class="btn" type="submit">Arbeitsblatt erstellen</button><button class="btn ghost" type="button" id="hm">Zurück</button></div>
+   </form></div><div id="out"></div>`;
+  bindTheme();
+  $('#hm').onclick=home;
+  $('#sk').onchange=()=>{$('#snw').hidden=$('#sk').value==='tabelle'};
+  $('#sf').onsubmit=ev=>{ev.preventDefault();buildSheet($('#sk').value,+$('#sn').value)};
+}
+const ul=t=>esc(t).replace(/\*\*(.+?)\*\*/g,'<u>$1</u>'); // auf Papier unterstrichen statt fett
+function buildSheet(kind,n){
+  const title=`Englisch 5: Pronomen · ${SHEETS[kind]}`;
+  const uniq=(g)=>{const out=[],seen=new Set();for(let i=0;i<n*8&&out.length<n;i++){const q=g();if(!seen.has(q.prompt)){seen.add(q.prompt);out.push(q)}}return out};
+  let task,ws,key;
+  if(kind==='tabelle'){
+    task='Fülle die Tabelle aus. In jeder Zeile steht schon ein Wort.';
+    const give=PR.map(p=>p.s==='you'?'ds':pick(['ds','s','o'])); // bei you immer Deutsch vorgeben, sonst unklar: du oder ihr?
+    const tab=sol=>`<table class="ptab"><tr><th>Deutsch</th><th>Subjekt (wer?)</th><th>Objekt (wen? wem?)</th></tr>${PR.map((p,i)=>`<tr>${['ds','s','o'].map(c=>`<td>${sol||give[i]===c?esc(p[c]):''}</td>`).join('')}</tr>`).join('')}</table>`;
+    ws=tab(false);key=tab(true);
+  }else{
+    let rows;
+    if(kind==='luecken'){task='Setze das passende Pronomen ein.';rows=uniq(()=>qGap(true)).map(q=>({q:q.prompt.replace('___','__________'),sol:q.sol}))}
+    else if(kind==='ersetzen'){task='Ersetze den unterstrichenen Teil durch ein Pronomen und schreibe den Satz neu.';rows=uniq(()=>qReplace(true)).map(q=>({q:q.prompt,sol:q.sol,line:true}))}
+    else if(kind==='fehler'){task='Stimmt der Satz? Kreuze an. Verbessere die falschen Sätze.';rows=uniq(qFehler).map(q=>({q:q.prompt,ws:'☐ richtig    ☐ falsch',sol:q.correct==='Stimmt'?'richtig':'falsch: '+q.sol.replace(/^Richtig heißt es: /,'')}))}
+    else{task='Bring die Wörter in die richtige Reihenfolge und ersetze dabei den unterstrichenen Teil. Ein Wort passt nicht.';rows=uniq(qBuild).map(q=>({q:q.tiles.join('   /   '),hint:q.prompt,sol:q.sol,line:true}))}
+    const cell=r=>ul(r.q)+(r.hint?`<br><small>${ul(r.hint)}</small>`:'');
+    const table=sol=>`<table>${rows.map((r,i)=>`<tr><td class="n">${i+1}.</td>${r.ws?`<td class="w">${cell(r)}</td><td>${esc(sol?r.sol:r.ws)}</td>`
+      :`<td>${cell(r)}${sol?`<br><b>${esc(r.sol)}</b>`:r.line?'<div class="wline"></div>':''}</td>`}</tr>`).join('')}</table>`;
+    ws=table(false);key=table(true);
+  }
+  $('#out').innerHTML=`<div class="actions noprint" style="margin-top:16px"><button class="btn" id="pw">Arbeitsblatt drucken</button><button class="btn" id="pk">Lösungen drucken</button><button class="btn ghost" id="rx">Neu mischen</button></div>
+   <section class="sheet ws"><h2>${esc(title)}</h2><div class="meta"><span>Name: ________________________</span><span>Datum: ______________</span></div><p>${task}</p>${ws}</section>
+   <section class="sheet key"><h2>Lösungen: ${esc(title)}</h2>${key}</section>`;
+  const pr=m=>{document.documentElement.dataset.print=m;window.print()};
+  $('#pw').onclick=()=>pr('sheet');$('#pk').onclick=()=>pr('key');
+  $('#rx').onclick=()=>buildSheet(kind,n);
+}
+home();
+</script>
+
+</body>
+</html>

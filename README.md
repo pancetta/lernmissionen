@@ -6,3 +6,4 @@ Der Lernfortschritt wird nur im Browser des jeweiligen Geräts gespeichert (loca
 Über einen eigenen Eltern-Link lassen sich Arbeitsblätter mit getrennten Lösungsblättern drucken oder als PDF sichern.
 
 Aufbau: `index.html` ist die Übersicht, jede Mission liegt in einem eigenen Ordner `fach-klasse/mission/index.html`.
+Die Missionen einer Klasse teilen sich Dateien im Klassenordner, zum Beispiel `englisch-5/wortschatz.js` (die Wortliste, neue Wörter nur hinten anhängen), `englisch-5/gemeinsam.js` und `englisch-5/stil.css`.

@@ -11,280 +11,18 @@
 <link rel="icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAIAAACyr5FlAAAD/ElEQVR4nO3dzU0cQRCG4cXizJ6ckmNAToEDhMIBUrAcg1PitBn4YGm0wvsN89Nd9VXP+5zsC1vdeqdAWPLcPTy/nYBbvmUPAF/EAYk4IBEHJOKARByQiAMScUAiDkjEAYk4IBEHJOKARByQiAMScUAiDkjEAYk4IBEHJOKARByQiAMScUAiDkj32QO4uLw+Xf/1/PKeNYkPNgck4oBEHJCIAxJx3Hb5+Tt7hHzEAYk4JJYHccw5eB/E8YUj90EckIjja4ddHsSxyDH7IA5IxLHUAZcHcaxwtD6IY51D9UEckIhjteMsD+LY4iB9EAck4tjoCMuDOLYbvg/igEQcu4y9PIhjr4H7II4GRu2DOCARRxtDLg/iaGa8PogDEnG0NNjyII7GRuqDONobpg/igEQcXYyxPIijlwH6IA5IxNFR9eVBHH2V7oM4uqvbB3FAIo4IRZcHcQSp2AdxQCKOOOWWB3GEqtUHcUQr1AdxQCKOBFWWB3HkKNEHcUAijjT+y4M4Mpn3QRzJnPsgDkjEkc92eRCHBc8+iAMScbgwXB7EYcStD+KARBxerJYHcdjx6YM4HJn0QRyQiMOUw/IgDl/pfRAHJOKwlrs8iMNdYh/EUUBWH8QBiThqSFkexFFGfB/EAYk4KgleHsRRTGQfxFFPWB/EAYk4SopZHvcBn1HR+ddj9gj52ByQiAMScUAiDkjEAenu4fktewaYYnNAIg5ICb8Eu3z8if/QMZy//4j8uITNEXzCYcTfG99WIOXEwfJYK+XG2ByQ0uJgeSyXdVeZm4M+lki8Jb6tQEqOg+UxL/d+2ByQ8uNgeSjpN5Mfx8ngFgw53IlFHPDkEofDg+LD5DZc4oAhozhMHpd0PvdgFMfJ6V6yWN2AVxywYheH1aMTzO3sdnHAh2Mcbg9QDMNTO8ZxsryprjzPaxoHHPjG4fkw9WB7Ut84kM46DttHqiHnM1rHcfK+u/3MT+ceBxIViMP88drM/1wF4kCWGnH4P2RrlThRmf+HtMRtDqbG5kAK4oBEHJCIAxJxQCIOSMQBadfvOS6vT9Ofzy/vu4fp6HrUSaGZU0Zlc0AiDki74rjedTf3tgm1nyvOHKnl5vC86/mpKs4cZm8cn6I2OdXk0zz/pq04c4oGm8P2rmduueLM8br8QOpw12tnqDhzby3f1PT/2VLCXzVGxZnDNH6Nl2o/4KibP7rizDHav+Ntfjc2P3aTj6s4c4BeLwBc/u1z1V10+rJdv3jXmbvq+3bIlJ+wdl5xxZk7CXp1aMCNBy//JjybmES/V7b5jSf+2LiZeROT/JcOr7p6k2utOPMG+XHAFv9kD4k4IBEHJOKARByQiAMScUAiDkh/ARSxEB9azzFAAAAAAElFTkSuQmCC">
 <style>html{-webkit-text-size-adjust:100%;color-scheme:light}body{margin:0}[hidden]{display:none!important}</style>
 <title>Vokabel-Inseln</title>
-<style>
-/* Layout: eine schmale Spalte, Inseln als Kacheln, eine Frage pro Bildschirm. Thema: Segeltörn von Insel zu Insel. */
-:root{
-  --bg:#eef6fa; --card:#ffffff; --ink:#10263b; --muted:#53697b; --line:#cfe0ea;
-  --sea:#0e6f94; --sea-soft:#d8eef6; --coral:#ff5a4e; --coral-ink:#ffffff; --sun:#ffc93c; --sun-ink:#3a2a00;
-  --good:#17895a; --good-soft:#d9f3e6; --bad:#c93a32; --bad-soft:#fde3e0;
-  --f-display:ui-rounded,'SF Pro Rounded','Arial Rounded MT Bold','Nunito','Trebuchet MS','Segoe UI',system-ui,sans-serif;
-  --f-body:system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
-}
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#0a1a28; --card:#12293c; --ink:#eaf3f9; --muted:#9db4c5; --line:#24435c;
-  --sea:#4fc0e8; --sea-soft:#133a52; --coral:#ff7468; --coral-ink:#2b0805; --sun:#ffd25a; --sun-ink:#2b2000;
-  --good:#4fd196; --good-soft:#12382b; --bad:#ff8a80; --bad-soft:#401c19; color-scheme:dark;}}
-:root[data-theme="dark"]{
-  --bg:#0a1a28; --card:#12293c; --ink:#eaf3f9; --muted:#9db4c5; --line:#24435c;
-  --sea:#4fc0e8; --sea-soft:#133a52; --coral:#ff7468; --coral-ink:#2b0805; --sun:#ffd25a; --sun-ink:#2b2000;
-  --good:#4fd196; --good-soft:#12382b; --bad:#ff8a80; --bad-soft:#401c19; color-scheme:dark;}
-*{box-sizing:border-box}
-body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:17px;line-height:1.45;padding-inline:16px;padding-block:20px 48px}
-#app{max-width:640px;margin:0 auto}
-h1,h2,h3{font-family:var(--f-display);margin:0;font-weight:600;text-wrap:balance}
-button{font:inherit;color:inherit;cursor:pointer}
-button:focus-visible,input:focus-visible{outline:3px solid var(--sea);outline-offset:2px}
-.top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}
-.brand{font-family:var(--f-display);font-weight:700;font-size:1.25rem;color:var(--sea);letter-spacing:.01em}
-.pill{display:inline-flex;align-items:center;gap:6px;background:var(--card);border:2px solid var(--line);border-radius:999px;padding:4px 12px;color:var(--ink);font-weight:800;font-size:.9rem;font-variant-numeric:tabular-nums}
-.pill.sun{background:var(--sun);border-color:var(--sun);color:var(--sun-ink)}
-.hero{background:var(--sea);color:#fff;border-radius:22px;padding:22px 20px;margin-bottom:20px;position:relative;overflow:hidden}
-:root[data-theme="dark"] .hero{color:#06202e}
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .hero{color:#06202e}}
-.hero h1{font-size:clamp(1.7rem,6vw,2.3rem);line-height:1.1}
-.hero p{margin:8px 0 0;max-width:34ch}
-.hero svg{position:absolute;right:-6px;bottom:-4px;width:130px;opacity:.9}
-.rank{margin-top:14px;display:flex;gap:8px;flex-wrap:wrap}
-.rank .pill{border-color:transparent}
-.namebox{display:flex;gap:10px;align-items:center;margin-bottom:18px;flex-wrap:wrap}
-.namebox label{font-weight:800}
-input[type=text]{font:inherit;color:var(--ink);background:var(--card);border:2px solid var(--line);border-radius:14px;padding:10px 14px;min-width:0}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
-.tile{text-align:left;background:var(--card);border:2px solid var(--line);border-radius:18px;padding:14px 16px;display:grid;gap:4px;transition:transform .12s,border-color .12s}
-.tile:hover{border-color:var(--sea);transform:translateY(-2px)}
-.tile h3{font-size:1.2rem}
-.tile .sub{color:var(--muted);font-size:.92rem}
-.stars{letter-spacing:2px;font-size:1.15rem;color:var(--line)}
-.stars b{color:var(--sun);font-weight:400;text-shadow:0 0 0 var(--sun-ink)}
-.tile.resume{background:var(--sun);border-color:var(--sun);color:var(--sun-ink)}
-.tile.resume .sub{color:inherit}
-.tile.mix{background:var(--coral);border-color:var(--coral);color:var(--coral-ink)}
-.tile.mix .sub{color:inherit;opacity:.9}
-.tile.mix .stars{color:rgba(255,255,255,.45)}
-.tile.mix .stars b{color:#fff}
-.sec{margin:22px 0 10px;font-size:1.1rem;color:var(--muted)}
-.q-head{display:flex;align-items:center;gap:12px;margin-bottom:12px}
-.back{background:none;border:2px solid var(--line);border-radius:12px;padding:4px 12px;font-weight:800;color:var(--muted)}
-.track{flex:1;height:14px;background:var(--sea-soft);border-radius:999px;position:relative}
-.track i{position:absolute;left:0;top:0;bottom:0;background:var(--sea);border-radius:999px;transition:width .35s}
-.track svg{position:absolute;top:-13px;width:34px;transition:left .35s;margin-left:-12px}
-.streak{min-width:78px;text-align:center}
-.qcard{background:var(--card);border:2px solid var(--line);border-radius:22px;padding:22px 18px}
-.kind{font-size:.82rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--sea)}
-.kind.redo{color:var(--coral)}
-.prompt{font-family:var(--f-display);font-weight:600;font-size:clamp(1.7rem,7vw,2.4rem);line-height:1.15;margin:6px 0 16px;overflow-wrap:anywhere}
-.opts{display:grid;gap:10px}
-.opt{text-align:left;background:var(--bg);border:2px solid var(--line);border-radius:14px;padding:13px 16px;font-weight:800;font-size:1.05rem;overflow-wrap:anywhere}
-.opt:hover:not(:disabled){border-color:var(--sea)}
-.opt.right{background:var(--good-soft);border-color:var(--good);color:var(--good)}
-.opt.wrong{background:var(--bad-soft);border-color:var(--bad);color:var(--bad)}
-.opt:disabled{cursor:default}
-.typebox{display:flex;gap:10px;flex-wrap:wrap}
-.typebox input{flex:1 1 180px;font-size:1.2rem;font-weight:800}
-.slots{font-family:var(--f-display);letter-spacing:.2em;color:var(--muted);margin:-6px 0 12px;min-height:1.4em}
-.btn{background:var(--coral);color:var(--coral-ink);border:0;border-radius:14px;padding:12px 22px;font-weight:800;font-family:var(--f-display);font-size:1.1rem;box-shadow:0 4px 0 rgba(0,0,0,.18)}
-.btn:active{transform:translateY(2px);box-shadow:0 2px 0 rgba(0,0,0,.18)}
-.btn.ghost{background:var(--card);color:var(--ink);border:2px solid var(--line);box-shadow:none}
-.btn.small{padding:8px 14px;font-size:.95rem}
-.fb{margin-top:16px;border-radius:16px;padding:14px 16px;display:grid;gap:10px}
-.fb.ok{background:var(--good-soft);color:var(--good)}
-.fb.no{background:var(--bad-soft);color:var(--bad)}
-.fb strong{font-family:var(--f-display);font-size:1.25rem}
-.fb .ans{color:var(--ink);font-weight:800}
-.fb .row{display:flex;justify-content:flex-end}
-.end{text-align:center}
-.bigstars{font-size:3rem;letter-spacing:6px;color:var(--line);margin:6px 0}
-.bigstars b{color:var(--sun);font-weight:400}
-.bigstars span{display:inline-block}
-.stats{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:12px 0 18px}
-.mist{text-align:left;background:var(--card);border:2px solid var(--line);border-radius:16px;padding:12px 16px;margin:14px 0}
-.mist h3{font-size:1.05rem;margin-bottom:6px}
-.mist ul{margin:0;padding-left:18px}
-.mist li{margin:3px 0}
-.actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
-.tip{color:var(--muted);font-size:.9rem;margin-top:22px}
-.theme{background:none;border:2px solid var(--line);border-radius:999px;padding:3px 12px;font-weight:800;font-size:.85rem;color:var(--muted)}
-@keyframes pop{0%{transform:scale(.3) rotate(-20deg);opacity:0}70%{transform:scale(1.25)}100%{transform:scale(1);opacity:1}}
-.pop{animation:pop .5s both}
-@media (prefers-reduced-motion:reduce){.pop{animation:none}.tile,.track i,.track svg{transition:none}}
-/* Seekarte */
-.maphead{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:22px 0 10px}
-.map{display:block;width:100%;height:auto}
-.map .sea{fill:var(--sea-soft)}
-.map .route{fill:none;stroke:var(--sea);stroke-width:2;stroke-dasharray:4 5;opacity:.55}
-.map .sand{fill:#f1d58c}
-.map .green{fill:#4caf6a}
-.map .pole{stroke:var(--ink);stroke-width:1.5}
-.map .mapboat{color:var(--ink)}
-.map text{fill:var(--ink);font:700 10px var(--f-body);text-anchor:middle}
-.isl{cursor:pointer;outline:none}
-.isl:hover .sand,.isl:focus-visible .sand{stroke:var(--coral);stroke-width:3}
-.treasure{display:flex;align-items:center;justify-content:center;gap:10px;font-weight:800;color:var(--sea);margin:4px 0 10px}
-/* Satzbaukasten */
-.line{min-height:56px;border:2px dashed var(--line);border-radius:14px;padding:6px;display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
-.line.right{border-style:solid;border-color:var(--good);background:var(--good-soft)}
-.line.wrong{border-style:solid;border-color:var(--bad);background:var(--bad-soft)}
-.chips{display:flex;flex-wrap:wrap;gap:8px;min-height:44px}
-.chip{background:var(--card);border:2px solid var(--sea);color:var(--ink);border-radius:12px;padding:8px 14px;font-weight:800;font-size:1.05rem}
-.chip:disabled{cursor:default}
-/* Memory und Blitzrunde */
-.memo{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-@media (min-width:520px){.memo{grid-template-columns:repeat(4,1fr)}}
-.card{min-height:86px;background:var(--sea);color:var(--card);border:2px solid var(--sea);border-radius:14px;padding:6px;font-weight:800;font-size:1rem;overflow-wrap:anywhere;transition:background .2s}
-.card.up{background:var(--card);color:var(--ink)}
-.card.found{background:var(--good-soft);color:var(--good);border-color:var(--good);cursor:default}
-.timer i{background:var(--coral)}
-.bignum{font-family:var(--f-display);font-size:4rem;font-weight:700;color:var(--sea);line-height:1;margin:8px 0}
-.fb .row{gap:10px}
-.prompt .btn{font-size:1.1rem}
-@media (prefers-reduced-motion:reduce){.card{transition:none}}
-/* Druck: Satzbaukasten-Schreiblinie und Memory-Karten zum Ausschneiden */
-.sheet small{color:#555}
-.sheet .wline{border-bottom:1px solid #999;height:2em}
-.sheet .cards{display:grid;grid-template-columns:repeat(4,1fr)}
-.sheet .cards div{position:relative;border:1px dashed #888;min-height:3cm;display:flex;align-items:center;justify-content:center;text-align:center;padding:14px 6px 6px;font-size:1.05rem;break-inside:avoid;overflow-wrap:anywhere}
-.sheet .cards small{position:absolute;top:4px;left:6px;font-size:.7rem}
-/* Arbeitsblatt: auf dem Bildschirm als Vorschau, im Druck nur Blatt oder nur Lösungen (data-print am html-Element) */
-.form{display:grid;gap:14px;margin-top:14px}
-.form label{font-weight:800;display:grid;gap:6px}
-select{font:inherit;color:var(--ink);background:var(--card);border:2px solid var(--line);border-radius:14px;padding:10px 14px}
-.sheet{background:#fff;color:#000;border-radius:12px;padding:24px;margin:16px 0}
-.sheet h2{font-size:1.3rem}
-.sheet .meta{display:flex;gap:24px;flex-wrap:wrap;margin:12px 0}
-.sheet table{width:100%;border-collapse:collapse}
-.sheet td{border-bottom:1px solid #999;padding:12px 6px 4px;vertical-align:bottom}
-.sheet td.n{width:2.5em;color:#555}
-.sheet td.w{width:45%}
-.sheet tr{break-inside:avoid}
-@media print{
-  body{background:#fff;padding:0}
-  #app{max-width:none}
-  .noprint{display:none!important}
-  .sheet{margin:0;padding:0;border-radius:0}
-  .key{break-before:page}
-  [data-print=sheet] .key,[data-print=key] .ws{display:none}
-  [data-print=key] .key{break-before:auto}
-}
-</style>
+<link rel="stylesheet" href="../stil.css">
 
 </head>
 <body>
 <div id="app"></div>
 
+<script src="../wortschatz.js"></script>
+<script src="../gemeinsam.js"></script>
 <script>
-/* ---------- Wortschatz Englisch Klasse 5, nach eigenen Themen-Inseln geordnet ---------- */
-/* [Insel, Englisch (Alternativen mit |), Deutsch (Alternativen mit /)]. Neue Wörter nur hinten anhängen: gespeicherte Runden merken sich Positionen in W. */
-const W = [
- ['zahlen','one','eins'],['zahlen','two','zwei'],['zahlen','three','drei'],['zahlen','four','vier'],['zahlen','five','fünf'],
- ['zahlen','six','sechs'],['zahlen','seven','sieben'],['zahlen','eight','acht'],['zahlen','nine','neun'],['zahlen','ten','zehn'],
- ['zahlen','eleven','elf'],['zahlen','twelve','zwölf'],['zahlen','thirteen','dreizehn'],['zahlen','fourteen','vierzehn'],
- ['zahlen','fifteen','fünfzehn'],['zahlen','sixteen','sechzehn'],['zahlen','seventeen','siebzehn'],['zahlen','eighteen','achtzehn'],
- ['zahlen','nineteen','neunzehn'],['zahlen','twenty','zwanzig'],
-
- ['zeit','Monday','Montag'],['zeit','Tuesday','Dienstag'],['zeit','Wednesday','Mittwoch'],['zeit','Thursday','Donnerstag'],
- ['zeit','Friday','Freitag'],['zeit','Saturday','Samstag'],['zeit','Sunday','Sonntag'],['zeit','every day','jeden Tag'],
- ['zeit','on Monday','am Montag'],['zeit','time','Zeit / Uhrzeit'],['zeit','minute','Minute'],
- ['zeit',"at 1 o'clock|at one o'clock",'um ein Uhr / um 13 Uhr'],['zeit','appointment','Termin / Verabredung'],
- ['zeit','now','jetzt / nun'],['zeit','before school|before lessons','vor der Schule / vor dem Unterricht'],
- ['zeit','the first day','der erste Tag'],
-
- ['farben','red','rot'],['farben','yellow','gelb'],['farben','blue','blau'],['farben','green','grün'],['farben','brown','braun'],
- ['farben','orange','orange'],['farben','grey','grau'],['farben','pink','rosa / pink'],['farben','purple','lila / violett'],
- ['farben','white','weiß'],['farben','black','schwarz'],['farben','navy','marineblau / Marine'],['farben','dark','dunkel'],
- ['farben','colour','Farbe'],['farben','uniform','Schuluniform / Uniform'],['farben','shoe','Schuh'],
- ['farben','trainer','Sportschuh / Turnschuh'],['farben','to wear|wear','tragen (Kleidung)'],
-
- ['beschreiben','big','groß'],['beschreiben','long','lang'],['beschreiben','short','kurz'],['beschreiben','new','neu'],
- ['beschreiben','different','anders / verschieden'],['beschreiben','British','britisch'],['beschreiben','nice','schön / nett'],
- ['beschreiben','great','toll / großartig'],['beschreiben','good','gut'],['beschreiben','strange','komisch / merkwürdig'],
- ['beschreiben','silly','albern / doof'],['beschreiben','sad','traurig'],['beschreiben','friendly','freundlich'],
-
- ['tiere','zoo','Zoo'],['tiere','animal','Tier'],['tiere','pet','Haustier'],['tiere','seal','Robbe / Seehund'],['tiere','bear','Bär'],
- ['tiere','elephant','Elefant'],['tiere','giraffe','Giraffe'],['tiere','lion','Löwe'],['tiere','monkey','Affe'],['tiere','pig','Schwein'],
- ['tiere','snake','Schlange'],['tiere','whale','Wal'],['tiere','ant','Ameise'],['tiere','bird','Vogel'],['tiere','butterfly','Schmetterling'],
- ['tiere','cat','Katze'],['tiere','dog','Hund'],['tiere','frog','Frosch'],['tiere','guinea pig','Meerschweinchen'],['tiere','horse','Pferd'],
- ['tiere','rabbit','Kaninchen / Hase'],['tiere','rat','Ratte'],
-
- ['klasse','classroom','Klassenraum / Klassenzimmer'],['klasse','board','Tafel'],['klasse','cupboard','Schrank'],['klasse','chair','Stuhl'],
- ['klasse','desk','Schreibtisch / Pult'],['klasse','door','Tür'],['klasse','window','Fenster'],['klasse','clock','Uhr (Wanduhr, Turmuhr)'],
- ['klasse','watch','Armbanduhr'],['klasse','school bag|schoolbag','Schultasche / Schulranzen'],['klasse','book','Buch'],
- ['klasse','exercise book','Heft / Schulheft'],['klasse','ruler','Lineal'],['klasse','pen','Kuli / Füller / Stift'],['klasse','pencil','Bleistift'],
- ['klasse','pencil case','Federmäppchen / Mäppchen'],['klasse','glue stick','Klebestift'],['klasse','glue','Kleber / Klebstoff'],
- ['klasse','rubber','Radiergummi'],['klasse','sharpener','Spitzer / Anspitzer'],
-
- ['schule','school','Schule'],['schule','at school','in der Schule'],['schule','class','Klasse (Schulklasse)'],
- ['schule','lesson','Unterrichtsstunde / Stunde'],['schule','teacher','Lehrer / Lehrerin'],['schule','student','Schüler / Schülerin'],
- ['schule','classmate','Mitschüler / Mitschülerin'],['schule','English','Englisch'],['schule','library','Bücherei / Bibliothek'],
- ['schule','language','Sprache'],['schule','sentence','Satz'],['schule','speaker','Sprecher / Sprecherin'],
- ['schule','profile','Steckbrief / Profil'],['schule','form of|form','Form (von)'],['schule','rhyme','Reim'],['schule','game','Spiel'],
- ['schule','tip','Tipp'],
-
- ['leute','boy','Junge'],['leute','girl','Mädchen'],['leute','kid','Kind'],['leute','people','Menschen / Leute'],['leute','mum','Mama'],
- ['leute','mother','Mutter'],['leute','dad','Papa'],['leute','father','Vater'],['leute','brother','Bruder'],['leute','sister','Schwester'],
- ['leute','flat','Wohnung'],['leute','home','Zuhause'],['leute','at home','zu Hause / daheim'],
- ['leute','to go home|go home','nach Hause gehen'],['leute','to come home|come home','nach Hause kommen'],
- ['leute','hometown','Heimatstadt'],
-
- ['stadt','town','Stadt'],['stadt','sea','Meer'],['stadt','river','Fluss'],['stadt','harbour','Hafen'],['stadt','boat','Boot'],
- ['stadt','castle','Burg / Schloss'],['stadt','tower','Turm'],['stadt','swimming pool|pool','Schwimmbad'],['stadt','big wheel','Riesenrad'],
- ['stadt','map','Karte / Stadtplan'],['stadt','card','Karte (zum Beispiel Postkarte)'],['stadt','picture','Bild'],['stadt','photo','Foto'],
- ['stadt','place','Ort / Platz'],['stadt','here','hier'],['stadt','there','dort / dorthin'],['stadt','near','nahe bei / in der Nähe von'],
- ['stadt','at','an / bei / in (wo?)'],
-
- ['verben','to see|see','sehen'],['verben','to go|go','gehen / fahren'],['verben','to look at|look at','anschauen / ansehen'],
- ['verben','can','können'],['verben','to think|think','denken / glauben'],['verben','to say|say','sagen'],['verben','to show|show','zeigen'],
- ['verben','to come|come','kommen'],['verben','to put|put','legen / stellen / hintun'],
- ['verben','to talk to|talk to|to talk|talk','sprechen mit / reden mit'],['verben','to open|open','öffnen / aufmachen'],
- ['verben','to touch|touch','anfassen / berühren'],['verben','to give|give','geben'],['verben','to know|know','wissen / kennen'],
- ['verben','to wait for|wait for|to wait|wait','warten (auf)'],['verben','to hurry up|hurry up','sich beeilen'],
- ['verben','to forget|forget','vergessen'],['verben','to have|have','haben'],['verben','to speak|speak','sprechen'],
-
- ['kleine','too','auch'],['kleine','of','von'],['kleine','for','für'],['kleine','what?|what','was?'],['kleine','who?|who','wer?'],
- ['kleine','where?|where','wo? / wohin?'],['kleine','your','dein / deine / euer / eure'],['kleine','our','unser / unsere'],
- ['kleine','me','mich / mir'],['kleine','or','oder'],['kleine','but','aber'],['kleine','with','mit'],['kleine','without','ohne'],
- ['kleine','please','bitte'],['kleine','when','wenn'],['kleine','thing','Ding / Sache'],['kleine','his mum','seine Mama'],
- ['kleine','her best friend','ihre beste Freundin / ihr bester Freund'],['kleine','their first day','ihr erster Tag'],
-
- ['hallo','Hello.','Hallo.'],['hallo','My name is ...','Ich heiße ...'],['hallo',"I'm from Germany.",'Ich komme aus Deutschland.'],
- ['hallo',"I'm ten years old.",'Ich bin zehn Jahre alt.'],['hallo',"What's your name?",'Wie heißt du?'],
- ['hallo','How old are you?','Wie alt bist du?'],['hallo','Where are you from?','Woher kommst du?'],
- ['hallo','What about you?','Und du?'],['hallo','Nice to meet you.','Schön, dich kennenzulernen.'],['hallo','Thank you.','Danke.'],
- ['hallo','Bye.','Tschüs.'],['hallo','See you.','Bis bald.'],['hallo',"I'm sorry.|Sorry.",'Tut mir leid. / Entschuldigung.'],
- ['hallo','Welcome to our school.','Willkommen an unserer Schule.'],['hallo',"Let's go!",'Los geht’s!'],
- ['hallo','about me/you/...','über mich/dich/...'],
-
- ['saetze',"Yes, that's right.",'Ja, das stimmt.'],['saetze',"No, that's wrong.",'Nein, das ist falsch.'],
- ['saetze','Is it Monday?','Ist heute Montag?'],['saetze','What time is it?','Wie spät ist es?'],['saetze',"You're late.",'Du bist zu spät.'],
- ['saetze','Watch out!','Vorsicht! / Pass auf!'],['saetze',"Don't go.",'Geh nicht.'],['saetze','So?','Na und?'],
- ['saetze','Have a go.','Probier es mal.'],['saetze','Follow me.','Folge mir. / Folgt mir.'],['saetze','Simon says ...','Simon sagt ...'],
- ['saetze','Let me show you ...','Ich zeige dir ...'],['saetze','This is ...','Das ist ...'],['saetze','Here are ...','Hier sind ...'],
- ['saetze','There are ...','Da sind ... / Es gibt ...'],['saetze',"There's ...",'Da ist ... / Es gibt ...'],
- ['saetze','my favourite colour','meine Lieblingsfarbe'],['saetze','I like ...','Ich mag ...'],['saetze',"I don't like ...",'Ich mag ... nicht.'],
- ['saetze',"A snake isn't a good pet.",'Eine Schlange ist kein gutes Haustier.'],['saetze','an elephant','ein Elefant'],
- ['saetze',"she's ...",'sie ist ...'],['saetze',"they're ...",'sie sind ...'],['saetze',"he/she/it isn't ...",'er/sie/es ist nicht ...'],
- ['saetze',"you aren't ...",'du bist nicht ... / ihr seid nicht ...'],['saetze','lots of ...|a lot of ...','viel ... / viele ...'],
- ['saetze','on the way to ...','auf dem Weg zu ...']
-];
-const TOPICS = [
- {id:'zahlen',name:'Zahlen-Insel',map:'Zahlen',sub:'one bis twenty'},
- {id:'zeit',name:'Uhren-Insel',map:'Uhren',sub:'Wochentage, Uhrzeit, Termine'},
- {id:'farben',name:'Farben-Insel',map:'Farben',sub:'Farben und was man anzieht'},
- {id:'beschreiben',name:'Wie-ist-das-Insel',map:'Wie ist das?',sub:'groß, kurz, albern, freundlich ...'},
- {id:'tiere',name:'Tier-Insel',map:'Tiere',sub:'vom Meerschweinchen bis zum Wal'},
- {id:'klasse',name:'Klassenzimmer-Insel',map:'Klasse',sub:'Tafel, Lineal, Radiergummi ...'},
- {id:'schule',name:'Schul-Insel',map:'Schule',sub:'Lehrer, Unterricht, Sprache ...'},
- {id:'leute',name:'Familien-Insel',map:'Familie',sub:'Mama, Papa, Geschwister, Zuhause'},
- {id:'stadt',name:'Hafen-Insel',map:'Hafen',sub:'Meer, Burg, Riesenrad ...'},
- {id:'verben',name:'Tu-Wörter-Insel',map:'Tu-Wörter',sub:'sehen, sagen, geben, vergessen ...'},
- {id:'kleine',name:'Mini-Wörter-Insel',map:'Mini',sub:'mit, ohne, aber, wer, wo ...'},
- {id:'hallo',name:'Hallo-Insel',map:'Hallo',sub:'Sich vorstellen und begrüßen'},
- {id:'saetze',name:'Plauder-Insel',map:'Plaudern',sub:'Sätze für jeden Tag'}
-];
-const NOTYPE=['hallo','saetze']; // Satz-Inseln: nicht zum Tippen, dafür Satzbaukasten
-const RANKS=[[0,'Leichtmatrose'],[100,'Matrose'],[300,'Steuermann/-frau'],[600,'Kapitän/in'],[1000,'Admiral/in']];
-const ROUND=10, BLITZ=60, PAIRS=6;
-const CHEER=['Richtig!','Super!','Genau!','Stark!','Yes!','Perfekt!','Great!'];
-const OOPS=['Fast!','Nicht schlimm.','Merk dir das gut.','Beim nächsten Mal klappt es.'];
+const {W,TOPICS,NOTYPE}=WORTSCHATZ;
+const BRAND='Vokabel-Inseln';
+const MAP=[[40,40],[105,40],[170,40],[235,40],[300,40],[300,115],[235,115],[170,115],[105,115],[40,115],[70,190],[170,190],[270,190]]; // Seekarte, Reihenfolge wie TOPICS
 
 /* ---------- Speicher (nur Komfort, darf ausfallen) ---------- */
 let save={name:'',xp:0,best:{},weak:{},sound:true,blitz:0,memo:0};
@@ -312,27 +50,9 @@ function unpackRound(r){
 }
 function saveRound(){save.round=packRound();persist()}
 
-/* ---------- Hilfen ---------- */
-const $=s=>document.querySelector(s);
-const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
-const enShow=e=>e[1].split('|')[0];
-const deShow=e=>e[2].replace(/ \/ /g,' / ');
-const allEn=e=>e[1].split('|').join(' / ');
-const norm=t=>t.replace(/[‘’´`]/g,"'").replace(/[.!?]+$/,'').replace(/\s+/g,' ').trim();
 const key=e=>e[1];
-const pick=a=>a[Math.floor(Math.random()*a.length)];
-function rank(){let r=RANKS[0];for(const x of RANKS)if(save.xp>=x[0])r=x;return r[1]}
-function starsHtml(n){return '<span class="stars">'+[1,2,3].map(i=>i<=n?'<b>★</b>':'★').join('')+'</span>'}
-const boat='<svg viewBox="0 0 34 30" aria-hidden="true"><path d="M17 2v18" stroke="currentColor" stroke-width="2"/><path d="M18 3l11 15H18z" fill="#ffc93c"/><path d="M3 21h28l-5 7H8z" fill="#ff5a4e"/></svg>';
-const hero='<svg viewBox="0 0 130 90" aria-hidden="true"><path d="M0 62q16-14 32 0t32 0 32 0 34 0v28H0z" fill="#ffffff" opacity=".28"/><path d="M0 74q16-14 32 0t32 0 32 0 34 0v16H0z" fill="#ffffff" opacity=".4"/><path d="M62 10v34" stroke="#fff" stroke-width="3"/><path d="M65 12l30 30H65z" fill="#ffc93c"/><path d="M40 48h70l-12 16H52z" fill="#ff5a4e"/></svg>';
-const chest=(x,y)=>`<g transform="translate(${x} ${y})" aria-hidden="true"><rect y="5" width="18" height="11" rx="2" fill="#a0522d"/><path d="M0 7Q9-2 18 7z" fill="#7a3b17"/><rect x="7.5" y="7" width="3" height="5" fill="#ffc93c"/></g>`;
-const flag=(x,y)=>`<g transform="translate(${x} ${y})" aria-hidden="true"><path d="M0 0v17" class="pole"/><path d="M1 1h11l-3 4 3 4H1z" fill="#ff5a4e"/></g>`;
 
-// Wörter für Satzbaukasten: Satzzeichen und "..." als eigene Kärtchen
-const toks=s=>s.match(/\.\.\.|[\wÀ-ÿ'’\/]+|[?!.,]/g)||[];
 const canBuild=e=>NOTYPE.includes(e[0])&&toks(enShow(e)).filter(t=>/\w/.test(t)).length>=3;
-function scramble(t){let s=t;for(let i=0;i<10&&s.join(' ')===t.join(' ');i++)s=shuffle(t);return s}
 function distractors(e,label){ // bis zu 3 andere Antworten, zuerst von derselben Insel
   const mine=label(e),seen=new Set([mine]),d=[];
   for(const x of shuffle(W.filter(x=>x!==e&&x[0]===e[0])).concat(shuffle(W.filter(x=>x[0]!==e[0])))){const l=label(x);if(!seen.has(l)){seen.add(l);d.push(l)}if(d.length>=3)break}
@@ -340,47 +60,8 @@ function distractors(e,label){ // bis zu 3 andere Antworten, zuerst von derselbe
 }
 const tfShown=e=>Math.random()<.5?deShow(e):distractors(e,deShow)[0]; // halb stimmt es, halb nicht
 
-/* ---------- Stimme ---------- */
-// Nur Stimmen, die auf dem Gerät selbst laufen (localService). Online-Stimmen (z. B. "Google ..." in Chrome) würden den Text an fremde Server schicken.
-let VOICE=null;
-// Apple liefert auch Spaß-Stimmen mit (singend, flüsternd, Roboter), die fürs Lernen nicht taugen.
-const ODD=/^(Albert|Bad News|Bahh|Bells|Boing|Bubbles|Cellos|Deranged|Good News|Hysterical|Jester|Junior|Organ|Pipe Organ|Ralph|Fred|Kathy|Superstar|Trinoids|Whisper|Wobble|Zarvox)\b/i;
-function pickVoice(){
-  try{
-    const score=v=>(/^en[-_]GB/i.test(v.lang)?4:/^en[-_](US|IE|AU)/i.test(v.lang)?2:0)+(/Enhanced|Premium|verbessert/i.test(v.name)?3:0)+(v.default?1:0);
-    const vs=speechSynthesis.getVoices().filter(v=>v.localService&&/^en[-_]/i.test(v.lang)&&!ODD.test(v.name));
-    VOICE=vs.sort((a,b)=>score(b)-score(a))[0]||null;
-  }catch(e){VOICE=null}
-}
-if('speechSynthesis' in window){pickVoice();speechSynthesis.onvoiceschanged=()=>{const had=!!VOICE;pickVoice();if(!had&&VOICE&&$('#nm')&&document.activeElement.id!=='nm')home()}}
-const canSpeak=()=>!!VOICE&&save.sound;
-function say(t,slow){
-  if(!canSpeak())return;
-  try{if(speechSynthesis.speaking)speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t.replace(/\.\.\./g,' ').replace(/\//g,', '));u.voice=VOICE;u.lang=VOICE.lang;u.rate=slow?.55:.9;speechSynthesis.speak(u)}catch(e){}
-}
-
 /* ---------- Ansichten ---------- */
-let G=null, B=null, M=null; // laufende Runde, Blitzrunde, Memory
-// ponytail: Export mit Lösungen nur über den Eltern-Link (#eltern), schützt vor Neugier, nicht vor Quelltext-Lesern. Bewusst nicht gespeichert, damit es auf dem Kindergerät nicht hängen bleibt.
-const PARENT=location.hash==='#eltern';
-function themeBtn(){return '<button class="theme" id="tg" aria-label="Hell oder dunkel wechseln">hell / dunkel</button>'}
-function bindTheme(){const b=$('#tg');if(!b)return;b.onclick=()=>{const r=document.documentElement;const dark=r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;r.dataset.theme=dark?'light':'dark'}}
-const topBar=()=>`<div class="top"><span class="brand">Vokabel-Inseln</span>${themeBtn()}</div>`;
 function mistList(list){return list.length?`<div class="mist"><h3>Diese Wörter üben wir weiter</h3><ul>${list.map(e=>`<li><b>${esc(enShow(e))}</b> = ${esc(deShow(e))}</li>`).join('')}</ul></div>`:'<div class="mist"><h3>Keine Fehler. Wow!</h3></div>'}
-
-function seaMap(){
-  // Inseln im Zickzack entlang einer Route. Drei Sterne = Schatztruhe, ein oder zwei = Fähnchen. Das Boot wartet an der ersten Insel ohne Schatz.
-  const P=[[40,40],[105,40],[170,40],[235,40],[300,40],[300,115],[235,115],[170,115],[105,115],[40,115],[70,190],[170,190],[270,190]];
-  const next=TOPICS.findIndex(t=>(save.best[t.id]||0)<3);
-  const isl=TOPICS.map((t,i)=>{const [x,y]=P[i],n=save.best[t.id]||0;
-    return `<g class="isl" data-t="${t.id}" tabindex="0" role="button" aria-label="${t.name}, ${n} von 3 Sternen">
-     <ellipse class="sand" cx="${x}" cy="${y}" rx="25" ry="11"/><ellipse class="green" cx="${x-5}" cy="${y-3}" rx="12" ry="5"/>
-     ${n>=3?chest(x-14,y-20):n>0?flag(x-12,y-22):''}<text x="${x}" y="${y+23}">${esc(t.map)}</text></g>`}).join('');
-  // Markierung links auf der Insel, Boot rechts daneben (an einer Insel mit Schatz steht nie das Boot)
-  const b=next>=0?boat.replace('<svg',`<svg x="${P[next][0]+2}" y="${P[next][1]-26}" width="26" height="23" class="mapboat"`):'';
-  return `<svg class="map" viewBox="0 0 340 222" role="group" aria-label="Seekarte"><rect class="sea" width="340" height="222" rx="18"/>
-   <path class="route" d="M${P.map(p=>p.join(' ')).join(' L')}"/>${isl}${b}</svg>`;
-}
 
 function home(){
   G=null;M=null;if(B){clearTimeout(B.timer);B=null}
@@ -399,7 +80,7 @@ function home(){
   <div class="namebox"><label for="nm">Dein Name</label><input type="text" id="nm" maxlength="16" value="${esc(save.name)}" placeholder="z. B. Mia" autocomplete="off"></div>
   ${resume}
   <div class="maphead"><h2 class="sec" style="margin:0">Seekarte</h2><span class="pill">Schätze: ${chests} von ${TOPICS.length}</span></div>
-  ${seaMap()}
+  ${seaMap(MAP)}
   <p class="tip" style="margin-top:4px">Drei Sterne auf einer Insel, und du findest ihren Schatz.</p>
   <h2 class="sec">Spiele</h2><div class="grid">
    <button class="tile mix" data-t="mix"><h3>Große Rundfahrt</h3><span class="sub">Alle Inseln auf einmal, die schwierigste Fahrt</span>${starsHtml(save.best.mix||0)}</button>
@@ -588,37 +269,7 @@ function blitzEnd(){
 }
 
 /* ---------- Memory: englisches Wort und deutsche Bedeutung als Paar ---------- */
-function memory(topic){
-  G=null;if(B){clearTimeout(B.timer);B=null}
-  const es=pickEntries(topic,PAIRS);
-  M={topic,tries:0,open:[],found:0,pairs:es.length,lock:false,cards:shuffle(es.flatMap(e=>[{e,t:enShow(e),en:true},{e,t:deShow(e),en:false}]))};
-  $('#app').innerHTML=`<div class="q-head"><button class="back" id="bk" aria-label="Memory beenden">Ende</button><span class="brand" style="flex:1;text-align:center">Memory</span><span class="pill" id="mt">0 Züge</span></div>
-   <p class="tip" style="margin:0 0 12px">Finde die Paare: englisches Wort und deutsche Bedeutung.</p>
-   <div class="memo" role="group" aria-label="Karten, mit Pfeiltasten wählen">${M.cards.map((c,i)=>`<button class="card nav" data-i="${i}" aria-label="Verdeckte Karte">?</button>`).join('')}</div>`;
-  $('#bk').onclick=home;
-  document.querySelectorAll('.card').forEach(b=>b.onclick=()=>flip(b));
-}
-function flip(b){
-  const c=M&&M.cards[+b.dataset.i];
-  if(!c||M.lock||c.found||M.open.includes(b))return;
-  b.textContent=c.t;b.classList.add('up');b.setAttribute('aria-label',c.t);if(c.en)say(c.t);
-  M.open.push(b);if(M.open.length<2)return;
-  M.tries++;$('#mt').textContent=M.tries+(M.tries===1?' Zug':' Züge');
-  const [x,y]=M.open.map(o=>M.cards[+o.dataset.i]);
-  if(x.e===y.e){x.found=y.found=true;M.open.forEach(o=>{o.classList.add('found');o.disabled=true});M.open=[];if(++M.found===M.pairs)setTimeout(memoEnd,700)}
-  else{M.lock=true;setTimeout(()=>{if(!M)return;M.open.forEach(o=>{o.textContent='?';o.classList.remove('up');o.setAttribute('aria-label','Verdeckte Karte')});M.open=[];M.lock=false},1100)}
-}
-function memoEnd(){
-  if(!M)return;const r=M;M=null;
-  const gain=10+r.pairs*2,rec=!save.memo||r.tries<save.memo;if(rec)save.memo=r.tries;save.xp+=gain;persist();
-  $('#app').innerHTML=`${topBar()}
-  <div class="qcard end"><h2>${rec?'Neuer Rekord!':'Alle Paare gefunden!'}</h2>
-   <div class="bignum pop">${r.tries}</div><p>Züge für ${r.pairs} Paare</p>
-   <div class="stats"><span class="pill">Rekord: ${save.memo} Züge</span><span class="pill sun">+${gain} Punkte</span></div>
-   <div class="mist"><h3>Deine Paare</h3><ul>${[...new Set(r.cards.map(c=>c.e))].map(e=>`<li><b>${esc(enShow(e))}</b> = ${esc(deShow(e))}</li>`).join('')}</ul></div>
-   <div class="actions"><button class="btn" id="again">Nochmal</button><button class="btn ghost" id="hm">Zur Seekarte</button></div></div>`;
-  bindTheme();$('#again').onclick=()=>memory(r.topic);$('#hm').onclick=home;$('#again').focus();
-}
+function memory(topic){memoryGame(pickEntries(topic,PAIRS).map(e=>({a:enShow(e),b:deShow(e)})),()=>memory(topic),'Finde die Paare: englisches Wort und deutsche Bedeutung.')}
 
 /* ---------- Arbeitsblatt drucken / als PDF sichern ---------- */
 const SHEETS={uebersetzen:'Übersetzen',diktat:'Diktat',tf:'Richtig oder falsch',build:'Satzbaukasten',memory:'Memory-Karten'};
@@ -666,18 +317,6 @@ function buildSheet(kind,topic,dir,n){
   $('#pw').onclick=()=>pr('sheet');$('#pk').onclick=()=>pr('key');
   $('#rx').onclick=()=>buildSheet(kind,topic,dir,n);
 }
-
-/* ---------- Tastatur ---------- */
-document.addEventListener('keydown',ev=>{
-  // Pfeiltasten wandern durch Antworten, Satzwörter und Memory-Karten (rundherum); Enter/Leertaste wählt wie bei jedem Knopf
-  const os=[...document.querySelectorAll('.nav:not(:disabled)')];
-  if(os.length&&/^Arrow(Up|Down|Left|Right)$/.test(ev.key)&&document.activeElement.tagName!=='INPUT'){
-    const i=os.indexOf(document.activeElement),d=/Up|Left/.test(ev.key)?-1:1;
-    ev.preventDefault();os[i<0?(d>0?0:os.length-1):(i+d+os.length)%os.length].focus();return;
-  }
-  if(!G||!G.answered)return;
-  if(ev.key==='Enter'){const b=$('#nx');if(b&&document.activeElement!==b&&document.activeElement.id!=='say'){ev.preventDefault();b.click()}}
-});
 
 home();
 </script>
