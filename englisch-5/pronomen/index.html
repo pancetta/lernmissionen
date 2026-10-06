@@ -180,6 +180,7 @@ try{const s=localStorage.getItem('en5-pron-v2');if(s)save=Object.assign(save,JSO
     const o=JSON.parse(localStorage.getItem('en5-pron-v1')||'null')||{},v=JSON.parse(localStorage.getItem('en5-v1')||'null')||{};
     save.name=o.name||v.name||'';save.xp=o.xp||0;save.blitz=o.blitz||0;save.memo=o.memo||0;if(o.sound===false||v.sound===false)save.sound=false;
   }}catch(e){}
+initRank();
 let storageOK=true;
 function persist(){try{localStorage.setItem('en5-pron-v2',JSON.stringify(save));storageOK=true}catch(e){storageOK=false}}
 try{localStorage.setItem('en5-test','1');localStorage.removeItem('en5-test')}catch(e){storageOK=false}
@@ -203,7 +204,7 @@ function home(){
   <div class="top"><a class="back" href="../../${PARENT?'#eltern':''}" style="text-decoration:none">Übersicht</a><span class="brand">${BRAND}</span>${themeBtn()}</div>
   <section class="hero"><h1>${hi} Wer ist he, wer ist she?</h1>
    <p>Pronomen sind kleine Wörter für Personen und Dinge: I, you, he, she, it, we, they. Jede Insel zeigt sie von einer anderen Seite. Eine Fahrt hat ${ROUND} Fragen.</p>
-   <div class="rank"><span class="pill sun">${save.xp} Punkte</span><span class="pill">Rang: ${rank()}</span></div>${hero}</section>
+   <div class="rank"><span class="pill sun">${save.xp} Punkte</span><span class="pill">Rang: ${rank()}</span></div>${rankBar()}${hero}</section>
   <div class="namebox"><label for="nm">Dein Name</label><input type="text" id="nm" maxlength="16" value="${esc(save.name)}" placeholder="z. B. Mia" autocomplete="off"></div>
   ${resume}${cheat}
   <div class="maphead"><h2 class="sec" style="margin:0">Seekarte</h2><span class="pill">Schätze: ${chests} von ${TOPICS.length}</span></div>
@@ -308,7 +309,7 @@ function finish(){
   $('#app').innerHTML=`${topBar()}
   <div class="qcard end"><h2>${esc(msg)}</h2>
    <div class="bigstars" aria-label="${stars} von 3 Sternen">${[1,2,3].map(i=>i<=stars?`<b><span class="pop" style="animation-delay:${i*.25}s">★</span></b>`:'★').join('')}</div>
-   ${treasure}
+   ${treasure}${rankUp()}
    <div class="stats"><span class="pill">${n} von ${G.total} gleich richtig</span><span class="pill">Beste Serie ${G.best}</span><span class="pill sun">+${G.xp} Punkte</span></div>
    ${mistList([...new Set(G.missed)])}
    <div class="actions"><button class="btn" id="again">Nochmal spielen</button><button class="btn ghost" id="hm">Zur Seekarte</button></div>
@@ -347,7 +348,7 @@ function blitzEnd(){
   const rec=r.ok>0&&r.ok>(save.blitz||0);if(rec)save.blitz=r.ok;persist();
   $('#app').innerHTML=`${topBar()}
   <div class="qcard end"><h2>${rec?'Neuer Rekord!':'Zeit ist um!'}</h2>
-   <div class="bignum pop">${r.ok}</div><p>richtige Antworten in ${BLITZ} Sekunden</p>
+   <div class="bignum pop">${r.ok}</div><p>richtige Antworten in ${BLITZ} Sekunden</p>${rankUp()}
    <div class="stats"><span class="pill">Rekord: ${save.blitz||0}</span><span class="pill sun">+${r.ok*3} Punkte</span></div>
    ${mistList(r.missed)}
    <div class="actions"><button class="btn" id="again">Nochmal</button><button class="btn ghost" id="hm">Zur Seekarte</button></div></div>`;

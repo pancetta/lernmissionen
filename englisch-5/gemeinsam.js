@@ -1,6 +1,10 @@
 /* Gemeinsame Teile der Englisch-5-Missionen: Hilfen, Stimme, Hell/Dunkel, Seekarte, Memory, Tastatur.
    Die Seite selbst legt fest: BRAND, TOPICS, save/persist, home(), und ihre eigenen Fragen. */
-const RANKS=[[0,'Leichtmatrose'],[100,'Matrose'],[300,'Steuermann/-frau'],[600,'Kapitän/in'],[1000,'Admiral/in']];
+// Ränge: der Abstand wächst jedes Mal um 100 Punkte (eine gute Runde bringt etwa 120 bis 165).
+// Nach dem letzten Rang geht es endlos weiter, alle LEGEND Punkte eine neue Stufe.
+const RANKS=[[0,'Leichtmatrose'],[100,'Matrose'],[300,'Bootsmann/-frau'],[600,'Steuermann/-frau'],[1000,'Navigator/in'],[1500,'Offizier/in'],[2100,'Kapitän/in'],
+ [2800,'Flottenkapitän/in'],[3600,'Kommodore'],[4500,'Konteradmiral/in'],[5500,'Vizeadmiral/in'],[6600,'Admiral/in'],[7800,'Großadmiral/in'],[9100,'Legende der sieben Meere']];
+const LEGEND=1500;
 const ROUND=10, BLITZ=60, PAIRS=6;
 const CHEER=['Richtig!','Super!','Genau!','Stark!','Yes!','Perfekt!','Great!'];
 const OOPS=['Fast!','Nicht schlimm.','Merk dir das gut.','Beim nächsten Mal klappt es.'];
@@ -11,7 +15,17 @@ const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',
 const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
 const norm=t=>t.replace(/[‘’´`]/g,"'").replace(/[.!?]+$/,'').replace(/\s+/g,' ').trim();
 const pick=a=>a[Math.floor(Math.random()*a.length)];
-function rank(){let r=RANKS[0];for(const x of RANKS)if(save.xp>=x[0])r=x;return r[1]}
+const LAST=RANKS.length-1;
+function level(xp=save.xp){if(xp>=RANKS[LAST][0])return LAST+Math.floor((xp-RANKS[LAST][0])/LEGEND);let i=0;RANKS.forEach((r,k)=>{if(xp>=r[0])i=k});return i}
+const levelName=L=>L<=LAST?RANKS[L][1]:`${RANKS[LAST][1]} · Stufe ${L-LAST+1}`;
+const levelStart=L=>L<=LAST?RANKS[L][0]:RANKS[LAST][0]+(L-LAST)*LEGEND;
+const lvl=()=>Math.max(level(),save.rk||0); // save.rk: höchster je erreichter Rang, niemand wird herabgestuft
+function rank(){return levelName(lvl())}
+function rankBar(){const L=lvl(),a=levelStart(L),b=levelStart(L+1),p=Math.max(0,Math.min(100,(save.xp-a)/(b-a)*100));
+  return `<div class="rbar" role="progressbar" aria-label="Fortschritt zum nächsten Rang" aria-valuenow="${Math.round(p)}" aria-valuemax="100"><i style="width:${p}%"></i></div><p class="rnext">Noch ${Math.max(0,b-save.xp)} Punkte bis ${esc(levelName(L+1))}</p>`}
+function rankUp(){const L=level();if(L>(save.rk||0)){save.rk=L;persist();return `<p class="treasure pop">⚓ Neuer Rang: ${esc(levelName(L))}!</p>`}return ''}
+// Einmalig beim Laden: Wer nach der alten, kürzeren Rangliste schon weiter war, behält seinen Rang.
+function initRank(){if(save.rk!==undefined)return;const old=[0,100,300,600,1000],map=[0,1,3,6,11];let i=0;old.forEach((t,k)=>{if(save.xp>=t)i=k});save.rk=map[i]}
 function starsHtml(n){return '<span class="stars">'+[1,2,3].map(i=>i<=n?'<b>★</b>':'★').join('')+'</span>'}
 const boat='<svg viewBox="0 0 34 30" aria-hidden="true"><path d="M17 2v18" stroke="currentColor" stroke-width="2"/><path d="M18 3l11 15H18z" fill="#ffc93c"/><path d="M3 21h28l-5 7H8z" fill="#ff5a4e"/></svg>';
 const hero='<svg viewBox="0 0 130 90" aria-hidden="true"><path d="M0 62q16-14 32 0t32 0 32 0 34 0v28H0z" fill="#ffffff" opacity=".28"/><path d="M0 74q16-14 32 0t32 0 32 0 34 0v16H0z" fill="#ffffff" opacity=".4"/><path d="M62 10v34" stroke="#fff" stroke-width="3"/><path d="M65 12l30 30H65z" fill="#ffc93c"/><path d="M40 48h70l-12 16H52z" fill="#ff5a4e"/></svg>';
@@ -84,7 +98,7 @@ function memoEnd(){
   const gain=10+r.pairs*2,rec=!save.memo||r.tries<save.memo;if(rec)save.memo=r.tries;save.xp+=gain;persist();
   $('#app').innerHTML=`${topBar()}
   <div class="qcard end"><h2>${rec?'Neuer Rekord!':'Alle Paare gefunden!'}</h2>
-   <div class="bignum pop">${r.tries}</div><p>Züge für ${r.pairs} Paare</p>
+   <div class="bignum pop">${r.tries}</div><p>Züge für ${r.pairs} Paare</p>${rankUp()}
    <div class="stats"><span class="pill">Rekord: ${save.memo} Züge</span><span class="pill sun">+${gain} Punkte</span></div>
    <div class="mist"><h3>Deine Paare</h3><ul>${[...new Set(r.cards.map(c=>c.e))].map(e=>`<li><b>${esc(e.a)}</b> = ${esc(e.b)}</li>`).join('')}</ul></div>
    <div class="actions"><button class="btn" id="again">Nochmal</button><button class="btn ghost" id="hm">Zur Seekarte</button></div></div>`;

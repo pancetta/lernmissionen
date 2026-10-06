@@ -131,6 +131,10 @@ input[type=text]{font:inherit;color:var(--ink);background:var(--card);border:2px
 .sheet .cards{display:grid;grid-template-columns:repeat(4,1fr)}
 .sheet .cards div{position:relative;border:1px dashed #888;min-height:3cm;display:flex;align-items:center;justify-content:center;text-align:center;padding:14px 6px 6px;font-size:1.05rem;break-inside:avoid;overflow-wrap:anywhere}
 .sheet .cards small{position:absolute;top:4px;left:6px;font-size:.7rem}
+/* Fortschritt zum nächsten Rang (im blauen Kopfbereich) */
+.rbar{height:8px;background:rgba(255,255,255,.3);border-radius:999px;margin-top:12px;max-width:260px;position:relative;z-index:1}
+.rbar i{display:block;height:100%;background:var(--sun);border-radius:999px}
+.rnext{font-size:.88rem;margin:6px 0 0!important;opacity:.95;position:relative;z-index:1}
 /* Sätze statt einzelner Wörter (Pronomen-Inseln) */
 .prompt.sm{font-size:clamp(1.25rem,5vw,1.6rem);line-height:1.3}
 .prompt b,.opt b{color:var(--coral)}
