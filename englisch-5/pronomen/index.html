@@ -22,7 +22,7 @@
 const BRAND='Pronomen-Inseln';
 const W=WORTSCHATZ.W;
 const TOPICS=[
- {id:'uebersetzen',name:'Ich-du-er-Insel',map:'ich, du, er',sub:'ich = I, wir = we, sie = they …'},
+ {id:'uebersetzen',name:'Ich-du-er-Insel',map:'ich, du, er',sub:'ich = I, wir = we, er = he …'},
  {id:'zuordnen',name:'Zuordnen-Insel',map:'Zuordnen',sub:'Lisa → she, Tom and I → we'},
  {id:'ersetzen',name:'Ersetz-Insel',map:'Ersetzen',sub:'Aus „Tom“ wird „he“'},
  {id:'luecken',name:'Lücken-Insel',map:'Lücken',sub:'Welches Pronomen fehlt im Satz?'},
@@ -51,14 +51,15 @@ const PHYS=['tiere','klasse','stadt','farben','leute']; // zum Ansehen und Anfas
 const isThing=e=>{const en=enShow(e);return /^[A-ZÄÖÜ]/.test(deShow(e))&&/^[a-z][a-z ]*$/.test(en)&&!/ of$/.test(en)
   &&!['zeit','zahlen'].includes(e[0])&&!PERSON[en]&&!SKIP.includes(en)&&!/(\S+) \/ \1in\b/.test(deShow(e))};
 const THINGS=W.filter(isThing);
-const petLike=n=>!!(n.e&&n.e[0]==='tiere'); // Tiere: in der Schule "it", als Haustier aber auch he/she möglich
+const petLike=n=>!!(n.e&&(n.e[0]==='tiere'||enShow(n.e)==='boat')); // Tiere (und Boote) sind in der Schule "it", im Englischen aber auch he/she möglich
 
 function personNP(){
   const fam=W.filter(e=>PERSON[enShow(e)]);
   if(Math.random()<.55||!fam.length){const g=pick(['he','she']);return {t:pick(NAMES[g]),p:g==='he'?2:3,person:true,name:true}}
   const w=enShow(pick(fam));return {t:(['boy','girl'].includes(w)?'the ':'my ')+w,p:PERSON[w]==='he'?2:3,person:true};
 }
-function thingNP(){const e=pick(THINGS);return {t:'the '+enShow(e),p:4,phys:PHYS.includes(e[0]),e}}
+const NEW=['klasse','farben']; // "is new" nur bei Schulsachen und Kleidung (nicht "The sea is new")
+function thingNP(pool=THINGS){const e=pick(pool);return {t:'the '+enShow(e),p:4,phys:PHYS.includes(e[0]),nw:NEW.includes(e[0]),e}}
 function npOf(k){
   if(k==='I')return {t:'I',p:0,who:pick(NAMES[pick(['he','she'])])};        // "My name is Tom. I am ..."
   if(k==='you')return {t:'you',p:1,who:pick(NAMES[pick(['he','she'])])};     // "Hello, Lisa! How old are you?"
@@ -66,8 +67,8 @@ function npOf(k){
   if(k==='person')return personNP();
   if(k==='they-p'){const a=personNP(),fam=t=>t.startsWith('my ')?PERSON[t.slice(3)]:null;let b;do b=personNP();while(b.t===a.t||(fam(a.t)&&fam(a.t)===fam(b.t))); // nicht "my mum and my mother"
    return {t:a.t+' and '+b.t,p:7,person:true,pl:true}}
-  if(k==='they-t'){const a=thingNP(),near=THINGS.filter(x=>x[0]===a.e[0]&&enShow(x)!==a.t.slice(4)),b=pick(near.length?near:THINGS.filter(x=>'the '+enShow(x)!==a.t));
-    return {t:a.t+' and the '+enShow(b),p:7,pl:true,phys:a.phys&&PHYS.includes(b[0])}}
+  if(k==='they-t'){const P=THINGS.filter(x=>PHYS.includes(x[0])&&!['zoo','animal','pet'].includes(enShow(x))),a=thingNP(P.filter(x=>P.filter(y=>y[0]===x[0]).length>1)),b=pick(P.filter(x=>x[0]===a.e[0]&&'the '+enShow(x)!==a.t)); // nicht "the frog and the zoo" // zwei Dinge von derselben Insel
+    return {t:a.t+' and the '+enShow(b),p:7,pl:true,phys:true,nw:a.nw,e:a.e}}
   if(k==='we'){const a=personNP();return {t:a.t+' and I',p:5,person:true,pl:true}}
   if(k==='youpl'){const a=personNP();return {t:'you and '+a.t,p:6,person:true,pl:true}}
 }
@@ -77,22 +78,26 @@ const T={
  person:['{} is at school.','{} is my friend.','{} is nice.','{} is late.','{} is at home.','{} is sad.','{} is friendly.','Where is {}?'],
  name:['{} is ten years old.','{} is from Germany.'],
  people:['{} are at school.','{} are nice.','{} are late.','{} are at home.','{} are sad.','{} are friendly.','Where are {}?'],
- thing:['{} is great.','{} is nice.'],physThing:['{} is here.','{} is there.','{} is big.','{} is new.','Where is {}?'],
- things:['{} are great.','{} are nice.'],physThings:['{} are here.','{} are there.','{} are big.','{} are new.','Where are {}?']
+ thing:['{} is great.','{} is nice.'],physThing:['{} is here.','{} is there.','{} is big.','Where is {}?'],newThing:['{} is new.'],
+ things:['{} are great.','{} are nice.'],physThings:['{} are here.','{} are there.','{} are big.','Where are {}?'],newThings:['{} are new.']
 };
 const ALL=['person','person','it','it','they-p','they-t','we','youpl'], NOUNS=ALL; // NOUNS: Satzteile, die man ersetzen kann
 // Ein Satz mit Nomen, dazu derselbe Satz mit Pronomen
 function sentence(kinds=ALL){
   const n=npOf(pick(kinds));
-  const L=n.p===0?T.I:n.p===1?T.you:n.p===4?T.thing.concat(n.phys?T.physThing:[]):n.person&&n.pl?T.people.filter(t=>(n.p!==5&&n.p!==6)||!t.startsWith('Where'))
-    :n.pl?T.things.concat(n.phys?T.physThings:[]):T.person.concat(n.name?T.name:[]);
+  const L=n.p===0?T.I:n.p===1?T.you:n.p===4?T.thing.concat(n.phys?T.physThing:[],n.nw?T.newThing:[]):n.person&&n.pl?T.people.filter(t=>(n.p!==5&&n.p!==6)||!t.startsWith('Where'))
+    :n.pl?T.things.concat(n.phys?T.physThings:[],n.nw?T.newThings:[]):T.person.concat(n.name?T.name:[]);
   const t=pick(L),at0=t.startsWith('{}'),put=x=>t.replace('{}',at0||x==='I'?cap(x):x),w=PR[n.p].s;
   return {t,at0,put,n,w,orig:put(n.t),mark:t.replace('{}','**'+(at0?cap(n.t):n.t)+'**'),out:put(w)};
 }
 const shown=(s,x)=>s.at0||x==='I'?cap(x):x;                       // so steht das Pronomen im Satz
-const choices=s=>shuffle([s.w].concat(shuffle(FORMS.filter(x=>x!==s.w)).slice(0,3))).map(x=>shown(s,x));
-const intro=n=>n.p===0?`My name is **${n.who}**.`:n.p===1?`Hello, **${n.who}**!`:n.p===5||n.p===6?`**${cap(n.t)}** are friends.`
-  :n.pl?`Here are **${n.t}**.`:n.person?`This is **${n.t}**.`:`Here is **${n.t}**.`;
+// avoid: Pronomen, die man auch begründen könnte. Bei Tieren nie he/she (Haustiere!), mit ctx bei einer Person nie it ("It is late." = Es ist spät).
+const avoidFor=(s,ctx)=>(petLike(s.n)?['he','she']:[]).concat(ctx&&s.n.person&&!s.n.pl?['it']:[]);
+const choices=(s,ctx)=>{const av=avoidFor(s,ctx);return shuffle([s.w].concat(shuffle(FORMS.filter(x=>x!==s.w&&!av.includes(x))).slice(0,3))).map(x=>shown(s,x))};
+// Erster Satz, der das fette Wort einführt (danach nie "Where ...?", das passte nicht zu "This is Lisa.")
+const intro=n=>n.p===0?`My name is **${n.who}**.`:n.p===1?`Hello, **${n.who}**!`:n.person&&n.pl?`**${cap(n.t)}** are friends.`
+  :n.person?`This is **${n.t}**.`:`Look at **${n.t}**!`;
+const ctxSentence=kinds=>{let s;do s=sentence(kinds);while(s.t.startsWith('Where'));return s};
 
 /* ---------- Fragen (alle als reine Daten, damit Runden gespeichert werden können) ---------- */
 // Felder: kind (mc|type|build|listen), label, prompt (**fett** erlaubt), options/correct, accept, tiles/target, sol, say, wk (Übungs-Schlüssel)
@@ -115,10 +120,10 @@ function qReplace(){
   return {kind:'mc',label:'Welches Pronomen ersetzt den fetten Teil?',prompt:s.mark,options:choices(s),correct:shown(s,s.w),sol:s.out,say:s.out,wk:s.w};
 }
 function qGap(quick){
-  const s=sentence(ALL.concat(['I','you'])),correct=shown(s,s.w),i=intro(s.n);
-  const q={kind:'mc',label:'Welches Pronomen fehlt?',prompt:`${i} ${s.t.replace('{}','___')}`,options:choices(s),correct,accept:[correct],
+  const s=ctxSentence(ALL.concat(['I','you'])),correct=shown(s,s.w),i=intro(s.n);
+  const q={kind:'mc',label:'Welches Pronomen passt zum fetten Wort?',prompt:`${i} ${s.t.replace('{}','___')}`,options:choices(s,true),correct,accept:[correct],
     sol:`${plain(i)} ${s.out}`,say:`${plain(i)} ${s.out}`,wk:s.w};
-  if(!quick&&Math.random()<.5){q.kind='type';q.label='Schreibe das fehlende Pronomen'}
+  if(!quick&&Math.random()<.5){q.kind='type';q.label='Schreibe das Pronomen für das fette Wort'}
   return q;
 }
 function qWho(){
@@ -130,19 +135,20 @@ function qWho(){
 function qFehler(){
   const ok=Math.random()<.45,yes=ok?'Stimmt':'Stimmt nicht';
   if(Math.random()<.15){ // I schreibt man immer groß
-    const s=sentence(['I']),i=intro(s.n);
+    const s=ctxSentence(['I']),i=intro(s.n);
     return {kind:'mc',label:'Stimmt der Satz?',prompt:`${i} ${ok?s.out:s.out.replace(/^I /,'i ')}`,options:['Stimmt','Stimmt nicht'],correct:yes,
       sol:(ok?'':'I schreibt man immer groß: ')+`${plain(i)} ${s.out}`,say:`${plain(i)} ${s.out}`,wk:'I'};
   }
   // falsches Pronomen zum Satz davor: "This is Lisa. He is nice." Ohne Tiere, denn Haustiere dürfen im Englischen auch he/she sein.
-  let s;do s=sentence(['person','person','it','they-p','they-t','we','you']);while(petLike(s.n));
-  const i=intro(s.n),same=s.n.p===1?['we','they']:s.n.pl?['we','they']:['he','she','it']; // gleiche Verbform (is/are), damit nur der Sinn entscheidet
+  let s;do s=ctxSentence(['person','person','it','they-p','they-t','we','you']);while(petLike(s.n));
+  const i=intro(s.n),same=s.n.p===1||s.n.pl?['we','they']:s.n.person?['he','she']:['he','she','it']; // gleiche Verbform (is/are); bei Personen kein it ("It is nice." wäre auch richtig)
   const wrong=pick(same.filter(x=>x!==s.w));
-  return {kind:'mc',label:'Passt das Pronomen zum Satz davor?',prompt:`${i} ${ok?s.out:s.put(wrong)}`,options:['Stimmt','Stimmt nicht'],correct:yes,
+  return {kind:'mc',label:'Passt das Pronomen zum fetten Wort?',prompt:`${i} ${ok?s.out:s.put(wrong)}`,options:['Stimmt','Stimmt nicht'],correct:yes,
     sol:(ok?'':'Richtig heißt es: ')+`${plain(i)} ${s.out}`,say:`${plain(i)} ${s.out}`,wk:s.w};
 }
 function qBuild(){
-  const s=sentence(NOUNS),t=toks(s.out),o=pick((s.n.pl?['we','they','you']:['he','she','it']).filter(x=>x!==s.w));
+  let s;do s=sentence(NOUNS);while(/ (here|there)\b/.test(s.t)); // "Here it is." wäre auch richtig
+  const t=toks(s.out),o=petLike(s.n)&&!s.n.pl?'they':pick((s.n.pl?['we','they','you']:['he','she','it']).filter(x=>x!==s.w));
   return {kind:'build',label:'Bau den Satz mit Pronomen',prompt:s.mark,tiles:scramble(t.concat([shown(s,o)])),target:t.join(' '),extra:1,sol:s.out,say:s.out,wk:s.w};
 }
 function qListen(){ // hören und den gehörten Satz wählen: He / She / It is ... oder We / They / You are ...
@@ -161,7 +167,7 @@ function makeQ(topic){ // drei Kandidaten, der mit dem schwächsten Pronomen gew
   const c=[g(),g(),g()];return c.sort((a,b)=>(save.weak[b.wk]||0)-(save.weak[a.wk]||0)+Math.random()-.5)[0];
 }
 const MEMO=()=>{ // Paare mit eindeutigen Kartentexten: Englisch ↔ Deutsch oder Pronomen ↔ Person
-  const c=FORMS.map(w=>({a:w,b:deOf(w)})).concat([...Array(12)].map(()=>{const s=sentence(NOUNS);return {a:s.w,b:s.n.t}}));
+  const c=FORMS.map(w=>({a:w,b:deOf(w)})).concat([...Array(12)].map(()=>{let s;do s=sentence(NOUNS);while(petLike(s.n));return {a:s.w,b:s.n.t}}));
   const out=[],used=new Set();
   for(const x of shuffle(c)){if(used.has(x.a)||used.has(x.b))continue;out.push(x);used.add(x.a);used.add(x.b);if(out.length===PAIRS)break}
   return out;
@@ -378,9 +384,9 @@ function buildSheet(kind,n){
     ws=tab(false);key=tab(true);
   }else{
     let rows;
-    if(kind==='luecken'){task='Setze das passende Pronomen ein.';rows=uniq(()=>qGap(true)).map(q=>({q:q.prompt.replace('___','__________'),sol:q.sol}))}
+    if(kind==='luecken'){task='Setze das Pronomen für das unterstrichene Wort ein.';rows=uniq(()=>qGap(true)).map(q=>({q:q.prompt.replace('___','__________'),sol:q.sol}))}
     else if(kind==='ersetzen'){task='Ersetze den unterstrichenen Teil durch ein Pronomen und schreibe den Satz neu.';rows=uniq(()=>qReplace(true)).map(q=>({q:q.prompt,sol:q.sol,line:true}))}
-    else if(kind==='fehler'){task='Stimmt der Satz? Kreuze an. Verbessere die falschen Sätze.';rows=uniq(qFehler).map(q=>({q:q.prompt,ws:'☐ richtig    ☐ falsch',sol:q.correct==='Stimmt'?'richtig':'falsch: '+q.sol.replace(/^Richtig heißt es: /,'')}))}
+    else if(kind==='fehler'){task='Passt das Pronomen zum unterstrichenen Wort? Kreuze an und verbessere die falschen Sätze.';rows=uniq(qFehler).map(q=>({q:q.prompt,ws:'☐ richtig    ☐ falsch',sol:q.correct==='Stimmt'?'richtig':'falsch: '+q.sol.replace(/^Richtig heißt es: /,'')}))}
     else{task='Bring die Wörter in die richtige Reihenfolge und ersetze dabei den unterstrichenen Teil. Ein Wort passt nicht.';rows=uniq(qBuild).map(q=>({q:q.tiles.join('   /   '),hint:q.prompt,sol:q.sol,line:true}))}
     const cell=r=>ul(r.q)+(r.hint?`<br><small>${ul(r.hint)}</small>`:'');
     const table=sol=>`<table>${rows.map((r,i)=>`<tr><td class="n">${i+1}.</td>${r.ws?`<td class="w">${cell(r)}</td><td>${esc(sol?r.sol:r.ws)}</td>`
