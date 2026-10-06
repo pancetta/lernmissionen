@@ -1,0 +1,37 @@
+index.html
+  s_54261e8a499c43::t_91a7ff967206fa 38
+englisch-5/stil.css
+  s_54261e8a499c43::t_7568a2c53596a0 1-133,143-163
+  s_54261e8a499c43::t_ccbea369b75c46 134-142
+englisch-5/wortschatz.js
+  s_54261e8a499c43::t_65abaf760d0277 1-116
+englisch-5/pronomen/index.html
+  s_54261e8a499c43::t_d93267dfd84289 174
+  s_54261e8a499c43::t_09f005a163cc36 90,97,99
+  s_54261e8a499c43::t_ccbea369b75c46 1-89,91-96,98,100-173,175-400,402-426
+  s_54261e8a499c43::t_0492b8dfd7d5d9 401
+englisch-5/vokabeln/index.html
+  s_54261e8a499c43::t_7568a2c53596a0 14
+  s_54261e8a499c43::t_65abaf760d0277 20-21,23-24
+  s_54261e8a499c43::t_8c9d79e18953df 25,83,272
+englisch-5/gemeinsam.js
+  s_54261e8a499c43::t_8c9d79e18953df 1-103
+README.md
+  s_54261e8a499c43::t_744c4eaa0dbfbb 9
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "a20c2297bc73a189a2df6acac57638cdcc51b8db",
+  "prompts": {},
+  "sessions": {
+    "s_54261e8a499c43": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "09d1c376-00da-4c7d-9fcd-87abfbea46f1",
+        "model": "unknown"
+      },
+      "human_author": "Robert Speck <pancetta@users.noreply.github.com>"
+    }
+  }
+}
