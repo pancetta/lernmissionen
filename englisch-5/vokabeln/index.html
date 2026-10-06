@@ -408,7 +408,7 @@ function home(){
   </div>
   <h2 class="sec">Inseln</h2><div class="grid">${tiles}</div>
   <p class="tip">${storageOK?'Dein Fortschritt wird automatisch auf diesem Gerät gespeichert.':'Speichern geht in diesem Browser gerade nicht (privates Fenster?). Dein Fortschritt geht beim Schließen verloren.'}</p>
-  <p class="tip">Sterne gibt es für richtige Antworten beim ersten Versuch: 5 richtig = 1 Stern, 7 = 2 Sterne, 9 = 3 Sterne.</p>
+  <p class="tip">Sterne gibt es für richtige Antworten beim ersten Versuch: 5 von 10 = 1 Stern, 7 von 10 = 2 Sterne, 9 von 10 = 3 Sterne.</p>
   <p class="tip">${VOICE?`<button class="theme" id="snd">${save.sound?'🔊 Ton an':'🔇 Ton aus'}</button> Hör-Fragen und Vorlesen nutzen die Stimme dieses Geräts.${/Firefox/.test(navigator.userAgent)&&/Macintosh/.test(navigator.userAgent)?' In Firefox auf dem Mac knackt die Stimme am Ende, in Safari oder Chrome klingt sie sauber.':''}`:'Auf diesem Gerät ist keine englische Stimme eingebaut, deshalb gibt es hier keine Hör-Fragen.'}</p>
   ${PARENT?'<p class="tip"><button class="theme" id="pdf">Arbeitsblatt als PDF (für Eltern und Lehrkräfte)</button></p>':''}
   <p class="tip"><button class="theme" id="rst">Alles zurücksetzen</button></p>`;
@@ -531,7 +531,8 @@ function answer(i,text){
   document.querySelector('.streak').textContent=G.streak>=2?'Serie '+G.streak:'Serie 0';
 }
 function finish(){
-  const n=G.first,stars=n>=9?3:n>=7?2:n>=5?1:0;
+  // Sterne nach Anteil, damit auch kleine Inseln (weniger als 10 Wörter) drei Sterne erlauben. Bei 10 Fragen: 9 / 7 / 5.
+  const n=G.first,need=p=>Math.ceil(G.total*p),stars=n>=need(.9)?3:n>=need(.7)?2:n>=need(.5)?1:0;
   const tk=G.topic,before=save.best[tk]||0;if(stars>before)save.best[tk]=stars;
   const bonus=stars*10;G.xp+=bonus;save.xp+=bonus;save.round=null;persist();
   const msg=stars===3?'Insel erobert. Das war Spitze!':stars===2?'Sehr gut! Eine Runde noch für den dritten Stern?':stars===1?'Gut gemacht. Mit etwas Übung klappen mehr Sterne.':'Das war ein Anfang. Probiere es noch einmal, es wird jedes Mal leichter.';
