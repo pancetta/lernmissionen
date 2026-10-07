@@ -12,7 +12,11 @@ function play(gen,n,label){for(let r=0;r<n;r++){const q=gen();if(!q)continue;sta
   else if(k==='build'){answer(null,'falsch')}
   else solveWrong(q);
   scan(label+' falsch beantwortet '+(q.sub||k));}}
-if(typeof SUB!=='undefined'){ // Mathe
+if(typeof AUFG!=='undefined'){ // Deutsch
+  for(const [isl,o] of Object.entries(AUFG))for(const sub of Object.keys(o))play(()=>gen(isl,sub),4,'Deutsch '+isl);
+  start('check');let g=0;while(!$('.end')&&g++<80){solveWrong(G.queue[0]);$('#nx').click()}
+  scan('Deutsch Ende Ich-kann-Check');
+}else if(typeof SUB!=='undefined'){ // Mathe
   for(const [isl,o] of Object.entries(SUB))for(const sub of Object.keys(o))play(()=>gen(isl,sub),sub==='wort2zahl'||sub==='zahl2wort'||sub==='runden'?15:3,'Mathe '+isl); // lange Zahlwörter öfter
   start('check');let g=0;while(!$('.end')&&g++<80){const q=G.queue[0];if(q.kind==='mc')answer((q.options.indexOf(q.correct)+1)%q.options.length);else if(q.kind==='widget'){if(q.w==='bars')WS.set(0,q.step);else WS.put(q.i===1?2:1);answer(null,null)}else answer(null,q.kind==='build'?'x':'999999999');$('#nx').click()}
   scan('Mathe Ende Ich-kann-Check');

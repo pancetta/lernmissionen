@@ -1,6 +1,6 @@
 # Lernmissionen
 
-Lernmissionen ist eine Sammlung kleiner Übungsseiten für Schulkinder (zum Beispiel Englisch und Mathe, Klasse 5). Sie laufen direkt im Browser, auf iPad, iPhone oder PC, ohne Installation.
+Lernmissionen ist eine Sammlung kleiner Übungsseiten für Schulkinder (zum Beispiel Deutsch Klasse 3, Englisch und Mathe Klasse 5). Sie laufen direkt im Browser, auf iPad, iPhone oder PC, ohne Installation.
 Die Seiten sammeln keine Daten, nutzen kein Tracking und laden nichts von fremden Servern.
 Der Lernfortschritt wird nur im Browser des jeweiligen Geräts gespeichert (localStorage) und verlässt dieses Gerät nie.
 

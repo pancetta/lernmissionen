@@ -42,8 +42,10 @@ let VOICE=null;
 const ODD=/^(Albert|Bad News|Bahh|Bells|Boing|Bubbles|Cellos|Deranged|Good News|Hysterical|Jester|Junior|Organ|Pipe Organ|Ralph|Fred|Kathy|Superstar|Trinoids|Whisper|Wobble|Zarvox)\b/i;
 function pickVoice(){
   try{
-    const score=v=>(/^en[-_]GB/i.test(v.lang)?4:/^en[-_](US|IE|AU)/i.test(v.lang)?2:0)+(/Enhanced|Premium|verbessert/i.test(v.name)?3:0)+(v.default?1:0);
-    const vs=speechSynthesis.getVoices().filter(v=>v.localService&&/^en[-_]/i.test(v.lang)&&!ODD.test(v.name));
+    // Sprache der Mission: <html data-voice="de"> für Deutsch, sonst Englisch (britisch bevorzugt)
+    const de=document.documentElement.dataset.voice==='de',lang=de?/^de[-_]/i:/^en[-_]/i;
+    const score=v=>(de?(/^de[-_]DE/i.test(v.lang)?4:0):/^en[-_]GB/i.test(v.lang)?4:/^en[-_](US|IE|AU)/i.test(v.lang)?2:0)+(/Enhanced|Premium|verbessert/i.test(v.name)?3:0)+(v.default?1:0);
+    const vs=speechSynthesis.getVoices().filter(v=>v.localService&&lang.test(v.lang)&&!ODD.test(v.name));
     VOICE=vs.sort((a,b)=>score(b)-score(a))[0]||null;
   }catch(e){VOICE=null}
 }
