@@ -1,0 +1,399 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Mathe">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAIAAACyr5FlAAAD/ElEQVR4nO3dzU0cQRCG4cXizJ6ckmNAToEDhMIBUrAcg1PitBn4YGm0wvsN89Nd9VXP+5zsC1vdeqdAWPLcPTy/nYBbvmUPAF/EAYk4IBEHJOKARByQiAMScUAiDkjEAYk4IBEHJOKARByQiAMScUAiDkjEAYk4IBEHJOKARByQiAMScUAiDkj32QO4uLw+Xf/1/PKeNYkPNgck4oBEHJCIAxJx3Hb5+Tt7hHzEAYk4JJYHccw5eB/E8YUj90EckIjja4ddHsSxyDH7IA5IxLHUAZcHcaxwtD6IY51D9UEckIhjteMsD+LY4iB9EAck4tjoCMuDOLYbvg/igEQcu4y9PIhjr4H7II4GRu2DOCARRxtDLg/iaGa8PogDEnG0NNjyII7GRuqDONobpg/igEQcXYyxPIijlwH6IA5IxNFR9eVBHH2V7oM4uqvbB3FAIo4IRZcHcQSp2AdxQCKOOOWWB3GEqtUHcUQr1AdxQCKOBFWWB3HkKNEHcUAijjT+y4M4Mpn3QRzJnPsgDkjEkc92eRCHBc8+iAMScbgwXB7EYcStD+KARBxerJYHcdjx6YM4HJn0QRyQiMOUw/IgDl/pfRAHJOKwlrs8iMNdYh/EUUBWH8QBiThqSFkexFFGfB/EAYk4KgleHsRRTGQfxFFPWB/EAYk4SopZHvcBn1HR+ddj9gj52ByQiAMScUAiDkjEAenu4fktewaYYnNAIg5ICb8Eu3z8if/QMZy//4j8uITNEXzCYcTfG99WIOXEwfJYK+XG2ByQ0uJgeSyXdVeZm4M+lki8Jb6tQEqOg+UxL/d+2ByQ8uNgeSjpN5Mfx8ngFgw53IlFHPDkEofDg+LD5DZc4oAhozhMHpd0PvdgFMfJ6V6yWN2AVxywYheH1aMTzO3sdnHAh2Mcbg9QDMNTO8ZxsryprjzPaxoHHPjG4fkw9WB7Ut84kM46DttHqiHnM1rHcfK+u/3MT+ceBxIViMP88drM/1wF4kCWGnH4P2RrlThRmf+HtMRtDqbG5kAK4oBEHJCIAxJxQCIOSMQBadfvOS6vT9Ofzy/vu4fp6HrUSaGZU0Zlc0AiDki74rjedTf3tgm1nyvOHKnl5vC86/mpKs4cZm8cn6I2OdXk0zz/pq04c4oGm8P2rmduueLM8br8QOpw12tnqDhzby3f1PT/2VLCXzVGxZnDNH6Nl2o/4KibP7rizDHav+Ntfjc2P3aTj6s4c4BeLwBc/u1z1V10+rJdv3jXmbvq+3bIlJ+wdl5xxZk7CXp1aMCNBy//JjybmES/V7b5jSf+2LiZeROT/JcOr7p6k2utOPMG+XHAFv9kD4k4IBEHJOKARByQiAMScUAiDkh/ARSxEB9azzFAAAAAAElFTkSuQmCC">
+<link rel="icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAIAAACyr5FlAAAD/ElEQVR4nO3dzU0cQRCG4cXizJ6ckmNAToEDhMIBUrAcg1PitBn4YGm0wvsN89Nd9VXP+5zsC1vdeqdAWPLcPTy/nYBbvmUPAF/EAYk4IBEHJOKARByQiAMScUAiDkjEAYk4IBEHJOKARByQiAMScUAiDkjEAYk4IBEHJOKARByQiAMScUAiDkj32QO4uLw+Xf/1/PKeNYkPNgck4oBEHJCIAxJx3Hb5+Tt7hHzEAYk4JJYHccw5eB/E8YUj90EckIjja4ddHsSxyDH7IA5IxLHUAZcHcaxwtD6IY51D9UEckIhjteMsD+LY4iB9EAck4tjoCMuDOLYbvg/igEQcu4y9PIhjr4H7II4GRu2DOCARRxtDLg/iaGa8PogDEnG0NNjyII7GRuqDONobpg/igEQcXYyxPIijlwH6IA5IxNFR9eVBHH2V7oM4uqvbB3FAIo4IRZcHcQSp2AdxQCKOOOWWB3GEqtUHcUQr1AdxQCKOBFWWB3HkKNEHcUAijjT+y4M4Mpn3QRzJnPsgDkjEkc92eRCHBc8+iAMScbgwXB7EYcStD+KARBxerJYHcdjx6YM4HJn0QRyQiMOUw/IgDl/pfRAHJOKwlrs8iMNdYh/EUUBWH8QBiThqSFkexFFGfB/EAYk4KgleHsRRTGQfxFFPWB/EAYk4SopZHvcBn1HR+ddj9gj52ByQiAMScUAiDkjEAenu4fktewaYYnNAIg5ICb8Eu3z8if/QMZy//4j8uITNEXzCYcTfG99WIOXEwfJYK+XG2ByQ0uJgeSyXdVeZm4M+lki8Jb6tQEqOg+UxL/d+2ByQ8uNgeSjpN5Mfx8ngFgw53IlFHPDkEofDg+LD5DZc4oAhozhMHpd0PvdgFMfJ6V6yWN2AVxywYheH1aMTzO3sdnHAh2Mcbg9QDMNTO8ZxsryprjzPaxoHHPjG4fkw9WB7Ut84kM46DttHqiHnM1rHcfK+u/3MT+ceBxIViMP88drM/1wF4kCWGnH4P2RrlThRmf+HtMRtDqbG5kAK4oBEHJCIAxJxQCIOSMQBadfvOS6vT9Ofzy/vu4fp6HrUSaGZU0Zlc0AiDki74rjedTf3tgm1nyvOHKnl5vC86/mpKs4cZm8cn6I2OdXk0zz/pq04c4oGm8P2rmduueLM8br8QOpw12tnqDhzby3f1PT/2VLCXzVGxZnDNH6Nl2o/4KibP7rizDHav+Ntfjc2P3aTj6s4c4BeLwBc/u1z1V10+rJdv3jXmbvq+3bIlJ+wdl5xxZk7CXp1aMCNBy//JjybmES/V7b5jSf+2LiZeROT/JcOr7p6k2utOPMG+XHAFv9kD4k4IBEHJOKARByQiAMScUAiDkh/ARSxEB9azzFAAAAAAElFTkSuQmCC">
+<style>html{-webkit-text-size-adjust:100%;color-scheme:light}body{margin:0}[hidden]{display:none!important}</style>
+<title>Mathe-Inseln</title>
+<link rel="stylesheet" href="../../gemeinsam/stil.css">
+
+</head>
+<body>
+<div id="app"></div>
+<script src="../../gemeinsam/gemeinsam.js"></script>
+<script src="../../gemeinsam/runde.js"></script>
+<script>
+const BRAND='Mathe-Inseln',MISSED='Diese Aufgaben üben wir weiter';
+const TOPICS=[
+ {id:'diagramm',name:'Diagramm-Insel',map:'Diagramme',sub:'Säulen, Balken, Strichlisten',can:'Säulen- und Balkendiagramme lesen, Strichlisten auswerten'},
+ {id:'strahl',name:'Zahlenstrahl-Insel',map:'Zahlenstrahl',sub:'Zahlen ordnen und ablesen',can:'Zahlen ordnen und am Zahlenstrahl ablesen'},
+ {id:'gross',name:'Riesenzahl-Insel',map:'Große Zahlen',sub:'Millionen lesen, schreiben, runden',can:'Große Zahlen in Worten verstehen und runden'},
+ {id:'fach',name:'Fachwort-Insel',map:'Fachwörter',sub:'Summe, Differenz, Produkt, Quotient',can:'Rechnungen mit Fachwörtern lösen'},
+ {id:'klecks',name:'Klecks-Insel',map:'Kleckse',sub:'18 + ● = 31 und Zahlenmauern',can:'Klecksaufgaben mit der Umkehraufgabe lösen'},
+ {id:'geld',name:'Geld-Insel',map:'Geld',sub:'Euro und Cent, Wechselgeld',can:'Mit Geld rechnen'},
+ {id:'laenge',name:'Längen-Insel',map:'Längen',sub:'mm, cm, dm, m, km',can:'Längen umwandeln und mit Längen rechnen'}
+];
+const MAP=[[50,42],[130,42],[210,42],[290,42],[250,118],[170,118],[90,118]]; // Seekarte, Reihenfolge wie TOPICS
+
+/* ---------- Hilfen ---------- */
+const R=(a,b)=>a+Math.floor(Math.random()*(b-a+1));                 // ganze Zufallszahl von a bis b
+const fmt=n=>n>=10000?String(n).replace(/\B(?=(\d{3})+(?!\d))/g,' '):String(n); // 3989, aber 10 000 (schmales Leerzeichen)
+const euro=c=>`${Math.floor(c/100)},${String(c%100).padStart(2,'0')} €`;
+const BLOB='<span class="blob" aria-label="Klecks">●</span>';
+const mc=(o)=>Object.assign({kind:'mc'},o);
+const uniq=a=>[...new Set(a)];
+function opts4(correct,cands){return shuffle([correct].concat(shuffle(uniq(cands).filter(x=>x!==correct)).slice(0,3)))}
+
+/* ---------- Zahlwörter ---------- */
+const ONES=['','ein','zwei','drei','vier','fünf','sechs','sieben','acht','neun','zehn','elf','zwölf','dreizehn','vierzehn','fünfzehn','sechzehn','siebzehn','achtzehn','neunzehn'];
+const TENS=['','','zwanzig','dreißig','vierzig','fünfzig','sechzig','siebzig','achtzig','neunzig'];
+function w999(n){const h=Math.floor(n/100),r=n%100;let s=h?ONES[h]+'hundert':'';if(r)s+=r<20?ONES[r]:(r%10?ONES[r%10]+'und':'')+TENS[Math.floor(r/10)];return s}
+function words(n){ // 1079252849 -> "eine Milliarde neunundsiebzig Millionen zweihundertzweiundfünfzigtausendachthundertneunundvierzig"
+  if(!n)return 'null';
+  const bi=Math.floor(n/1e9),mi=Math.floor(n/1e6)%1000,th=Math.floor(n/1e3)%1000,re=n%1000,p=[];
+  if(bi)p.push(bi===1?'eine Milliarde':w999(bi)+' Milliarden');
+  if(mi)p.push(mi===1?'eine Million':w999(mi)+' Millionen');
+  const low=(th?w999(th)+'tausend':'')+(re?w999(re)+(re%100===1?'s':''):'');
+  if(low)p.push(low);
+  return p.join(' ');
+}
+function bigNum(){ // Millionen bis Milliarden, Dreiergruppen zum Teil null
+  const groups=R(3,4),g=[R(1,groups===4?9:999)];
+  for(let i=1;i<groups;i++)g.push(Math.random()<.25?0:R(1,999));
+  return g.reduce((a,x)=>a*1000+x,0);
+}
+const PLACES=[['Einer',1],['Zehner',10],['Hunderter',100],['Tausender',1e3],['Zehntausender',1e4],['Hunderttausender',1e5],['Millionen',1e6],['Zehnmillionen',1e7],['Hundertmillionen',1e8]];
+
+/* ---------- Grafiken ---------- */
+function chartSvg(d,opt={}){ // Säulen- oder Balkendiagramm; Werte liegen immer auf einer Gitterlinie
+  const W=opt.w||320,H=opt.h||200,n=d.vals.length,top=d.max,horiz=d.horiz&&!opt.mini;
+  const lines=top/d.step,lab=horiz?Math.ceil(lines/6):lines>12?2:1,fs=opt.mini?9:11; // liegend ist weniger Platz für Zahlen
+  let s=`<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(d.t)}" data-max="${top}">`;
+  if(!horiz){
+    const x0=opt.mini?24:40,y0=H-(opt.mini?16:28),y1=12,pw=W-x0-8,ph=y0-y1,bw=pw/n;
+    for(let k=0;k<=lines;k++){const y=y0-ph*k/lines;s+=`<line class="grid" x1="${x0}" x2="${W-8}" y1="${y}" y2="${y}"/>`;if(k%lab===0)s+=`<text x="${x0-4}" y="${y+3.5}" text-anchor="end" font-size="${fs}">${fmt(k*d.step)}</text>`}
+    d.vals.forEach((v,i)=>{const h=ph*v/top,x=x0+bw*i+bw*.18;s+=`<rect class="bar" x="${x}" y="${y0-h}" width="${bw*.64}" height="${h}" data-v="${v}" data-p="${ph}"/>`;if(!opt.mini)s+=`<text x="${x0+bw*i+bw/2}" y="${y0+14}" text-anchor="middle" font-size="${fs}">${esc(d.short[i])}</text>`;else s+=`<text x="${x0+bw*i+bw/2}" y="${y0+11}" text-anchor="middle" font-size="8">${esc(d.short[i])}</text>`});
+  }else{
+    const x0=74,x1=W-12,y0=10,y1=H-24,pw=x1-x0,bh=(y1-y0)/n;
+    for(let k=0;k<=lines;k++){const x=x0+pw*k/lines;s+=`<line class="grid" x1="${x}" x2="${x}" y1="${y0}" y2="${y1}"/>`;if(k%lab===0)s+=`<text x="${x}" y="${y1+14}" text-anchor="middle" font-size="${fs}">${fmt(k*d.step)}</text>`}
+    d.vals.forEach((v,i)=>{const w=pw*v/top,y=y0+bh*i+bh*.2;s+=`<rect class="bar" x="${x0}" y="${y}" width="${w}" height="${bh*.6}" data-v="${v}" data-p="${pw}"/><text x="${x0-6}" y="${y+bh*.3+4}" text-anchor="end" font-size="${fs}">${esc(d.short[i])}</text>`});
+  }
+  return s+'</svg>';
+}
+function tallySvg(n){ // Strichliste: Fünferbündel mit Querstrich
+  let s=`<svg class="tally" viewBox="0 0 ${Math.ceil(n/5)*30+4} 26" height="26" role="img" aria-label="Strichliste">`;
+  for(let i=0;i<n;i++){const g=Math.floor(i/5),k=i%5,x=4+g*30+k*5;s+=k<4?`<line x1="${x}" y1="3" x2="${x}" y2="23"/>`:`<line x1="${x-19}" y1="20" x2="${x+1}" y2="6"/>`}
+  return s+'</svg>';
+}
+function strahlSvg(start,step,i){ // Zahlenstrahl mit 20 Teilstrichen, beschriftet bei 0, 10 und 20, Pfeil bei Teilstrich i
+  const X=k=>30+k*13;let s=`<svg class="strahl" viewBox="0 0 320 74" role="img" aria-label="Zahlenstrahl"><line class="axis" x1="22" x2="298" y1="44" y2="44"/>`; // Rand, damit lange Zahlen nicht abgeschnitten werden
+  for(let k=0;k<=20;k++){const h=k%10===0?9:k%5===0?6:4;s+=`<line class="axis" x1="${X(k)}" x2="${X(k)}" y1="${44-h}" y2="${44+h}"/>`;if(k%10===0)s+=`<text x="${X(k)}" y="68" text-anchor="middle" font-size="12">${fmt(start+k*step)}</text>`}
+  return s+`<path class="arrow" d="M${X(i)} 31 l-6 -12 h12 z"/><line class="arrowline" x1="${X(i)}" x2="${X(i)}" y1="4" y2="22"/></svg>`;
+}
+function mauerHtml(rows,hide,cap){ // Zahlenmauer: rows = [[oben],[mitte,mitte],[unten,unten,unten]]
+  return `<div class="mauer" aria-label="${esc(cap)}">${rows.map((r,ri)=>`<div class="mrow">${r.map((v,ci)=>`<span class="brick${ri===hide[0]&&ci===hide[1]?' q':''}">${ri===hide[0]&&ci===hide[1]?'?':fmt(v)}</span>`).join('')}</div>`).join('')}</div><p class="tip" style="margin:6px 0 0">${esc(cap)}</p>`;
+}
+
+/* ---------- Diagramm-Insel ---------- */
+const DAYS=['Montag','Dienstag','Mittwoch','Donnerstag','Freitag'],DS=['Mo','Di','Mi','Do','Fr'];
+const CHARTS=[
+ {t:'Schulweg der Klasse 5b',unit:'Kinder',step:1,max:12,cats:['zu Fuß','mit dem Fahrrad','mit dem Bus','mit dem Auto','mit dem Roller'],short:['zu Fuß','Fahrrad','Bus','Auto','Roller'],ask:c=>`Wie viele Kinder kommen ${c} zur Schule?`},
+ {t:'Lieblingstiere der Klasse 5a',unit:'Kinder',step:1,max:10,cats:['Hund','Katze','Pferd','Hase','Hamster'],short:['Hund','Katze','Pferd','Hase','Hamster'],ask:c=>`Wie viele Kinder haben „${c}“ als Lieblingstier?`},
+ {t:'Verkaufte Brötchen am Schulkiosk',unit:'Brötchen',step:5,max:60,cats:DAYS,short:DS,ask:c=>`Wie viele Brötchen wurden am ${c} verkauft?`},
+ {t:'Besucher im Freibad',unit:'Besucher',step:50,max:600,cats:DAYS,short:DS,ask:c=>`Wie viele Besucher kamen am ${c}?`},
+ {t:'Gesammelte Pfandflaschen',unit:'Flaschen',step:10,max:120,cats:['Klasse 5a','Klasse 5b','Klasse 5c','Klasse 5d'],short:['5a','5b','5c','5d'],ask:c=>`Wie viele Flaschen hat die ${c} gesammelt?`}
+];
+function chartData(n){ // unterschiedliche Werte, damit größter und kleinster eindeutig sind
+  const c=pick(CHARTS),k=Math.min(n||c.cats.length,c.cats.length),idx=shuffle([...c.cats.keys()]).slice(0,k).sort((a,b)=>a-b);
+  const pool=shuffle([...Array(c.max/c.step).keys()].map(i=>(i+1)*c.step)).slice(0,k);
+  return Object.assign({},c,{cats:idx.map(i=>c.cats[i]),short:idx.map(i=>c.short[i]),vals:pool,horiz:Math.random()<.4});
+}
+const chartBox=d=>`<p class="ctitle">${esc(d.t)}</p>${chartSvg(d)}`;
+const D={
+ ablesen(){const d=chartData(),i=R(0,d.vals.length-1);return {kind:'num',label:'Lies im Diagramm ab',html:chartBox(d)+`<p>${esc(d.ask(d.cats[i]))}</p>`,ans:d.vals[i],unit:d.unit,sol:`${fmt(d.vals[i])} ${d.unit}`}},
+ extrem(){const d=chartData(),max=Math.random()<.5,v=max?Math.max(...d.vals):Math.min(...d.vals),i=d.vals.indexOf(v);
+  return mc({label:'Lies im Diagramm ab',html:chartBox(d)+`<p>Wo ist der Wert am ${max?'größten':'kleinsten'}?</p>`,options:shuffle(d.short.slice()),correct:d.short[i],sol:`${d.short[i]} (${fmt(v)} ${d.unit})`})},
+ unterschied(){const d=chartData(),[i,j]=shuffle([...d.vals.keys()]).slice(0,2).sort((a,b)=>d.vals[b]-d.vals[a]);
+  return {kind:'num',label:'Vergleiche im Diagramm',html:chartBox(d)+`<p>Wie viel mehr sind es bei „${esc(d.short[i])}“ als bei „${esc(d.short[j])}“?</p>`,ans:d.vals[i]-d.vals[j],unit:d.unit,sol:`${fmt(d.vals[i])} − ${fmt(d.vals[j])} = ${fmt(d.vals[i]-d.vals[j])} ${d.unit}`}},
+ summe(){const d=chartData(4),t=d.vals.reduce((a,b)=>a+b,0);
+  return {kind:'num',label:'Rechne mit dem Diagramm',html:chartBox(d)+`<p>Wie viele ${d.unit} sind es zusammen?</p>`,ans:t,unit:d.unit,sol:`${d.vals.map(fmt).join(' + ')} = ${fmt(t)} ${d.unit}`}},
+ strich(){const c=pick([['Kinder mit Brille',['Klasse 5a','Klasse 5b','Klasse 5c']],['Fahrzeuge an der Ampel',['Autos','Fahrräder','Lkw','Busse']],['Würfelwürfe',['Eins','Zwei','Drei','Sechs']]]),
+   v=shuffle([...Array(19).keys()].map(i=>i+3)).slice(0,c[1].length),i=R(0,v.length-1);
+  return {kind:'num',label:'Werte die Strichliste aus',html:`<p class="ctitle">${esc(c[0])}</p><table class="strich">${c[1].map((k,j)=>`<tr><td>${esc(k)}</td><td>${tallySvg(v[j])}</td></tr>`).join('')}</table><p>Wie oft wurde „${esc(c[1][i])}“ gezählt?</p>`,
+    ans:v[i],sol:`${v[i]} Mal (${Math.floor(v[i]/5)} Fünferbündel und ${v[i]%5} Striche)`}},
+ passt(){const d=chartData(4);d.horiz=false;const a=d.vals,sw=a.slice();const[i,j]=shuffle([0,1,2,3]).slice(0,2);[sw[i],sw[j]]=[sw[j],sw[i]];
+  const off=a.slice(),k=R(0,3);off[k]=off[k]+(off[k]+d.step<=d.max?d.step:-d.step);
+  const mk=v=>chartSvg(Object.assign({},d,{vals:v}),{mini:true,w:160,h:110});
+  return mc({label:'Welches Diagramm passt zur Tabelle?',raw:true,html:`<p class="ctitle">${esc(d.t)}</p><table class="vt"><tr>${d.short.map(s=>`<th>${esc(s)}</th>`).join('')}</tr><tr>${a.map(v=>`<td>${fmt(v)}</td>`).join('')}</tr></table>`,
+    options:shuffle([mk(a),mk(sw),mk(off)]),correct:mk(a),sol:'Das Diagramm, in dem jede Säule genau so hoch ist wie der Wert in der Tabelle.',paper:false})},
+ deuten(){const s=pick([['Im Diagramm sieht man auf einen Blick, welcher Wert am größten ist.',1],['In der Tabelle kann man die genauen Zahlen ablesen.',1],['Im Diagramm kann man Werte manchmal nur ungefähr ablesen.',1],['In einer Tabelle sieht man sofort, welcher Wert am kleinsten ist, ohne zu vergleichen.',0],['Ein Diagramm zeigt immer genauere Werte als eine Tabelle.',0],['Bei einem Säulendiagramm ist die längste Säule der kleinste Wert.',0]]);
+  return mc({label:'Diagramm oder Tabelle: Stimmt das?',html:`<p>${esc(s[0])}</p>`,options:['Stimmt','Stimmt nicht'],correct:s[1]?'Stimmt':'Stimmt nicht',sol:s[1]?'Stimmt.':'Stimmt nicht.'})}
+};
+
+/* ---------- Zahlenstrahl-Insel ---------- */
+const STEPS=[1,2,5,10,20,25,50,100,200,250,500,1000];
+const Z={
+ pfeil(){const st=pick(STEPS),start=R(0,12)*10*st,i=pick([...Array(19).keys()].map(k=>k+1).filter(k=>k!==10)),v=start+i*st;
+  return {kind:'num',label:'Welche Zahl zeigt der Pfeil?',html:strahlSvg(start,st,i),ans:v,sol:`${fmt(v)} (ein Teilstrich = ${fmt(st)})`}},
+ nachbar(){const vor=Math.random()<.5,base=pick([R(2,99)*1000,R(1,9)*10000,R(1000,99999),R(10,999)*100]),n=vor?base:base-1+(Math.random()<.5?0:R(0,1)),v=vor?n-1:n+1;
+  return {kind:'num',label:vor?'Vorgänger':'Nachfolger',html:`<p>Wie heißt der ${vor?'Vorgänger':'Nachfolger'} von <b>${fmt(n)}</b>?</p>`,ans:v,sol:`${vor?`${fmt(v)} ist der Vorgänger von ${fmt(n)}`:`${fmt(v)} ist der Nachfolger von ${fmt(n)}`}`}},
+ ordnen(){const dg=shuffle([1,2,3,4,5,6,7,8,9]).slice(0,3);let ns=[];
+  for(let t=0;t<60&&ns.length<5;t++){const p=shuffle(dg),len=R(2,4),n=+p.concat(p).slice(0,len).join('');if(!ns.includes(n))ns.push(n)}
+  const up=Math.random()<.5,s=ns.slice().sort((a,b)=>up?a-b:b-a);
+  return {kind:'build',label:up?'Ordne: Beginne mit der kleinsten Zahl':'Ordne: Beginne mit der größten Zahl',html:`<p>Tippe die Zahlen der Reihe nach an.</p>`,tiles:shuffle(ns.map(fmt)),target:s.map(fmt).join(' '),sol:s.map(fmt).join(up?' < ':' > ')}},
+ vergleich(){let a=R(1000,99999),b;const r=Math.random();
+  if(r<.15)b=a;else if(r<.6){const s=String(a).split(''),i=R(0,s.length-2);[s[i],s[i+1]]=[s[i+1],s[i]];b=+s.join('');if(b===a||s[0]==='0')b=a+R(1,9)*10}else b=a+pick([-1,1])*R(1,9)*pick([1,10,100,1000]);
+  if(b<1)b=a+R(1,9)*10;
+  const c=a<b?'<':a>b?'>':'=';
+  return mc({label:'Setze <, > oder = ein',html:`<p class="big">${fmt(a)} ${BLOB} ${fmt(b)}</p>`,options:['<','>','='],correct:c,sol:`${fmt(a)} ${c} ${fmt(b)}`})},
+ mitte(){const st=pick([2,10,20,100,200,1000]),a=R(1,40)*st,b=a+st*R(1,5)*2,m=(a+b)/2;
+  return {kind:'num',label:'Genau in der Mitte',html:`<p>Welche Zahl liegt auf dem Zahlenstrahl genau in der Mitte zwischen <b>${fmt(a)}</b> und <b>${fmt(b)}</b>?</p>`,ans:m,sol:`${fmt(m)}, denn ${fmt(m)} − ${fmt(a)} = ${fmt(b)} − ${fmt(m)} = ${fmt(m-a)}`}}
+};
+
+/* ---------- Riesenzahl-Insel ---------- */
+function nearNums(n){ // ähnliche, aber falsche Zahlen für Antwortmöglichkeiten
+  const s=String(n),c=[];
+  for(let i=0;i<s.length-1;i++)if(s[i]!==s[i+1]){const t=s.split('');[t[i],t[i+1]]=[t[i+1],t[i]];if(t[0]!=='0')c.push(+t.join(''))}
+  for(const p of [1e3,1e6,1e9])if(n>p)c.push(n+p*R(1,3));
+  c.push(n*10);if(n%10===0)c.push(n/10);
+  return uniq(c.filter(x=>x>0&&x!==n&&x<1e12));
+}
+const G_={
+ wort2zahl(){const n=bigNum();return {kind:'num',label:'Schreibe die Zahl mit Ziffern',html:`<p class="words">${esc(words(n))}</p>`,ans:n,sol:fmt(n)}},
+ zahl2wort(){const n=bigNum(),c=shuffle(nearNums(n)).filter(x=>words(x)!==words(n)).slice(0,3);
+  return mc({label:'Wie heißt die Zahl in Worten?',html:`<p class="big">${fmt(n)}</p>`,options:shuffle([words(n)].concat(c.map(words))),correct:words(n),sol:`${fmt(n)} = ${words(n)}`})},
+ runden(){const k=R(1,6),[name,p]=PLACES[k],n=R(p*10,Math.min(p*10000,9e9)),r=Math.round(n/p)*p;
+  return {kind:'num',label:'Runde',html:`<p>Runde <b>${fmt(n)}</b> auf <b>${name}</b>.</p>`,ans:r,sol:`${fmt(n)} ≈ ${fmt(r)} (die Ziffer rechts daneben ist ${Math.floor(n/(p/10))%10}, also ${Math.floor(n/(p/10))%10>=5?'aufrunden':'abrunden'})`}},
+ stelle(){const n=R(1e6,99999999),k=R(1,Math.min(7,String(n).length-1)),[name,p]=PLACES[k],d=Math.floor(n/p)%10;
+  return {kind:'num',label:'Stellenwert',html:`<p>Welche Ziffer steht in <b>${fmt(n)}</b> an der <b>${name}stelle</b>?</p>`,ans:d,sol:`${d} steht an der ${name}stelle`}},
+ tafel(){const ks=shuffle([0,1,2,3,4,5,6]).slice(0,R(2,4)).sort((a,b)=>b-a),parts=ks.map(k=>[R(1,9),k]),n=parts.reduce((a,[v,k])=>a+v*PLACES[k][1],0);
+  const nm=(v,k)=>`${v} ${k===6?(v===1?'Million':'Millionen'):PLACES[k][0]}`;
+  return {kind:'num',label:'Stellenwerttafel',html:`<p>Wie heißt die Zahl? <b>${parts.map(([v,k])=>nm(v,k)).join(', ')}</b></p>`,ans:n,sol:fmt(n)}},
+ fakten(){const f=pick([['Wie viele Nullen hat eine Million?','6',['3','9','7']],['Wie viele Nullen hat eine Milliarde?','9',['6','12','10']],['Wie viele Nullen hat eine Billion?','12',['9','15','10']],
+   ['Wie viele Tausender ergeben eine Million?','1000',['100','10 000','10']],['Wie viele Millionen ergeben eine Milliarde?','1000',['100','10','10 000']],['Was kommt nach der Million?','Milliarde',['Billion','Tausend','Hunderttausend']]]);
+  return mc({label:'Große Zahlen',html:`<p>${esc(f[0])}</p>`,options:shuffle([f[1]].concat(f[2])),correct:f[1],sol:f[1]})}
+};
+
+/* ---------- Fachwort-Insel ---------- */
+const OPS={'+':{n:'Summe',art:'die',a:'Summand',b:'Summand',r:'Summe',verb:'Addition'},'−':{n:'Differenz',art:'die',a:'Minuend',b:'Subtrahend',r:'Differenz',verb:'Subtraktion'},
+ '·':{n:'Produkt',art:'das',a:'Faktor',b:'Faktor',r:'Produkt',verb:'Multiplikation'},':':{n:'Quotient',art:'der',a:'Dividend',b:'Divisor',r:'Quotient',verb:'Division'}};
+function task(op){ // Aufgabe mit drei verschiedenen Zahlen, damit jede Zahl genau einen Namen hat
+  for(;;){let a,b,c;
+    if(op==='+'){a=R(10,500);b=R(10,500);c=a+b}else if(op==='−'){a=R(50,900);b=R(5,a-5);c=a-b}
+    else if(op==='·'){a=R(3,30);b=R(2,12);c=a*b}else{b=R(2,12);c=R(2,25);a=b*c}
+    if(a!==b&&a!==c&&b!==c)return {op,a,b,c,s:`${fmt(a)} ${op} ${fmt(b)} = ${fmt(c)}`};
+  }
+}
+const F={
+ worte(){const op=pick(Object.keys(OPS)),t=task(op),w=OPS[op];
+  const forms={'+':[`Bilde die Summe aus ${t.a} und ${t.b}.`,`Addiere ${t.a} und ${t.b}.`],'−':[`Bilde die Differenz aus ${t.a} und ${t.b}.`,`Subtrahiere ${t.b} von ${t.a}.`],
+   '·':[`Bilde das Produkt aus ${t.a} und ${t.b}.`,`Multipliziere ${t.a} mit ${t.b}.`],':':[`Bilde den Quotienten aus ${t.a} und ${t.b}.`,`Dividiere ${t.a} durch ${t.b}.`]};
+  return {kind:'num',label:'Rechnung in Worten',html:`<p>${pick(forms[op])}</p>`,ans:t.c,sol:t.s}},
+ begriff(){const op=pick(Object.keys(OPS)),t=task(op),w=OPS[op],which=pick(['a','b','c']),num=t[which],name=which==='c'?w.r:w[which];
+  const all=['Summand','Summe','Minuend','Subtrahend','Differenz','Faktor','Produkt','Dividend','Divisor','Quotient'];
+  const same=[w.a,w.b,w.r].filter(x=>x!==name),o=opts4(name,same.concat(shuffle(all.filter(x=>x!==name))));
+  return mc({label:'Wie heißt diese Zahl?',html:`<p class="big">${t.s}</p><p>Wie heißt die Zahl <b>${fmt(num)}</b> in dieser Aufgabe?</p>`,options:o,correct:name,sol:`${fmt(num)} ist ${name==='Summe'||name==='Differenz'?'die':name==='Produkt'?'das':name==='Summand'||name==='Faktor'?'ein':'der'} ${name}`})},
+ ergebnis(){const op=pick(Object.keys(OPS)),w=OPS[op];
+  return mc({label:'Fachwörter',html:`<p>Wie heißt das Ergebnis einer <b>${w.verb}</b>?</p>`,options:shuffle(['Summe','Differenz','Produkt','Quotient']),correct:w.r,sol:`Das Ergebnis einer ${w.verb} heißt ${w.r}.`})},
+ fehler(){const op=pick(Object.keys(OPS)),t=task(op),w=OPS[op],ok=Math.random()<.45;
+  let st;
+  if(Math.random()<.5){const n=ok?w.n:pick(Object.values(OPS).filter(x=>x.n!==w.n)).n,art=n==='Produkt'?'Das':n==='Quotient'?'Der':'Die';st=`${art} ${n} der Zahlen ${fmt(t.a)} und ${fmt(t.b)} ist ${fmt(t.c)}.`}
+  else{const roles=[['a',w.a],['b',w.b]].filter(r=>!(op==='+'||op==='·')||r[0]==='a'),[k,name]=pick(roles),wrongName={Minuend:'Subtrahend',Subtrahend:'Minuend',Dividend:'Divisor',Divisor:'Dividend',Summand:'Faktor',Faktor:'Summand'}[name];
+    const nm=ok?name:wrongName,art=['Summand','Faktor'].includes(nm)?'Ein':'Der';st=`${art} ${nm} dieser Aufgabe ist ${fmt(t[k])}.`}
+  return mc({label:'Stimmt die Aussage?',html:`<p class="big">${t.s}</p><p>${esc(st)}</p>`,options:['Stimmt','Stimmt nicht'],correct:ok?'Stimmt':'Stimmt nicht',
+    sol:ok?'Stimmt.':`Stimmt nicht. Bei ${t.s}: ${fmt(t.a)} ist ${['+','·'].includes(op)?'ein':'der'} ${w.a}, ${fmt(t.b)} ${['+','·'].includes(op)?'ein':'der'} ${w.b}, ${fmt(t.c)} ${w.art} ${w.r}.`})},
+ inworte(){const op=pick(Object.keys(OPS)),t=task(op),ph=o=>`${OPS[o].art} ${OPS[o].n} aus ${fmt(t.a)} und ${fmt(t.b)}`;
+  return mc({label:'Wie sagt man dazu?',html:`<p class="big">${fmt(t.a)} ${op} ${fmt(t.b)}</p>`,options:shuffle(Object.keys(OPS).map(ph)),correct:ph(op),sol:`${fmt(t.a)} ${op} ${fmt(t.b)} ist ${ph(op)}.`})}
+};
+
+/* ---------- Klecks-Insel ---------- */
+function klecksTask(){ // Gleichung mit Klecks: [Anzeige, Lösung, Umkehraufgabe, falsche Umkehraufgaben]
+  const op=pick(['+','−','·',':']),pos=pick([0,1]),t=task(op),{a,b,c}=t;
+  if(op==='+')return pos?[`${fmt(a)} + ${BLOB} = ${fmt(c)}`,b,`${fmt(c)} − ${fmt(a)}`,[`${fmt(c)} + ${fmt(a)}`,`${fmt(a)} − ${fmt(c)}`,`${fmt(c)} · ${fmt(a)}`]]:[`${BLOB} + ${fmt(b)} = ${fmt(c)}`,a,`${fmt(c)} − ${fmt(b)}`,[`${fmt(c)} + ${fmt(b)}`,`${fmt(b)} − ${fmt(c)}`,`${fmt(c)} : ${fmt(b)}`]];
+  if(op==='−')return pos?[`${fmt(a)} − ${BLOB} = ${fmt(c)}`,b,`${fmt(a)} − ${fmt(c)}`,[`${fmt(a)} + ${fmt(c)}`,`${fmt(c)} − ${fmt(a)}`,`${fmt(c)} + ${fmt(c)}`]]:[`${BLOB} − ${fmt(b)} = ${fmt(c)}`,a,`${fmt(c)} + ${fmt(b)}`,[`${fmt(c)} − ${fmt(b)}`,`${fmt(b)} − ${fmt(c)}`,`${fmt(c)} · ${fmt(b)}`]];
+  if(op==='·')return pos?[`${fmt(a)} · ${BLOB} = ${fmt(c)}`,b,`${fmt(c)} : ${fmt(a)}`,[`${fmt(c)} · ${fmt(a)}`,`${fmt(c)} − ${fmt(a)}`,`${fmt(a)} : ${fmt(c)}`]]:[`${BLOB} · ${fmt(b)} = ${fmt(c)}`,a,`${fmt(c)} : ${fmt(b)}`,[`${fmt(c)} · ${fmt(b)}`,`${fmt(c)} − ${fmt(b)}`,`${fmt(b)} : ${fmt(c)}`]];
+  return pos?[`${fmt(a)} : ${BLOB} = ${fmt(c)}`,b,`${fmt(a)} : ${fmt(c)}`,[`${fmt(a)} · ${fmt(c)}`,`${fmt(c)} : ${fmt(a)}`,`${fmt(a)} − ${fmt(c)}`]]:[`${BLOB} : ${fmt(b)} = ${fmt(c)}`,a,`${fmt(c)} · ${fmt(b)}`,[`${fmt(c)} : ${fmt(b)}`,`${fmt(b)} : ${fmt(c)}`,`${fmt(c)} + ${fmt(b)}`]];
+}
+const K={
+ klecks(){const [s,x,inv]=klecksTask();return {kind:'num',label:'Welche Zahl ist unter dem Klecks?',html:`<p class="big">${s}</p>`,ans:x,sol:`${BLOBTXT} = ${inv} = ${fmt(x)}`}},
+ umkehr(){let s,x,inv,wr;do{[s,x,inv,wr]=klecksTask();wr=wr.filter(w=>ev(w)!==x)}while(wr.length<2); // nie eine zweite Rechnung mit demselben Ergebnis
+  return mc({label:'Mit welcher Umkehraufgabe findest du den Klecks?',html:`<p class="big">${s}</p>`,options:shuffle([inv].concat(wr)),correct:inv,sol:`${inv} = ${fmt(x)}`})},
+ mauer(){const mult=Math.random()<.4,base=mult?[R(2,5),R(2,5),R(2,5)]:[R(5,99),R(5,99),R(5,99)],f=mult?(x,y)=>x*y:(x,y)=>x+y;
+  const mid=[f(base[0],base[1]),f(base[1],base[2])],rows=[[f(mid[0],mid[1])],mid,base],ri=R(0,2),hide=[ri,R(0,rows[ri].length-1)],ans=rows[hide[0]][hide[1]];
+  return {kind:'num',label:'Welche Zahl gehört an die Stelle mit dem Fragezeichen?',html:mauerHtml(rows,hide,mult?'Multiplikationsmauer: Jeder Stein ist das Produkt der beiden Steine darunter.':'Additionsmauer: Jeder Stein ist die Summe der beiden Steine darunter.'),ans,sol:fmt(ans)}}
+};
+const BLOBTXT='●';
+const ev=t=>{const m=t.replace(/\u202F/g,'').match(/^(\d+) (.) (\d+)$/),a=+m[1],b=+m[3];return {'+':a+b,'−':a-b,'·':a*b,':':a/b}[m[2]]}; // Rechnung im Text ausrechnen
+
+/* ---------- Geld-Insel ---------- */
+const ITEMS=[['Heft',129],['Bleistift',89],['Füller',799],['Lineal',149],['Radiergummi',79],['Klebestift',215],['Mäppchen',995],['Spitzer',135],['Collegeblock',249],['Wasserfarben',649],['Zirkel',459],['Buntstifte',375]];
+const money3=c=>{const e=Math.floor(c/100),ct=c%100;return pick([euro(c),`${c} ct`].concat(e&&ct?[`${e} € ${ct} ct`]:[]))};
+const M_={
+ inCent(){const c=pick([R(101,999),R(1001,9999),R(1,99)]),e=Math.floor(c/100),ct=c%100,show=e&&ct&&Math.random()<.35?`${e} € ${ct} ct`:euro(c);
+  return {kind:'num',label:'Schreibe in Cent',html:`<p class="big">${show} = ?</p>`,ans:c,unit:'ct',sol:`${show} = ${c} ct`}},
+ inEuro(){const c=pick([R(101,999),R(1001,9999),R(1,99)]);return {kind:'money',label:'Schreibe in Euro mit Komma',html:`<p class="big">${c} ct = ?</p>`,ans:c,unit:'€',sol:`${c} ct = ${euro(c)}`}},
+ ordnen(){let cs=[];for(let t=0;t<40&&cs.length<4;t++){const c=R(101,999);if(!cs.includes(c))cs.push(c)}
+  const shown=cs.map(c=>[c,money3(c)]),s=shown.slice().sort((a,b)=>a[0]-b[0]);
+  return {kind:'build',label:'Ordne: Beginne mit dem kleinsten Betrag',html:'<p>Tipp: Rechne alle Beträge erst in Cent um.</p>',tiles:shuffle(shown.map(x=>x[1])),target:s.map(x=>x[1]).join(' '),sol:s.map(x=>x[1]).join(' < ')}},
+ wechsel(){const c=R(105,9850),note=[5,10,20,50,100].find(n=>n*100>c),back=note*100-c;
+  return {kind:'money',label:'Wie viel Wechselgeld gibt es zurück?',html:`<p>Der Einkauf kostet <b>${euro(c)}</b>. Bezahlt wird mit einem <b>${note}-€-Schein</b>.</p>`,ans:back,unit:'€',sol:`${note},00 € − ${euro(c)} = ${euro(back)}`}},
+ kasse(){const it=shuffle(ITEMS).slice(0,R(3,4)),t=it.reduce((a,x)=>a+x[1],0);
+  return {kind:'money',label:'Berechne den Gesamtbetrag',html:`<table class="receipt">${it.map(([n,p])=>`<tr><td>${n}</td><td>${euro(p)}</td></tr>`).join('')}<tr class="sum"><td>Gesamt</td><td>?</td></tr></table>`,ans:t,unit:'€',sol:`${it.map(x=>euro(x[1])).join(' + ')} = ${euro(t)}`}},
+ reicht(){let it,t,b;for(;;){it=shuffle(ITEMS).slice(0,R(3,5));t=it.reduce((a,x)=>a+x[1],0);b=pick([10,20,30])*100;if(Math.abs(t-b)>=150)break}
+  const ok=t<=b;
+  return mc({label:'Überschlage: Reicht das Geld?',html:`<p>Du hast <b>${b/100} €</b> dabei und möchtest kaufen:</p><table class="receipt">${it.map(([n,p])=>`<tr><td>${n}</td><td>${euro(p)}</td></tr>`).join('')}</table>`,
+    options:['Ja, das reicht.','Nein, das reicht nicht.'],correct:ok?'Ja, das reicht.':'Nein, das reicht nicht.',sol:`Zusammen ${euro(t)}, das ist ${ok?'weniger':'mehr'} als ${b/100} €.`})},
+ wieviele(){const p=R(25,95),b=R(2,10)*100,n=Math.floor(b/p),rest=b-n*p,thing=pick([['Schokoriegel','Riegel'],['Kaugummi','Kaugummis'],['Sticker','Sticker'],['Lutscher','Lutscher']]);
+  return {kind:'num',label:'Wie viele kannst du kaufen?',html:`<p>Ein ${thing[0]} kostet <b>${p} ct</b>. Wie viele ${thing[1]} kannst du für <b>${b/100} €</b> höchstens kaufen?</p>`,ans:n,unit:thing[1],sol:`${n} ${thing[1]}: ${n} · ${p} ct = ${euro(n*p)}, es bleiben ${euro(rest)} übrig.`}}
+};
+
+/* ---------- Längen-Insel ---------- */
+const U=['mm','cm','dm','m','km'],FX={mm:1,cm:10,dm:100,m:1000,km:1e6}; // Faktor in mm
+const L_={
+ kleiner(){const i=R(1,4),u=U[i],s=U[i-1],f=FX[u]/FX[s],v=R(2,i===4?20:999);
+  return {kind:'num',label:'Schreibe in der nächstkleineren Einheit',html:`<p class="big">${fmt(v)} ${u} = ?</p>`,ans:v*f,unit:s,sol:`${fmt(v)} ${u} = ${fmt(v*f)} ${s} (1 ${u} = ${fmt(f)} ${s})`}},
+ groesser(){const i=R(0,3),u=U[i],g=U[i+1],f=FX[g]/FX[u],r=R(2,99),v=r*f;
+  return {kind:'num',label:'Schreibe in der nächstgrößeren Einheit',html:`<p class="big">${fmt(v)} ${u} = ?</p>`,ans:r,unit:g,sol:`${fmt(v)} ${u} = ${fmt(r)} ${g} (1 ${g} = ${fmt(f)} ${u})`}},
+ klammer(){let a,b;do{a=R(0,4);b=R(0,4)}while(Math.abs(a-b)<2||(a===4&&b===0)||(a===0&&b===4));const ua=U[a],ub=U[b];let v,r;
+  if(FX[ua]>FX[ub]){v=R(2,99);r=v*FX[ua]/FX[ub]}else{r=R(2,99);v=r*FX[ub]/FX[ua]}
+  return {kind:'num',label:'Schreibe in der Einheit, die in der Klammer steht',html:`<p class="big">${fmt(v)} ${ua} (in ${ub})</p>`,ans:r,unit:ub,sol:`${fmt(v)} ${ua} = ${fmt(r)} ${ub}`}},
+ vergleich(){const [u1,u2]=pick([['m','km'],['cm','m'],['mm','cm'],['dm','m'],['cm','dm'],['mm','m']]),f=FX[u2]/FX[u1],y=R(1,9),r=Math.random();
+  let x=r<.2?y*f:y*f+pick([-1,1])*pick([1,10,f/10>1?f/10:1,f/2]);if(x<1)x=y*f+1;const c=x<y*f?'<':x>y*f?'>':'=';
+  return mc({label:'Setze <, > oder = ein',html:`<p class="big">${fmt(x)} ${u1} ${BLOB} ${fmt(y)} ${u2}</p>`,options:['<','>','='],correct:c,sol:`${fmt(x)} ${u1} ${c} ${fmt(y)} ${u2}, denn ${fmt(y)} ${u2} = ${fmt(y*f)} ${u1}`})},
+ gemischt(){const [g,k]=pick([['m','cm'],['km','m'],['cm','mm'],['m','dm']]),f=FX[g]/FX[k],A=R(1,f>100?9:29),B=R(1,f-1),v=A*f+B,ok=`${A} ${g} ${B} ${k}`;
+  if(Math.random()<.5)return {kind:'num',label:'Schreibe in einer Einheit',html:`<p class="big">${ok} = ?</p>`,ans:v,unit:k,sol:`${ok} = ${fmt(A*f)} ${k} + ${B} ${k} = ${fmt(v)} ${k}`};
+  const wrong=uniq([`${Math.floor(v/(f/10))} ${g} ${v%(f/10)} ${k}`,B*10<f?`${A} ${g} ${B*10} ${k}`:`${A+1} ${g} ${B} ${k}`,`${A*10} ${g} ${B} ${k}`,`${A} ${g} ${B+1} ${k}`].filter(x=>x!==ok&&!/ 0 /.test(x)));
+  return mc({label:'Schreibe mit zwei Einheiten',html:`<p class="big">${fmt(v)} ${k} = ?</p>`,options:shuffle([ok].concat(wrong.slice(0,3))),correct:ok,sol:`${fmt(v)} ${k} = ${ok}`})},
+ rechnen(){const [g,k]=pick([['m','cm'],['km','m']]),f=FX[g]/FX[k],a=R(2,60)*f+R(1,f-1),b=R(1,40)*f+R(1,f-1),plus=Math.random()<.6||a<=b,x=plus?a:Math.max(a,b),y=plus?b:Math.min(a,b),r=plus?x+y:x-y;
+  const two=v=>`${Math.floor(v/f)} ${g} ${v%f} ${k}`;
+  return {kind:'num',label:'Rechne und gib das Ergebnis in der kleineren Einheit an',html:`<p class="big">${two(x)} ${plus?'+':'−'} ${two(y)} = ?</p>`,ans:r,unit:k,sol:`${fmt(x)} ${k} ${plus?'+':'−'} ${fmt(y)} ${k} = ${fmt(r)} ${k} = ${two(r)}`}},
+ ordnen(){const pool=[];for(let t=0;t<80&&pool.length<4;t++){const mm=R(2,99)*pick([10,100,1000,10000]);if(!pool.some(p=>p[0]===mm))pool.push([mm])}
+  const show=pool.map(([mm])=>{const u=pick(U.filter(u=>mm%FX[u]===0&&mm/FX[u]<100000));return [mm,`${fmt(mm/FX[u])} ${u}`]});
+  const s=show.slice().sort((a,b)=>a[0]-b[0]);
+  return {kind:'build',label:'Ordne: Beginne mit der kürzesten Länge',html:'<p>Tipp: Rechne erst alle Längen in dieselbe Einheit um.</p>',tiles:shuffle(show.map(x=>x[1])),target:s.map(x=>x[1]).join(' '),sol:s.map(x=>x[1]).join(' < ')}}
+};
+
+/* ---------- Auswahl der Fragen ---------- */
+const SUB={diagramm:D,strahl:Z,gross:G_,fach:F,klecks:K,geld:M_,laenge:L_};
+function gen(isl,sub,paper){ // eine Frage einer Insel; Unterart gewichtet nach Fehlern (wk = "insel.unterart")
+  const subs=Object.keys(SUB[isl]).filter(k=>!paper||k!=='passt');
+  if(!sub){const w=subs.map(k=>1+Math.min(3,save.weak[isl+'.'+k]||0));let r=Math.random()*w.reduce((a,b)=>a+b,0);sub=subs.find((k,i)=>(r-=w[i])<0)||subs[0]}
+  return Object.assign(SUB[isl][sub](),{isl,sub,wk:isl+'.'+sub});
+}
+const makeQ=topic=>gen(topic==='mix'?pick(TOPICS).id:topic);
+const redoQ=q=>gen(q.isl,q.sub);                                     // nach einem Fehler: neue Aufgabe derselben Art
+function makeRound(topic){ // Ich-kann-Check: aus jedem Thema zwei verschiedene Aufgaben, wie in einer Klassenarbeit
+  if(topic!=='check')return null;
+  return TOPICS.flatMap(t=>shuffle(Object.keys(SUB[t.id])).slice(0,2).map(s=>gen(t.id,s)));
+}
+function mcify(q){ // Zahl-Aufgabe in eine Auswahlfrage verwandeln (für die Blitzrunde)
+  if(q.kind==='mc')return q;
+  const a=q.ans,show=q.kind==='money'?euro:(n=>fmt(n)+(q.unit?' '+q.unit:''));
+  const c=[a+1,a-1,a+10,a-10,a*10,a%10===0?a/10:a+100,a+100,a-100].filter(x=>x>0&&x!==a);
+  return Object.assign({},q,{kind:'mc',options:opts4(show(a),c.map(show)),correct:show(a)});
+}
+function quickQ(){let q;do q=makeQ('mix');while(q.kind==='build'||q.raw||(q.kind==='num'&&q.ans>99999));return mcify(q)}
+function finishExtra(g){ // Ich-kann-Check: Ergebnis je Thema wie in der Liste im Buch
+  if(g.topic!=='check')return '';
+  const face=k=>k===2?['😀','Kann ich']:k===1?['😐','Fast']:['🙁','Üben'];
+  return `<table class="cancheck"><tr><th>Ich kann …</th><th></th><th></th></tr>${TOPICS.map(t=>{const r=(g.res||[]).filter(x=>x.isl===t.id),k=r.filter(x=>x.ok).length,[f,w]=face(k);
+    return `<tr><td>${esc(t.can)}</td><td class="face" aria-label="${w}">${f}</td><td>${k<2?`<button class="theme" data-go="${t.id}">Üben</button>`:''}</td></tr>`}).join('')}</table>`;
+}
+function memory(){ // Paare: Euro und Cent, Längen, Fachwörter, große Zahlen
+  const c=[],used=new Set(),add=(a,b)=>{if(used.has(a)||used.has(b))return;c.push({a,b});used.add(a);used.add(b)};
+  for(let i=0;i<2;i++){const x=R(101,999);add(euro(x),`${x} ct`)}
+  const L=shuffle([()=>{const v=R(2,9);return [`${v} km`,`${fmt(v*1000)} m`]},()=>{const v=R(2,9);return [`${v} m`,`${v*100} cm`]},()=>{const v=R(2,30);return [`${v} cm`,`${v*10} mm`]},()=>{const v=R(2,9);return [`${v} m`,`${v*10} dm`]}]);
+  add(...L[0]());add(...L[1]());
+  const w=pick(Object.values(OPS));add(w.r,`Ergebnis der ${w.verb}`);
+  const b=pick([['eine Million','1 000 000'],['eine Milliarde','1 000 000 000'],['zehntausend','10 000'],['hunderttausend','100 000']]);add(b[0],b[1]);
+  while(c.length<PAIRS){const x=R(101,999);add(euro(x),`${x} ct`)}
+  memoryGame(shuffle(c),memory,'Finde die Paare, die gleich viel bedeuten: 3,67 € und 367 ct, 2 km und 2000 m …');
+}
+
+/* ---------- Speicher (nur Komfort, darf ausfallen) ---------- */
+let save={name:'',xp:0,best:{},weak:{},sound:false,blitz:0,memo:0};
+try{const s=localStorage.getItem('ma5-v1');if(s)save=Object.assign(save,JSON.parse(s));
+  else{const v=JSON.parse(localStorage.getItem('en5-v1')||'null');if(v&&v.name)save.name=v.name} // Name von den Vokabel-Inseln übernehmen
+}catch(e){}
+save.sound=false; // Mathe liest nichts vor
+initRank();
+let storageOK=true;
+function persist(){try{localStorage.setItem('ma5-v1',JSON.stringify(save));storageOK=true}catch(e){storageOK=false}}
+try{localStorage.setItem('ma5-test','1');localStorage.removeItem('ma5-test')}catch(e){storageOK=false}
+
+/* ---------- Startseite ---------- */
+const NAMES={check:'Ich-kann-Check',mix:'Große Rundfahrt'};
+function home(){
+  G=null;M=null;if(B){clearTimeout(B.timer);B=null}
+  const hi=save.name?`Ahoi ${esc(save.name)}!`:'Ahoi!';
+  const tiles=TOPICS.map(t=>`<button class="tile" data-t="${t.id}"><h3>${t.name}</h3><span class="sub">${t.sub}</span>${starsHtml(save.best[t.id]||0)}</button>`).join('');
+  const chests=TOPICS.filter(t=>(save.best[t.id]||0)>=3).length;
+  const rg=save.round&&save.round.queue&&save.round.queue.length?save.round:null;
+  const resume=rg?`<div class="grid" style="margin-bottom:12px"><button class="tile resume" id="rs"><h3>Weiterspielen</h3><span class="sub">${esc(NAMES[rg.topic]||(TOPICS.find(t=>t.id===rg.topic)||{}).name)}, Frage ${Math.min(rg.done+1,rg.total)} von ${rg.total}</span></button></div>`:'';
+  $('#app').innerHTML=`
+  <div class="top"><a class="back" href="../../${PARENT?'#eltern':''}" style="text-decoration:none">Übersicht</a><span class="brand">${BRAND}</span>${themeBtn()}</div>
+  <section class="hero"><h1>${hi} Fit für die Mathe-Arbeit?</h1>
+   <p>Zahlen und Größen: Diagramme, Zahlenstrahl, große Zahlen, Fachwörter, Klecksaufgaben, Geld und Längen. Jede Insel ist ein Thema, eine Fahrt hat ${ROUND} Aufgaben.</p>
+   <div class="rank"><span class="pill sun">${save.xp} Punkte</span><span class="pill">Rang: ${rank()}</span></div>${rankBar()}${hero}</section>
+  <div class="namebox"><label for="nm">Dein Name</label><input type="text" id="nm" maxlength="16" value="${esc(save.name)}" placeholder="z. B. Mia" autocomplete="off"></div>
+  ${resume}
+  <div class="grid"><button class="tile mix" data-t="check"><h3>Ich-kann-Check</h3><span class="sub">Probe-Arbeit: zwei Aufgaben zu jedem Thema. Am Ende siehst du, was du schon kannst.</span>${starsHtml(save.best.check||0)}</button></div>
+  <div class="maphead"><h2 class="sec" style="margin:0">Seekarte</h2><span class="pill">Schätze: ${chests} von ${TOPICS.length}</span></div>
+  ${seaMap(MAP,170)}
+  <p class="tip" style="margin-top:4px">Drei Sterne auf einer Insel, und du findest ihren Schatz.</p>
+  <h2 class="sec">Spiele</h2><div class="grid">
+   <button class="tile" data-t="mix"><h3>Große Rundfahrt</h3><span class="sub">Aufgaben von allen Inseln gemischt</span>${starsHtml(save.best.mix||0)}</button>
+   <button class="tile" id="gb"><h3>Blitzrunde</h3><span class="sub">${BLITZ} Sekunden: Wie viele schaffst du?</span><span class="sub">Rekord: ${save.blitz||0} richtig</span></button>
+   <button class="tile" id="gm"><h3>Memory</h3><span class="sub">Finde ${PAIRS} Paare, die gleich viel bedeuten</span><span class="sub">${save.memo?'Rekord: '+save.memo+' Züge':'Noch kein Rekord'}</span></button>
+  </div>
+  <h2 class="sec">Inseln</h2><div class="grid">${tiles}</div>
+  <p class="tip">${storageOK?'Dein Fortschritt wird automatisch auf diesem Gerät gespeichert.':'Speichern geht in diesem Browser gerade nicht (privates Fenster?). Dein Fortschritt geht beim Schließen verloren.'}</p>
+  <p class="tip">Sterne gibt es für richtige Antworten beim ersten Versuch: 5 von 10 = 1 Stern, 7 von 10 = 2 Sterne, 9 von 10 = 3 Sterne. Zahlen darfst du mit oder ohne Leerzeichen eingeben, Geldbeträge mit Komma.</p>
+  ${PARENT?'<p class="tip"><button class="theme" id="pdf">Arbeitsblatt als PDF (für Eltern und Lehrkräfte)</button></p>':''}
+  <p class="tip"><button class="theme" id="rst">Alles zurücksetzen</button></p>`;
+  if(PARENT)$('#pdf').onclick=sheetSetup;
+  bindTheme();
+  $('#nm').oninput=e=>{save.name=e.target.value.trim();persist()};
+  document.querySelectorAll('[data-t]').forEach(b=>{b.onclick=()=>start(b.dataset.t);
+    if(b.tagName==='g')b.onkeydown=ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();start(b.dataset.t)}}});
+  $('#gb').onclick=blitz;$('#gm').onclick=memory;
+  if(rg)$('#rs').onclick=()=>{G=Object.assign({answered:false,res:[]},rg);show()};
+  let armed=false;$('#rst').onclick=ev=>{if(!armed){armed=true;ev.target.textContent='Wirklich alles löschen? Nochmal tippen.';return}save={name:'',xp:0,best:{},weak:{},round:null,sound:false,blitz:0,memo:0};persist();home()};
+}
+
+/* ---------- Arbeitsblatt drucken / als PDF sichern ---------- */
+function sheetSetup(){
+  G=null;
+  $('#app').innerHTML=`<div class="top noprint"><span class="brand">${BRAND}</span>${themeBtn()}</div>
+  <div class="qcard noprint"><h2>Arbeitsblatt als PDF</h2>
+   <p>Erstellt ein Arbeitsblatt und ein separates Lösungsblatt mit denselben Aufgaben. Jedes Blatt einzeln drucken oder im Druckdialog als PDF sichern (PC/Mac: „Als PDF speichern“; iPad/iPhone: im Druckdialog auf die Vorschau tippen, dann teilen oder sichern).</p>
+   <form class="form" id="sf">
+    <label>Thema<select id="sk"><option value="check">Übungsarbeit (alle Themen)</option>${TOPICS.map(t=>`<option value="${t.id}">${t.name.replace('-Insel','')}: ${esc(t.sub)}</option>`).join('')}</select></label>
+    <label id="snw">Anzahl<select id="sn"><option>10</option><option>15</option><option>20</option></select></label>
+    <div class="actions" style="justify-content:flex-start"><button class="btn" type="submit">Arbeitsblatt erstellen</button><button class="btn ghost" type="button" id="hm">Zurück</button></div>
+   </form></div><div id="out"></div>`;
+  bindTheme();
+  $('#hm').onclick=home;
+  $('#sk').onchange=()=>{$('#snw').hidden=$('#sk').value==='check'};$('#snw').hidden=true;
+  $('#sf').onsubmit=ev=>{ev.preventDefault();buildSheet($('#sk').value,+$('#sn').value)};
+}
+function paperRow(q){ // Aufgabe für Papier: Arbeitsauftrag, Auswahl als Liste, Zahlen mit Antwortlinie
+  let h=`<p><b>${esc(q.label)}</b></p>`+q.html;
+  if(q.kind==='mc')h+=`<p class="popts">${q.options.map(o=>'☐ '+esc(o)).join('&emsp;')}</p>`;
+  else if(q.kind==='build')h+=`<p class="popts">${q.tiles.map(esc).join('&emsp;·&emsp;')}</p><div class="wline"></div>`;
+  else h+=`<p class="pans">Antwort: ______________ ${q.unit?esc(q.unit):''}</p>`;
+  return h.replace(/<span class="blob"[^>]*>●<\/span>/g,'<span class="pbox"></span>'); // Kästchen zum Hineinschreiben
+}
+function buildSheet(kind,n){
+  const title=`Mathe 5: Zahlen und Größen · ${kind==='check'?'Übungsarbeit':TOPICS.find(t=>t.id===kind).name.replace('-Insel','')}`;
+  const qs=kind==='check'?TOPICS.flatMap(t=>shuffle(Object.keys(SUB[t.id]).filter(k=>k!=='passt')).slice(0,2).map(s=>gen(t.id,s,true)))
+    :(()=>{const out=[],seen=new Set();for(let i=0;i<n*10&&out.length<n;i++){const q=gen(kind,null,true);if(!seen.has(q.html)){seen.add(q.html);out.push(q)}}return out})();
+  const rows=sol=>`<ol class="ptasks">${qs.map(q=>`<li>${paperRow(q)}${sol?`<p class="psol"><b>Lösung:</b> ${md(q.kind==='mc'?q.correct+(q.sol&&q.sol!==q.correct?' · '+q.sol:''):q.sol)}</p>`:''}</li>`).join('')}</ol>`;
+  $('#out').innerHTML=`<div class="actions noprint" style="margin-top:16px"><button class="btn" id="pw">Arbeitsblatt drucken</button><button class="btn" id="pk">Lösungen drucken</button><button class="btn ghost" id="rx">Neu mischen</button></div>
+   <section class="sheet ws"><h2>${esc(title)}</h2><div class="meta"><span>Name: ________________________</span><span>Datum: ______________</span></div>${rows(false)}</section>
+   <section class="sheet key"><h2>Lösungen: ${esc(title)}</h2>${rows(true)}</section>`;
+  const pr=m=>{document.documentElement.dataset.print=m;window.print()};
+  $('#pw').onclick=()=>pr('sheet');$('#pk').onclick=()=>pr('key');
+  $('#rx').onclick=()=>buildSheet(kind,n);
+}
+home();
+</script>
+
+</body>
+</html>

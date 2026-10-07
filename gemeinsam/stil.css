@@ -144,6 +144,42 @@ details.mist summary{cursor:pointer}
 .sheet .ptab{border-collapse:collapse}
 .sheet .ptab th,.sheet .ptab td{border:1px solid #999;padding:10px 8px;width:33%;text-align:left}
 .sheet .ptab td{height:1.6em}
+/* Mathe: Zahlen-Eingabe, Klecks, Grafiken */
+.typebox .unit{align-self:center;font-weight:800;font-size:1.15rem;color:var(--muted)}
+.blob{display:inline-block;width:1.5em;height:1.1em;line-height:1.1em;border-radius:46% 54% 40% 60%;background:var(--coral);color:transparent;vertical-align:-0.12em}
+.prompt p{margin:0 0 10px}
+.prompt .big{font-size:clamp(1.5rem,6vw,2rem);font-variant-numeric:tabular-nums}
+.prompt .words{font-size:1.05rem;overflow-wrap:anywhere;line-height:1.4}
+.prompt .ctitle{font-size:.95rem;font-weight:800;color:var(--muted);margin:0 0 4px}
+.chart,.strahl{display:block;width:100%;max-width:420px;height:auto;margin:0 0 8px}
+.chart text,.strahl text{fill:var(--ink);font-family:var(--f-body)}
+.chart .grid{stroke:var(--line);stroke-width:1}
+.chart .bar{fill:var(--sea)}
+.strahl .axis{stroke:var(--ink);stroke-width:1.5}
+.strahl .arrow{fill:var(--coral)}.strahl .arrowline{stroke:var(--coral);stroke-width:3}
+.tally line{stroke:var(--ink);stroke-width:2;stroke-linecap:round}
+.strich,.vt,.receipt{border-collapse:collapse;font-size:1rem;margin:0 0 10px}
+.strich td,.vt td,.vt th,.receipt td{border:1px solid var(--line);padding:5px 10px;text-align:left}
+.vt th{font-weight:800}.receipt td:last-child{text-align:right;font-variant-numeric:tabular-nums}.receipt .sum td{font-weight:800}
+.mauer{display:inline-grid;gap:4px;margin:4px 0}
+.mrow{display:flex;justify-content:center;gap:4px}
+.brick{min-width:64px;padding:8px 6px;text-align:center;border:2px solid var(--line);border-radius:8px;background:var(--bg);font-weight:800;font-size:1.1rem}
+.brick.q{border-color:var(--coral);color:var(--coral)}
+.opts.raw{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+.opts.raw .opt{padding:6px}
+.opts.raw svg{display:block;width:100%;height:auto}
+.cancheck{width:100%;border-collapse:collapse;text-align:left;margin:12px 0}
+.cancheck th,.cancheck td{border-bottom:1px solid var(--line);padding:6px 4px;vertical-align:middle}
+.cancheck .face{font-size:1.5rem;text-align:center}
+/* Mathe-Arbeitsblatt */
+.sheet .ptasks{padding-left:1.6em;margin:0}
+.sheet .ptasks li{break-inside:avoid;padding:10px 0;border-bottom:1px solid #ccc}
+.sheet .ptasks p{margin:4px 0}
+.sheet .pans{margin-top:10px}
+.sheet .psol{color:#000}
+.sheet .pbox{display:inline-block;width:2em;height:1.2em;border:1.5px solid #000;vertical-align:-0.2em}
+.sheet .chart,.sheet .strahl{max-width:340px}
+.sheet .brick{background:#fff;border-color:#999}
 /* Arbeitsblatt: auf dem Bildschirm als Vorschau, im Druck nur Blatt oder nur Lösungen (data-print am html-Element) */
 .form{display:grid;gap:14px;margin-top:14px}
 .form label{font-weight:800;display:grid;gap:6px}
