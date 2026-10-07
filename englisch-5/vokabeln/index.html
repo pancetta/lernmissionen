@@ -74,7 +74,7 @@ function home(){
   if(rg){const tn=rg.topic==='mix'?'Große Rundfahrt':(TOPICS.find(t=>t.id===rg.topic)||{}).name;
     resume=`<div class="grid" style="margin-bottom:12px"><button class="tile resume" id="rs"><h3>Weiterspielen</h3><span class="sub">${esc(tn)}, Frage ${Math.min(rg.done+1,rg.total)} von ${rg.total}</span></button></div>`;}
   $('#app').innerHTML=`
-  <div class="top"><a class="back" href="../../${PARENT?'#eltern':''}" style="text-decoration:none">Übersicht</a><span class="brand">Vokabel-Inseln</span>${themeBtn()}</div>
+  <div class="top"><a class="back" href="../../" style="text-decoration:none">Übersicht</a><span class="brand">Vokabel-Inseln</span>${themeBtn()}</div>
   <section class="hero"><h1>${hi} Welche Insel steuerst du an?</h1>
    <p>Jede Insel ist ein Thema. Eine Fahrt hat ${ROUND} Fragen: auswählen, schreiben, ${VOICE?'zuhören, ':''}Sätze bauen. Fehler sind okay, du bekommst sie gleich noch einmal.</p>
    <div class="rank"><span class="pill sun">${save.xp} Punkte</span><span class="pill">Rang: ${rank()}</span></div>${rankBar()}${hero}</section>
@@ -92,9 +92,7 @@ function home(){
   <p class="tip">${storageOK?'Dein Fortschritt wird automatisch auf diesem Gerät gespeichert.':'Speichern geht in diesem Browser gerade nicht (privates Fenster?). Dein Fortschritt geht beim Schließen verloren.'}</p>
   <p class="tip">Sterne gibt es für richtige Antworten beim ersten Versuch: 5 von 10 = 1 Stern, 7 von 10 = 2 Sterne, 9 von 10 = 3 Sterne.</p>
   <p class="tip">${VOICE?`<button class="theme" id="snd">${save.sound?'🔊 Ton an':'🔇 Ton aus'}</button> Hör-Fragen und Vorlesen nutzen die Stimme dieses Geräts.${/Firefox/.test(navigator.userAgent)&&/Macintosh/.test(navigator.userAgent)?' In Firefox auf dem Mac knackt die Stimme am Ende, in Safari oder Chrome klingt sie sauber.':''}${/iPhone/.test(navigator.userAgent)?' Kein Ton auf dem iPhone? Stummschalter ausschalten (Klingeln an) und lauter stellen.':''}`:'Auf diesem Gerät ist keine englische Stimme eingebaut, deshalb gibt es hier keine Hör-Fragen.'}</p>
-  ${PARENT?'<p class="tip"><button class="theme" id="pdf">Arbeitsblatt als PDF (für Eltern und Lehrkräfte)</button></p>':''}
   <p class="tip"><button class="theme" id="rst">Alles zurücksetzen</button></p>`;
-  if(PARENT)$('#pdf').onclick=sheetSetup;
   if(VOICE)$('#snd').onclick=()=>{save.sound=!save.sound;persist();say("Hello! Let's go!");home()};
   bindTheme();
   $('#nm').oninput=e=>{save.name=e.target.value.trim();persist()};
@@ -272,52 +270,6 @@ function blitzEnd(){
 /* ---------- Memory: englisches Wort und deutsche Bedeutung als Paar ---------- */
 function memory(topic){memoryGame(pickEntries(topic,PAIRS).map(e=>({a:enShow(e),b:deShow(e)})),()=>memory(topic),'Finde die Paare: englisches Wort und deutsche Bedeutung.')}
 
-/* ---------- Arbeitsblatt drucken / als PDF sichern ---------- */
-const SHEETS={uebersetzen:'Übersetzen',diktat:'Diktat',tf:'Richtig oder falsch',build:'Satzbaukasten',memory:'Memory-Karten'};
-function sheetSetup(){
-  G=null;
-  $('#app').innerHTML=`<div class="top noprint"><span class="brand">Vokabel-Inseln</span>${themeBtn()}</div>
-  <div class="qcard noprint"><h2>Arbeitsblatt als PDF</h2>
-   <p>Erstellt ein Arbeitsblatt und ein separates Lösungsblatt mit denselben Wörtern. Jedes Blatt einzeln drucken oder im Druckdialog als PDF sichern (PC/Mac: „Als PDF speichern“; iPad/iPhone: im Druckdialog auf die Vorschau tippen, dann teilen oder sichern).</p>
-   <form class="form" id="sf">
-    <label>Aufgabe<select id="sk"><option value="uebersetzen">Übersetzen</option><option value="diktat">Diktat (jemand liest vor)</option><option value="tf">Richtig oder falsch</option><option value="build">Satzbaukasten (Sätze ordnen)</option><option value="memory">Memory-Karten zum Ausschneiden</option></select></label>
-    <label>Insel<select id="st"><option value="mix">Alle Inseln</option>${TOPICS.map(t=>`<option value="${t.id}">${t.name}</option>`).join('')}</select></label>
-    <label id="sdw">Richtung<select id="sd"><option value="en2de">Englisch → Deutsch</option><option value="de2en">Deutsch → Englisch</option><option value="mix">gemischt</option></select></label>
-    <label>Anzahl<select id="sn"><option value="0">alle</option><option>10</option><option>20</option><option>30</option></select></label>
-    <div class="actions" style="justify-content:flex-start"><button class="btn" type="submit">Arbeitsblatt erstellen</button><button class="btn ghost" type="button" id="hm">Zurück</button></div>
-   </form></div><div id="out"></div>`;
-  bindTheme();
-  $('#hm').onclick=home;
-  $('#sk').onchange=()=>{$('#sdw').hidden=$('#sk').value!=='uebersetzen'};
-  $('#sf').onsubmit=ev=>{ev.preventDefault();buildSheet($('#sk').value,$('#st').value,$('#sd').value,+$('#sn').value)};
-}
-function buildSheet(kind,topic,dir,n){
-  let es=shuffle(poolFor(topic)),note='';
-  if(kind==='build'){es=es.filter(canBuild);if(!es.length){es=shuffle(W.filter(canBuild));note=' (Sätze von allen Inseln)'}}
-  if(n)es=es.slice(0,n);
-  const title=`Englisch 5: ${topic==='mix'?'Alle Inseln':TOPICS.find(t=>t.id===topic).name}${note} · ${SHEETS[kind]}`;
-  let task,rows,stacked=false;
-  if(kind==='diktat'){task='Hör gut zu und schreibe das englische Wort oder den Satz auf.';rows=es.map(e=>({q:'',sol:`${allEn(e)}  (${deShow(e)})`}))}
-  else if(kind==='tf'){task='Stimmt die Übersetzung? Kreuze an.';rows=es.map(e=>{const s=tfShown(e),t=s===deShow(e);return {q:`${enShow(e)} = ${s}`,ws:'☐ richtig    ☐ falsch',sol:t?'richtig':'falsch, richtig ist: '+deShow(e)}})}
-  else if(kind==='build'){task='Bring die Wörter in die richtige Reihenfolge und schreibe den Satz auf.';stacked=true;rows=es.map(e=>({q:scramble(toks(enShow(e))).join('   /   '),hint:deShow(e),sol:enShow(e)}))}
-  else if(kind==='memory'){task='Karten ausschneiden, verdeckt mischen und Paare finden: englisches Wort und deutsche Bedeutung.';rows=es.map(e=>({q:enShow(e),sol:deShow(e)}))}
-  else{task=dir==='en2de'?'Schreibe das deutsche Wort daneben.':dir==='de2en'?'Schreibe das englische Wort daneben.':'Übersetze ins Deutsche oder ins Englische.';
-    rows=es.map(e=>{const d=dir==='mix'?(Math.random()<.5?'en2de':'de2en'):dir;return d==='en2de'?{q:enShow(e),sol:deShow(e)}:{q:deShow(e),sol:allEn(e)}})}
-  const cell=r=>esc(r.q)+(r.hint?`<br><small>${esc(r.hint)}</small>`:'');
-  const table=sol=>`<table>${rows.map((r,i)=>`<tr><td class="n">${i+1}.</td>${
-    stacked?`<td>${cell(r)}${sol?`<br><b>${esc(r.sol)}</b>`:'<div class="wline"></div>'}</td>`
-    :kind==='diktat'?`<td>${sol?esc(r.sol):''}</td>`
-    :`<td class="w">${cell(r)}</td><td>${sol?esc(r.sol):esc(r.ws||'')}</td>`}</tr>`).join('')}</table>`;
-  const cards=()=>`<div class="cards">${shuffle(rows.flatMap(r=>[[r.q,'EN'],[r.sol,'DE']])).map(([t,l])=>`<div><small>${l}</small>${esc(t)}</div>`).join('')}</div>`;
-  const [lw,lk,hk]=kind==='memory'?['Karten drucken','Paarliste drucken','Paarliste: ']:kind==='diktat'?['Arbeitsblatt drucken','Vorlese-Liste drucken','Zum Vorlesen (mit Lösungen): ']:['Arbeitsblatt drucken','Lösungen drucken','Lösungen: '];
-  $('#out').innerHTML=`<div class="actions noprint" style="margin-top:16px"><button class="btn" id="pw">${lw}</button><button class="btn" id="pk">${lk}</button><button class="btn ghost" id="rx">Neu mischen</button></div>
-   <section class="sheet ws"><h2>${esc(title)}</h2>${kind==='memory'?'':'<div class="meta"><span>Name: ________________________</span><span>Datum: ______________</span></div>'}<p>${task}</p>${kind==='memory'?cards():table(false)}</section>
-   <section class="sheet key"><h2>${hk}${esc(title)}</h2>${kind==='memory'?`<table>${rows.map((r,i)=>`<tr><td class="n">${i+1}.</td><td class="w">${esc(r.q)}</td><td>${esc(r.sol)}</td></tr>`).join('')}</table>`:table(true)}</section>`;
-  // ohne Knopf (Strg+P) wird beides gedruckt, die Lösungen auf neuer Seite
-  const pr=m=>{document.documentElement.dataset.print=m;window.print()};
-  $('#pw').onclick=()=>pr('sheet');$('#pk').onclick=()=>pr('key');
-  $('#rx').onclick=()=>buildSheet(kind,topic,dir,n);
-}
 
 home();
 </script>

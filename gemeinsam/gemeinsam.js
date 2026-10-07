@@ -56,8 +56,6 @@ function say(t,slow){
 
 /* ---------- Ansichten ---------- */
 let G=null, B=null, M=null; // laufende Runde, Blitzrunde, Memory
-// ponytail: Export mit Lösungen nur über den Eltern-Link (#eltern), schützt vor Neugier, nicht vor Quelltext-Lesern. Bewusst nicht gespeichert, damit es auf dem Kindergerät nicht hängen bleibt.
-const PARENT=location.hash==='#eltern';
 function themeBtn(){return '<button class="theme" id="tg" aria-label="Hell oder dunkel wechseln">hell / dunkel</button>'}
 function bindTheme(){const b=$('#tg');if(!b)return;b.onclick=()=>{const r=document.documentElement;const dark=r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;r.dataset.theme=dark?'light':'dark'}}
 const topBar=()=>`<div class="top"><span class="brand">${BRAND}</span>${themeBtn()}</div>`;

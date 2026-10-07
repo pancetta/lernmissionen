@@ -113,4 +113,3 @@ return {W,TOPICS,NOTYPE};
 })();
 const enShow=e=>e[1].split('|')[0];
 const deShow=e=>e[2].replace(/ \/ /g,' / ');
-const allEn=e=>e[1].split('|').join(' / ');

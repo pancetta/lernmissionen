@@ -121,7 +121,7 @@ const D={
   const off=a.slice(),k=R(0,3);off[k]=off[k]+(off[k]+d.step<=d.max?d.step:-d.step);
   const mk=v=>chartSvg(Object.assign({},d,{vals:v}),{mini:true,w:160,h:110});
   return mc({label:'Welches Diagramm passt zur Tabelle?',raw:true,html:`<p class="ctitle">${esc(d.t)}</p><table class="vt"><tr>${d.short.map(s=>`<th>${esc(s)}</th>`).join('')}</tr><tr>${a.map(v=>`<td>${fmt(v)}</td>`).join('')}</tr></table>`,
-    options:shuffle([mk(a),mk(sw),mk(off)]),correct:mk(a),sol:'Das Diagramm, in dem jede Säule genau so hoch ist wie der Wert in der Tabelle.',paper:false})},
+    options:shuffle([mk(a),mk(sw),mk(off)]),correct:mk(a),sol:'Das Diagramm, in dem jede Säule genau so hoch ist wie der Wert in der Tabelle.'})},
  deuten(){const s=pick([['Im Diagramm sieht man auf einen Blick, welcher Wert am größten ist.',1],['In der Tabelle kann man die genauen Zahlen ablesen.',1],['Im Diagramm kann man Werte manchmal nur ungefähr ablesen.',1],['In einer Tabelle sieht man sofort, welcher Wert am kleinsten ist, ohne zu vergleichen.',0],['Ein Diagramm zeigt immer genauere Werte als eine Tabelle.',0],['Bei einem Säulendiagramm ist die längste Säule der kleinste Wert.',0]]);
   return mc({label:'Diagramm oder Tabelle: Stimmt das?',html:`<p>${esc(s[0])}</p>`,options:['Stimmt','Stimmt nicht'],correct:s[1]?'Stimmt':'Stimmt nicht',sol:s[1]?'Stimmt.':'Stimmt nicht.'})}
 };
@@ -276,30 +276,28 @@ const svgPt=(svg,ev)=>{const r=svg.getBoundingClientRect(),vb=svg.viewBox.baseVa
 const barGeo=q=>q.horiz?{W:320,H:210,n:q.short.length,horiz:true,a0:78,a1:308,b0:8,b1:186}:{W:320,H:210,n:q.short.length,a0:182,a1:12,b0:40,b1:312};
 function barBox(g,q,i,v){const len=(g.a1-g.a0)*v/q.max,cw=(g.b1-g.b0)/g.n,c=g.b0+cw*i+cw*.18;
   return g.horiz?{x:g.a0,y:c,w:len,h:cw*.64}:{x:c,y:g.a0+len,w:cw*.64,h:-len}}
-function drawBars(q,vals,mode){ // mode 'live' = zum Ziehen, 'paper' = leeres Gitter oder fertige Lösung
+function drawBars(q,vals){ // Diagramm zum Ziehen
   const g=barGeo(q),lines=q.max/q.step,lab=g.horiz?Math.ceil(lines/6):lines>12?2:1;
-  let s=`<svg class="chart${mode==='live'?' drawsvg':''}" viewBox="0 0 ${g.W} ${g.H}" role="group" aria-label="${esc(q.t)}">`;
+  let s=`<svg class="chart drawsvg" viewBox="0 0 ${g.W} ${g.H}" role="group" aria-label="${esc(q.t)}">`;
   for(let k=0;k<=lines;k++){const p=g.a0+(g.a1-g.a0)*k/lines;
     s+=g.horiz?`<line class="grid" x1="${p}" x2="${p}" y1="${g.b0}" y2="${g.b1}"/>`+(k%lab?'':`<text x="${p}" y="${g.b1+14}" text-anchor="middle" font-size="11">${fmt(k*q.step)}</text>`)
       :`<line class="grid" x1="${g.b0}" x2="${g.b1}" y1="${p}" y2="${p}"/>`+(k%lab?'':`<text x="${g.b0-4}" y="${p+3.5}" text-anchor="end" font-size="11">${fmt(k*q.step)}</text>`)}
   q.short.forEach((c,i)=>{const cw=(g.b1-g.b0)/g.n,mid=g.b0+cw*i+cw/2,b=barBox(g,q,i,vals[i]);
     s+=g.horiz?`<text x="${g.a0-6}" y="${mid+4}" text-anchor="end" font-size="11">${esc(c)}</text>`:`<text x="${mid}" y="${g.a0+14}" text-anchor="middle" font-size="11">${esc(c)}</text>`;
-    if(mode==='live')s+=`<g class="dbar" data-i="${i}" tabindex="0" role="slider" aria-label="${esc(q.cats[i])}" aria-valuemin="0" aria-valuemax="${q.max}" aria-valuenow="0"><rect class="bar"/><rect class="knob"/></g>`;
-    else if(vals[i])s+=`<rect class="bar" x="${b.x}" y="${b.y}" width="${b.w}" height="${b.h}" data-v="${vals[i]}"/>`});
+    s+=`<g class="dbar" data-i="${i}" tabindex="0" role="slider" aria-label="${esc(q.cats[i])}" aria-valuemin="0" aria-valuemax="${q.max}" aria-valuenow="0"><rect class="bar"/><rect class="knob"/></g>`});
   return s+'</svg>';
 }
 const SX=k=>30+k*13; // Teilstrich k auf dem Zahlenstrahl (wie strahlSvg)
 const arrowAt=(k,cls)=>`<g class="mark ${cls}" transform="translate(${SX(k)} 0)"><path d="M0 31 l-6 -12 h12 z"/><line x1="0" x2="0" y1="4" y2="22"/></g>`;
-function markSvg(q,k,mode){
-  let s=`<svg class="strahl${mode==='live'?' marksvg':''}" viewBox="0 0 320 74"${mode==='live'?' tabindex="0" role="slider" aria-label="Zahlenstrahl: Pfeil setzen" aria-valuemin="0" aria-valuemax="20"':' role="img" aria-label="Zahlenstrahl"'}><line class="axis" x1="22" x2="298" y1="44" y2="44"/>`;
+function markSvg(q){ // Zahlenstrahl ohne Pfeil, der Pfeil wird gesetzt
+  let s=`<svg class="strahl marksvg" viewBox="0 0 320 74" tabindex="0" role="slider" aria-label="Zahlenstrahl: Pfeil setzen" aria-valuemin="0" aria-valuemax="20"><line class="axis" x1="22" x2="298" y1="44" y2="44"/>`;
   for(let t=0;t<=20;t++){const h=t%10===0?9:t%5===0?6:4;s+=`<line class="axis" x1="${SX(t)}" x2="${SX(t)}" y1="${44-h}" y2="${44+h}"/>`;if(t%10===0)s+=`<text x="${SX(t)}" y="68" text-anchor="middle" font-size="12">${fmt(q.start+t*q.step)}</text>`}
-  if(mode==='live')s+=`<rect class="hit" x="0" y="0" width="320" height="74"/><g class="mark live" style="display:none"><path d="M0 31 l-6 -12 h12 z"/><line x1="0" x2="0" y1="4" y2="22"/></g>`;
-  else if(k!==null)s+=arrowAt(k,'right');
+  s+=`<rect class="hit" x="0" y="0" width="320" height="74"/><g class="mark live" style="display:none"><path d="M0 31 l-6 -12 h12 z"/><line x1="0" x2="0" y1="4" y2="22"/></g>`;
   return s+'</svg>';
 }
 const WIDGETS={
  bars:{
-  html:q=>`<p class="tip" style="margin:0 0 6px">Zieh ${q.horiz?'die Balken auf die richtige Länge':'die Säulen auf die richtige Höhe'}. Mit der Tastatur: ${q.horiz?'Balken':'Säule'} auswählen, dann Pfeiltasten.</p>${drawBars(q,q.vals.map(()=>0),'live')}`,
+  html:q=>`<p class="tip" style="margin:0 0 6px">Zieh ${q.horiz?'die Balken auf die richtige Länge':'die Säulen auf die richtige Höhe'}. Mit der Tastatur: ${q.horiz?'Balken':'Säule'} auswählen, dann Pfeiltasten.</p>${drawBars(q,q.vals.map(()=>0))}`,
   init(q){
     const svg=$('.drawsvg'),g=barGeo(q);WS={v:q.vals.map(()=>0),moved:false,svg,g};
     const set=(i,v)=>{v=Math.max(0,Math.min(q.max,Math.round(v/q.step)*q.step));WS.v[i]=v;
@@ -320,11 +318,10 @@ const WIDGETS={
   empty:()=>WS.moved?'':'Zieh zuerst die Säulen auf die richtige Höhe.',
   check:q=>WS.v.every((v,i)=>v===q.vals[i]),
   done(q){WS.svg.classList.add('locked');WS.svg.querySelectorAll('.dbar').forEach(el=>{const i=+el.dataset.i,good=WS.v[i]===q.vals[i];el.classList.add(good?'good':'bad');
-    if(!good){const b=barBox(WS.g,q,i,q.vals[i]);el.insertAdjacentHTML('beforeend',`<rect class="target" x="${b.x}" y="${b.y}" width="${b.w}" height="${b.h}"/>`)}})},
-  paper:(q,sol)=>drawBars(q,sol?q.vals:q.vals.map(()=>0),'paper')
+    if(!good){const b=barBox(WS.g,q,i,q.vals[i]);el.insertAdjacentHTML('beforeend',`<rect class="target" x="${b.x}" y="${b.y}" width="${b.w}" height="${b.h}"/>`)}})} 
  },
  strahl:{
-  html:q=>`<p class="tip" style="margin:0 0 6px">Tippe auf den richtigen Teilstrich oder zieh den Pfeil dorthin. Mit der Tastatur: Zahlenstrahl auswählen, dann Pfeiltasten.</p>${markSvg(q,null,'live')}`,
+  html:q=>`<p class="tip" style="margin:0 0 6px">Tippe auf den richtigen Teilstrich oder zieh den Pfeil dorthin. Mit der Tastatur: Zahlenstrahl auswählen, dann Pfeiltasten.</p>${markSvg(q)}`,
   init(q){
     const svg=$('.marksvg');WS={k:null,svg};
     const put=k=>{k=Math.max(0,Math.min(20,k));WS.k=k;const m=svg.querySelector('.mark.live');m.setAttribute('transform',`translate(${SX(k)} 0)`);m.style.display='';
@@ -336,8 +333,7 @@ const WIDGETS={
   },
   empty:()=>WS.k===null?'Setze zuerst den Pfeil auf den Zahlenstrahl.':'',
   check:q=>WS.k===q.i,
-  done(q,ok){WS.svg.querySelector('.mark.live').classList.add(ok?'good':'bad');if(!ok)WS.svg.insertAdjacentHTML('beforeend',arrowAt(q.i,'right'))},
-  paper:(q,sol)=>markSvg(q,sol?q.i:null,'paper')
+  done(q,ok){WS.svg.querySelector('.mark.live').classList.add(ok?'good':'bad');if(!ok)WS.svg.insertAdjacentHTML('beforeend',arrowAt(q.i,'right'))} 
  }
 };
 D.zeichnen=function(){ // Säulen/Balken zu einer Tabelle oder Strichliste selbst zeichnen
@@ -357,8 +353,8 @@ Z.markieren=function(){ // Zahl (oder Mitte zwischen zwei Zahlen) selbst auf dem
 
 /* ---------- Auswahl der Fragen ---------- */
 const SUB={diagramm:D,strahl:Z,gross:G_,fach:F,klecks:K,geld:M_,laenge:L_};
-function gen(isl,sub,paper){ // eine Frage einer Insel; Unterart gewichtet nach Fehlern (wk = "insel.unterart")
-  const subs=Object.keys(SUB[isl]).filter(k=>!paper||k!=='passt');
+function gen(isl,sub){ // eine Frage einer Insel; Unterart gewichtet nach Fehlern (wk = "insel.unterart")
+  const subs=Object.keys(SUB[isl]);
   if(!sub){const w=subs.map(k=>1+Math.min(3,save.weak[isl+'.'+k]||0));let r=Math.random()*w.reduce((a,b)=>a+b,0);sub=subs.find((k,i)=>(r-=w[i])<0)||subs[0]}
   return Object.assign(SUB[isl][sub](),{isl,sub,wk:isl+'.'+sub});
 }
@@ -413,7 +409,7 @@ function home(){
   const rg=save.round&&save.round.queue&&save.round.queue.length?save.round:null;
   const resume=rg?`<div class="grid" style="margin-bottom:12px"><button class="tile resume" id="rs"><h3>Weiterspielen</h3><span class="sub">${esc(NAMES[rg.topic]||(TOPICS.find(t=>t.id===rg.topic)||{}).name)}, Frage ${Math.min(rg.done+1,rg.total)} von ${rg.total}</span></button></div>`:'';
   $('#app').innerHTML=`
-  <div class="top"><a class="back" href="../../${PARENT?'#eltern':''}" style="text-decoration:none">Übersicht</a><span class="brand">${BRAND}</span>${themeBtn()}</div>
+  <div class="top"><a class="back" href="../../" style="text-decoration:none">Übersicht</a><span class="brand">${BRAND}</span>${themeBtn()}</div>
   <section class="hero"><h1>${hi} Fit für die Mathe-Arbeit?</h1>
    <p>Zahlen und Größen: Diagramme, Zahlenstrahl, große Zahlen, Fachwörter, Klecksaufgaben, Geld und Längen. Jede Insel ist ein Thema, eine Fahrt hat ${ROUND} Aufgaben.</p>
    <div class="rank"><span class="pill sun">${save.xp} Punkte</span><span class="pill">Rang: ${rank()}</span></div>${rankBar()}${hero}</section>
@@ -431,9 +427,7 @@ function home(){
   <h2 class="sec">Inseln</h2><div class="grid">${tiles}</div>
   <p class="tip">${storageOK?'Dein Fortschritt wird automatisch auf diesem Gerät gespeichert.':'Speichern geht in diesem Browser gerade nicht (privates Fenster?). Dein Fortschritt geht beim Schließen verloren.'}</p>
   <p class="tip">Sterne gibt es für richtige Antworten beim ersten Versuch: 5 von 10 = 1 Stern, 7 von 10 = 2 Sterne, 9 von 10 = 3 Sterne. Zahlen darfst du mit oder ohne Leerzeichen eingeben, Geldbeträge mit Komma.</p>
-  ${PARENT?'<p class="tip"><button class="theme" id="pdf">Arbeitsblatt als PDF (für Eltern und Lehrkräfte)</button></p>':''}
   <p class="tip"><button class="theme" id="rst">Alles zurücksetzen</button></p>`;
-  if(PARENT)$('#pdf').onclick=sheetSetup;
   bindTheme();
   $('#nm').oninput=e=>{save.name=e.target.value.trim();persist()};
   document.querySelectorAll('[data-t]').forEach(b=>{b.onclick=()=>start(b.dataset.t);
@@ -443,42 +437,6 @@ function home(){
   let armed=false;$('#rst').onclick=ev=>{if(!armed){armed=true;ev.target.textContent='Wirklich alles löschen? Nochmal tippen.';return}save={name:'',xp:0,best:{},weak:{},round:null,sound:false,blitz:0,memo:0};persist();home()};
 }
 
-/* ---------- Arbeitsblatt drucken / als PDF sichern ---------- */
-function sheetSetup(){
-  G=null;
-  $('#app').innerHTML=`<div class="top noprint"><span class="brand">${BRAND}</span>${themeBtn()}</div>
-  <div class="qcard noprint"><h2>Arbeitsblatt als PDF</h2>
-   <p>Erstellt ein Arbeitsblatt und ein separates Lösungsblatt mit denselben Aufgaben. Jedes Blatt einzeln drucken oder im Druckdialog als PDF sichern (PC/Mac: „Als PDF speichern“; iPad/iPhone: im Druckdialog auf die Vorschau tippen, dann teilen oder sichern).</p>
-   <form class="form" id="sf">
-    <label>Thema<select id="sk"><option value="check">Übungsarbeit (alle Themen)</option>${TOPICS.map(t=>`<option value="${t.id}">${t.name.replace('-Insel','')}: ${esc(t.sub)}</option>`).join('')}</select></label>
-    <label id="snw">Anzahl<select id="sn"><option>10</option><option>15</option><option>20</option></select></label>
-    <div class="actions" style="justify-content:flex-start"><button class="btn" type="submit">Arbeitsblatt erstellen</button><button class="btn ghost" type="button" id="hm">Zurück</button></div>
-   </form></div><div id="out"></div>`;
-  bindTheme();
-  $('#hm').onclick=home;
-  $('#sk').onchange=()=>{$('#snw').hidden=$('#sk').value==='check'};$('#snw').hidden=true;
-  $('#sf').onsubmit=ev=>{ev.preventDefault();buildSheet($('#sk').value,+$('#sn').value)};
-}
-function paperRow(q,sol){ // Aufgabe für Papier: Arbeitsauftrag, Auswahl als Liste, Zahlen mit Antwortlinie, Zieh-Aufgaben zum Einzeichnen
-  let h=`<p><b>${esc(q.label)}</b></p>`+q.html;
-  if(q.kind==='widget')h+=WIDGETS[q.w].paper(q,sol);else
-  if(q.kind==='mc')h+=`<p class="popts">${q.options.map(o=>'☐ '+esc(o)).join('&emsp;')}</p>`;
-  else if(q.kind==='build')h+=`<p class="popts">${q.tiles.map(esc).join('&emsp;·&emsp;')}</p><div class="wline"></div>`;
-  else h+=`<p class="pans">Antwort: ______________ ${q.unit?esc(q.unit):''}</p>`;
-  return h.replace(/<span class="blob"[^>]*>●<\/span>/g,'<span class="pbox"></span>'); // Kästchen zum Hineinschreiben
-}
-function buildSheet(kind,n){
-  const title=`Mathe 5: Zahlen und Größen · ${kind==='check'?'Übungsarbeit':TOPICS.find(t=>t.id===kind).name.replace('-Insel','')}`;
-  const qs=kind==='check'?TOPICS.flatMap(t=>shuffle(Object.keys(SUB[t.id]).filter(k=>k!=='passt')).slice(0,2).map(s=>gen(t.id,s,true)))
-    :(()=>{const out=[],seen=new Set();for(let i=0;i<n*10&&out.length<n;i++){const q=gen(kind,null,true);if(!seen.has(q.html)){seen.add(q.html);out.push(q)}}return out})();
-  const rows=sol=>`<ol class="ptasks">${qs.map(q=>`<li>${paperRow(q,sol)}${sol?`<p class="psol"><b>Lösung:</b> ${md(q.kind==='mc'?q.correct+(q.sol&&q.sol!==q.correct?' · '+q.sol:''):q.sol)}</p>`:''}</li>`).join('')}</ol>`;
-  $('#out').innerHTML=`<div class="actions noprint" style="margin-top:16px"><button class="btn" id="pw">Arbeitsblatt drucken</button><button class="btn" id="pk">Lösungen drucken</button><button class="btn ghost" id="rx">Neu mischen</button></div>
-   <section class="sheet ws"><h2>${esc(title)}</h2><div class="meta"><span>Name: ________________________</span><span>Datum: ______________</span></div>${rows(false)}</section>
-   <section class="sheet key"><h2>Lösungen: ${esc(title)}</h2>${rows(true)}</section>`;
-  const pr=m=>{document.documentElement.dataset.print=m;window.print()};
-  $('#pw').onclick=()=>pr('sheet');$('#pk').onclick=()=>pr('key');
-  $('#rx').onclick=()=>buildSheet(kind,n);
-}
 home();
 </script>
 

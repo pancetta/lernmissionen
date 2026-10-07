@@ -198,7 +198,7 @@ function home(){
   const rg=save.round&&save.round.queue&&save.round.queue.length?save.round:null;
   const resume=rg?`<div class="grid" style="margin-bottom:12px"><button class="tile resume" id="rs"><h3>Weiterspielen</h3><span class="sub">${esc(rg.topic==='mix'?'Große Rundfahrt':(TOPICS.find(t=>t.id===rg.topic)||{}).name)}, Frage ${Math.min(rg.done+1,rg.total)} von ${rg.total}</span></button></div>`:'';
   $('#app').innerHTML=`
-  <div class="top"><a class="back" href="../../${PARENT?'#eltern':''}" style="text-decoration:none">Übersicht</a><span class="brand">${BRAND}</span>${themeBtn()}</div>
+  <div class="top"><a class="back" href="../../" style="text-decoration:none">Übersicht</a><span class="brand">${BRAND}</span>${themeBtn()}</div>
   <section class="hero"><h1>${hi} Wer ist he, wer ist she?</h1>
    <p>Pronomen sind kleine Wörter für Personen und Dinge: I, you, he, she, it, we, they. Jede Insel zeigt sie von einer anderen Seite. Eine Fahrt hat ${ROUND} Fragen.</p>
    <div class="rank"><span class="pill sun">${save.xp} Punkte</span><span class="pill">Rang: ${rank()}</span></div>${rankBar()}${hero}</section>
@@ -216,9 +216,7 @@ function home(){
   <p class="tip">${storageOK?'Dein Fortschritt wird automatisch auf diesem Gerät gespeichert.':'Speichern geht in diesem Browser gerade nicht (privates Fenster?). Dein Fortschritt geht beim Schließen verloren.'}</p>
   <p class="tip">Sterne gibt es für richtige Antworten beim ersten Versuch: 5 von 10 = 1 Stern, 7 von 10 = 2 Sterne, 9 von 10 = 3 Sterne.</p>
   <p class="tip">${VOICE?`<button class="theme" id="snd">${save.sound?'🔊 Ton an':'🔇 Ton aus'}</button> Hör-Fragen und Vorlesen nutzen die Stimme dieses Geräts.${/Firefox/.test(navigator.userAgent)&&/Macintosh/.test(navigator.userAgent)?' In Firefox auf dem Mac knackt die Stimme am Ende, in Safari oder Chrome klingt sie sauber.':''}${/iPhone/.test(navigator.userAgent)?' Kein Ton auf dem iPhone? Stummschalter ausschalten (Klingeln an) und lauter stellen.':''}`:'Auf diesem Gerät ist keine englische Stimme eingebaut, deshalb gibt es hier keine Hör-Fragen.'}</p>
-  ${PARENT?'<p class="tip"><button class="theme" id="pdf">Arbeitsblatt als PDF (für Eltern und Lehrkräfte)</button></p>':''}
   <p class="tip"><button class="theme" id="rst">Alles zurücksetzen</button></p>`;
-  if(PARENT)$('#pdf').onclick=sheetSetup;
   if(VOICE)$('#snd').onclick=()=>{save.sound=!save.sound;persist();say("Hello! Let's go!");home()};
   bindTheme();
   $('#nm').oninput=e=>{save.name=e.target.value.trim();persist()};
@@ -231,51 +229,6 @@ function home(){
 
 function memory(){memoryGame(MEMO(),memory,'Finde die Paare: wir gehört zu we, Lisa gehört zu she.')}
 
-/* ---------- Arbeitsblatt drucken / als PDF sichern ---------- */
-const SHEETS={luecken:'Lückentext',ersetzen:'Nomen ersetzen',fehler:'Richtig oder falsch',tabelle:'Pronomen-Tabelle',bauen:'Satzbaukasten'};
-function sheetSetup(){
-  G=null;
-  $('#app').innerHTML=`<div class="top noprint"><span class="brand">${BRAND}</span>${themeBtn()}</div>
-  <div class="qcard noprint"><h2>Arbeitsblatt als PDF</h2>
-   <p>Erstellt ein Arbeitsblatt und ein separates Lösungsblatt mit denselben Aufgaben. Jedes Blatt einzeln drucken oder im Druckdialog als PDF sichern (PC/Mac: „Als PDF speichern“; iPad/iPhone: im Druckdialog auf die Vorschau tippen, dann teilen oder sichern).</p>
-   <form class="form" id="sf">
-    <label>Aufgabe<select id="sk">${Object.entries(SHEETS).map(([k,v])=>`<option value="${k}">${v}</option>`).join('')}</select></label>
-    <label id="snw">Anzahl<select id="sn"><option>10</option><option>15</option><option>20</option></select></label>
-    <div class="actions" style="justify-content:flex-start"><button class="btn" type="submit">Arbeitsblatt erstellen</button><button class="btn ghost" type="button" id="hm">Zurück</button></div>
-   </form></div><div id="out"></div>`;
-  bindTheme();
-  $('#hm').onclick=home;
-  $('#sk').onchange=()=>{$('#snw').hidden=$('#sk').value==='tabelle'};
-  $('#sf').onsubmit=ev=>{ev.preventDefault();buildSheet($('#sk').value,+$('#sn').value)};
-}
-const ul=t=>esc(t).replace(/\*\*(.+?)\*\*/g,'<u>$1</u>'); // auf Papier unterstrichen statt fett
-function buildSheet(kind,n){
-  const title=`Englisch 5: Pronomen · ${SHEETS[kind]}`;
-  const uniq=(g)=>{const out=[],seen=new Set();for(let i=0;i<n*8&&out.length<n;i++){const q=g();if(!seen.has(q.prompt)){seen.add(q.prompt);out.push(q)}}return out};
-  let task,ws,key;
-  if(kind==='tabelle'){
-    task='Fülle die Tabelle aus. In jeder Zeile steht schon ein Wort.';
-    const give=PR.map(p=>p.s==='you'?'de':pick(['de','s'])); // bei you immer Deutsch vorgeben, sonst unklar: du oder ihr?
-    const tab=sol=>`<table class="ptab"><tr><th>Deutsch</th><th>Englisch</th></tr>${PR.map((p,i)=>`<tr>${['de','s'].map(c=>`<td>${sol||give[i]===c?esc(p[c]):''}</td>`).join('')}</tr>`).join('')}</table>`;
-    ws=tab(false);key=tab(true);
-  }else{
-    let rows;
-    if(kind==='luecken'){task='Setze das Pronomen für das unterstrichene Wort ein.';rows=uniq(()=>qGap(true)).map(q=>({q:q.prompt.replace('___','__________'),sol:q.sol}))}
-    else if(kind==='ersetzen'){task='Ersetze den unterstrichenen Teil durch ein Pronomen und schreibe den Satz neu.';rows=uniq(()=>qReplace(true)).map(q=>({q:q.prompt,sol:q.sol,line:true}))}
-    else if(kind==='fehler'){task='Passt das Pronomen zum unterstrichenen Wort? Kreuze an und verbessere die falschen Sätze.';rows=uniq(qFehler).map(q=>({q:q.prompt,ws:'☐ richtig    ☐ falsch',sol:q.correct==='Stimmt'?'richtig':'falsch: '+q.sol.replace(/^Richtig heißt es: /,'')}))}
-    else{task='Bring die Wörter in die richtige Reihenfolge und ersetze dabei den unterstrichenen Teil. Ein Wort passt nicht.';rows=uniq(qBuild).map(q=>({q:q.tiles.join('   /   '),hint:q.prompt,sol:q.sol,line:true}))}
-    const cell=r=>ul(r.q)+(r.hint?`<br><small>${ul(r.hint)}</small>`:'');
-    const table=sol=>`<table>${rows.map((r,i)=>`<tr><td class="n">${i+1}.</td>${r.ws?`<td class="w">${cell(r)}</td><td>${esc(sol?r.sol:r.ws)}</td>`
-      :`<td>${cell(r)}${sol?`<br><b>${esc(r.sol)}</b>`:r.line?'<div class="wline"></div>':''}</td>`}</tr>`).join('')}</table>`;
-    ws=table(false);key=table(true);
-  }
-  $('#out').innerHTML=`<div class="actions noprint" style="margin-top:16px"><button class="btn" id="pw">Arbeitsblatt drucken</button><button class="btn" id="pk">Lösungen drucken</button><button class="btn ghost" id="rx">Neu mischen</button></div>
-   <section class="sheet ws"><h2>${esc(title)}</h2><div class="meta"><span>Name: ________________________</span><span>Datum: ______________</span></div><p>${task}</p>${ws}</section>
-   <section class="sheet key"><h2>Lösungen: ${esc(title)}</h2>${key}</section>`;
-  const pr=m=>{document.documentElement.dataset.print=m;window.print()};
-  $('#pw').onclick=()=>pr('sheet');$('#pk').onclick=()=>pr('key');
-  $('#rx').onclick=()=>buildSheet(kind,n);
-}
 home();
 </script>
 
