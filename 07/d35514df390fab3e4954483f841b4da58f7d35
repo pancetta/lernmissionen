@@ -1,0 +1,24 @@
+mathe-5/zahlen-und-groessen/index.html
+  s_54261e8a499c43::t_5bbe2844977511 308-309
+  s_54261e8a499c43::t_791cbc1512baae 272-307,310-357,377,462,464,474
+gemeinsam/runde.js
+  s_54261e8a499c43::t_eb45df1f525467 6-7,42-43,61-63,84-85
+gemeinsam/stil.css
+  s_54261e8a499c43::t_791cbc1512baae 174-185
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "07d35514df390fab3e4954483f841b4da58f7d35",
+  "prompts": {},
+  "sessions": {
+    "s_54261e8a499c43": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "09d1c376-00da-4c7d-9fcd-87abfbea46f1",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Robert Speck <pancetta@users.noreply.github.com>"
+    }
+  }
+}
