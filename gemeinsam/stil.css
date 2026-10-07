@@ -171,6 +171,18 @@ details.mist summary{cursor:pointer}
 .cancheck{width:100%;border-collapse:collapse;text-align:left;margin:12px 0}
 .cancheck th,.cancheck td{border-bottom:1px solid var(--line);padding:6px 4px;vertical-align:middle}
 .cancheck .face{font-size:1.5rem;text-align:center}
+/* Mathe: Säulen ziehen, Pfeil setzen */
+.drawsvg,.marksvg{touch-action:none;cursor:pointer;user-select:none;-webkit-user-select:none;outline:none}
+.drawsvg.locked{cursor:default}
+.dbar .knob{fill:var(--coral)}
+.dbar:focus{outline:none}.dbar:focus .knob{stroke:var(--ink);stroke-width:2}
+.dbar.good .bar{fill:var(--good)}.dbar.bad .bar{fill:var(--bad)}.dbar.good .knob,.dbar.bad .knob{display:none}
+.chart .target{fill:none;stroke:var(--good);stroke-width:2.5;stroke-dasharray:5 3}
+.marksvg:focus-visible{outline:3px solid var(--sea);outline-offset:2px;border-radius:6px}
+.strahl .hit{fill:transparent}
+.mark path{fill:var(--coral)}.mark line{stroke:var(--coral);stroke-width:3}
+.mark.good path,.mark.right path{fill:var(--good)}.mark.good line,.mark.right line{stroke:var(--good)}
+.mark.bad path{fill:var(--bad)}.mark.bad line{stroke:var(--bad)}
 /* Mathe-Arbeitsblatt */
 .sheet .ptasks{padding-left:1.6em;margin:0}
 .sheet .ptasks li{break-inside:avoid;padding:10px 0;border-bottom:1px solid #ccc}

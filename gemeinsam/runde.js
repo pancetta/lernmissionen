@@ -3,7 +3,8 @@
    makeRound(topic) (eigene Fragenliste), redoQ(q) (Ersatzfrage nach einem Fehler), finishExtra(G), MISSED, TYPE_PH.
    Felder einer Frage: kind mc|type|num|money|build|listen, label, prompt (**fett**) oder html (fertiges HTML),
    options/correct (raw:true = Optionen sind HTML), accept (type), ans (num: Zahl, money: Cent), unit,
-   tiles/target/extra (build: extra = so viele Kärtchen bleiben übrig), sol, say, wk (Übungs-Schlüssel). */
+   tiles/target/extra (build: extra = so viele Kärtchen bleiben übrig), sol, say, wk (Übungs-Schlüssel).
+   kind widget: Aufgabe zum Ziehen/Setzen, die Seite liefert WIDGETS[q.w] = {html(q), init(q), empty(), check(q), done(q,ok)}. */
 const md=t=>esc(t).replace(/\*\*(.+?)\*\*/g,'<b>$1</b>');            // **fett** im Fragetext
 const plain=t=>t.replace(/\*\*/g,'');
 const parseNum=t=>{t=t.replace(/[\s.  ']/g,'');return /^\d+$/.test(t)?+t:null};
@@ -38,6 +39,8 @@ function show(){
     body=`<div class="line" id="bl" aria-label="Deine Reihenfolge"></div>
     <div class="chips" id="bc" role="group" aria-label="Kärtchen, mit Pfeiltasten wählen">${q.tiles.map(t=>`<button class="chip nav" type="button">${esc(t)}</button>`).join('')}</div>
     ${q.extra?'<p class="tip" style="margin:8px 0 0">Ein Wort bleibt übrig.</p>':''}<p style="margin:12px 0 0"><button class="btn" id="bp" type="button">Prüfen</button></p>`;
+  }else if(k==='widget'){
+    body=`${WIDGETS[q.w].html(q)}<p style="margin:12px 0 0"><button class="btn" id="bp" type="button">Prüfen</button></p>`;
   }else body=optsHtml(q);
   $('#app').innerHTML=`
   <div class="q-head"><button class="back" id="bk" aria-label="Zurück zur Seekarte">Ende</button>
@@ -55,6 +58,9 @@ function show(){
     $('#bp').onclick=()=>{if(G.answered)return;
       if(q.extra?!$('#bl').children.length:$('#bc').children.length){$('#fb').innerHTML=`<p class="tip">${q.extra?'Tippe die Wörter in der richtigen Reihenfolge an.':'Benutze alle Kärtchen.'}</p>`;return}
       answer(null,[...$('#bl').children].map(c=>c.textContent).join(' '))};
+  }else if(k==='widget'){
+    WIDGETS[q.w].init(q);
+    $('#bp').onclick=()=>{if(G.answered)return;const e=WIDGETS[q.w].empty();if(e){$('#fb').innerHTML=`<p class="tip">${e}</p>`;return}answer(null,null)};
   }else{
     if(k==='listen'){say(q.say);$('#hear').onclick=()=>say(q.say);$('#slow').onclick=()=>say(q.say,true)}
     document.querySelectorAll('.opt').forEach(b=>b.onclick=()=>answer(+b.dataset.i,null));
@@ -75,6 +81,8 @@ function answer(i,text){
   }else if(k==='build'){
     ok=text===q.target;
     document.querySelectorAll('.chip').forEach(b=>b.disabled=true);$('#bp').disabled=true;$('#bl').classList.add(ok?'right':'wrong');
+  }else if(k==='widget'){
+    ok=WIDGETS[q.w].check(q);WIDGETS[q.w].done(q,ok);$('#bp').disabled=true;
   }else{ok=q.options[i]===q.correct;markOpts(q,i)}
   if($('#ti')){$('#ti').disabled=true;document.querySelector('#tf button').disabled=true}
   G.answered=true;
