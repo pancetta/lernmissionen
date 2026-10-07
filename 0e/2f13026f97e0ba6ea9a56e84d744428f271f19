@@ -1,0 +1,29 @@
+mathe-5/zahlen-und-groessen/index.html
+  s_54261e8a499c43::t_bd29233d9ba79c 85,376-377,381
+  s_54261e8a499c43::t_a2878be9d9742d 66
+  s_54261e8a499c43::t_392040f9741953 1-65,68-70,72-74,76-84,86-375,378-380,382-399
+  s_54261e8a499c43::t_efa28f42d74ccb 67,71,75
+index.html
+  s_54261e8a499c43::t_392040f9741953 41-45
+README.md
+  s_54261e8a499c43::t_d3dbd77bc7030a 3,9
+gemeinsam/stil.css
+  s_54261e8a499c43::t_392040f9741953 147-179,181-182
+  s_54261e8a499c43::t_bd29233d9ba79c 180
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "0e2f13026f97e0ba6ea9a56e84d744428f271f19",
+  "prompts": {},
+  "sessions": {
+    "s_54261e8a499c43": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "09d1c376-00da-4c7d-9fcd-87abfbea46f1",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Robert Speck <pancetta@users.noreply.github.com>"
+    }
+  }
+}
