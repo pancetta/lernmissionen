@@ -11,15 +11,16 @@
 <link rel="icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAIAAACyr5FlAAAD/ElEQVR4nO3dzU0cQRCG4cXizJ6ckmNAToEDhMIBUrAcg1PitBn4YGm0wvsN89Nd9VXP+5zsC1vdeqdAWPLcPTy/nYBbvmUPAF/EAYk4IBEHJOKARByQiAMScUAiDkjEAYk4IBEHJOKARByQiAMScUAiDkjEAYk4IBEHJOKARByQiAMScUAiDkj32QO4uLw+Xf/1/PKeNYkPNgck4oBEHJCIAxJx3Hb5+Tt7hHzEAYk4JJYHccw5eB/E8YUj90EckIjja4ddHsSxyDH7IA5IxLHUAZcHcaxwtD6IY51D9UEckIhjteMsD+LY4iB9EAck4tjoCMuDOLYbvg/igEQcu4y9PIhjr4H7II4GRu2DOCARRxtDLg/iaGa8PogDEnG0NNjyII7GRuqDONobpg/igEQcXYyxPIijlwH6IA5IxNFR9eVBHH2V7oM4uqvbB3FAIo4IRZcHcQSp2AdxQCKOOOWWB3GEqtUHcUQr1AdxQCKOBFWWB3HkKNEHcUAijjT+y4M4Mpn3QRzJnPsgDkjEkc92eRCHBc8+iAMScbgwXB7EYcStD+KARBxerJYHcdjx6YM4HJn0QRyQiMOUw/IgDl/pfRAHJOKwlrs8iMNdYh/EUUBWH8QBiThqSFkexFFGfB/EAYk4KgleHsRRTGQfxFFPWB/EAYk4SopZHvcBn1HR+ddj9gj52ByQiAMScUAiDkjEAenu4fktewaYYnNAIg5ICb8Eu3z8if/QMZy//4j8uITNEXzCYcTfG99WIOXEwfJYK+XG2ByQ0uJgeSyXdVeZm4M+lki8Jb6tQEqOg+UxL/d+2ByQ8uNgeSjpN5Mfx8ngFgw53IlFHPDkEofDg+LD5DZc4oAhozhMHpd0PvdgFMfJ6V6yWN2AVxywYheH1aMTzO3sdnHAh2Mcbg9QDMNTO8ZxsryprjzPaxoHHPjG4fkw9WB7Ut84kM46DttHqiHnM1rHcfK+u/3MT+ceBxIViMP88drM/1wF4kCWGnH4P2RrlThRmf+HtMRtDqbG5kAK4oBEHJCIAxJxQCIOSMQBadfvOS6vT9Ofzy/vu4fp6HrUSaGZU0Zlc0AiDki74rjedTf3tgm1nyvOHKnl5vC86/mpKs4cZm8cn6I2OdXk0zz/pq04c4oGm8P2rmduueLM8br8QOpw12tnqDhzby3f1PT/2VLCXzVGxZnDNH6Nl2o/4KibP7rizDHav+Ntfjc2P3aTj6s4c4BeLwBc/u1z1V10+rJdv3jXmbvq+3bIlJ+wdl5xxZk7CXp1aMCNBy//JjybmES/V7b5jSf+2LiZeROT/JcOr7p6k2utOPMG+XHAFv9kD4k4IBEHJOKARByQiAMScUAiDkh/ARSxEB9azzFAAAAAAElFTkSuQmCC">
 <style>html{-webkit-text-size-adjust:100%;color-scheme:light}body{margin:0}[hidden]{display:none!important}</style>
 <title>Pronomen-Inseln</title>
-<link rel="stylesheet" href="../stil.css">
+<link rel="stylesheet" href="../../gemeinsam/stil.css">
 
 </head>
 <body>
 <div id="app"></div>
 <script src="../wortschatz.js"></script>
-<script src="../gemeinsam.js"></script>
+<script src="../../gemeinsam/gemeinsam.js"></script>
+<script src="../../gemeinsam/runde.js"></script>
 <script>
-const BRAND='Pronomen-Inseln';
+const BRAND='Pronomen-Inseln',MISSED='Diese Sätze üben wir weiter',TYPE_PH='Pronomen';
 const W=WORTSCHATZ.W;
 const TOPICS=[
  {id:'uebersetzen',name:'Ich-du-er-Insel',map:'ich, du, er',sub:'ich = I, wir = we, er = he …'},
@@ -39,8 +40,6 @@ const PR=[{s:'I',de:'ich'},{s:'you',de:'du'},{s:'he',de:'er'},{s:'she',de:'sie (
 const FORMS=[...new Set(PR.map(p=>p.s))];
 const deOf=w=>PR.filter(p=>p.s===w).map(p=>p.de).join(' / ');
 const cap=t=>t[0].toUpperCase()+t.slice(1);
-const md=t=>esc(t).replace(/\*\*(.+?)\*\*/g,'<b>$1</b>');          // **fett** im Fragetext
-const plain=t=>t.replace(/\*\*/g,'');
 
 // Personen: eigene Namen und Familienwörter aus der Wortliste. Neue Personen-Wörter hier mit he/she eintragen.
 const NAMES={he:['Tom','Ben','Max','Leo'],she:['Lisa','Emma','Mia','Anna']};
@@ -184,7 +183,6 @@ initRank();
 let storageOK=true;
 function persist(){try{localStorage.setItem('en5-pron-v2',JSON.stringify(save));storageOK=true}catch(e){storageOK=false}}
 try{localStorage.setItem('en5-test','1');localStorage.removeItem('en5-test')}catch(e){storageOK=false}
-function saveRound(){save.round=G&&G.queue.length?{topic:G.topic,total:G.total,done:G.done,first:G.first,xp:G.xp,streak:G.streak,best:G.best,missed:G.missed,queue:G.queue}:null;persist()}
 
 /* ---------- Ansichten ---------- */
 const cheat=`<details class="mist"><summary><b>Spickzettel: die Pronomen</b></summary>
@@ -192,7 +190,6 @@ const cheat=`<details class="mist"><summary><b>Spickzettel: die Pronomen</b></su
  ${[['ich','I','I am ten.'],['du','you','You are nice.'],['er','he','Tom → he'],['sie (eine Person)','she','Lisa → she'],['es','it','the dog → it'],['wir','we','Tom and I → we'],['ihr (mehrere)','you','you and Tom → you'],['sie (mehrere)','they','Tom and Lisa → they']]
    .map(([d,e,x])=>`<tr><td>${esc(d)}</td><td><b>${e}</b></td><td>${esc(x)}</td></tr>`).join('')}</table>
  <p class="tip">Tiere und Dinge sind <b>it</b>. <b>I</b> schreibt man immer groß. Nach I kommt <b>am</b>, nach he, she, it kommt <b>is</b>, nach we, you, they kommt <b>are</b>.</p></details>`;
-function mistList(list){return list.length?`<div class="mist"><h3>Diese Sätze üben wir weiter</h3><ul>${list.map(t=>`<li>${md(t)}</li>`).join('')}</ul></div>`:'<div class="mist"><h3>Keine Fehler. Wow!</h3></div>'}
 function home(){
   G=null;M=null;if(B){clearTimeout(B.timer);B=null}
   const hi=save.name?`Ahoi ${esc(save.name)}!`:'Ahoi!';
@@ -232,128 +229,6 @@ function home(){
   let armed=false;$('#rst').onclick=ev=>{if(!armed){armed=true;ev.target.textContent='Wirklich alles löschen? Nochmal tippen.';return}save={name:'',xp:0,best:{},weak:{},round:null,sound:save.sound,blitz:0,memo:0};persist();home()};
 }
 
-/* ---------- Runde ---------- */
-function start(topic){
-  const qs=[],seen=new Set();
-  for(let i=0;i<60&&qs.length<ROUND;i++){const q=makeQ(topic),k=q.prompt+'|'+q.sol;if(!seen.has(k)){seen.add(k);qs.push(q)}}
-  G={topic,queue:qs,total:qs.length,done:0,first:0,xp:0,streak:0,best:0,missed:[],answered:false};
-  show();
-}
-const optsHtml=q=>`<div class="opts" role="group" aria-label="Antworten, mit Pfeiltasten wählen">${q.options.map((o,i)=>`<button class="opt nav" data-i="${i}">${md(o)}</button>`).join('')}</div>`;
-function markOpts(q,i){document.querySelectorAll('.opt').forEach((b,k)=>{b.disabled=true;if(q.options[k]===q.correct)b.classList.add('right');else if(k===i)b.classList.add('wrong')})}
-function show(){
-  if(!G.queue.length)return finish();
-  let q=G.queue[0];
-  if(q.kind==='listen'&&!canSpeak()){q=G.queue[0]=Object.assign(qReplace(),{redo:q.redo})} // Ton inzwischen aus
-  saveRound();
-  const pct=Math.round(G.done/G.total*100);
-  let prompt=q.kind==='listen'?`<button class="btn" id="hear" type="button">🔊 Anhören</button> <button class="btn ghost small" id="slow" type="button">🐢 langsam</button>`:md(q.prompt),body;
-  if(q.kind==='type'){
-    body=`<form class="typebox" id="tf" autocomplete="off"><input type="text" id="ti" aria-label="Pronomen" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="Pronomen"><button class="btn" type="submit">Prüfen</button></form>`;
-  }else if(q.kind==='build'){
-    body=`<div class="line" id="bl" aria-label="Dein Satz"></div>
-    <div class="chips" id="bc" role="group" aria-label="Wörter, mit Pfeiltasten wählen">${q.tiles.map(t=>`<button class="chip nav" type="button">${esc(t)}</button>`).join('')}</div>
-    <p class="tip" style="margin:8px 0 0">Ein Wort bleibt übrig.</p><p style="margin:12px 0 0"><button class="btn" id="bp" type="button">Prüfen</button></p>`;
-  }else body=optsHtml(q);
-  $('#app').innerHTML=`
-  <div class="q-head"><button class="back" id="bk" aria-label="Zurück zur Seekarte">Ende</button>
-   <div class="track" role="progressbar" aria-valuenow="${G.done}" aria-valuemax="${G.total}"><i style="width:${pct}%"></i><span style="position:absolute;left:calc(${pct}% );top:0">${boat.replace('<svg','<svg style="position:absolute;top:-14px;left:-12px;width:34px;color:var(--ink)"')}</span></div>
-   <span class="pill streak">${G.streak>=2?'Serie '+G.streak:'Serie 0'}</span></div>
-  <div class="qcard"><div class="kind ${q.redo?'redo':''}">${q.redo?'Noch einmal üben · ':''}${q.label}</div><div class="prompt sm">${prompt}</div>${body}<div id="fb"></div></div>`;
-  G.answered=false;
-  $('#bk').onclick=home;
-  if(q.kind==='type'){
-    $('#ti').focus();
-    $('#tf').onsubmit=ev=>{ev.preventDefault();if(!G.answered)answer(null,$('#ti').value)};
-  }else if(q.kind==='build'){
-    document.querySelectorAll('.chip').forEach(b=>b.onclick=()=>{if(G.answered)return;const from=b.parentNode;(from.id==='bc'?$('#bl'):$('#bc')).appendChild(b);(from.querySelector('.chip')||$('#bp')).focus()});
-    $('#bp').onclick=()=>{if(G.answered)return;if(!$('#bl').children.length){$('#fb').innerHTML='<p class="tip">Tippe die Wörter in der richtigen Reihenfolge an.</p>';return}answer(null,[...$('#bl').children].map(c=>c.textContent).join(' '))};
-  }else{
-    if(q.kind==='listen'){say(q.say);$('#hear').onclick=()=>say(q.say);$('#slow').onclick=()=>say(q.say,true)}
-    document.querySelectorAll('.opt').forEach(b=>b.onclick=()=>answer(+b.dataset.i,null));
-  }
-}
-function answer(i,text){
-  if(G.answered)return;
-  const q=G.queue[0];let ok,caseOnly=false;
-  if(q.kind==='type'){
-    const t=norm(text||'');if(!t){$('#ti').focus();return}
-    const alts=q.accept.map(norm);ok=alts.includes(t); // Groß- und Kleinschreibung zählt (I, Satzanfang)
-    caseOnly=!ok&&alts.some(a=>a.toLowerCase()===t.toLowerCase());
-    $('#ti').disabled=true;document.querySelector('#tf button').disabled=true;
-  }else if(q.kind==='build'){
-    ok=text===q.target;
-    document.querySelectorAll('.chip').forEach(b=>b.disabled=true);$('#bp').disabled=true;$('#bl').classList.add(ok?'right':'wrong');
-  }else{ok=q.options[i]===q.correct;markOpts(q,i)}
-  G.answered=true;
-  if(!q.redo){
-    if(ok){G.first++;G.streak++;G.best=Math.max(G.best,G.streak);const gain=10+Math.min(G.streak-1,5);G.xp+=gain;save.xp+=gain;if(save.weak[q.wk])save.weak[q.wk]--}
-    else{G.streak=0;save.weak[q.wk]=(save.weak[q.wk]||0)+1;G.missed.push(q.sol.replace(/^Richtig heißt es: /,''));G.queue.push(Object.assign({},q,{redo:true,kind:q.kind==='type'?'mc':q.kind}))}
-    G.done++;
-  }else if(!ok){G.queue.push(Object.assign({},q))}
-  persist();
-  $('#fb').innerHTML=`<div class="fb ${ok?'ok':'no'}" role="status"><strong>${ok?pick(CHEER):caseOnly?'Fast! Achte auf Groß- und Kleinschreibung.':pick(OOPS)}</strong>
-   <span class="ans">${ok?md(q.sol):(q.sol.startsWith('Richtig heißt es')?'':'Richtig ist: ')+md(q.sol)}</span>
-   <div class="row">${canSpeak()?'<button class="btn ghost small" id="say" type="button" style="margin-right:auto">🔊 Anhören</button>':''}<button class="btn" id="nx">${G.queue.length>1?'Weiter':'Fertig'}</button></div></div>`;
-  if($('#say'))$('#say').onclick=()=>say(q.say);
-  $('#nx').focus();
-  $('#nx').onclick=()=>{G.queue.shift();show()};
-  document.querySelector('.streak').textContent=G.streak>=2?'Serie '+G.streak:'Serie 0';
-}
-function finish(){
-  const n=G.first,need=p=>Math.ceil(G.total*p),stars=n>=need(.9)?3:n>=need(.7)?2:n>=need(.5)?1:0;
-  const tk=G.topic,before=save.best[tk]||0;if(stars>before)save.best[tk]=stars;
-  const bonus=stars*10;G.xp+=bonus;save.xp+=bonus;save.round=null;persist();
-  const msg=stars===3?'Insel erobert. Das war Spitze!':stars===2?'Sehr gut! Eine Runde noch für den dritten Stern?':stars===1?'Gut gemacht. Mit etwas Übung klappen mehr Sterne.':'Das war ein Anfang. Probiere es noch einmal, es wird jedes Mal leichter.';
-  const treasure=stars===3&&before<3&&tk!=='mix'?`<p class="treasure pop"><svg viewBox="0 0 18 16" width="40" aria-hidden="true">${chest(0,0)}</svg> Du hast den Schatz der ${esc(TOPICS.find(t=>t.id===tk).name)} gefunden!</p>`:'';
-  $('#app').innerHTML=`${topBar()}
-  <div class="qcard end"><h2>${esc(msg)}</h2>
-   <div class="bigstars" aria-label="${stars} von 3 Sternen">${[1,2,3].map(i=>i<=stars?`<b><span class="pop" style="animation-delay:${i*.25}s">★</span></b>`:'★').join('')}</div>
-   ${treasure}${rankUp()}
-   <div class="stats"><span class="pill">${n} von ${G.total} gleich richtig</span><span class="pill">Beste Serie ${G.best}</span><span class="pill sun">+${G.xp} Punkte</span></div>
-   ${mistList([...new Set(G.missed)])}
-   <div class="actions"><button class="btn" id="again">Nochmal spielen</button><button class="btn ghost" id="hm">Zur Seekarte</button></div>
-   <p class="tip">Rang: ${rank()} · ${save.xp} Punkte insgesamt</p></div>`;
-  bindTheme();
-  $('#again').onclick=()=>start(tk);$('#hm').onclick=home;
-}
-
-/* ---------- Blitzrunde: 60 Sekunden, nur Antippen ---------- */
-function blitz(){
-  G=null;M=null;
-  B={end:Date.now()+BLITZ*1000,ok:0,missed:[],last:''};
-  B.timer=setTimeout(blitzEnd,BLITZ*1000);
-  blitzQ();
-}
-function blitzQ(){
-  if(!B)return;
-  let q;do q=quickQ();while(q.prompt===B.last);B.last=q.prompt;
-  const left=Math.max(0,B.end-Date.now()),busy={v:false};
-  $('#app').innerHTML=`<div class="q-head"><button class="back" id="bk" aria-label="Blitzrunde beenden">Ende</button>
-   <div class="track timer" role="timer" aria-label="Restzeit"><i id="tm" style="width:${left/BLITZ/10}%;transition:width ${left}ms linear"></i></div>
-   <span class="pill sun" id="bs">${B.ok} richtig</span></div>
-  <div class="qcard"><div class="kind">Blitzrunde · ${q.label}</div><div class="prompt sm">${md(q.prompt)}</div>${optsHtml(q)}</div>`;
-  requestAnimationFrame(()=>requestAnimationFrame(()=>{const t=$('#tm');if(t)t.style.width='0%'}));
-  $('#bk').onclick=home;
-  document.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{
-    if(busy.v||!B)return;busy.v=true;
-    const i=+b.dataset.i,ok=q.options[i]===q.correct;markOpts(q,i);
-    if(ok){B.ok++;save.xp+=3;if(save.weak[q.wk])save.weak[q.wk]--}else{const m=q.sol.replace(/^Richtig heißt es: /,'');if(!B.missed.includes(m))B.missed.push(m);save.weak[q.wk]=(save.weak[q.wk]||0)+1}
-    persist();$('#bs').textContent=B.ok+' richtig';
-    setTimeout(()=>{if(B&&Date.now()<B.end)blitzQ()},ok?450:1300);
-  });
-}
-function blitzEnd(){
-  if(!B)return;const r=B;B=null;
-  const rec=r.ok>0&&r.ok>(save.blitz||0);if(rec)save.blitz=r.ok;persist();
-  $('#app').innerHTML=`${topBar()}
-  <div class="qcard end"><h2>${rec?'Neuer Rekord!':'Zeit ist um!'}</h2>
-   <div class="bignum pop">${r.ok}</div><p>richtige Antworten in ${BLITZ} Sekunden</p>${rankUp()}
-   <div class="stats"><span class="pill">Rekord: ${save.blitz||0}</span><span class="pill sun">+${r.ok*3} Punkte</span></div>
-   ${mistList(r.missed)}
-   <div class="actions"><button class="btn" id="again">Nochmal</button><button class="btn ghost" id="hm">Zur Seekarte</button></div></div>`;
-  bindTheme();$('#again').onclick=blitz;$('#hm').onclick=home;$('#again').focus();
-}
 function memory(){memoryGame(MEMO(),memory,'Finde die Paare: wir gehört zu we, Lisa gehört zu she.')}
 
 /* ---------- Arbeitsblatt drucken / als PDF sichern ---------- */
