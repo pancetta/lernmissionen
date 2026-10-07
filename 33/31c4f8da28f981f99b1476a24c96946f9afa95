@@ -1,0 +1,23 @@
+englisch-5/pronomen/index.html
+  s_54261e8a499c43::t_6e59d3f46ad5c1 14,20-21,23
+gemeinsam/runde.js
+  s_54261e8a499c43::t_2b97571ae0a2b1 1-152
+englisch-5/vokabeln/index.html
+  s_54261e8a499c43::t_42525224729a60 14,21
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "3331c4f8da28f981f99b1476a24c96946f9afa95",
+  "prompts": {},
+  "sessions": {
+    "s_54261e8a499c43": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "09d1c376-00da-4c7d-9fcd-87abfbea46f1",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Robert Speck <pancetta@users.noreply.github.com>"
+    }
+  }
+}
