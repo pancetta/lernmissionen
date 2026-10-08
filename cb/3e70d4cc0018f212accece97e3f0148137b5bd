@@ -1,0 +1,22 @@
+deutsch-3/woerter-und-saetze/index.html
+  s_54261e8a499c43::t_dd516be5d40f76 29,81-91,191-194,197-209
+  s_54261e8a499c43::t_78c7edabc6d82d 44,111,114,129
+tests/deutsch.js
+  s_54261e8a499c43::t_78c7edabc6d82d 21,51-58,60-61
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "cb3e70d4cc0018f212accece97e3f0148137b5bd",
+  "prompts": {},
+  "sessions": {
+    "s_54261e8a499c43": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "09d1c376-00da-4c7d-9fcd-87abfbea46f1",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Robert Speck <pancetta@users.noreply.github.com>"
+    }
+  }
+}
