@@ -26,7 +26,7 @@ const TOPICS=[
  {id:'satz',name:'Satzzeichen-Insel',map:'Satzzeichen',sub:'Punkt, Fragezeichen, groß am Anfang',can:'Satzgrenzen erkennen und Satzzeichen setzen'},
  {id:'abc',name:'ABC-Insel',map:'ABC',sub:'Buchstaben und Wörter ordnen',can:'Wörter nach dem Abc sortieren'},
  {id:'laute',name:'Laute-Insel',map:'Laute',sub:'Selbstlaute, Umlaute, Zwielaute',can:'Selbstlaute, Umlaute und Zwielaute kennen'},
- {id:'ie',name:'ie-oder-i-Insel',map:'ie oder i',sub:'Biene oder Kind?',can:'ie oder i richtig schreiben'}
+ {id:'ie',name:'ie-oder-i-Insel',map:'ie oder i',sub:'Bie-ne oder Kis-te? Offene und geschlossene Silben',can:'ie oder i richtig schreiben'}
 ];
 const MAP=[[60,42],[160,42],[260,42],[260,118],[160,118],[60,118]]; // Seekarte, Reihenfolge wie TOPICS
 
@@ -41,7 +41,7 @@ const NOMEN=[
  ['Schaf','das','Schafe','Tier','🐑'],['Frosch','der','Frösche','Tier','🐸'],['Schnecke','die','Schnecken','Tier','🐌'],['Fisch','der','Fische','Tier','🐟'],
  ['Hase','der','Hasen','Tier','🐇'],['Löwe','der','Löwen','Tier','🦁'],['Biene','die','Bienen','Tier','🐝'],['Igel','der','Igel','Tier','🦔'],
  ['Baum','der','Bäume','Pflanze','🌳'],['Blume','die','Blumen','Pflanze','💐'],['Rose','die','Rosen','Pflanze','🌹'],['Tulpe','die','Tulpen','Pflanze','🌷'],
- ['Busch','der','Büsche','Pflanze','🌿'],['Tanne','die','Tannen','Pflanze','🌲'],['Sonnenblume','die','Sonnenblumen','Pflanze','🌻'],
+ ['Busch','der','Büsche','Pflanze',''],['Tanne','die','Tannen','Pflanze','🌲'],['Sonnenblume','die','Sonnenblumen','Pflanze','🌻'],
  ['Tisch','der','Tische','Ding',''],['Stuhl','der','Stühle','Ding','🪑'],['Buch','das','Bücher','Ding','📖'],['Heft','das','Hefte','Ding',''],
  ['Stift','der','Stifte','Ding','✏️'],['Ball','der','Bälle','Ding','⚽'],['Haus','das','Häuser','Ding','🏠'],['Auto','das','Autos','Ding','🚗'],
  ['Schuh','der','Schuhe','Ding','👟'],['Jacke','die','Jacken','Ding','🧥'],['Tasche','die','Taschen','Ding','👜'],['Lampe','die','Lampen','Ding','💡'],
@@ -78,12 +78,17 @@ const ZWIE=[['🪣','Eimer'],['🐭','Maus'],['🌽','Mais'],['🪜','Leiter'],[
 const ZWIELAUTE=['ai','au','äu','ei','eu'];
 // Silben: Wörter mit Trennstrichen
 const SILBEN=['Hund','Ka-tze','Ba-na-ne','Schu-le','Te-le-fon','Scho-ko-la-de','Kro-ko-dil','Ap-fel','E-le-fant','Gi-raf-fe','Fahr-rad','Re-gen-schirm','Ge-burts-tag','Ku-gel-schrei-ber','Was-ser','Blu-me','Fuß-ball','Spiel-platz','Son-ne','Ta-schen-lam-pe','Pau-se','Hams-ter','Ma-ri-en-kä-fer','Schmet-ter-ling','Ei','Brot'];
-// ie oder i: [Wort, Emoji, Art] Art: 'ie' (langes i mit ie), 'i' (kurzes i), 'merk' (langes i ohne e, Merkwort)
-const IE=[['Biene','🐝','ie'],['Brief','✉️','ie'],['Ziege','🐐','ie'],['Wiese','','ie'],['Spiegel','🪞','ie'],['Tier','','ie'],['Riese','','ie'],['Papier','📄','ie'],
- ['Stiefel','👢','ie'],['Knie','','ie'],['Ziel','🏁','ie'],['Fliege','🪰','ie'],['Dieb','','ie'],['lieb','','ie'],['viel','','ie'],['schief','','ie'],['fliegen','','ie'],['spielen','','ie'],
- ['Kind','🧒','i'],['Fisch','🐟','i'],['Tisch','','i'],['Kiste','📦','i'],['Ring','💍','i'],['Wind','🌬️','i'],['Bild','🖼️','i'],['Milch','🥛','i'],['Licht','💡','i'],
- ['Zimmer','','i'],['Himmel','','i'],['Kirsche','🍒','i'],['Zitrone','🍋','i'],['Brille','👓','i'],['Schiff','🚢','i'],['bitte','','i'],['mit','','i'],['nicht','','i'],
- ['Tiger','🐯','merk'],['Igel','🦔','merk'],['Krokodil','🐊','merk'],['Kino','🎬','merk'],['wir','','merk'],['mir','','merk'],['dir','','merk']];
+// ie oder i nach der Silbenmethode: [Wort in Silben, Emoji, Art]
+// 'ie': 1. Silbe offen (endet mit Selbstlaut), i lang  ·  'i': 1. Silbe geschlossen (endet mit Mitlaut), i kurz
+// 'merk': i lang in offener Silbe, aber ohne e (Merkwort). Nur zweisilbige Wörter, damit die Silbenregel sichtbar ist.
+const IE=[['Bie-ne','🐝','ie'],['Zie-ge','🐐','ie'],['Wie-se','','ie'],['Spie-gel','🪞','ie'],['Rie-se','','ie'],['Stie-fel','👢','ie'],['Flie-ge','🪰','ie'],
+ ['Zwie-bel','🧅','ie'],['Brie-fe','','ie'],['Tie-re','','ie'],['Lie-der','','ie'],['sie-ben','','ie'],['flie-gen','','ie'],['spie-len','','ie'],['lie-gen','','ie'],
+ ['rie-chen','','ie'],['lie-ben','','ie'],['schie-ben','','ie'],
+ ['Kis-te','📦','i'],['Lis-te','','i'],['Hil-fe','','i'],['Stif-te','','i'],['Spin-ne','🕷️','i'],['Pin-sel','🖌️','i'],['Bril-le','👓','i'],['Kir-sche','','i'],
+ ['Him-mel','','i'],['Zim-mer','','i'],['Kin-der','','i'],['Bil-der','','i'],['Win-ter','','i'],['Mit-te','','i'],['Bir-ne','','i'],['Kis-sen','','i'],
+ ['trin-ken','','i'],['win-ken','','i'],['bit-te','','i'],
+ ['Ti-ger','🐯','merk'],['I-gel','🦔','merk'],['Ki-no','','merk'],['Bi-ber','','merk']];
+const IE_MERK1=['mir','dir','wir']; // kurze Merkwörter mit langem i ohne e
 
 /* ---------- Hilfen ---------- */
 const R=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
@@ -103,10 +108,10 @@ const NO={
  artikel(){const n=pick(NOMEN);return mc({label:'Welcher Artikel passt?',html:`<p class="big">${emo(n[4])}${GAP} ${n[0]}</p>`,options:['der','die','das'],correct:n[1],sol:`${n[1]} ${n[0]}`,say:`${n[1]} ${n[0]}`})},
  unbestimmt(){const n=pick(NOMEN);return mc({label:'Welcher unbestimmte Artikel passt?',html:`<p class="big">${emo(n[4])}${GAP} ${n[0]}</p>`,options:['ein','eine'],correct:ein(n[1]),sol:`${ein(n[1])} ${n[0]} (${n[1]} ${n[0]})`,say:`${ein(n[1])} ${n[0]}`})},
  welcherArt(){const a=pick(['der','die','das','ein','eine']),b=['der','die','das'].includes(a);
-  return mc({label:'Bestimmt oder unbestimmt?',html:`<p>Ist <b>${a}</b> ein bestimmter oder ein unbestimmter Artikel?</p>`,options:['bestimmter Artikel','unbestimmter Artikel'],correct:b?'bestimmter Artikel':'unbestimmter Artikel',sol:'der, die, das sind bestimmte Artikel. ein, eine sind unbestimmte Artikel.'})},
+  return mc({label:'Bestimmt oder unbestimmt?',html:`<p class="big">„${a}“</p><p>Ist dieser Artikel bestimmt oder unbestimmt?</p>`,options:['bestimmter Artikel','unbestimmter Artikel'],correct:b?'bestimmter Artikel':'unbestimmter Artikel',sol:'der, die, das sind bestimmte Artikel. ein, eine sind unbestimmte Artikel.'})},
  mehrzahl(){const n=pick(NOMEN.filter(n=>n[2]!==n[0])),pl=n[2].split('|');return {kind:'type',label:'Schreibe die Mehrzahl',html:`<p class="big">${emo(n[4])}${n[1]} ${n[0]} → die ${GAP}</p>`,accept:pl,correct:pl[0],sol:`${n[1]} ${n[0]} – die ${pl[0]}`,say:`die ${pl[0]}`}},
  einzahl(){const n=pick(NOMEN.filter(n=>n[2]!==n[0])),pl=n[2].split('|')[0]; // andere Antworten: Einzahl-Wörter, die nicht auch Mehrzahl sein können
-  return mc({label:'Einzahl oder Mehrzahl?',html:`<p>Welches Wort steht in der <b>Mehrzahl</b>?</p>`,options:shuffle([pl].concat(shuffle(NOMEN.filter(x=>x!==n&&x[2]!==x[0])).slice(0,3).map(x=>x[0]))),correct:pl,sol:`die ${pl} ist Mehrzahl, die Einzahl heißt ${n[1]} ${n[0]}.`})},
+  return mc({label:'Einzahl oder Mehrzahl?',html:`<p>Welches Wort steht in der <b>Mehrzahl</b>?</p>`,options:shuffle([pl].concat(shuffle(NOMEN.filter(x=>x!==n&&x[2]!==x[0])).slice(0,3).map(x=>x[0]))),correct:pl,sol:`„die ${pl}“ ist die Mehrzahl. Die Einzahl heißt „${n[1]} ${n[0]}“.`})},
  gruppe(){const n=pick(NOMEN);return mc({label:'Wozu gehört das Nomen?',html:`<p class="big">${emo(n[4])}${n[1]} ${n[0]}</p>`,options:['Mensch','Tier','Pflanze','Ding'],correct:n[3],sol:`${n[1]} ${n[0]}: ${n[3]}`,say:`${n[1]} ${n[0]}`})}
 };
 function uniqStr(a){return [...new Set(a)]}
@@ -121,7 +126,7 @@ const ZU={
   return mc({label:'Welcher Artikel passt?',html:`<p class="big">${GAP} ${z[4]}</p><p class="tip">Tipp: Der Artikel richtet sich nach dem letzten Wort.</p>`,options:['der','die','das'],correct:z[3],sol:`${z[3]} ${z[4]}, denn es heißt ${z[3]} ${z[2]}.`,say:`${z[3]} ${z[4]}`})},
  zerlegen(){const z=pick(ZUS),first=Math.random()<.5,ans=first?z[0]:z[2];
   const pool=uniqStr(ZUS.flatMap(x=>[x[0],x[2]])).filter(w=>w!==z[0]&&w!==z[2]);
-  return mc({label:'Welche Nomen stecken darin?',html:`<p class="big">${z[3]} ${z[4]} = ${first?`${GAP} + ${z[3]} ${z[2]}`:`${z[1]} ${z[0]} + ${GAP}`}</p>`,options:shuffle([ans].concat(shuffle(pool).slice(0,3))),correct:ans,sol:`${z[3]} ${z[4]} = ${z[1]} ${z[0]} + ${z[3]} ${z[2]}`})},
+  return mc({label:'Welches Nomen fehlt?',html:`<p class="big">${z[3]} ${z[4]} = ${first?`${GAP} + ${z[3]} ${z[2]}`:`${z[1]} ${z[0]} + ${GAP}`}</p>`,options:shuffle([ans].concat(shuffle(pool).slice(0,3))),correct:ans,sol:`${z[3]} ${z[4]} = ${z[1]} ${z[0]} + ${z[3]} ${z[2]}`})},
  finden(){const z=pick(ZUS),simple=shuffle(NOMEN.filter(n=>!ZUS.some(x=>x[4]===n[0])&&n[0].length<=6)).slice(0,3).map(n=>n[0]);
   return mc({label:'Welches Nomen ist zusammengesetzt?',html:'<p>Ein zusammengesetztes Nomen besteht aus zwei Nomen.</p>',options:shuffle([z[4]].concat(simple)),correct:z[4],sol:`${z[4]} = ${z[0]} + ${z[2]}`})}
 };
@@ -183,17 +188,25 @@ const LA={
 };
 
 /* ---------- ie-oder-i-Insel ---------- */
-const lueckeIE=w=>{const i=w.search(/ie|i/i),n=w.slice(i,i+2).toLowerCase()==='ie'?2:1;return {i,n,shown:w.slice(0,i)+GAP+w.slice(i+n)}};
+const ieWord=x=>x[0].replace(/-/g,''),ieFirst=x=>x[0].split('-')[0],ieOpen=x=>/[aeiouäöü]$/i.test(ieFirst(x));
+const ieWhy=x=>x[2]==='merk'?`${x[0]}: Die erste Silbe ist offen, das i klingt lang – aber ohne e! Das ist ein Merkwort.`
+  :x[2]==='ie'?`${x[0]}: Die erste Silbe ist offen, das i klingt lang. Deshalb ie.`:`${x[0]}: Die erste Silbe ist geschlossen, das i klingt kurz. Deshalb i.`;
+const lueckeIE=w=>{const i=w.search(/ie|i/i),n=w.slice(i,i+2).toLowerCase()==='ie'?2:1;return w.slice(0,i)+GAP+w.slice(i+n)};
 const IEW=IE.filter(x=>x[2]!=='merk');
 const IE_={
- einsetzen(){const x=pick(IEW),{shown}=lueckeIE(x[0]),up=/^[IJ]/.test(x[0]);
-  return mc({label:'ie oder i?',html:`<p class="big">${emo(x[1])}${shown}</p>`,options:up?['I','Ie']:['i','ie'],correct:x[2]==='ie'?(up?'Ie':'ie'):(up?'I':'i'),sol:`${x[0]} – ${x[2]==='ie'?'das i ist lang: ie':'das i ist kurz: i'}`,say:x[0]})},
- lang(){const x=pick(IE);return mc({label:'Wird das i lang oder kurz gesprochen?',html:`<p class="big">${emo(x[1])}${x[0]}</p>`,options:['lang','kurz'],correct:x[2]==='i'?'kurz':'lang',sol:x[2]==='merk'?`${x[0]}: lang – aber ohne e! Das ist ein Merkwort.`:`${x[0]}: ${x[2]==='ie'?'lang, deshalb ie':'kurz, deshalb nur i'}`,say:x[0]})},
- hoeren(){const x=pick(IE);return {kind:'listen',label:'Hör genau hin: Ist das i lang oder kurz?',options:['lang','kurz'],correct:x[2]==='i'?'kurz':'lang',sol:`${x[0]}: ${x[2]==='i'?'kurz':'lang'}${x[2]==='merk'?' (Merkwort ohne e)':''}`,say:x[0]}},
- schreiben(){ // nur Bilder mit eindeutigem Namen (📄 könnte auch „Blatt“ heißen)
-  const x=pick(IE.filter(x=>['Biene','Spiegel','Stiefel','Fliege','Fisch','Ring','Milch','Kirsche','Zitrone','Brille','Schiff'].includes(x[0])));return {kind:'type',label:'Schreibe das Wort richtig',html:`<p class="big">${emo(x[1])}</p><p class="tip">Nomen schreibt man groß. Denk an ie oder i!</p>`,accept:[x[0]],correct:x[0],sol:x[0],say:x[0]}},
- merk(){const m=pick(IE.filter(x=>x[2]==='merk')),o=shuffle(IEW).slice(0,3).map(x=>x[0]);
-  return mc({label:'Welches Wort ist ein Merkwort?',html:'<p>Bei Merkwörtern hört man ein langes i, schreibt aber kein e.</p>',options:shuffle([m[0]].concat(o)),correct:m[0],sol:`${m[0]} ist ein Merkwort: langes i ohne e.`,say:m[0]})}
+ einsetzen(){const x=pick(IEW),w=ieWord(x);
+  return mc({label:'ie oder i?',html:`<p class="big">${emo(x[1])}${lueckeIE(w)}</p><p class="tip">Sprich das Wort in Silben. Endet die erste Silbe mit dem i, schreibst du meistens ie.</p>`,options:['i','ie'],correct:x[2],sol:ieWhy(x),say:w})},
+ offen(){const x=pick(IE);
+  return mc({label:'Ist die erste Silbe offen oder geschlossen?',html:`<p class="big">${x[0]}</p><p class="tip">Offen: Die Silbe endet mit einem Selbstlaut. Geschlossen: Sie endet mit einem Mitlaut.</p>`,options:['offen','geschlossen'],correct:ieOpen(x)?'offen':'geschlossen',sol:ieWhy(x),say:ieWord(x)})},
+ tabelle(){const o=pick(IE.filter(x=>x[2]==='ie')),c=shuffle(IE.filter(x=>x[2]==='i')).slice(0,3);
+  return mc({label:'Welches Wort hat eine offene erste Silbe?',html:'<p>Sprich die Wörter in Silben.</p>',options:shuffle([o].concat(c).map(x=>x[0])),correct:o[0],sol:ieWhy(o)})},
+ lang(){const x=pick(IE),w=ieWord(x);return mc({label:'Wird das i lang oder kurz gesprochen?',html:`<p class="big">${emo(x[1])}${w}</p>`,options:['lang','kurz'],correct:x[2]==='i'?'kurz':'lang',sol:ieWhy(x),say:w})},
+ hoeren(){const x=pick(IE),w=ieWord(x);return {kind:'listen',label:'Hör genau hin: Ist das i lang oder kurz?',options:['lang','kurz'],correct:x[2]==='i'?'kurz':'lang',sol:ieWhy(x),say:w}},
+ schreiben(){ // nur Bilder mit eindeutigem Namen
+  const x=pick(IE.filter(x=>['Bie-ne','Zie-ge','Spie-gel','Stie-fel','Flie-ge','Zwie-bel','Spin-ne','Pin-sel','Bril-le'].includes(x[0]))),w=ieWord(x);
+  return {kind:'type',label:'Schreibe das Wort richtig',html:`<p class="big">${emo(x[1])}</p><p class="tip">Nomen schreibt man groß. Sprich in Silben: ie oder i?</p>`,accept:[w],correct:w,sol:ieWhy(x),say:w}},
+ merk(){const m=Math.random()<.7?ieWord(pick(IE.filter(x=>x[2]==='merk'))):pick(IE_MERK1),o=shuffle(IEW).slice(0,3).map(ieWord);
+  return mc({label:'Welches Wort ist ein Merkwort?',html:'<p>Bei Merkwörtern hört man ein langes i, schreibt aber kein e.</p>',options:shuffle([m].concat(o)),correct:m,sol:`${m} ist ein Merkwort: langes i ohne e.`,say:m})}
 };
 
 /* ---------- Auswahl der Fragen ---------- */

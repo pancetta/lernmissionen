@@ -18,7 +18,7 @@ const fill=(t,x)=>word(t).replace('?',x);
 each('nomen','erkennen',q=>q.options.filter(o=>NOMEN.some(n=>UP(n[0])===o)).length===1&&NOMEN.some(n=>UP(n[0])===q.correct)||'nicht genau ein Nomen');
 each('nomen','artikel',(q,t)=>noun(word(t).replace('? ',''))[1]===q.correct||'Artikel');
 each('nomen','unbestimmt',(q,t)=>(noun(word(t).replace('? ',''))[1]==='die'?'eine':'ein')===q.correct||'ein/eine');
-each('nomen','welcherArt',(q,t)=>(/\b(der|die|das) ein/.test(t)?'bestimmter Artikel':'unbestimmter Artikel')===q.correct||'bestimmt/unbestimmt');
+each('nomen','welcherArt',(q,t)=>(/^„(der|die|das)“$/.test(t)?'bestimmter Artikel':'unbestimmter Artikel')===q.correct||'bestimmt/unbestimmt');
 each('nomen','mehrzahl',(q,t)=>{const n=noun(word(t).split(' ')[1]);return n[2].split('|').every(p=>q.accept.includes(p))&&q.accept.length===n[2].split('|').length||'Mehrzahl'});
 each('nomen','einzahl',q=>{const plurals=new Set(NOMEN.flatMap(n=>n[2].split('|'))),sing=new Set(NOMEN.map(n=>n[0]));return q.options.filter(o=>plurals.has(o)).length===1&&plurals.has(q.correct)&&!sing.has(q.correct)||'nicht genau eine Mehrzahl'});
 each('nomen','gruppe',(q,t)=>noun(word(t).split(' ')[1])[3]===q.correct||'Gruppe');
@@ -48,11 +48,17 @@ const LAUT={a:'Selbstlaut',e:'Selbstlaut',i:'Selbstlaut',o:'Selbstlaut',u:'Selbs
 each('laute','gruppe',(q,t)=>(LAUT[t]||'Mitlaut')===q.correct||'Laut-Gruppe');
 each('laute','welcher',q=>q.options.filter(o=>/^[aeiou]$/.test(o)).length===1&&/^[aeiou]$/.test(q.correct)||'Selbstlaut-Auswahl');
 each('laute','silben',(q,t)=>{const w=SILBEN.find(x=>x.replace(/-/g,'')===t.split(' ')[0]);return w.split('-').length===q.ans||'Silben'});
-const IEX=w=>IE.find(x=>x[0]===w);
-each('ie','einsetzen',(q,t)=>{const w=fill(t,q.correct),x=IEX(w);return !!x&&x[2]===(q.correct.toLowerCase()==='ie'?'ie':'i')||'ie/i'});
+// ie oder i nach der Silbenmethode: Daten folgen der Regel (offene 1. Silbe → ie, geschlossene → i, Merkwort: offen ohne e)
+const IEX=w=>IE.find(x=>ieWord(x)===w);
+let ieData=true;for(const x of IE){const f=ieFirst(x),open=/[aeiouäöü]$/i.test(f),ok=x[0].split('-').length>=2&&x[0].split('-').every(t=>/[aeiouäöü]/i.test(t))&&
+  (x[2]==='ie'?open&&/ie$/i.test(f):x[2]==='i'?!open&&/i/i.test(f)&&!/ie/i.test(x[0]):open&&/i$/i.test(f)&&!/ie/i.test(x[0]));if(!ok){ieData=false;P('Silbenregel passt nicht: '+x)}}
+A('ie-Wörter folgen der Silbenregel (offen → ie, geschlossen → i)',ieData);
+each('ie','einsetzen',(q,t)=>{const w=fill(t,q.correct),x=IEX(w);return !!x&&x[2]===q.correct&&!/ /.test(w)||'ie/i'});
+each('ie','offen',(q,t)=>{const x=IE.find(x=>x[0]===t);return (ieOpen(x)?'offen':'geschlossen')===q.correct||'offen/geschlossen'});
+each('ie','tabelle',q=>q.options.filter(o=>ieOpen(IE.find(x=>x[0]===o))).length===1&&ieOpen(IE.find(x=>x[0]===q.correct))||'nicht genau eine offene Silbe');
 each('ie','lang',(q,t)=>(IEX(word(t))[2]==='i'?'kurz':'lang')===q.correct||'lang/kurz');
-each('ie','schreiben',(q,t)=>{const x=IE.find(x=>x[1]&&t.startsWith(x[1]));return !!x&&q.accept.length===1&&q.accept[0]===x[0]||'Wort zum Bild'});
-each('ie','merk',q=>q.options.filter(o=>IEX(o)[2]==='merk').length===1&&IEX(q.correct)[2]==='merk'||'Merkwort');
+each('ie','schreiben',(q,t)=>{const x=IE.find(x=>x[1]&&t.startsWith(x[1]));return !!x&&q.accept.length===1&&q.accept[0]===ieWord(x)||'Wort zum Bild'});
+each('ie','merk',q=>{const merk=o=>IE_MERK1.includes(o)||(IEX(o)||[])[2]==='merk';return q.options.filter(merk).length===1&&merk(q.correct)||'Merkwort'});
 {let ok=true;for(let i=0;i<N;i++){const q=gen('ie','hoeren'),x=IEX(q.say);if(!x||(x[2]==='i'?'kurz':'lang')!==q.correct)ok=false}A('Hören: lang/kurz passt zum vorgelesenen Wort',ok)}
 const all=Object.entries(AUFG).flatMap(([i,o])=>Object.keys(o).map(k=>i+'.'+k));
 A('alle Aufgabenarten nachgeprüft: genau eine richtige Antwort, keine Fehler',probs.n===0);
