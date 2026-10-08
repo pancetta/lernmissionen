@@ -50,7 +50,7 @@ each('laute','welcher',q=>q.options.filter(o=>/^[aeiou]$/.test(o)).length===1&&/
 each('laute','silben',(q,t)=>{const w=SILBEN.find(x=>x.replace(/-/g,'')===t.split(' ')[0]);return w.split('-').length===q.ans||'Silben'});
 // ie oder i nach der Silbenmethode: Daten folgen der Regel (offene 1. Silbe → ie, geschlossene → i, Merkwort: offen ohne e)
 const IEX=w=>IE.find(x=>ieWord(x)===w);
-let ieData=true;for(const x of IE){const f=ieFirst(x),open=/[aeiouäöü]$/i.test(f),ok=x[0].split('-').length>=2&&x[0].split('-').every(t=>/[aeiouäöü]/i.test(t))&&
+let ieData=true;for(const x of IE){const f=ieFirst(x),open=ieOpen(x),ok=x[0].split('-').length>=2&&x[0].split('-').every(t=>/[aeiouäöü]/i.test(t))&&
   (x[2]==='ie'?open&&/ie$/i.test(f):x[2]==='i'?!open&&/i/i.test(f)&&!/ie/i.test(x[0]):open&&/i$/i.test(f)&&!/ie/i.test(x[0]));if(!ok){ieData=false;P('Silbenregel passt nicht: '+x)}}
 A('ie-Wörter folgen der Silbenregel (offen → ie, geschlossen → i)',ieData);
 each('ie','einsetzen',(q,t)=>{const w=fill(t,q.correct),x=IEX(w);return !!x&&x[2]===q.correct&&!/ /.test(w)||'ie/i'});

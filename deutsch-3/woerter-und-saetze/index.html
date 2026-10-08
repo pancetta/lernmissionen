@@ -191,7 +191,7 @@ const LA={
 const ieWord=x=>x[0].replace(/-/g,''),ieFirst=x=>x[0].split('-')[0],ieOpen=x=>/[aeiouäöü]$/i.test(ieFirst(x));
 const ieWhy=x=>x[2]==='merk'?`${x[0]}: Die erste Silbe ist offen, das i klingt lang – aber ohne e! Das ist ein Merkwort.`
   :x[2]==='ie'?`${x[0]}: Die erste Silbe ist offen, das i klingt lang. Deshalb ie.`:`${x[0]}: Die erste Silbe ist geschlossen, das i klingt kurz. Deshalb i.`;
-const lueckeIE=w=>{const i=w.search(/ie|i/i),n=w.slice(i,i+2).toLowerCase()==='ie'?2:1;return w.slice(0,i)+GAP+w.slice(i+n)};
+const lueckeIE=w=>w.replace(/ie?/i,GAP);
 const IEW=IE.filter(x=>x[2]!=='merk');
 const IE_={
  einsetzen(){const x=pick(IEW),w=ieWord(x);
