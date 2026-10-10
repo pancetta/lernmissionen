@@ -62,6 +62,7 @@ each('ie','lang',(q,t)=>(IEX(word(t))[2]==='i'?'kurz':'lang')===q.correct||'lang
 each('ie','schreiben',(q,t)=>{const x=IE.find(x=>x[1]&&t.startsWith(x[1]));return !!x&&q.accept.length===1&&q.accept[0]===ieWord(x)||'Wort zum Bild'});
 each('ie','merk',q=>{const merk=o=>IE_MERK1.includes(o)||(IEX(o)||[])[2]==='merk';return q.options.filter(merk).length===1&&merk(q.correct)||'Merkwort'});
 {let ok=true;for(let i=0;i<N;i++){const q=gen('ie','hoeren'),x=IEX(q.say);if(!x||(x[2]==='i'?'kurz':'lang')!==q.correct)ok=false}A('Hören: lang/kurz passt zum vorgelesenen Wort',ok)}
+{let ok=true;for(const s of ['lang','hoeren','offen'])for(let i=0;i<N;i++){const q=gen('ie',s);if(/Merkwort/.test(q.sol))ok=false}A('Merkwörter (Igel, Tiger …) nur in der Merkwort-Aufgabe, nicht bei lang/kurz oder offen/geschlossen',ok)}
 const all=Object.entries(AUFG).flatMap(([i,o])=>Object.keys(o).map(k=>i+'.'+k));
 A('alle Aufgabenarten nachgeprüft: genau eine richtige Antwort, keine Fehler',probs.n===0);
 // Runden, Eingaben, Check, Spiele
