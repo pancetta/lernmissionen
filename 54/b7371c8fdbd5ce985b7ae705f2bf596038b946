@@ -1,0 +1,22 @@
+deutsch-3/woerter-und-saetze/index.html
+  s_54261e8a499c43::t_05c0f8f2522e74 108-109,133-134
+  s_54261e8a499c43::t_8baee2dc6987bf 80
+mathe-5/zahlen-und-groessen/index.html
+  s_54261e8a499c43::t_8baee2dc6987bf 57,59-60,236
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "54b7371c8fdbd5ce985b7ae705f2bf596038b946",
+  "prompts": {},
+  "sessions": {
+    "s_54261e8a499c43": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "09d1c376-00da-4c7d-9fcd-87abfbea46f1",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Robert Speck <pancetta@users.noreply.github.com>"
+    }
+  }
+}
