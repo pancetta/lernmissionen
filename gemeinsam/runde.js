@@ -4,6 +4,7 @@
    Felder einer Frage: kind mc|type|num|money|build|listen, label, prompt (**fett**) oder html (fertiges HTML),
    options/correct (raw:true = Optionen sind HTML), accept (type), ans (num: Zahl, money: Cent), unit,
    tiles/target/extra (build: extra = so viele Kärtchen bleiben übrig), sol, say, wk (Übungs-Schlüssel).
+   kind alle: alle passenden Kärtchen antippen, tiles = Kärtchen, hits = Nummern der richtigen (aufsteigend).
    kind widget: Aufgabe zum Ziehen/Setzen, die Seite liefert WIDGETS[q.w] = {html(q), init(q), empty(), check(q), done(q,ok)}. */
 const md=t=>esc(t).replace(/\*\*(.+?)\*\*/g,'<b>$1</b>');            // **fett** im Fragetext
 const plain=t=>t.replace(/\*\*/g,'');
@@ -14,6 +15,7 @@ const missedText=q=>q.sol.replace(/^Richtig heißt es: /,'');
 function mistList(list){return list.length?`<div class="mist"><h3>${typeof MISSED!=='undefined'?MISSED:'Diese Aufgaben üben wir weiter'}</h3><ul>${list.map(t=>`<li>${md(t)}</li>`).join('')}</ul></div>`:'<div class="mist"><h3>Keine Fehler. Wow!</h3></div>'}
 function saveRound(){save.round=G&&G.queue.length?{topic:G.topic,total:G.total,done:G.done,first:G.first,xp:G.xp,streak:G.streak,best:G.best,missed:G.missed,queue:G.queue}:null;persist()}
 const optsHtml=q=>`<div class="opts${q.raw?' raw':''}" role="group" aria-label="Antworten, mit Pfeiltasten wählen">${q.options.map((o,i)=>`<button class="opt nav" data-i="${i}"${q.raw?` aria-label="Antwort ${i+1}"`:''}>${q.raw?o:md(o)}</button>`).join('')}</div>`;
+const $$c=()=>[...document.querySelectorAll('.chip')];
 function markOpts(q,i){document.querySelectorAll('.opt').forEach((b,k)=>{b.disabled=true;if(q.options[k]===q.correct)b.classList.add('right');else if(k===i)b.classList.add('wrong')})}
 
 function start(topic){
@@ -39,6 +41,9 @@ function show(){
     body=`<div class="line" id="bl" aria-label="Deine Reihenfolge"></div>
     <div class="chips" id="bc" role="group" aria-label="Kärtchen, mit Pfeiltasten wählen">${q.tiles.map(t=>`<button class="chip nav" type="button">${esc(t)}</button>`).join('')}</div>
     ${q.extra?'<p class="tip" style="margin:8px 0 0">Ein Wort bleibt übrig.</p>':''}<p style="margin:12px 0 0"><button class="btn" id="bp" type="button">Prüfen</button></p>`;
+  }else if(k==='alle'){
+    body=`<div class="chips" role="group" aria-label="Kärtchen, mit Pfeiltasten wählen">${q.tiles.map(t=>`<button class="chip nav" type="button" aria-pressed="false">${esc(t)}</button>`).join('')}</div>
+    <p style="margin:12px 0 0"><button class="btn" id="bp" type="button">Prüfen</button></p>`;
   }else if(k==='widget'){
     body=`${WIDGETS[q.w].html(q)}<p style="margin:12px 0 0"><button class="btn" id="bp" type="button">Prüfen</button></p>`;
   }else body=optsHtml(q);
@@ -58,6 +63,10 @@ function show(){
     $('#bp').onclick=()=>{if(G.answered)return;
       if(q.extra?!$('#bl').children.length:$('#bc').children.length){$('#fb').innerHTML=`<p class="tip">${q.extra?'Tippe die Wörter in der richtigen Reihenfolge an.':'Benutze alle Kärtchen.'}</p>`;return}
       answer(null,[...$('#bl').children].map(c=>c.textContent).join(' '))};
+  }else if(k==='alle'){
+    document.querySelectorAll('.chip').forEach(b=>b.onclick=()=>{if(!G.answered)b.setAttribute('aria-pressed',b.getAttribute('aria-pressed')==='false')});
+    $('#bp').onclick=()=>{if(G.answered)return;const on=$$c().flatMap((b,i)=>b.getAttribute('aria-pressed')==='true'?[i]:[]);
+      if(!on.length){$('#fb').innerHTML='<p class="tip">Tippe zuerst die passenden Kärtchen an.</p>';return}answer(null,on.join(','))};
   }else if(k==='widget'){
     WIDGETS[q.w].init(q);
     $('#bp').onclick=()=>{if(G.answered)return;const e=WIDGETS[q.w].empty();if(e){$('#fb').innerHTML=`<p class="tip">${e}</p>`;return}answer(null,null)};
@@ -81,6 +90,9 @@ function answer(i,text){
   }else if(k==='build'){
     ok=text===q.target;
     document.querySelectorAll('.chip').forEach(b=>b.disabled=true);$('#bp').disabled=true;$('#bl').classList.add(ok?'right':'wrong');
+  }else if(k==='alle'){ // grün = richtig gewählt, rot = falsch gewählt, gestrichelt = übersehen
+    ok=text===q.hits.join(',');const on=text.split(',');
+    $$c().forEach((b,i)=>{const h=q.hits.includes(i),p=on.includes(String(i));b.disabled=true;if(p||h)b.classList.add(h?(p?'right':'miss'):'wrong')});$('#bp').disabled=true;
   }else if(k==='widget'){
     ok=WIDGETS[q.w].check(q);WIDGETS[q.w].done(q,ok);$('#bp').disabled=true;
   }else{ok=q.options[i]===q.correct;markOpts(q,i)}

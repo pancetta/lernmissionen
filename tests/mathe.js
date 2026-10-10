@@ -69,7 +69,7 @@ each('klecks','mauer',(q,t)=>{box.innerHTML=q.html;const rows=[...box.querySelec
 each('geld','inCent',(q,t)=>{const s=t.replace(' = ?','');const m=s.match(/^(\d+) € (\d+) ct$/);return (m?+m[1]*100+ +m[2]:cents(s))===q.ans||'in Cent'});
 each('geld','inEuro',(q,t)=>+t.match(/^(\d+) ct/)[1]===q.ans||'in Euro');
 each('geld','ordnen',(q,t)=>{const v=x=>{let m;return (m=x.match(/^(\d+) € (\d+) ct$/))?+m[1]*100+ +m[2]:(m=x.match(/^(\d+) ct$/))?+m[1]:cents(x)};return q.tiles.slice().sort((a,b)=>v(a)-v(b)).join(' ')===q.target||'Geld ordnen'});
-each('geld','wechsel',(q,t)=>{const m=t.match(/kostet ([\d,]+ €)\. Bezahlt wird mit einem (\d+)-€-Schein/);const c=cents(m[1]);return +m[2]*100-c===q.ans&&q.ans>0&&+m[2]*100-c<+m[2]*100||'Wechselgeld'});
+each('geld','wechsel',(q,t)=>{const m=t.match(/kostet ([\d,]+ €)\. Bezahlt wird mit einem (\d+)-€-Schein(?: und (\d+) (ct|€))?\./),c=cents(m[1]),pay=+m[2]*100+(m[3]?+m[3]*(m[4]==='€'?100:1):0);return pay-c===q.ans&&[5,10,20,50,100,200].find(n=>n*100>c)===+m[2]||'Wechselgeld'});
 each('geld','kasse',(q,t)=>{box.innerHTML=q.html;const s=[...box.querySelectorAll('tr:not(.sum) td:last-child')].map(x=>cents(x.textContent)).reduce((a,b)=>a+b,0);return s===q.ans||'Kassenzettel'});
 each('geld','reicht',(q,t)=>{box.innerHTML=q.html;const s=[...box.querySelectorAll('td:last-child')].map(x=>cents(x.textContent)).reduce((a,b)=>a+b,0),b=+t.match(/hast (\d+) €/)[1]*100;return (s<=b?'Ja, das reicht.':'Nein, das reicht nicht.')===q.correct&&Math.abs(s-b)>=150||'Reicht'});
 each('geld','wieviele',(q,t)=>{const m=t.match(/kostet (\d+) ct.*für (\d+) €/);return Math.floor(m[2]*100/m[1])===q.ans||'Wie viele'});
@@ -80,6 +80,9 @@ each('laenge','gemischt',(q,t)=>{if(q.kind==='num')return lenQ(q,t);const v=len(
 each('laenge','rechnen',(q,t)=>{const m=t.match(/^(.+?) ([+−]) (.+?) = \?$/),r=m[2]==='+'?len(m[1])+len(m[3]):len(m[1])-len(m[3]);return r===q.ans*MM[q.unit]&&r>0||'Längen rechnen'});
 each('laenge','ordnen',(q,t)=>q.tiles.slice().sort((a,b)=>len(a)-len(b)).join(' ')===q.target&&new Set(q.tiles.map(len)).size===q.tiles.length||'Längen ordnen');
 const covered=new Set(Object.entries(SUB).flatMap(([i,o])=>Object.keys(o).map(k=>i+'.'+k)));
+{let mx=0;for(const k of ['pfeil','nachbar','vergleich','mitte','markieren','ordnen'])for(let i=0;i<300;i++){const q=gen('strahl',k);box.innerHTML=(q.html||'')+(q.tiles||[]).join(' ');const tx=[...box.querySelectorAll('text')].map(x=>x.textContent);box.querySelectorAll('svg').forEach(x=>x.remove());tx.push(box.textContent); // Beschriftungen einzeln lesen
+  const m=Math.max(...(tx.join(' ').match(/\d[\d\u202F]*/g)||[]).map(num),q.ans||0,q.start+20*(q.step||0)||0);if(m>10000)P(`${k}: ${m} | ${box.textContent}`);mx=Math.max(mx,m)}
+ A('Zahlenstrahl-Insel: alle Zahlen höchstens 10 000 (wie auf den Übungsblättern)',mx<=10000)}
 A('alle Aufgabenarten nachgerechnet: keine Fehler',(probs.n||0)===0);
 
 /* 3) Eingaben, Runden, Spiele, Blätter */

@@ -17,6 +17,7 @@ const kindOfQ=q=>q.kind||(q.type?'type':'mc');                        // alte Vo
 function solve(q){ // aktuelle Frage richtig beantworten, egal welche Mission und Frageart
   const k=kindOfQ(q);
   if(k==='widget'){q.w==='bars'?q.vals.forEach((v,i)=>WS.set(i,v)):WS.put(q.i);return answer(null,null)}
+  if(k==='alle')return answer(null,q.hits.join(','));
   if(k==='num')return answer(null,String(q.ans));
   if(k==='money')return answer(null,euro(q.ans));
   if(k==='type')return answer(null,q.accept?q.accept[0]:enShow(q.e));
@@ -26,6 +27,7 @@ function solve(q){ // aktuelle Frage richtig beantworten, egal welche Mission un
 function solveWrong(q){ // aktuelle Frage falsch beantworten
   const k=kindOfQ(q);
   if(k==='widget'){q.w==='bars'?WS.set(0,q.vals[0]===q.step?2*q.step:q.step):WS.put(q.i===1?2:1);return answer(null,null)}
+  if(k==='alle')return answer(null,q.hits.slice(1).join(','));
   if(k==='num')return answer(null,String(q.ans+1));
   if(k==='money')return answer(null,euro(q.ans+1));
   if(k==='type')return answer(null,'zzz');

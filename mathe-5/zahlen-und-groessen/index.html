@@ -53,12 +53,12 @@ function words(n){ // 1079252849 -> "eine Milliarde neunundsiebzig Millionen zwe
   if(low)p.push(low);
   return p.join(' ');
 }
-function bigNum(){ // Millionen bis Milliarden, Dreiergruppen zum Teil null
-  const groups=R(3,4),g=[R(1,groups===4?9:999)];
+function bigNum(){ // Millionen bis Hundertmilliarden, Dreiergruppen zum Teil null
+  const groups=R(3,4),g=[R(1,999)];
   for(let i=1;i<groups;i++)g.push(Math.random()<.25?0:R(1,999));
   return g.reduce((a,x)=>a*1000+x,0);
 }
-const PLACES=[['Einer',1],['Zehner',10],['Hunderter',100],['Tausender',1e3],['Zehntausender',1e4],['Hunderttausender',1e5],['Millionen',1e6],['Zehnmillionen',1e7],['Hundertmillionen',1e8]];
+const PLACES=[['Einer',1],['Zehner',10],['Hunderter',100],['Tausender',1e3],['Zehntausender',1e4],['Hunderttausender',1e5],['Millionen',1e6],['Zehnmillionen',1e7],['Hundertmillionen',1e8],['Milliarden',1e9]];
 
 /* ---------- Grafiken ---------- */
 function chartSvg(d,opt={}){ // Säulen- oder Balkendiagramm; Werte liegen immer auf einer Gitterlinie
@@ -114,7 +114,7 @@ const D={
  summe(){const d=chartData(4),t=d.vals.reduce((a,b)=>a+b,0);
   return {kind:'num',label:'Rechne mit dem Diagramm',html:chartBox(d)+`<p>Wie viele ${d.unit} sind es zusammen?</p>`,ans:t,unit:d.unit,sol:`${d.vals.map(fmt).join(' + ')} = ${fmt(t)} ${d.unit}`}},
  strich(){const c=pick([['Kinder mit Brille',['Klasse 5a','Klasse 5b','Klasse 5c']],['Fahrzeuge an der Ampel',['Autos','Fahrräder','Lkw','Busse']],['Würfelwürfe',['Eins','Zwei','Drei','Sechs']]]),
-   v=shuffle([...Array(19).keys()].map(i=>i+3)).slice(0,c[1].length),i=R(0,v.length-1);
+   v=shuffle([...Array(23).keys()].map(i=>i+3)).slice(0,c[1].length),i=R(0,v.length-1);
   return {kind:'num',label:'Werte die Strichliste aus',html:`<p class="ctitle">${esc(c[0])}</p><table class="strich">${c[1].map((k,j)=>`<tr><td>${esc(k)}</td><td>${tallySvg(v[j])}</td></tr>`).join('')}</table><p>Wie oft wurde „${esc(c[1][i])}“ gezählt?</p>`,
     ans:v[i],sol:`${v[i]} Mal (${Math.floor(v[i]/5)} Fünferbündel und ${v[i]%5} Striche)`}},
  passt(){const d=chartData(4);d.horiz=false;const a=d.vals,sw=a.slice();const[i,j]=shuffle([0,1,2,3]).slice(0,2);[sw[i],sw[j]]=[sw[j],sw[i]];
@@ -127,22 +127,23 @@ const D={
 };
 
 /* ---------- Zahlenstrahl-Insel ---------- */
-const STEPS=[1,2,5,10,20,25,50,100,200,250,500,1000];
+const STEPS=[1,2,5,10,20,25,50,100,200,250,500];
+const strahl0=st=>R(0,Math.floor((10000-20*st)/(10*st)))*10*st; // Anfang so, dass der ganze Strahl bis höchstens 10 000 geht
 const Z={
- pfeil(){const st=pick(STEPS),start=R(0,12)*10*st,i=pick([...Array(19).keys()].map(k=>k+1).filter(k=>k!==10)),v=start+i*st;
+ pfeil(){const st=pick(STEPS),start=strahl0(st),i=pick([...Array(19).keys()].map(k=>k+1).filter(k=>k!==10)),v=start+i*st;
   return {kind:'num',label:'Welche Zahl zeigt der Pfeil?',html:strahlSvg(start,st,i),ans:v,sol:`${fmt(v)} (ein Teilstrich = ${fmt(st)})`}},
- nachbar(){const vor=Math.random()<.5,base=pick([R(2,99)*1000,R(1,9)*10000,R(1000,99999),R(10,999)*100]),n=vor?base:base-1+(Math.random()<.5?0:R(0,1)),v=vor?n-1:n+1;
+ nachbar(){const vor=Math.random()<.5,base=pick([R(1,99)*100,R(1,10)*1000,R(100,9999),R(10,999)*10]),n=vor?base:base-(Math.random()<.75?1:2),v=vor?n-1:n+1;
   return {kind:'num',label:vor?'Vorgänger':'Nachfolger',html:`<p>Wie heißt der ${vor?'Vorgänger':'Nachfolger'} von <b>${fmt(n)}</b>?</p>`,ans:v,sol:`${vor?`${fmt(v)} ist der Vorgänger von ${fmt(n)}`:`${fmt(v)} ist der Nachfolger von ${fmt(n)}`}`}},
  ordnen(){const dg=shuffle([1,2,3,4,5,6,7,8,9]).slice(0,3);let ns=[];
-  for(let t=0;t<60&&ns.length<5;t++){const p=shuffle(dg),len=R(2,4),n=+p.concat(p).slice(0,len).join('');if(!ns.includes(n))ns.push(n)}
+  for(let t=0;t<300&&ns.length<8;t++){const p=shuffle(dg),len=R(2,3),n=+p.concat(p).slice(0,len).join('');if(!ns.includes(n))ns.push(n)}
   const up=Math.random()<.5,s=ns.slice().sort((a,b)=>up?a-b:b-a);
   return {kind:'build',label:up?'Ordne: Beginne mit der kleinsten Zahl':'Ordne: Beginne mit der größten Zahl',html:`<p>Tippe die Zahlen der Reihe nach an.</p>`,tiles:shuffle(ns.map(fmt)),target:s.map(fmt).join(' '),sol:s.map(fmt).join(up?' < ':' > ')}},
- vergleich(){let a=R(1000,99999),b;const r=Math.random();
+ vergleich(){let a=R(100,9999),b;const r=Math.random();
   if(r<.15)b=a;else if(r<.6){const s=String(a).split(''),i=R(0,s.length-2);[s[i],s[i+1]]=[s[i+1],s[i]];b=+s.join('');if(b===a||s[0]==='0')b=a+R(1,9)*10}else b=a+pick([-1,1])*R(1,9)*pick([1,10,100,1000]);
-  if(b<1)b=a+R(1,9)*10;
+  if(b<1||b>9999)b=a-R(1,9);
   const c=a<b?'<':a>b?'>':'=';
   return mc({label:'Setze <, > oder = ein',html:`<p class="big">${fmt(a)} ${BLOB} ${fmt(b)}</p>`,options:['<','>','='],correct:c,sol:`${fmt(a)} ${c} ${fmt(b)}`})},
- mitte(){const st=pick([2,10,20,100,200,1000]),a=R(1,40)*st,b=a+st*R(1,5)*2,m=(a+b)/2;
+ mitte(){const st=pick([2,10,20,100,200]),a=R(1,40)*st,b=a+st*R(1,5)*2,m=(a+b)/2;
   return {kind:'num',label:'Genau in der Mitte',html:`<p>Welche Zahl liegt auf dem Zahlenstrahl genau in der Mitte zwischen <b>${fmt(a)}</b> und <b>${fmt(b)}</b>?</p>`,ans:m,sol:`${fmt(m)}, denn ${fmt(m)} − ${fmt(a)} = ${fmt(b)} − ${fmt(m)} = ${fmt(m-a)}`}}
 };
 
@@ -158,7 +159,7 @@ const G_={
  wort2zahl(){const n=bigNum();return {kind:'num',label:'Schreibe die Zahl mit Ziffern',html:`<p class="words">${esc(words(n))}</p>`,ans:n,sol:fmt(n)}},
  zahl2wort(){const n=bigNum(),c=shuffle(nearNums(n)).filter(x=>words(x)!==words(n)).slice(0,3);
   return mc({label:'Wie heißt die Zahl in Worten?',html:`<p class="big">${fmt(n)}</p>`,options:shuffle([words(n)].concat(c.map(words))),correct:words(n),sol:`${fmt(n)} = ${words(n)}`})},
- runden(){const k=R(1,6),[name,p]=PLACES[k],n=R(p*10,Math.min(p*10000,9e9)),r=Math.round(n/p)*p;
+ runden(){const k=pick([2,3,4,5,6,9]),[name,p]=PLACES[k],n=R(p*10,Math.min(p*10000,999e9)),r=Math.round(n/p)*p;
   return {kind:'num',label:'Runde',html:`<p>Runde <b>${fmt(n)}</b> auf <b>${name}</b>.</p>`,ans:r,sol:`${fmt(n)} ≈ ${fmt(r)} (die Ziffer rechts daneben ist ${Math.floor(n/(p/10))%10}, also ${Math.floor(n/(p/10))%10>=5?'aufrunden':'abrunden'})`}},
  stelle(){const n=R(1e6,99999999),k=R(1,Math.min(7,String(n).length-1)),[name,p]=PLACES[k],d=Math.floor(n/p)%10;
   return {kind:'num',label:'Stellenwert',html:`<p>Welche Ziffer steht in <b>${fmt(n)}</b> an der <b>${name}stelle</b>?</p>`,ans:d,sol:`${d} steht an der ${name}stelle`}},
@@ -175,8 +176,8 @@ const OPS={'+':{n:'Summe',art:'die',a:'Summand',b:'Summand',r:'Summe',verb:'Addi
  '·':{n:'Produkt',art:'das',a:'Faktor',b:'Faktor',r:'Produkt',verb:'Multiplikation'},':':{n:'Quotient',art:'der',a:'Dividend',b:'Divisor',r:'Quotient',verb:'Division'}};
 function task(op){ // Aufgabe mit drei verschiedenen Zahlen, damit jede Zahl genau einen Namen hat
   for(;;){let a,b,c;
-    if(op==='+'){a=R(10,500);b=R(10,500);c=a+b}else if(op==='−'){a=R(50,900);b=R(5,a-5);c=a-b}
-    else if(op==='·'){a=R(3,30);b=R(2,12);c=a*b}else{b=R(2,12);c=R(2,25);a=b*c}
+    if(op==='+'){[a,b]=shuffle([R(10,600),R(5,99)]);c=a+b}else if(op==='−'){a=R(50,900);b=R(5,Math.min(a-5,250));c=a-b}
+    else if(op==='·'){a=R(3,30);b=R(2,9);c=a*b}else{b=R(2,12);c=R(2,25);a=b*c}
     if(a!==b&&a!==c&&b!==c)return {op,a,b,c,s:`${fmt(a)} ${op} ${fmt(b)} = ${fmt(c)}`};
   }
 }
@@ -225,14 +226,14 @@ const ev=t=>{const m=t.replace(/\u202F/g,'').match(/^(\d+) (.) (\d+)$/),a=+m[1],
 const ITEMS=[['Heft',129],['Bleistift',89],['Füller',799],['Lineal',149],['Radiergummi',79],['Klebestift',215],['Mäppchen',995],['Spitzer',135],['Collegeblock',249],['Wasserfarben',649],['Zirkel',459],['Buntstifte',375]];
 const money3=c=>{const e=Math.floor(c/100),ct=c%100;return pick([euro(c),`${c} ct`].concat(e&&ct?[`${e} € ${ct} ct`]:[]))};
 const M_={
- inCent(){const c=pick([R(101,999),R(1001,9999),R(1,99)]),e=Math.floor(c/100),ct=c%100,show=e&&ct&&Math.random()<.35?`${e} € ${ct} ct`:euro(c);
+ inCent(){const c=pick([R(101,999),R(1001,9999),R(10001,99999),R(1,99)]),e=Math.floor(c/100),ct=c%100,show=e&&ct&&Math.random()<.35?`${e} € ${ct} ct`:euro(c);
   return {kind:'num',label:'Schreibe in Cent',html:`<p class="big">${show} = ?</p>`,ans:c,unit:'ct',sol:`${show} = ${c} ct`}},
- inEuro(){const c=pick([R(101,999),R(1001,9999),R(1,99)]);return {kind:'money',label:'Schreibe in Euro mit Komma',html:`<p class="big">${c} ct = ?</p>`,ans:c,unit:'€',sol:`${c} ct = ${euro(c)}`}},
- ordnen(){let cs=[];for(let t=0;t<40&&cs.length<4;t++){const c=R(101,999);if(!cs.includes(c))cs.push(c)}
+ inEuro(){const c=pick([R(101,999),R(1001,9999),R(10001,99999),R(1,99)]);return {kind:'money',label:'Schreibe in Euro mit Komma',html:`<p class="big">${c} ct = ?</p>`,ans:c,unit:'€',sol:`${c} ct = ${euro(c)}`}},
+ ordnen(){let cs;do{const c=R(1001,99999);cs=uniq([c].concat(shuffle(nearNums(c)).filter(x=>x>100&&x<100000)))}while(cs.length<4);cs=cs.slice(0,4); // ähnliche Ziffern: 36,62 € / 3266 ct / 36,26 €
   const shown=cs.map(c=>[c,money3(c)]),s=shown.slice().sort((a,b)=>a[0]-b[0]);
   return {kind:'build',label:'Ordne: Beginne mit dem kleinsten Betrag',html:'<p>Tipp: Rechne alle Beträge erst in Cent um.</p>',tiles:shuffle(shown.map(x=>x[1])),target:s.map(x=>x[1]).join(' '),sol:s.map(x=>x[1]).join(' < ')}},
- wechsel(){const c=R(105,9850),note=[5,10,20,50,100].find(n=>n*100>c),back=note*100-c;
-  return {kind:'money',label:'Wie viel Wechselgeld gibt es zurück?',html:`<p>Der Einkauf kostet <b>${euro(c)}</b>. Bezahlt wird mit einem <b>${note}-€-Schein</b>.</p>`,ans:back,unit:'€',sol:`${note},00 € − ${euro(c)} = ${euro(back)}`}},
+ wechsel(){const c=R(105,19900),note=[5,10,20,50,100,200].find(n=>n*100>c),coin=Math.random()<.4?pick([10,20,50,100,200]):0,pay=note*100+coin,back=pay-c,cn=coin>=100?`${coin/100} €`:`${coin} ct`;
+  return {kind:'money',label:'Wie viel Wechselgeld gibt es zurück?',html:`<p>Der Einkauf kostet <b>${euro(c)}</b>. Bezahlt wird mit einem <b>${note}-€-Schein</b>${coin?` und <b>${cn}</b>`:''}.</p>`,ans:back,unit:'€',sol:`${euro(pay)} − ${euro(c)} = ${euro(back)}`}},
  kasse(){const it=shuffle(ITEMS).slice(0,R(3,4)),t=it.reduce((a,x)=>a+x[1],0);
   return {kind:'money',label:'Berechne den Gesamtbetrag',html:`<table class="receipt">${it.map(([n,p])=>`<tr><td>${n}</td><td>${euro(p)}</td></tr>`).join('')}<tr class="sum"><td>Gesamt</td><td>?</td></tr></table>`,ans:t,unit:'€',sol:`${it.map(x=>euro(x[1])).join(' + ')} = ${euro(t)}`}},
  reicht(){let it,t,b;for(;;){it=shuffle(ITEMS).slice(0,R(3,5));t=it.reduce((a,x)=>a+x[1],0);b=pick([10,20,30])*100;if(Math.abs(t-b)>=150)break}
@@ -344,7 +345,7 @@ D.zeichnen=function(){ // Säulen/Balken zu einer Tabelle oder Strichliste selbs
     t:d.t,cats:d.cats,short:d.short,step:d.step,max:d.max,horiz:d.horiz,vals:d.vals,sol:d.short.map((s,i)=>`${s}: ${fmt(d.vals[i])}`).join(', ')};
 };
 Z.markieren=function(){ // Zahl (oder Mitte zwischen zwei Zahlen) selbst auf dem Zahlenstrahl markieren
-  const st=pick(STEPS),start=R(0,12)*10*st;let i=pick([...Array(19).keys()].map(k=>k+1).filter(k=>k!==10)),text;
+  const st=pick(STEPS),start=strahl0(st);let i=pick([...Array(19).keys()].map(k=>k+1).filter(k=>k!==10)),text;
   if(Math.random()<.3){const dd=R(1,Math.min(i,20-i)),a=i-dd,b=i+dd;text=`Markiere die Zahl, die genau in der Mitte zwischen <b>${fmt(start+a*st)}</b> und <b>${fmt(start+b*st)}</b> liegt.`}
   else text=`Markiere die Zahl <b>${fmt(start+i*st)}</b>.`;
   const v=start+i*st,ref=i<10?0:10;

@@ -73,11 +73,11 @@ const SAETZE=[
 const NAMEN_NOMEN=['Lara','Mama','Ben','Oma','Tim','Papa','Mia','Garten','Ball','Schuh','Sonne','Katze','Hund','Kinder','Kuchen','Buch','Bild','Suppe','Zoo','Sofa','Fahrrad','Blumen','Geburtstag','Morgen','Kakao','Pause','Hunger'];
 // Laute einsetzen: Selbstlaute [Emoji, Wort, Stelle der Lücke]; bei Umlauten und Zwielauten sucht die Seite die Stelle selbst
 const SELBST=[['🐕','Hund',1],['🐇','Hase',1],['👖','Hose',1],['⚽','Ball',1],['🐟','Fisch',1],['✏️','Stift',2],['🍴','Gabel',1],['🖌️','Pinsel',1],['🥫','Dose',1],['🌹','Rose',1],['👃','Nase',1],['🎩','Hut',1],['🐄','Kuh',1],['🚌','Bus',1],['🦆','Ente',0],['🍎','Apfel',0],['🦔','Igel',0]];
-const UMLAUT=[['🐻','Bär'],['🧀','Käse'],['🥕','Möhre'],['👑','König'],['🚪','Tür'],['🔑','Schlüssel'],['🧢','Mütze'],['🐞','Käfer'],['🦁','Löwe'],['🥄','Löffel'],['🎲','Würfel'],['🥦','Gemüse']];
+const UMLAUT=[['🐻','Bär'],['🧀','Käse'],['🥕','Möhre'],['👑','König'],['🚪','Tür'],['🔑','Schlüssel'],['🧢','Mütze'],['🐞','Käfer'],['🦁','Löwe'],['🥄','Löffel'],['🎲','Würfel'],['🥦','Gemüse'],['','schön'],['','müde'],['','spät'],['','fühlen'],['','hören'],['','zählen']];
 const ZWIE=[['🪣','Eimer'],['🐭','Maus'],['🌽','Mais'],['🪜','Leiter'],['🏠','Haus'],['🦉','Eule'],['🔥','Feuer'],['👗','Kleid'],['🌳','Baum'],['🚗','Auto'],['🧼','Seife'],['🦈','Hai'],['👍','Daumen'],['🍂','Laub'],['🏘️','Häuser']];
 const ZWIELAUTE=['ai','au','äu','ei','eu'];
 // Silben: Wörter mit Trennstrichen
-const SILBEN=['Hund','Ka-tze','Ba-na-ne','Schu-le','Te-le-fon','Scho-ko-la-de','Kro-ko-dil','Ap-fel','E-le-fant','Gi-raf-fe','Fahr-rad','Re-gen-schirm','Ge-burts-tag','Ku-gel-schrei-ber','Was-ser','Blu-me','Fuß-ball','Spiel-platz','Son-ne','Ta-schen-lam-pe','Pau-se','Hams-ter','Ma-ri-en-kä-fer','Schmet-ter-ling','Ei','Brot'];
+const SILBEN=['Hund','Ka-tze','Ba-na-ne','Schu-le','Te-le-fon','Scho-ko-la-de','Kro-ko-dil','Ap-fel','E-le-fant','Gi-raf-fe','Fahr-rad','Re-gen-schirm','Ge-burts-tag','Ku-gel-schrei-ber','Was-ser','Blu-me','Fuß-ball','Spiel-platz','Son-ne','Ta-schen-lam-pe','Pau-se','Hams-ter','Ma-ri-en-kä-fer','Schmet-ter-ling','Ei','Brot','Pau-sen-hof','Klas-sen-zim-mer','Turn-hal-le','Schul-ta-sche','Was-ser-fla-sche'];
 // ie oder i nach der Silbenmethode: [Wort in Silben, Emoji, Art]
 // 'ie': 1. Silbe offen (endet mit Selbstlaut), i lang  ·  'i': 1. Silbe geschlossen (endet mit Mitlaut), i kurz
 // 'merk': i lang in offener Silbe, aber ohne e (Merkwort). Nur zweisilbige Wörter, damit die Silbenregel sichtbar ist.
@@ -105,6 +105,8 @@ const VOKALE='aeiou';
 const NO={
  erkennen(){const n=pick(NOMEN),o=shuffle([UP(n[0])].concat(shuffle(KEIN_NOMEN).slice(0,3).map(UP)));
   return mc({label:'Welches Wort ist ein Nomen?',html:'<p>Nomen sind Wörter für Menschen, Tiere, Pflanzen und Dinge.</p>',options:o,correct:UP(n[0]),sol:`${n[1]} ${n[0]} ist ein Nomen.`,say:`${n[1]} ${n[0]}`})},
+ alle(){const ns=shuffle(NOMEN).slice(0,R(2,4)),ws=shuffle(ns.map(n=>UP(n[0])).concat(shuffle(KEIN_NOMEN).slice(0,7-ns.length).map(UP)));
+  return {kind:'alle',label:'Tippe alle Nomen an',html:'<p>Nomen sind Wörter für Menschen, Tiere, Pflanzen und Dinge. Prüfe: Passt der, die oder das davor?</p>',tiles:ws,hits:ws.flatMap((w,i)=>ns.some(n=>UP(n[0])===w)?[i]:[]),sol:'Nomen: '+ns.map(n=>`${n[1]} ${n[0]}`).join(', ')}},
  artikel(){const n=pick(NOMEN);return mc({label:'Welcher Artikel passt?',html:`<p class="big">${emo(n[4])}${GAP} ${n[0]}</p>`,options:['der','die','das'],correct:n[1],sol:`${n[1]} ${n[0]}`,say:`${n[1]} ${n[0]}`})},
  unbestimmt(){const n=pick(NOMEN);return mc({label:'Welcher unbestimmte Artikel passt?',html:`<p class="big">${emo(n[4])}${GAP} ${n[0]}</p>`,options:['ein','eine'],correct:ein(n[1]),sol:`${ein(n[1])} ${n[0]} (${n[1]} ${n[0]})`,say:`${ein(n[1])} ${n[0]}`})},
  welcherArt(){const a=pick(['der','die','das','ein','eine']),b=['der','die','das'].includes(a);
@@ -124,42 +126,44 @@ const ZU={
   return {kind:'type',label:'Schreibe das zusammengesetzte Nomen',html:`<p class="big">${z[1]} ${z[0]} + ${z[3]} ${z[2]} = ${z[3]} ${GAP}</p>`,accept:[z[4]],correct:z[4],sol:`${z[3]} ${z[4]}`,say:`${z[3]} ${z[4]}`}},
  artikel(){const z=pick(ZUS);
   return mc({label:'Welcher Artikel passt?',html:`<p class="big">${GAP} ${z[4]}</p><p class="tip">Tipp: Der Artikel richtet sich nach dem letzten Wort.</p>`,options:['der','die','das'],correct:z[3],sol:`${z[3]} ${z[4]}, denn es heißt ${z[3]} ${z[2]}.`,say:`${z[3]} ${z[4]}`})},
- zerlegen(){const z=pick(ZUS),first=Math.random()<.5,ans=first?z[0]:z[2];
-  const pool=uniqStr(ZUS.flatMap(x=>[x[0],x[2]])).filter(w=>w!==z[0]&&w!==z[2]);
-  return mc({label:'Welches Nomen fehlt?',html:`<p class="big">${z[3]} ${z[4]} = ${first?`${GAP} + ${z[3]} ${z[2]}`:`${z[1]} ${z[0]} + ${GAP}`}</p>`,options:shuffle([ans].concat(shuffle(pool).slice(0,3))),correct:ans,sol:`${z[3]} ${z[4]} = ${z[1]} ${z[0]} + ${z[3]} ${z[2]}`})},
- finden(){const z=pick(ZUS),simple=shuffle(NOMEN.filter(n=>!ZUS.some(x=>x[4]===n[0])&&n[0].length<=6)).slice(0,3).map(n=>n[0]);
-  return mc({label:'Welches Nomen ist zusammengesetzt?',html:'<p>Ein zusammengesetztes Nomen besteht aus zwei Nomen.</p>',options:shuffle([z[4]].concat(simple)),correct:z[4],sol:`${z[4]} = ${z[0]} + ${z[2]}`})}
+ zerlegen(){const z=pick(ZUS),first=Math.random()<.5,[a,w]=first?[z[1],z[0]]:[z[3],z[2]],ans=`${a} ${w}`; // mit Artikel: ein falscher Artikel am richtigen Wort ist auch falsch
+  const pool=uniqStr(ZUS.flatMap(x=>[`${x[1]} ${x[0]}`,`${x[3]} ${x[2]}`])).filter(x=>!x.endsWith(' '+z[0])&&!x.endsWith(' '+z[2]));
+  return mc({label:'Welches Nomen fehlt? Achte auch auf den Artikel.',html:`<p class="big">${z[3]} ${z[4]} = ${first?`${GAP} + ${z[3]} ${z[2]}`:`${z[1]} ${z[0]} + ${GAP}`}</p>`,options:shuffle([ans,`${pick(['der','die','das'].filter(x=>x!==a))} ${w}`].concat(shuffle(pool).slice(0,2))),correct:ans,sol:`${z[3]} ${z[4]} = ${z[1]} ${z[0]} + ${z[3]} ${z[2]}`})},
+ finden(){const zs=shuffle(ZUS).filter((z,i,a)=>a.findIndex(x=>x[4]===z[4])===i).slice(0,R(2,3)),simple=shuffle(NOMEN.filter(n=>!ZUS.some(x=>x[4]===n[0])&&n[0].length<=6)).slice(0,6-zs.length).map(n=>n[0]);
+  const ws=shuffle(zs.map(z=>z[4]).concat(simple));
+  return {kind:'alle',label:'Tippe alle zusammengesetzten Nomen an',html:'<p>Ein zusammengesetztes Nomen besteht aus zwei Nomen.</p>',tiles:ws,hits:ws.flatMap((w,i)=>zs.some(z=>z[4]===w)?[i]:[]),sol:zs.map(z=>`${z[4]} = ${z[0]} + ${z[2]}`).join(', ')}}
 };
 
 /* ---------- Satzzeichen-Insel ---------- */
 const startKlein=s=>s[2]?s[0]:s[0][0].toLowerCase()+s[0].slice(1); // Satzanfang klein, außer bei Nomen und Namen
 const mark=s=>s[1]==='F'?'?':'.';
 function twoSentences(){let a,b;do{a=pick(SAETZE);b=pick(SAETZE)}while(a===b);return [a,b]}
+const text=ss=>ss.map(s=>s[0]+mark(s)).join(' ');
 const SZ={
  zeichen(){const s=pick(SAETZE);return mc({label:'Welches Satzzeichen fehlt?',html:`<p class="big">${s[0]} ${GAP}</p>`,options:['.','?'],correct:mark(s),sol:`${s[0]}${mark(s)} ${s[1]==='F'?'Das ist eine Frage.':'Das ist ein Aussagesatz.'}`,say:s[0]+mark(s)})},
  satzart(){const s=pick(SAETZE);return mc({label:'Was für ein Satz ist das?',html:`<p class="big">${s[0]}${mark(s)}</p>`,options:['Aussagesatz','Fragesatz'],correct:s[1]==='F'?'Fragesatz':'Aussagesatz',sol:s[1]==='F'?'Fragesatz: Am Ende steht ein Fragezeichen.':'Aussagesatz: Am Ende steht ein Punkt.',say:s[0]+mark(s)})},
- gross(){let a,b;do{[a,b]=twoSentences()}while(b[2]);const w0=b[0].split(' ')[0],low=startKlein(b),wrong=low.split(' ').slice(1).filter(w=>!NAMEN_NOMEN.includes(w)&&w===w.toLowerCase());
-  const o=shuffle([w0.toLowerCase()].concat(shuffle(uniqStr(wrong.concat(a[0].split(' ').slice(1).filter(w=>w===w.toLowerCase())))).filter(w=>w!==w0.toLowerCase()).slice(0,3)));
-  return mc({label:'Welches Wort muss großgeschrieben werden?',html:`<p class="big">${a[0]}${mark(a)} ${low}${mark(b)}</p>`,options:o,correct:w0.toLowerCase(),sol:`${w0} – am Satzanfang schreibt man groß.`,say:`${a[0]}${mark(a)} ${b[0]}${mark(b)}`})},
- grenzen(){const [a,b]=twoSentences(),ok=`${a[0]}${mark(a)} ${b[0]}${mark(b)}`,aw=a[0].split(' ');
+ gross(){const ss=shuffle(SAETZE).slice(0,3),ok=text(ss),ws=ok.split(' '); // alles klein: Satzanfänge, Nomen und Namen antippen
+  return {kind:'alle',label:'Tippe alle Wörter an, die man großschreibt',html:'<p>Satzanfänge, Nomen und Namen schreibt man groß.</p>',tiles:ws.map(w=>w.toLowerCase()),hits:ws.flatMap((w,i)=>w[0]!==w[0].toLowerCase()?[i]:[]),sol:ok,say:ok}},
+ grenzen(){const [a,b]=twoSentences(),c=pick(SAETZE.filter(s=>s!==a&&s!==b)),tail=' '+text([c]),ok=`${a[0]}${mark(a)} ${b[0]}${mark(b)}`+tail,aw=a[0].split(' ');
   const w=[];
   w.push(`${aw.slice(0,-1).join(' ')}${mark(a)} ${cap(aw[aw.length-1])} ${startKlein(b)}${mark(b)}`); // Grenze an falscher Stelle
   w.push(`${a[0]} ${startKlein(b)}${mark(b)}`);                                                   // Satzzeichen fehlt
   if(a[1]==='F')w.push(`${a[0]}. ${b[0]}${mark(b)}`);                                            // Punkt nach einer Frage
   if(!b[2])w.push(`${a[0]}${mark(a)} ${startKlein(b)}${mark(b)}`);                                 // klein nach dem Punkt
-  return mc({label:'Welcher Text ist richtig geschrieben?',html:'<p>Achte auf Satzzeichen und große Satzanfänge.</p>',options:shuffle([ok].concat(shuffle(uniqStr(w).filter(x=>x!==ok)).slice(0,2))),correct:ok,sol:ok,say:ok})}
+  return mc({label:'Welcher Text ist richtig geschrieben?',html:'<p>Achte auf Satzzeichen und große Satzanfänge.</p>',options:shuffle([ok].concat(shuffle(uniqStr(w.map(x=>x+tail)).filter(x=>x!==ok)).slice(0,2))),correct:ok,sol:ok,say:ok})}
 };
 
 /* ---------- ABC-Insel ---------- */
 const ABCW=['Ampel','Banane','Clown','Dach','Eule','Fuchs','Gabel','Hund','Insel','Junge','Kerze','Lampe','Mond','Nest','Obst','Pilz','Quark','Rabe','Sonne','Tasse','Uhr','Vase','Wolke','Zebra','Hose','Hand','Haus','Hemd','Hut','Hase','Berg','Ball','Bus','Brot','Biene','Buch'];
 const AB={
- luecke(){const i=R(1,24),k=Math.random()<.6?i:pick([i-1,i+1]),show=[ABC[i-1],ABC[i],ABC[i+1]].map((c,j)=>j===k-i+1?GAP:c);
-  const L=ABC[k];return {kind:'type',label:'Welcher Buchstabe fehlt?',html:`<p class="big">${show.join(' ')}</p>`,accept:[L,L.toLowerCase()],correct:L,sol:`${ABC[i-1]} ${ABC[i]} ${ABC[i+1]}`}},
+ luecke(){const i=R(0,21),[g,h]=shuffle([0,1,2,3,4]).slice(0,2).sort(),row=[...ABC.slice(i,i+5)],pair=(x,y)=>`${x} und ${y}`; // fünf Buchstaben, zwei fehlen
+  const ok=pair(row[g],row[h]),o=uniqStr([ok,pair(row[h],row[g])].concat([-1,1].filter(d=>i+g+d>=0&&i+h+d<26).map(d=>pair(ABC[i+g+d],ABC[i+h+d])))).slice(0,4);
+  return mc({label:'Welche Buchstaben fehlen?',html:`<p class="big">${row.map((c,j)=>j===g||j===h?GAP:c).join(' ')}</p><p class="tip">Erst die erste Lücke, dann die zweite.</p>`,options:shuffle(o),correct:ok,sol:row.join(' ')})},
  nachbar(){const i=R(1,24),nach=Math.random()<.5,L=nach?ABC[i+1]:ABC[i-1];
   return mc({label:'Abc',html:`<p class="big">Welcher Buchstabe kommt ${nach?'nach':'vor'} <b>${ABC[i]}</b>?</p>`,options:shuffle(uniqStr([L,ABC[nach?i-1:i+1],ABC[nach?Math.min(25,i+2):Math.max(0,i-2)],ABC[(i+5)%26]]).filter(x=>x!==ABC[i])),correct:L,sol:nach?`${ABC[i]} ${L}`:`${L} ${ABC[i]}`})},
  ordnen(){const same=Math.random()<.4;let ws;
   // gleicher Anfang: Gruppen mit verschiedenen zweiten Buchstaben
-  if(same)ws=shuffle(pick([['Hand','Hemd','Hose','Hund'],['Ball','Berg','Biene','Brot','Bus']])).slice(0,4);else{ws=[];for(const w of shuffle(ABCW))if(!ws.some(x=>x[0]===w[0])){ws.push(w);if(ws.length===5)break}}
+  if(same)ws=shuffle(pick([['Hand','Hemd','Hose','Hund'],['Ball','Berg','Biene','Brot','Bus']])).slice(0,4);else{ws=[];for(const w of shuffle(ABCW))if(!ws.some(x=>x[0]===w[0])){ws.push(w);if(ws.length===6)break}}
   const s=ws.slice().sort((a,b)=>a.toLowerCase()<b.toLowerCase()?-1:1);
   return {kind:'build',label:'Ordne nach dem Abc',html:`<p>Tippe die Wörter in der Reihenfolge des Abc an.${same?' Alle beginnen gleich – schau auf den zweiten Buchstaben!':''}</p>`,tiles:shuffle(ws),target:s.join(' '),sol:s.join(', ')}},
  erstes(){const ws=[];for(const w of shuffle(ABCW))if(!ws.some(x=>x[0]===w[0])){ws.push(w);if(ws.length===4)break}const f=ws.slice().sort((a,b)=>a<b?-1:1)[0];
