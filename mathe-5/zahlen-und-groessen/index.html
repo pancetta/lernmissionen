@@ -426,7 +426,7 @@ function home(){
    <button class="tile" id="gb"><h3>Blitzrunde</h3><span class="sub">${BLITZ} Sekunden: Wie viele schaffst du?</span><span class="sub">Rekord: ${save.blitz||0} richtig</span></button>
    <button class="tile" id="gm"><h3>Memory</h3><span class="sub">Finde ${PAIRS} Paare, die gleich viel bedeuten</span><span class="sub">${save.memo?'Rekord: '+save.memo+' Züge':'Noch kein Rekord'}</span></button>
   </div>
-  <h2 class="sec">Inseln</h2><div class="grid">${tiles}</div>
+  <h2 class="sec">Inseln</h2><div class="grid isles">${tiles}</div>
   <p class="tip">${storageOK?'Dein Fortschritt wird automatisch auf diesem Gerät gespeichert.':'Speichern geht in diesem Browser gerade nicht (privates Fenster?). Dein Fortschritt geht beim Schließen verloren.'}</p>
   <p class="tip">Sterne gibt es für richtige Antworten beim ersten Versuch: 5 von 10 = 1 Stern, 7 von 10 = 2 Sterne, 9 von 10 = 3 Sterne. Zahlen darfst du mit oder ohne Leerzeichen eingeben, Geldbeträge mit Komma.</p>
   <p class="tip"><button class="theme" id="rst">Alles zurücksetzen</button></p>`;

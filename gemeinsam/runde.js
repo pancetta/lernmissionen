@@ -122,7 +122,7 @@ function finish(){
   const treasure=stars===3&&before<3&&isl?`<p class="treasure pop"><svg viewBox="0 0 18 16" width="40" aria-hidden="true">${chest(0,0)}</svg> Du hast den Schatz der ${esc(isl.name)} gefunden!</p>`:'';
   $('#app').innerHTML=`${topBar()}
   <div class="qcard end"><h2>${esc(msg)}</h2>
-   <div class="bigstars" aria-label="${stars} von 3 Sternen">${[1,2,3].map(i=>i<=stars?`<b><span class="pop" style="animation-delay:${i*.25}s">★</span></b>`:'★').join('')}</div>
+   ${stars===3?confetti():''}<div class="bigstars" aria-label="${stars} von 3 Sternen">${[1,2,3].map(i=>i<=stars?`<b><span class="pop" style="animation-delay:${i*.25}s">★</span></b>`:'★').join('')}</div>
    ${treasure}${rankUp()}
    <div class="stats"><span class="pill">${n} von ${G.total} gleich richtig</span><span class="pill">Beste Serie ${G.best}</span><span class="pill sun">+${G.xp} Punkte</span></div>
    ${typeof finishExtra==='function'?finishExtra(G):''}
@@ -164,7 +164,7 @@ function blitzEnd(){
   const rec=r.ok>0&&r.ok>(save.blitz||0);if(rec)save.blitz=r.ok;persist();
   $('#app').innerHTML=`${topBar()}
   <div class="qcard end"><h2>${rec?'Neuer Rekord!':'Zeit ist um!'}</h2>
-   <div class="bignum pop">${r.ok}</div><p>richtige Antworten in ${BLITZ} Sekunden</p>${rankUp()}
+   ${rec?confetti():''}<div class="bignum pop">${r.ok}</div><p>richtige Antworten in ${BLITZ} Sekunden</p>${rankUp()}
    <div class="stats"><span class="pill">Rekord: ${save.blitz||0}</span><span class="pill sun">+${r.ok*3} Punkte</span></div>
    ${mistList(r.missed)}
    <div class="actions"><button class="btn" id="again">Nochmal</button><button class="btn ghost" id="hm">Zur Seekarte</button></div></div>`;

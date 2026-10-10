@@ -1,4 +1,4 @@
-/* Gemeinsame Teile der Englisch-5-Missionen: Hilfen, Stimme, Hell/Dunkel, Seekarte, Memory, Tastatur.
+/* Gemeinsame Teile aller Missionen: Hilfen, Stimme, Hell/Dunkel, Seekarte, Memory, Tastatur.
    Die Seite selbst legt fest: BRAND, TOPICS, save/persist, home(), und ihre eigenen Fragen. */
 // Ränge: der Abstand wächst jedes Mal um 100 Punkte (eine gute Runde bringt etwa 120 bis 165).
 // Nach dem letzten Rang geht es endlos weiter, alle LEGEND Punkte eine neue Stufe.
@@ -28,8 +28,14 @@ function rankUp(){const L=level();if(L>(save.rk||0)){save.rk=L;persist();return 
 function initRank(){if(save.rk!==undefined)return;const old=[0,100,300,600,1000],map=[0,1,3,6,11];let i=0;old.forEach((t,k)=>{if(save.xp>=t)i=k});save.rk=map[i]}
 function starsHtml(n){return '<span class="stars">'+[1,2,3].map(i=>i<=n?'<b>★</b>':'★').join('')+'</span>'}
 const boat='<svg viewBox="0 0 34 30" aria-hidden="true"><path d="M17 2v18" stroke="currentColor" stroke-width="2"/><path d="M18 3l11 15H18z" fill="#ffc93c"/><path d="M3 21h28l-5 7H8z" fill="#ff5a4e"/></svg>';
-const hero='<svg viewBox="0 0 130 90" aria-hidden="true"><path d="M0 62q16-14 32 0t32 0 32 0 34 0v28H0z" fill="#ffffff" opacity=".28"/><path d="M0 74q16-14 32 0t32 0 32 0 34 0v16H0z" fill="#ffffff" opacity=".4"/><path d="M62 10v34" stroke="#fff" stroke-width="3"/><path d="M65 12l30 30H65z" fill="#ffc93c"/><path d="M40 48h70l-12 16H52z" fill="#ff5a4e"/></svg>';
-const chest=(x,y)=>`<g transform="translate(${x} ${y})" aria-hidden="true"><rect y="5" width="18" height="11" rx="2" fill="#a0522d"/><path d="M0 7Q9-2 18 7z" fill="#7a3b17"/><rect x="7.5" y="7" width="3" height="5" fill="#ffc93c"/></g>`;
+// Kopfbild: die Wellen laufen (doppelt so lang wie sichtbar, eine Wellenlänge = 64), das Boot schaukelt
+const wave=y=>`M0 ${y}q16-14 32 0t32 0 32 0 32 0 32 0 32 0v${90-y}H0z`;
+const hero=`<svg viewBox="0 0 130 90" aria-hidden="true"><path class="wv" d="${wave(62)}" fill="#ffffff" opacity=".28"/>
+ <g class="bob"><path d="M62 10v34" stroke="#fff" stroke-width="3"/><path d="M65 12l30 30H65z" fill="#ffc93c"/><path d="M40 48h70l-12 16H52z" fill="#ff5a4e"/></g>
+ <path class="wv wv2" d="${wave(70)}" fill="#ffffff" opacity=".4"/></svg>`;
+// Konfetti für ein besonderes Ergebnis (nur auf dem Endbildschirm)
+const confetti=()=>'<div class="confetti" aria-hidden="true">'+Array.from({length:30},(_,i)=>`<i style="left:${(2+Math.random()*90).toFixed(1)}%;background:${['#ff5a4e','#ffc93c','#4fc0e8','#17895a','#7b5cc4'][i%5]};animation-delay:${(Math.random()*.7).toFixed(2)}s;--r:${Math.round(Math.random()*720-360)}deg"></i>`).join('')+'</div>';
+const chest=(x,y)=>`<g transform="translate(${x} ${y})" aria-hidden="true"><rect y="5" width="18" height="11" rx="2" fill="#a0522d"/><path d="M0 7Q9-2 18 7z" fill="#7a3b17"/><rect x="7.5" y="7" width="3" height="5" fill="#ffc93c"/><path class="spark" d="M17 0l1.2 2.8 2.8 1.2-2.8 1.2L17 8l-1.2-2.8L13 4l2.8-1.2z"/></g>`;
 const flag=(x,y)=>`<g transform="translate(${x} ${y})" aria-hidden="true"><path d="M0 0v17" class="pole"/><path d="M1 1h11l-3 4 3 4H1z" fill="#ff5a4e"/></g>`;
 // Wörter für Satzbaukasten: Satzzeichen und "..." als eigene Kärtchen
 const toks=s=>s.match(/\.\.\.|[\wÀ-ÿ'’\/]+|[?!.,]/g)||[];
@@ -66,11 +72,14 @@ function seaMap(P,h=222){ // P: Inselpositionen in der Reihenfolge von TOPICS
   const next=TOPICS.findIndex(t=>(save.best[t.id]||0)<3);
   const isl=TOPICS.map((t,i)=>{const [x,y]=P[i],n=save.best[t.id]||0;
     return `<g class="isl" data-t="${t.id}" tabindex="0" role="button" aria-label="${t.name}, ${n} von 3 Sternen">
-     <ellipse class="sand" cx="${x}" cy="${y}" rx="25" ry="11"/><ellipse class="green" cx="${x-5}" cy="${y-3}" rx="12" ry="5"/>
+     <ellipse class="foam" cx="${x}" cy="${y+1}" rx="29" ry="13"/>${i===next?`<ellipse class="ping" cx="${x}" cy="${y}" rx="27" ry="12"/>`:''}<ellipse class="sand" cx="${x}" cy="${y}" rx="25" ry="11"/><ellipse class="green" cx="${x-5}" cy="${y-3}" rx="12" ry="5"/>
      ${n>=3?chest(x-14,y-20):n>0?flag(x-12,y-22):''}<text x="${x}" y="${y+23}">${esc(t.map)}</text></g>`}).join('');
   // Markierung links auf der Insel, Boot rechts daneben (an einer Insel mit Schatz steht nie das Boot)
-  const b=next>=0?boat.replace('<svg',`<svg x="${P[next][0]+2}" y="${P[next][1]-26}" width="26" height="23" class="mapboat"`):'';
-  return `<svg class="map" viewBox="0 0 340 ${h}" role="group" aria-label="Seekarte"><rect class="sea" width="340" height="${h}" rx="18"/>
+  const b=next>=0?`<g class="bob">${boat.replace('<svg',`<svg x="${P[next][0]+2}" y="${P[next][1]-26}" width="26" height="23" class="mapboat"`)}</g>`:'';
+  // Wellenkringel zwischen den Inselreihen
+  const rip=[...new Set(P.map(p=>p[1]))].slice(0,-1).flatMap((y,k)=>[.2,.55,.85].map(f=>`<path class="ripple" d="M${Math.round(340*f+(k%2?-30:0))} ${y+40}q5-4 10 0t10 0"/>`)).join('');
+  return `<svg class="map" viewBox="0 0 340 ${h}" role="group" aria-label="Seekarte"><defs><linearGradient id="seaG" x1="0" y1="0" x2="0" y2="1"><stop class="sea2" offset="0"/><stop class="sea1" offset="1"/></linearGradient></defs>
+   <rect class="sea" width="340" height="${h}" rx="18"/>${rip}
    <path class="route" d="M${P.map(p=>p.join(' ')).join(' L')}"/>${isl}${b}</svg>`;
 }
 /* ---------- Memory: Paare {a,b}; a ist Englisch und wird beim Aufdecken vorgelesen. again() startet ein neues Spiel. ---------- */
@@ -98,7 +107,7 @@ function memoEnd(){
   const gain=10+r.pairs*2,rec=!save.memo||r.tries<save.memo;if(rec)save.memo=r.tries;save.xp+=gain;persist();
   $('#app').innerHTML=`${topBar()}
   <div class="qcard end"><h2>${rec?'Neuer Rekord!':'Alle Paare gefunden!'}</h2>
-   <div class="bignum pop">${r.tries}</div><p>Züge für ${r.pairs} Paare</p>${rankUp()}
+   ${rec?confetti():''}<div class="bignum pop">${r.tries}</div><p>Züge für ${r.pairs} Paare</p>${rankUp()}
    <div class="stats"><span class="pill">Rekord: ${save.memo} Züge</span><span class="pill sun">+${gain} Punkte</span></div>
    <div class="mist"><h3>Deine Paare</h3><ul>${[...new Set(r.cards.map(c=>c.e))].map(e=>`<li><b>${esc(e.a)}</b> = ${esc(e.b)}</li>`).join('')}</ul></div>
    <div class="actions"><button class="btn" id="again">Nochmal</button><button class="btn ghost" id="hm">Zur Seekarte</button></div></div>`;
