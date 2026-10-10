@@ -82,10 +82,11 @@ function seaMap(P,h=222){ // P: Inselpositionen in der Reihenfolge von TOPICS
    <rect class="sea" width="340" height="${h}" rx="18"/>${rip}
    <path class="route" d="M${P.map(p=>p.join(' ')).join(' L')}"/>${isl}${b}</svg>`;
 }
-/* ---------- Memory: Paare {a,b}; a ist Englisch und wird beim Aufdecken vorgelesen. again() startet ein neues Spiel. ---------- */
-function memoryGame(pairs,again,intro){
+/* ---------- Memory: Paare {a,b}; a wird beim Aufdecken vorgelesen. again() startet ein neues Spiel, key = Name des Rekords.
+   Optional je Paar: sa = was beim Aufdecken von a vorgelesen wird, fa = Text von a, sobald das Paar gefunden ist (Hör-Memory: a = 🔊), la = Zeile in der Liste am Ende. ---------- */
+function memoryGame(pairs,again,intro,key='memo'){
   G=null;if(B){clearTimeout(B.timer);B=null}
-  M={again,tries:0,open:[],found:0,pairs:pairs.length,lock:false,cards:shuffle(pairs.flatMap(e=>[{e,t:e.a,en:true},{e,t:e.b,en:false}]))};
+  M={again,key,tries:0,open:[],found:0,pairs:pairs.length,lock:false,cards:shuffle(pairs.flatMap(e=>[{e,t:e.a,en:true},{e,t:e.b,en:false}]))};
   $('#app').innerHTML=`<div class="q-head"><button class="back" id="bk" aria-label="Memory beenden">Ende</button><span class="brand" style="flex:1;text-align:center">Memory</span><span class="pill" id="mt">0 Züge</span></div>
    <p class="tip" style="margin:0 0 12px">${esc(intro)}</p>
    <div class="memo" role="group" aria-label="Karten, mit Pfeiltasten wählen">${M.cards.map((c,i)=>`<button class="card nav" data-i="${i}" aria-label="Verdeckte Karte">?</button>`).join('')}</div>`;
@@ -95,21 +96,21 @@ function memoryGame(pairs,again,intro){
 function flip(b){
   const c=M&&M.cards[+b.dataset.i];
   if(!c||M.lock||c.found||M.open.includes(b))return;
-  b.textContent=c.t;b.classList.add('up');b.setAttribute('aria-label',c.t);if(c.en)say(c.t);
+  b.textContent=c.t;b.classList.add('up');b.setAttribute('aria-label',c.en&&c.e.sa||c.t);if(c.en)say(c.e.sa||c.t);
   M.open.push(b);if(M.open.length<2)return;
   M.tries++;$('#mt').textContent=M.tries+(M.tries===1?' Zug':' Züge');
   const [x,y]=M.open.map(o=>M.cards[+o.dataset.i]);
-  if(x.e===y.e){x.found=y.found=true;M.open.forEach(o=>{o.classList.add('found');o.disabled=true});M.open=[];if(++M.found===M.pairs)setTimeout(memoEnd,700)}
+  if(x.e===y.e){x.found=y.found=true;M.open.forEach(o=>{const c=M.cards[+o.dataset.i];if(c.en&&c.e.fa)o.textContent=c.e.fa;o.classList.add('found');o.disabled=true});M.open=[];if(++M.found===M.pairs)setTimeout(memoEnd,700)}
   else{M.lock=true;setTimeout(()=>{if(!M)return;M.open.forEach(o=>{o.textContent='?';o.classList.remove('up');o.setAttribute('aria-label','Verdeckte Karte')});M.open=[];M.lock=false},1100)}
 }
 function memoEnd(){
   if(!M)return;const r=M;M=null;
-  const gain=10+r.pairs*2,rec=!save.memo||r.tries<save.memo;if(rec)save.memo=r.tries;save.xp+=gain;persist();
+  const gain=10+r.pairs*2,rec=!save[r.key]||r.tries<save[r.key];if(rec)save[r.key]=r.tries;save.xp+=gain;persist();
   $('#app').innerHTML=`${topBar()}
   <div class="qcard end"><h2>${rec?'Neuer Rekord!':'Alle Paare gefunden!'}</h2>
    ${rec?confetti():''}<div class="bignum pop">${r.tries}</div><p>Züge für ${r.pairs} Paare</p>${rankUp()}
-   <div class="stats"><span class="pill">Rekord: ${save.memo} Züge</span><span class="pill sun">+${gain} Punkte</span></div>
-   <div class="mist"><h3>Deine Paare</h3><ul>${[...new Set(r.cards.map(c=>c.e))].map(e=>`<li><b>${esc(e.a)}</b> = ${esc(e.b)}</li>`).join('')}</ul></div>
+   <div class="stats"><span class="pill">Rekord: ${save[r.key]} Züge</span><span class="pill sun">+${gain} Punkte</span></div>
+   <div class="mist"><h3>Deine Paare</h3><ul>${[...new Set(r.cards.map(c=>c.e))].map(e=>`<li>${e.la?esc(e.la):`<b>${esc(e.a)}</b> = ${esc(e.b)}`}</li>`).join('')}</ul></div>
    <div class="actions"><button class="btn" id="again">Nochmal</button><button class="btn ghost" id="hm">Zur Seekarte</button></div></div>`;
   bindTheme();$('#again').onclick=r.again;$('#hm').onclick=home;$('#again').focus();
 }

@@ -76,7 +76,39 @@ let g=0;while(!$('.end')&&g++<80){const q=G.queue[0];g<=2?solveWrong(q):solve(q)
 const rows=$$('.cancheck tr').slice(1).map(r=>r.querySelector('.face').textContent);
 A('Check-Tabelle: erstes Thema 🙁 mit Üben-Knopf, Rest 😀',rows.length===6&&rows[0]==='🙁'&&rows.slice(1).every(f=>f==='😀')&&!!$('[data-go="nomen"]'));
 let qq=true;for(let i=0;i<400;i++){const x=quickQ();if(x.kind!=='mc')qq=false}A('Blitzrunde: nur Auswahlfragen',qq);
-let memoOk=true;for(let i=0;i<150;i++){home();$('#gm').click();const t=M.cards.map(c=>c.t);if(t.length!==12||new Set(t).size!==12)memoOk=false;
-  for(const c of M.cards.filter(c=>/\p{Extended_Pictographic}/u.test(c.t))){const fits=NOMEN.filter(n=>n[4]===c.t).map(n=>`${n[1]} ${n[0]}`);if(t.filter(x=>fits.includes(x)).length!==1)memoOk=false}}
-A('Memory: 12 eindeutige Karten, jedes Bild passt zu genau einer Karte',memoOk);
+// Memory: alle Arten und Stufen; jede Karte passt zu genau einer anderen (Bild: nur Namen mit Artikel, Mehrzahl oder allein, nicht Wortteile)
+const PL=w=>{const n=noun(w);return n?n[2].split('|'):[]};
+let memoOk=true;for(const art of ['mix','silben','hoeren'])for(const n of [6,8,10])for(let i=0;i<40;i++){memoStart(art,n);const cs=M.cards,t=cs.map(c=>c.t);
+  if(cs.length!==2*n||new Set(t.filter(x=>x!=='🔊')).size!==t.filter(x=>x!=='🔊').length){memoOk=false;P(`Memory ${art} ${n}: ${t}`)}
+  if(art==='mix')for(const c of cs.filter(c=>/\p{Extended_Pictographic}/u.test(c.t))){const L=(NOMEN.find(n=>n[4]===c.t)||[])[0]||ieWord(IE_BILD.find(x=>x[1]===c.t)),
+    fits=t.filter(x=>x!==c.t&&!x.includes('+')&&x.split(' ').some(w=>w===L||PL(L).includes(w)));if(fits.length!==1){memoOk=false;P(`Memory-Bild ${c.t} passt zu ${fits.length} Karten: ${t}`)}}
+  if(art==='silben')for(const c of cs.filter(c=>c.en))if(!SILBEN.includes(c.t+c.e.b.slice(1))||c.e.sa!==(c.t+c.e.b.slice(1)).replace(/-/g,'')){memoOk=false;P('Silben-Paar '+c.t+c.e.b)}
+  if(art==='hoeren')for(const c of cs.filter(c=>c.en)){const n=NOMEN.find(n=>`${n[1]} ${n[0]}`===c.e.sa);if(!n||t.filter(x=>x===n[4]).length!==1){memoOk=false;P('Hör-Paar '+c.e.sa)}}}
+A('Memory: gemischt, Silben, Hören je 6/8/10 Paare, jede Karte eindeutig',memoOk);
+{memoStart('silben',8);const bs=$$('.card');for(const e of new Set(M.cards.map(c=>c.e)))M.cards.forEach((c,i)=>{if(c.e===e)flip(bs[i])});const tries=M.tries;memoEnd();
+ A('Memory: Rekord je Art und Stufe',save.memo_silben8===tries&&tries===8&&/8 Paare/.test($('.end').textContent))}
+home();$('#gm').click();A('Memory-Auswahl mit Stufen',$$('[data-n]').length===3&&$$('[data-art]').length>=2);
+// Artikel-Häfen
+haefen();let hOk=true;for(let i=0;i<15;i++){const w=X.w;if(!$('.big').textContent.includes(w[0]))hOk=false;$(`[data-a="${w[1]}"]`).click();if(X.n!==i+1||!$('.opt.right'))hOk=false;hafenWeiter()}
+A('Artikel-Häfen: richtiger Hafen zählt, es wird schneller',hOk&&X.t===Math.max(HAFEN_T[2],HAFEN_T[0]-15*HAFEN_T[1]));
+hafenA(null);A('Artikel-Häfen: Zeit um kostet ein Leben',X.lives===2&&/Zeit ist um/.test($('#fb').textContent)&&!!$('.opt.right'));
+for(let k=0;k<2;k++){hafenWeiter();const w=X.w;$(`[data-a="${w[1]==='der'?'die':'der'}"]`).click();if(!$('.opt.wrong'))hOk=false}hafenWeiter();
+A('Artikel-Häfen: nach drei Fehlern Ende mit Rekord und Fehlerliste',hOk&&!!$('.end')&&save.hafen===15&&$$('.mist li').length>=1);
+// Satz-Detektiv
+detektiv();let dOk=true;
+for(let f=0;f<DET_N;f++){const d=X.d,re=d.words.map((w,i)=>(i===0||d.marks[i-1]?cap(w):w)+d.marks[i]).join(' ');
+  if(re!==d.ok||!richtig(d.ok)||d.marks.filter(Boolean).length!==d.ok.match(/[.?]/g).length){dOk=false;P('Detektiv-Text: '+re+' | '+d.ok)}
+  if(f<DET_N-1){d.marks.forEach((m,i)=>{for(let k=0;k<{'':0,'.':1,'?':2}[m];k++)$(`.dgap[data-k="${i}"]`).click()});
+    const ws=$$('.dw').map(x=>x.textContent);if(ws.join(' ')!==d.ok.replace(/[.?]/g,''))dOk=false} // nach einem Zeichen groß weiter
+  $('#bp').click();if(f<DET_N-1?!/Fall gelöst/.test($('#fb').textContent):!($('.dgap.miss')&&/Fast/.test($('#fb').textContent)))dOk=false;$('#nx').click()}
+A('Satz-Detektiv: Antippen setzt . und ?, danach groß, gelöste Fälle zählen, Fehler zeigt fehlende Zeichen',dOk&&!!$('.end')&&save.detektiv===DET_N-1);
+// Abc-Leiter
+leiter();let lOk=true;const two=x=>x.slice(0,2).toLowerCase();
+for(let k=0;k<LEITER_N-1;k++){const w=X.w,list=X.list.slice();if(list.some(x=>two(x)===two(w))||list.includes(w))lOk=false;
+  const p=list.filter(x=>x.localeCompare(w,'de')<0).length;$(`.slot[data-p="${p}"]`).click();if(X.n!==k+1)lOk=false;leiterWeiter()}
+const LL=X.list.slice();if(LL.join()!==LL.slice().sort((a,b)=>a.localeCompare(b,'de')).join())lOk=false;
+{const p=X.list.filter(x=>x.localeCompare(X.w,'de')<0).length;$(`.slot[data-p="${p===0?1:0}"]`).click()}
+A('Abc-Leiter: falsche Stelle kostet ein Leben, die richtige wird gezeigt',X.lives===2&&!!$('.slot.right')&&!!$('.slot.wrong'));
+leiterWeiter();A('Abc-Leiter: richtig einsortiert zählt, Leiter bleibt sortiert, Ende nach 10 Wörtern',lOk&&!!$('.end')&&save.leiter===LEITER_N-1);
+home();
 done();

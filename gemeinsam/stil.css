@@ -164,6 +164,16 @@ a.tile{color:inherit;text-decoration:none}
 .card.up{background:var(--card);color:var(--ink)}
 .card.found{background:var(--good-soft);color:var(--good);border-color:var(--good);cursor:default}
 .timer i{background:var(--coral)}
+/* Spiele: Häfen, Satz-Detektiv, Abc-Leiter, Memory-Stufen */
+.opts.haefen{grid-template-columns:repeat(3,minmax(0,1fr))}.haefen .opt{text-align:center;font-size:1.2rem}
+.du{white-space:nowrap}.dtext{font-size:1.25rem;line-height:2.3;font-weight:700;margin:6px 0 0}
+.dgap{display:inline-block;min-width:26px;height:1.6em;vertical-align:middle;margin:0 1px;padding:0 4px;border:2px dashed var(--line);border-radius:8px;background:transparent;color:var(--coral);font-weight:800;font-size:1.2rem;line-height:1}
+.dgap:not(:empty){border-style:solid;border-color:var(--sea)}.dgap.right{border-color:var(--good);color:var(--good);background:var(--good-soft)}
+.dgap.wrong{border-color:var(--bad);color:var(--bad);background:var(--bad-soft);text-decoration:line-through}.dgap.miss{border-color:var(--good);color:var(--good)}
+.leiter{display:grid;gap:4px;margin-top:8px}.sprosse{background:var(--sea-soft);border-radius:10px;padding:7px 14px;font-weight:800;overflow-wrap:anywhere}
+.slot{border:2px dashed var(--line);background:transparent;border-radius:10px;padding:3px;color:var(--muted);font-size:.85rem;font-weight:700}
+.slot.right{border-style:solid;border-color:var(--good);color:var(--good);background:var(--good-soft);font-size:1rem}.slot.wrong{border-color:var(--bad);color:var(--bad)}
+.levels{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px}
 .bignum{font-family:var(--f-display);font-size:4rem;font-weight:700;color:var(--sea);line-height:1;margin:8px 0}
 .fb .row{gap:10px}
 .prompt .btn{font-size:1.1rem}

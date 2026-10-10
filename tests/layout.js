@@ -16,6 +16,10 @@ if(typeof AUFG!=='undefined'){ // Deutsch
   for(const [isl,o] of Object.entries(AUFG))for(const sub of Object.keys(o))play(()=>gen(isl,sub),4,'Deutsch '+isl);
   start('check');let g=0;while(!$('.end')&&g++<80){solveWrong(G.queue[0]);$('#nx').click()}
   scan('Deutsch Ende Ich-kann-Check');
+  home();$('#gh').click();scan('Häfen');hafenA(null);scan('Häfen Fehler');
+  home();$('#gd').click();scan('Detektiv');$$('.dgap').forEach(b=>{b.click();b.click()});scan('Detektiv alle ?');$('#bp').click();scan('Detektiv geprüft');
+  home();$('#gl').click();for(let k=0;k<LEITER_N-1;k++){leiterA(0);leiterWeiter();X.lives=3}scan('Leiter lang');
+  home();$('#gm').click();scan('Memory-Auswahl');memoStart('silben',10);$$('.card').forEach((b,i)=>b.textContent=M.cards[i].t);scan('Memory Silben aufgedeckt');home();
 }else if(typeof SUB!=='undefined'){ // Mathe
   for(const [isl,o] of Object.entries(SUB))for(const sub of Object.keys(o))play(()=>gen(isl,sub),sub==='wort2zahl'||sub==='zahl2wort'||sub==='runden'?15:3,'Mathe '+isl); // lange Zahlwörter öfter
   start('check');let g=0;while(!$('.end')&&g++<80){const q=G.queue[0];if(q.kind==='mc')answer((q.options.indexOf(q.correct)+1)%q.options.length);else if(q.kind==='widget'){if(q.w==='bars')WS.set(0,q.step);else WS.put(q.i===1?2:1);answer(null,null)}else answer(null,q.kind==='build'?'x':'999999999');$('#nx').click()}
