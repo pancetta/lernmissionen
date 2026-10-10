@@ -1,0 +1,35 @@
+tests/mathe.js
+  s_54261e8a499c43::t_2ba2c7af6ef064 85
+  s_54261e8a499c43::t_29e01ba910d156 72
+  s_54261e8a499c43::t_b0a0be16e00e32 83-84
+tests/deutsch.js
+  s_54261e8a499c43::t_1b89d6926274af 30
+  s_54261e8a499c43::t_be4864bf36329d 19-20,31,37-38,40-41,47
+mathe-5/zahlen-und-groessen/index.html
+  s_54261e8a499c43::t_0537ed0a4dda52 56-57,61,117,130-131,133,138,141,143,146,162,179-180,229,231-232,235-236,348
+  s_54261e8a499c43::t_7a1e773ea795b7 135
+deutsch-3/woerter-und-saetze/index.html
+  s_54261e8a499c43::t_1ee32bf73a4fbc 76,80,108-109,129-134,141,145-147,153,159-161,166
+gemeinsam/stil.css
+  s_54261e8a499c43::t_516ef9d90e2026 117-120
+tests/hilfen.js
+  s_54261e8a499c43::t_516ef9d90e2026 20,30
+gemeinsam/runde.js
+  s_54261e8a499c43::t_516ef9d90e2026 7,18,44-46,66-69,93-95
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "dc566c140b97c14ea2dff64dcf429cb381f991ac",
+  "prompts": {},
+  "sessions": {
+    "s_54261e8a499c43": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "09d1c376-00da-4c7d-9fcd-87abfbea46f1",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Robert Speck <pancetta@users.noreply.github.com>"
+    }
+  }
+}
