@@ -80,19 +80,24 @@ let qq=true;for(let i=0;i<400;i++){const x=quickQ();if(x.kind!=='mc')qq=false}A(
 const PL=w=>{const n=noun(w);return n?n[2].split('|'):[]};
 let memoOk=true;for(const art of ['mix','silben','hoeren'])for(const n of [6,8,10])for(let i=0;i<40;i++){memoStart(art,n);const cs=M.cards,t=cs.map(c=>c.t);
   if(cs.length!==2*n||new Set(t.filter(x=>x!=='🔊')).size!==t.filter(x=>x!=='🔊').length){memoOk=false;P(`Memory ${art} ${n}: ${t}`)}
-  if(art==='mix')for(const c of cs.filter(c=>/\p{Extended_Pictographic}/u.test(c.t))){const L=(NOMEN.find(n=>n[4]===c.t)||[])[0]||ieWord(IE_BILD.find(x=>x[1]===c.t)),
-    fits=t.filter(x=>x!==c.t&&!x.includes('+')&&x.split(' ').some(w=>w===L||PL(L).includes(w)));if(fits.length!==1){memoOk=false;P(`Memory-Bild ${c.t} passt zu ${fits.length} Karten: ${t}`)}}
+  if(art==='mix'||art==='hoeren')for(const c of cs.filter(c=>c.t!=='🔊'&&/\p{Extended_Pictographic}/u.test(c.t))){const L=(NOMEN.find(n=>n[4]===c.t)||[])[0]||ieWord(IE_BILD.find(x=>x[1]===c.t)),g=oberOf(L),
+    names=x=>x.includes('+')?[]:x.split(' ').concat(ZUS.filter(z=>z[4]===x).map(z=>z[2])), // ein zusammengesetztes Nomen benennt auch sein Grundwort (Haustür → Tür)
+    fits=cs.filter(d=>d.t!==c.t&&(d.e.sa?[d.e.sa.split(' ')[1]]:names(d.t)).some(w=>oberOf(w)===g||NOMEN.some(n=>oberOf(n[0])===g&&PL(n[0]).includes(w))));
+    if(fits.length!==1){memoOk=false;P(`Memory-Bild ${c.t} passt zu ${fits.length} Karten: ${t}`)}}
+  if(art==='silben'&&new Set(cs.filter(c=>c.en).map(c=>c.e.b.split('-')[1])).size!==n){memoOk=false;P('Silben-Memory: gleiche 2. Silbe '+t)}
   if(art==='silben')for(const c of cs.filter(c=>c.en))if(!SILBEN.includes(c.t+c.e.b.slice(1))||c.e.sa!==(c.t+c.e.b.slice(1)).replace(/-/g,'')){memoOk=false;P('Silben-Paar '+c.t+c.e.b)}
   if(art==='hoeren')for(const c of cs.filter(c=>c.en)){const n=NOMEN.find(n=>`${n[1]} ${n[0]}`===c.e.sa);if(!n||t.filter(x=>x===n[4]).length!==1){memoOk=false;P('Hör-Paar '+c.e.sa)}}}
+{let both=0;for(let i=0;i<300;i++){memoStart('mix',10);const t=M.cards.map(c=>c.t);if(t.includes('🌷')&&t.includes('die Blume'))both++}A('Memory: nie Bild und Oberbegriff zugleich (🌷 und „die Blume“)',both===0)}
 A('Memory: gemischt, Silben, Hören je 6/8/10 Paare, jede Karte eindeutig',memoOk);
 {memoStart('silben',8);const bs=$$('.card');for(const e of new Set(M.cards.map(c=>c.e)))M.cards.forEach((c,i)=>{if(c.e===e)flip(bs[i])});const tries=M.tries;memoEnd();
  A('Memory: Rekord je Art und Stufe',save.memo_silben8===tries&&tries===8&&/8 Paare/.test($('.end').textContent))}
 home();$('#gm').click();A('Memory-Auswahl mit Stufen',$$('[data-n]').length===3&&$$('[data-art]').length>=2);
-// Artikel-Häfen
-haefen();let hOk=true;for(let i=0;i<15;i++){const w=X.w;if(!$('.big').textContent.includes(w[0]))hOk=false;$(`[data-a="${w[1]}"]`).click();if(X.n!==i+1||!$('.opt.right'))hOk=false;hafenWeiter()}
-A('Artikel-Häfen: richtiger Hafen zählt, es wird schneller',hOk&&X.t===Math.max(HAFEN_T[2],HAFEN_T[0]-15*HAFEN_T[1]));
-hafenA(null);A('Artikel-Häfen: Zeit um kostet ein Leben',X.lives===2&&/Zeit ist um/.test($('#fb').textContent)&&!!$('.opt.right'));
-for(let k=0;k<2;k++){hafenWeiter();const w=X.w;$(`[data-a="${w[1]==='der'?'die':'der'}"]`).click();if(!$('.opt.wrong'))hOk=false}hafenWeiter();
+// Artikel-Häfen (gemeinsames Sortier-Spiel)
+const binOf=a=>`[data-b="${HAEFEN.bins.indexOf(a)}"]`,wordOf=()=>noun($('.prompt .big').textContent.replace(EMO,'').trim());
+haefen();let hOk=true;for(let i=0;i<15;i++){const w=wordOf();if(!w||w[1]!==X.it.bin)hOk=false;$(binOf(w[1])).click();if(X.n!==i+1||!$('.opt.right'))hOk=false;sortWeiter()}
+A('Artikel-Häfen: richtiger Hafen zählt, es wird schneller',hOk&&X.t===Math.max(HAEFEN.t[2],HAEFEN.t[0]-15*HAEFEN.t[1]));
+sortA(-1);A('Artikel-Häfen: Zeit um kostet ein Leben',X.lives===2&&/Zeit ist um/.test($('#fb').textContent)&&!!$('.opt.right'));
+for(let k=0;k<2;k++){sortWeiter();const w=wordOf();$(binOf(w[1]==='der'?'die':'der')).click();if(!$('.opt.wrong'))hOk=false}sortWeiter();
 A('Artikel-Häfen: nach drei Fehlern Ende mit Rekord und Fehlerliste',hOk&&!!$('.end')&&save.hafen===15&&$$('.mist li').length>=1);
 // Satz-Detektiv
 detektiv();let dOk=true;

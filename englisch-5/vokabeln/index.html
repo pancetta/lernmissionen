@@ -19,8 +19,10 @@
 
 <script src="../wortschatz.js"></script>
 <script src="../../gemeinsam/gemeinsam.js"></script>
+<script src="../../gemeinsam/spiele.js"></script>
 <script>
-const {W,TOPICS,NOTYPE}=WORTSCHATZ;
+const {W,TOPICS,NOTYPE,NAH}=WORTSCHATZ;
+const nah=(a,b)=>NAH.some(g=>g.includes(enShow(a))&&g.includes(enShow(b)));
 const BRAND='Vokabel-Inseln';
 const MAP=[[40,40],[105,40],[170,40],[235,40],[300,40],[300,115],[235,115],[170,115],[105,115],[40,115],[70,190],[170,190],[270,190]]; // Seekarte, Reihenfolge wie TOPICS
 
@@ -56,7 +58,7 @@ const key=e=>e[1];
 const canBuild=e=>NOTYPE.includes(e[0])&&toks(enShow(e)).filter(t=>/\w/.test(t)).length>=3;
 function distractors(e,label){ // bis zu 3 andere Antworten, zuerst von derselben Insel
   const mine=label(e),seen=new Set([mine]),d=[];
-  for(const x of shuffle(W.filter(x=>x!==e&&x[0]===e[0])).concat(shuffle(W.filter(x=>x[0]!==e[0])))){const l=label(x);if(!seen.has(l)){seen.add(l);d.push(l)}if(d.length>=3)break}
+  for(const x of shuffle(W.filter(x=>x!==e&&!nah(x,e)&&x[0]===e[0])).concat(shuffle(W.filter(x=>x[0]!==e[0]&&!nah(x,e))))){const l=label(x);if(!seen.has(l)){seen.add(l);d.push(l)}if(d.length>=3)break}
   return d;
 }
 const tfShown=e=>Math.random()<.5?deShow(e):distractors(e,deShow)[0]; // halb stimmt es, halb nicht
@@ -65,7 +67,7 @@ const tfShown=e=>Math.random()<.5?deShow(e):distractors(e,deShow)[0]; // halb st
 function mistList(list){return list.length?`<div class="mist"><h3>Diese Wörter üben wir weiter</h3><ul>${list.map(e=>`<li><b>${esc(enShow(e))}</b> = ${esc(deShow(e))}</li>`).join('')}</ul></div>`:'<div class="mist"><h3>Keine Fehler. Wow!</h3></div>'}
 
 function home(){
-  G=null;M=null;if(B){clearTimeout(B.timer);B=null}
+  G=null;M=null;if(B){clearTimeout(B.timer);B=null}stopSpiel();
   const hi=save.name?`Ahoi ${esc(save.name)}!`:'Ahoi!';
   const tiles=TOPICS.map(t=>`<button class="tile" data-t="${t.id}"><h3>${t.name}</h3><span class="sub">${t.sub}</span>${starsHtml(save.best[t.id]||0)}</button>`).join('');
   const chests=TOPICS.filter(t=>(save.best[t.id]||0)>=3).length;
@@ -87,6 +89,8 @@ function home(){
    <button class="tile mix" data-t="mix"><h3>Große Rundfahrt</h3><span class="sub">Alle Inseln auf einmal, die schwierigste Fahrt</span>${starsHtml(save.best.mix||0)}</button>
    <button class="tile" id="gb"><h3>Blitzrunde</h3><span class="sub">${BLITZ} Sekunden: Wie viele schaffst du?</span><span class="sub">Rekord: ${save.blitz||0} richtig</span></button>
    <button class="tile" id="gm"><h3>Memory</h3><span class="sub">Finde ${PAIRS} Wortpaare</span><span class="sub">${save.memo?'Rekord: '+save.memo+' Züge':'Noch kein Rekord'}</span></button>
+   <button class="tile" id="gd" data-ico="⚖️"><h3>Stimmt’s?</h3><span class="sub">dog = Hund? Schnell entscheiden, es wird immer schneller</span><span class="sub">Rekord: ${save.duell||0} richtig</span></button>
+   <button class="tile" id="gt" data-ico="🗝️"><h3>Schatztruhe</h3><span class="sub">Errate das englische Wort Buchstabe für Buchstabe</span><span class="sub">Rekord: ${save.truhe||0} von ${TRUHE_N} Truhen</span></button>
   </div>
   <h2 class="sec">Inseln</h2><div class="grid isles">${tiles}</div>
   <p class="tip">${storageOK?'Dein Fortschritt wird automatisch auf diesem Gerät gespeichert.':'Speichern geht in diesem Browser gerade nicht (privates Fenster?). Dein Fortschritt geht beim Schließen verloren.'}</p>
@@ -98,7 +102,7 @@ function home(){
   $('#nm').oninput=e=>{save.name=e.target.value.trim();persist()};
   document.querySelectorAll('[data-t]').forEach(b=>{b.onclick=()=>start(b.dataset.t);
     if(b.tagName==='g')b.onkeydown=ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();start(b.dataset.t)}}});
-  $('#gb').onclick=blitz;$('#gm').onclick=()=>memory('words');
+  $('#gb').onclick=blitz;$('#gm').onclick=()=>memory('words');$('#gd').onclick=duell;$('#gt').onclick=truhe;
   if(rg)$('#rs').onclick=()=>{G=rg;show()};
   let armed=false;$('#rst').onclick=ev=>{if(!armed){armed=true;ev.target.textContent='Wirklich alles löschen? Nochmal tippen.';return}save={name:'',xp:0,best:{},weak:{},round:null,sound:save.sound,blitz:0,memo:0};persist();home()};
 }
@@ -266,6 +270,51 @@ function blitzEnd(){
    <div class="actions"><button class="btn" id="again">Nochmal</button><button class="btn ghost" id="hm">Zur Seekarte</button></div></div>`;
   bindTheme();$('#again').onclick=blitz;$('#hm').onclick=home;$('#again').focus();
 }
+
+/* ---------- Spiele: Stimmt's?-Duell, Schatztruhe ---------- */
+// Stimmt's? (gemeinsames Sortier-Spiel): Passt die deutsche Bedeutung zum englischen Wort?
+const deTeile=d=>d.toLowerCase().split(/\s*[\/,;]\s*/).map(x=>x.trim()).filter(Boolean);
+const gleichesEn=(a,b)=>a[1].split('|').some(x=>b[1].split('|').includes(x));
+const passt=(e,d)=>W.some(x=>gleichesEn(x,e)&&deTeile(deShow(x)).some(t=>deTeile(d).includes(t))); // auch über ein zweites Wort mit gleicher Schreibweise
+const DUELL={key:'duell',title:'Stimmt’s?',intro:'Passt die Bedeutung? Entscheide, bevor die Zeit abläuft.',bins:['Stimmt','Stimmt nicht'],t:[7000,300,3000],endText:'Wortpaare richtig erkannt',
+  next(){const e=pickEntries('words',1)[0],d=Math.random()<.5?deShow(e):distractors(e,deShow)[0];
+    return {html:`<p class="big">${esc(enShow(e))} = ${esc(d)}</p>`,bin:passt(e,d)?'Stimmt':'Stimmt nicht',sol:`**${enShow(e)}** = ${deShow(e)}`,wk:key(e),say:enShow(e)}}};
+const duell=()=>sortGame(DUELL);
+
+// Schatztruhe: das englische Wort Buchstabe für Buchstabe erraten; der deutsche Hinweis und der erste Buchstabe stehen schon da
+const TRUHE_N=5,TRUHE_LEBEN=6,ABC_EN='abcdefghijklmnopqrstuvwxyz';
+const TRUHE_W=W.filter(e=>!NOTYPE.includes(e[0])&&/^[A-Za-z][A-Za-z' -]{2,13}$/.test(enShow(e)));
+function truhe(){G=null;M=null;if(B){clearTimeout(B.timer);B=null}X={game:'truhe',i:0,n:0,missed:[],seen:[]};truheQ()}
+function truheQ(){
+  let e;do e=pick(TRUHE_W);while(X.seen.includes(e));X.seen.push(e);
+  const w=enShow(e);Object.assign(X,{e,w,got:new Set([w[0].toLowerCase()]),wrong:0,busy:false});
+  $('#app').innerHTML=`${gameHead('Schatztruhe',`<span class="brand" style="flex:1;text-align:center">Truhe ${X.i+1} von ${TRUHE_N}</span><span id="tl">${lives(TRUHE_LEBEN,'🔑')}</span>`)}
+  <div class="qcard"><div class="kind">Welches englische Wort ist das?</div><p>Auf Deutsch: <b>${esc(deShow(e))}</b></p><p class="truhe" id="tw" aria-live="polite"></p>
+  <div class="abc" role="group" aria-label="Buchstaben, mit Pfeiltasten wählen">${[...ABC_EN].map(c=>`<button class="nav" type="button" data-c="${c}">${c}</button>`).join('')}</div>
+  <p class="tip">Jeder falsche Buchstabe kostet einen Schlüssel. Du kannst auch auf der Tastatur tippen.</p><div id="fb"></div></div>`;
+  $('#bk').onclick=home;document.querySelectorAll('[data-c]').forEach(b=>b.onclick=()=>truheRate(b.dataset.c));
+  X.got.forEach(c=>{const b=$(`[data-c="${c}"]`);if(b){b.disabled=true;b.classList.add('right')}});truheDraw();$('[data-c]:not(:disabled)').focus();
+}
+function truheDraw(all){
+  $('#tw').innerHTML=[...X.w].map(c=>/[a-z]/i.test(c)?`<span class="bs">${all||X.got.has(c.toLowerCase())?esc(c):''}</span>`:`<span class="bs frei">${c===' '?'&nbsp;':esc(c)}</span>`).join('');
+  $('#tw').setAttribute('aria-label',[...X.w].map(c=>/[a-z]/i.test(c)&&!all&&!X.got.has(c.toLowerCase())?'Lücke':c).join(' '));
+}
+function truheRate(c){
+  if(!X||X.game!=='truhe'||X.busy||X.got.has(c))return;X.got.add(c);const hit=X.w.toLowerCase().includes(c),b=$(`[data-c="${c}"]`);
+  if(b){b.disabled=true;b.classList.add(hit?'right':'wrong')}
+  if(!hit){X.wrong++;$('#tl').innerHTML=lives(TRUHE_LEBEN-X.wrong,'🔑')}
+  truheDraw();
+  if([...X.w.toLowerCase()].every(ch=>!/[a-z]/.test(ch)||X.got.has(ch)))truheEnde(true);else if(X.wrong>=TRUHE_LEBEN)truheEnde(false);
+}
+function truheEnde(ok){
+  X.busy=true;X.i++;if(ok)X.n++;else{X.missed.push(`**${X.w}** = ${deShow(X.e)}`);weakUp(key(X.e))}
+  truheDraw(true);document.querySelectorAll('[data-c]').forEach(b=>b.disabled=true);if(canSpeak())say(X.w);
+  $('#fb').innerHTML=`<div class="fb ${ok?'ok':'no'}" role="status"><strong>${ok?'Die Truhe ist offen!':'Keine Schlüssel mehr.'}</strong><span class="ans"><b>${esc(X.w)}</b> = ${esc(deShow(X.e))}</span>
+   <div class="row"><button class="btn" id="nx">${X.i<TRUHE_N?'Nächste Truhe':'Fertig'}</button></div></div>`;
+  $('#nx').onclick=truheWeiter;$('#nx').focus();
+}
+const truheWeiter=()=>{if(X)X.i<TRUHE_N?truheQ():spielEnde('truhe',X.n,`von ${TRUHE_N} Truhen geöffnet`,X.missed,truhe)};
+document.addEventListener('keydown',ev=>{if(X&&X.game==='truhe'&&!X.busy&&/^[a-z]$/i.test(ev.key)&&!ev.ctrlKey&&!ev.metaKey&&!ev.altKey){ev.preventDefault();truheRate(ev.key.toLowerCase())}});
 
 /* ---------- Memory: englisches Wort und deutsche Bedeutung als Paar ---------- */
 function memory(topic){memoryGame(pickEntries(topic,PAIRS).map(e=>({a:enShow(e),b:deShow(e)})),()=>memory(topic),'Finde die Paare: englisches Wort und deutsche Bedeutung.')}

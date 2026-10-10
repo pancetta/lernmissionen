@@ -16,7 +16,7 @@ if(typeof AUFG!=='undefined'){ // Deutsch
   for(const [isl,o] of Object.entries(AUFG))for(const sub of Object.keys(o))play(()=>gen(isl,sub),4,'Deutsch '+isl);
   start('check');let g=0;while(!$('.end')&&g++<80){solveWrong(G.queue[0]);$('#nx').click()}
   scan('Deutsch Ende Ich-kann-Check');
-  home();$('#gh').click();scan('Häfen');hafenA(null);scan('Häfen Fehler');
+  home();$('#gh').click();scan('Häfen');sortA(-1);scan('Häfen Fehler');
   home();$('#gd').click();scan('Detektiv');$$('.dgap').forEach(b=>{b.click();b.click()});scan('Detektiv alle ?');$('#bp').click();scan('Detektiv geprüft');
   home();$('#gl').click();for(let k=0;k<LEITER_N-1;k++){leiterA(0);leiterWeiter();X.lives=3}scan('Leiter lang');
   home();$('#gm').click();scan('Memory-Auswahl');memoStart('silben',10);$$('.card').forEach((b,i)=>b.textContent=M.cards[i].t);scan('Memory Silben aufgedeckt');home();
@@ -24,12 +24,18 @@ if(typeof AUFG!=='undefined'){ // Deutsch
   for(const [isl,o] of Object.entries(SUB))for(const sub of Object.keys(o))play(()=>gen(isl,sub),sub==='wort2zahl'||sub==='zahl2wort'||sub==='runden'?15:3,'Mathe '+isl); // lange Zahlwörter öfter
   start('check');let g=0;while(!$('.end')&&g++<80){const q=G.queue[0];if(q.kind==='mc')answer((q.options.indexOf(q.correct)+1)%q.options.length);else if(q.kind==='widget'){if(q.w==='bars')WS.set(0,q.step);else WS.put(q.i===1?2:1);answer(null,null)}else answer(null,q.kind==='build'?'x':'999999999');$('#nx').click()}
   scan('Mathe Ende Ich-kann-Check');
+  for(let i=0;i<12;i++){home();$('#gv').click();scan('Vergleich');sortA(-1);scan('Vergleich Fehler')}
+  home();$('#gk').click();do kasseQ();while(X.note!==50);scan('Kasse');for(const v of [2000,1000,500,200,100,50,20,10,5,2,1])$(`[data-v="${v}"]`).click();scan('Kasse voll');$('#bp').click();scan('Kasse geprüft');
+  home();$('#gz').click();zielSet(X.max);$('#bp').click();scan('Zielwurf');home();
 }else if(typeof qGap!=='undefined'){ // Pronomen
   for(const t of TOPICS)play(()=>makeQ(t.id),15,'Pronomen '+t.id);
   start('mix');let g=0;while(!$('.end')&&g++<60){const q=G.queue[0];if(q.kind==='type')answer(null,'zzz');else if(q.kind==='build')answer(null,'x');else answer((q.options.indexOf(q.correct)+1)%q.options.length);$('#nx').click()}scan('Pronomen Ende');
 }else{ // Vokabeln (eigener Ablauf)
   for(const t of TOPICS){for(let r=0;r<12;r++){start(t.id);const q=G.queue[0];scan('Vokabeln Frage '+t.id);
     if(kindOf(q)==='type')answer(null,'zzz');else if(kindOf(q)==='build')answer(null,'x');else answer((q.options.indexOf(q.correct)+1)%q.options.length);scan('Vokabeln falsch '+t.id)}}
+  for(let i=0;i<15;i++){home();$('#gd').click();scan('Stimmt’s');sortA(-1);scan('Stimmt’s Fehler')}
+  for(let i=0;i<10;i++){home();$('#gt').click();X.w=TRUHE_W.reduce((a,e)=>enShow(e).length>a.length?enShow(e):a,'');truheDraw();scan('Truhe langes Wort');[...ABC_EN].slice(0,6).forEach(c=>$(`[data-c="${c}"]`).click());scan('Truhe Ende')}
+  home();
 }
 home();scan('Startseite');
 over.forEach(P);A(`nichts läuft über den Rand (${BREITE} px)`,over.length===0);done();

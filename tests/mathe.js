@@ -100,4 +100,30 @@ let qq=true;for(let i=0;i<500;i++){const x=quickQ();if(x.kind!=='mc'||new Set(x.
 A('Blitzrunde: 500 Fragen nur mit eindeutigen Antworten',qq);
 home();$('#gb').click();A('Blitz läuft',!!B);blitzEnd();
 home();$('#gm').click();const ct=M.cards.map(c=>c.t);A('Memory: 12 eindeutige Karten',ct.length===12&&new Set(ct).size===12);
+/* 4) Spiele */
+// Größer oder kleiner?: jede Aufgabe aus der Anzeige nachrechnen
+const wert=x=>{let m;x=x.trim();if(/€|ct/.test(x))return (m=x.match(/^(\d+) € (\d+) ct$/))?+m[1]*100+ +m[2]:(m=x.match(/^(\d+) ct$/))?+m[1]:cents(x);if(/[a-z]$/.test(x))return len(x);return num(x)};
+{let ok=true,eq=0;for(let i=0;i<400;i++){const it=VERGLEICH.next();box.innerHTML=it.html;const [l,r]=box.textContent.split(' ● '),a=wert(l),b=wert(r),c=a<b?'<':a>b?'>':'=';if(c==='=')eq++;
+  if(!(a>0&&b>0)||c!==it.bin){ok=false;P(`Vergleich: ${box.textContent} → ${it.bin}`)}}A('Größer oder kleiner?: jede Aufgabe richtig, auch „=“ kommt vor',ok&&eq>5)}
+vergleich();{const it=X.it;box.innerHTML=it.html;$(`[data-b="${VERGLEICH.bins.indexOf(it.bin)}"]`).click();A('Größer oder kleiner?: richtige Antwort zählt',X.n===1&&!!$('.opt.right'))}
+sortWeiter();for(let k=0;k<3;k++){$(`[data-b="${(VERGLEICH.bins.indexOf(X.it.bin)+1)%3}"]`).click();sortWeiter()}
+A('Größer oder kleiner?: nach drei Fehlern Ende mit Rekord',!!$('.end')&&save.vergleich===1);
+// Kasse: Wechselgeld legen wie ein Kind (größte Stücke zuerst), Zurücknehmen, falsche Summe
+const STUECKE=[2000,1000,500,200,100,50,20,10,5,2,1];
+const legen=v=>{for(const g of STUECKE)while(v>=g){$(`[data-v="${g}"]`).click();v-=g}};
+kasse();let kOk=true;
+for(let k=0;k<KASSE_N-1;k++){const back=X.note*100-X.c;if(back<=0||back>=X.note*100||[5,10,20,50].find(n=>n*100>X.c)!==X.note)kOk=false;
+  if(k===0){$('[data-v="1"]').click();$('[data-k]').click();if($$('[data-k]').length)kOk=false} // Münze auf den Tresen und wieder zurück
+  legen(back);if(cents($('#ks').textContent)!==back)kOk=false;$('#bp').click();if(!/Stimmt genau/.test($('#fb').textContent))kOk=false;$('#nx').click()}
+legen(X.note*100-X.c-1||2);$('#bp').click();A('Kasse: falsche Summe wird erkannt',/richtig sind/.test($('#fb').textContent));$('#nx').click();
+A('Kasse: Wechselgeld stimmt, Zurücknehmen geht, Ende mit Rekord',kOk&&!!$('.end')&&save.kasse===KASSE_N-1);
+// Zielwurf: genau getroffen = 3 Punkte (antippen), weit daneben = 0, Pfeiltasten bewegen
+zielwurf();let zOk=true;
+for(let k=0;k<ZIEL_N-1;k++){const svg=$('.marksvg'),x=ZX[0]+(ZX[1]-ZX[0])*X.v/X.max;ptr(svg,'pointerdown',...client(svg,x,40));ptr(svg,'pointerup',...client(svg,x,40));
+  if(Math.abs(X.g-X.v)>X.max/100)zOk=false;if(k===0){const g=X.g;taste(svg,'ArrowRight');if(X.g!==Math.min(X.max,g+X.max/100))zOk=false;taste(svg,'ArrowLeft')}
+  $('#bp').click();if(!/Volltreffer/.test($('#fb').textContent))zOk=false;$('#nx').click()}
+zielSet(X.v>X.max/2?0:X.max);$('#bp').click();A('Zielwurf: weit daneben gibt keinen Punkt',/Daneben/.test($('#fb').textContent));$('#nx').click();
+A('Zielwurf: Antippen trifft, Pfeiltasten bewegen, Ende mit Rekord',zOk&&!!$('.end')&&save.ziel===3*(ZIEL_N-1));
+A('Zielwurf: Punkte nach Abstand (2 %, 5 %, 10 %)',zielPunkte(500,520,1000)===3&&zielPunkte(500,550,1000)===2&&zielPunkte(500,600,1000)===1&&zielPunkte(500,601,1000)===0);
+home();
 done();

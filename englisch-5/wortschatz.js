@@ -109,7 +109,12 @@ const TOPICS = [
  {id:'saetze',name:'Plauder-Insel',map:'Plaudern',sub:'Sätze für jeden Tag'}
 ];
 const NOTYPE=['hallo','saetze']; // Satz-Inseln: nicht zum Tippen, dafür Satzbaukasten
-return {W,TOPICS,NOTYPE};
+// Bedeutungsnahe Wörter (englisch, wie angezeigt): nie gegeneinander als falsche Antwort, denn „mum = Mutter“ oder „photo = Bild“ ist nicht falsch
+const NAH=[['mum','mother'],['dad','father'],['pen','pencil'],['glue','glue stick'],['class','lesson','classroom'],['student','classmate'],['home','at home','flat'],
+ ['map','card'],['picture','photo'],['to say','to speak','to talk to'],['to see','to look at'],['nice','good','great','big'],['strange','silly'],['navy','blue','dark','black'],['shoe','trainer'],
+ ['pet','animal'],['Monday','on Monday'],['book','exercise book','library'],['town','hometown'],['to think','to know'],['to put','to give'],['clock','watch','time'],['to go','to come','to go home','to come home'],
+ ['rabbit','guinea pig','rat']];
+return {W,TOPICS,NOTYPE,NAH};
 })();
 const enShow=e=>e[1].split('|')[0];
 const deShow=e=>e[2].replace(/ \/ /g,' / ');

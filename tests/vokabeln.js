@@ -34,4 +34,28 @@ const runs=[...TOPICS.map(t=>t.id),'mix'].map(t=>[t,perfect(t)]);
 runs.forEach(([t,r])=>{if(r.stars!==3)P('keine 3 Sterne: '+t)});
 A('fehlerfreie Runde = 3 Sterne (alle Inseln und Rundfahrt)',runs.every(([,r])=>r.stars===3));
 A('kleine Insel (8 Wörter): fehlerfrei = 3 Sterne',perfect('zeit',W.filter(e=>e[0]==='zeit').slice(0,8).map(e=>makeQ(e))).stars===3);
+// Bedeutungsnahe Wörter (NAH) erscheinen nie gegeneinander als falsche Antwort
+{let ok=true;for(const e of W.filter(e=>NAH.some(g=>g.includes(enShow(e)))))for(let k=0;k<30;k++){const q=makeQ(e,true),part=W.filter(x=>x!==e&&NAH.some(g=>g.includes(enShow(x))&&g.includes(enShow(e))));
+  if(part.some(x=>q.options.includes(deShow(x))||q.options.includes(enShow(x)))){ok=false;P(`NAH: ${enShow(e)} mit ${q.options}`)}}A('bedeutungsnahe Wörter (mum/Mutter …) nie als falsche Antwort',ok)}
+// Stimmt's?: jedes Paar unabhängig nachprüfen
+const teile=d=>d.toLowerCase().split('/').flatMap(x=>x.split(',')).map(x=>x.trim()).filter(Boolean);
+{let ok=true,ja=0;for(let i=0;i<500;i++){const it=DUELL.next();box.innerHTML=it.html;const [en,de]=box.textContent.split(' = '),es=W.filter(x=>x[1].split('|').includes(en));
+  const wahr=es.some(x=>teile(x[2]).some(t=>teile(de).includes(t)));if(wahr)ja++;
+  const von=W.find(x=>deShow(x)===de);if(!es.length||(wahr?'Stimmt':'Stimmt nicht')!==it.bin||!wahr&&von&&es.some(x=>nah(x,von))){ok=false;P(`Stimmt's: ${en} = ${de} → ${it.bin}`)}}
+ A('Stimmt’s?: jedes Paar richtig bewertet, beide Antworten kommen vor',ok&&ja>150&&ja<350)}
+duell();$(`[data-b="${DUELL.bins.indexOf(X.it.bin)}"]`).click();A('Stimmt’s?: richtige Antwort zählt',X.n===1);
+sortWeiter();for(let k=0;k<3;k++){$(`[data-b="${1-DUELL.bins.indexOf(X.it.bin)}"]`).click();sortWeiter()}
+A('Stimmt’s?: nach drei Fehlern Ende mit Rekord',!!$('.end')&&save.duell===1);
+// Schatztruhe: Hinweis eindeutig, Buchstaben antippen und tippen, gewinnen und verlieren
+{const amb=TRUHE_W.filter(e=>TRUHE_W.some(x=>x!==e&&deShow(x)===deShow(e)&&enShow(x)[0].toLowerCase()===enShow(e)[0].toLowerCase()&&enShow(x).length===enShow(e).length));
+ A('Schatztruhe: deutscher Hinweis + erster Buchstabe + Länge passen nur zu einem Wort',!amb.length||(amb.forEach(e=>P('Truhe mehrdeutig: '+enShow(e))),false))}
+truhe();let tOk=true;
+for(let k=0;k<TRUHE_N-1;k++){const w=X.w.toLowerCase(),ls=[...new Set(w.replace(/[^a-z]/g,''))].filter(c=>!X.got.has(c));
+  if($$('.bs:not(.frei)').filter(b=>b.textContent).length!==[...w].filter(c=>c===w[0]).length){tOk=false;P('Truhe Anfang: '+X.w)} // nur der erste Buchstabe steht schon da
+  ls.forEach((c,j)=>j===0?document.body.dispatchEvent(new KeyboardEvent('keydown',{key:c,bubbles:true})):$(`[data-c="${c}"]`).click());
+  if(!/Truhe ist offen/.test($('#fb').textContent)||X.wrong){tOk=false;P('Truhe nicht offen: '+X.w)}$('#nx').click()}
+{const fehl=[...ABC_EN].filter(c=>!X.w.toLowerCase().includes(c)).slice(0,TRUHE_LEBEN);fehl.forEach(c=>$(`[data-c="${c}"]`).click());
+ A('Schatztruhe: sechs falsche Buchstaben, dann ist die Truhe zu',/Keine Schlüssel/.test($('#fb').textContent)&&$$('.abc .wrong').length===TRUHE_LEBEN);$('#nx').click()}
+A('Schatztruhe: Antippen und Tastatur, Ende mit Rekord',tOk&&!!$('.end')&&save.truhe===TRUHE_N-1);
+home();
 done();

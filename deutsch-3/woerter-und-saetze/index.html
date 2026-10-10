@@ -18,6 +18,7 @@
 <div id="app"></div>
 <script src="../../gemeinsam/gemeinsam.js"></script>
 <script src="../../gemeinsam/runde.js"></script>
+<script src="../../gemeinsam/spiele.js"></script>
 <script>
 const BRAND='Deutsch-Inseln',MISSED='Diese Aufgaben üben wir weiter',TYPE_PH='Wort';
 const TOPICS=[
@@ -236,30 +237,20 @@ function finishExtra(g){
     return `<tr><td>${esc(t.can)}</td><td class="face" aria-label="${w}">${f}</td><td>${k<2?`<button class="theme" data-go="${t.id}">Üben</button>`:''}</td></tr>`}).join('')}</table>`;
 }
 /* ---------- Spiele: Memory mit Stufen, Artikel-Häfen, Satz-Detektiv, Abc-Leiter ---------- */
-let X=null; // laufendes Spiel (Häfen, Detektiv, Leiter); Timer prüfen immer, ob ihr Spiel noch läuft
-const later=(f,ms)=>{const me=X;setTimeout(()=>{if(X===me&&X)f()},ms)};
-const lives=n=>`<span class="pill" aria-label="${n} Leben">${'⛵'.repeat(n)}</span>`;
-const gameHead=(title,extra)=>`<div class="q-head"><button class="back" id="bk" aria-label="${title} beenden">Ende</button>${extra}</div>`;
-function spielEnde(key,n,text,missed,again){
-  X=null;const rec=n>0&&n>(save[key]||0);if(rec)save[key]=n;const gain=n*3;save.xp+=gain;persist();
-  $('#app').innerHTML=`${topBar()}<div class="qcard end"><h2>${rec?'Neuer Rekord!':'Geschafft!'}</h2>${rec?confetti():''}<div class="bignum pop">${n}</div><p>${text}</p>${rankUp()}
-   <div class="stats"><span class="pill">Rekord: ${save[key]||0}</span><span class="pill sun">+${gain} Punkte</span></div>${mistList(missed)}
-   <div class="actions"><button class="btn" id="again">Nochmal</button><button class="btn ghost" id="hm">Zur Seekarte</button></div></div>`;
-  bindTheme();$('#again').onclick=again;$('#hm').onclick=home;$('#again').focus();
-}
-const weak=k=>{save.weak[k]=(save.weak[k]||0)+1}; // Fehler im Spiel: diese Aufgabenart kommt auf der Insel öfter
-
 // Memory: 6, 8 oder 10 Paare; bunt gemischt, Silben oder zum Hören
-// Silben-Memory nur mit Wörtern ab drei Silben: bei kurzen ergeben fremde Hälften echte Wörter (Blu- + -se = Bluse)
+// Silben-Memory nur mit Wörtern ab drei Silben: bei kurzen ergeben fremde Hälften echte Wörter (Blu- + -se = Bluse).
+// Nie zwei Wörter mit gleicher 2. Silbe (Pau-sen-hof, Klas-sen-zim-mer), sonst passen die Hälften über Kreuz.
 const MEMO_ART={mix:'Bunt gemischt',silben:'Silben-Memory',hoeren:'Hör-Memory'};
 const memoKey=(art,n)=>art==='mix'&&n===6?'memo':`memo_${art}${n}`; // „memo“: bisheriger Rekord
+// Gruppe = Grundwort bzw. Oberbegriff: 🚪 passt zu „die Tür“ und zu „Haustür“, 🌷 zu „die Tulpe“ und zu „die Blume“
+const OBER={Rose:'Blume',Tulpe:'Blume',Sonnenblume:'Blume',Tanne:'Baum',Ente:'Vogel',Junge:'Kind',Mädchen:'Kind',Baby:'Kind'},oberOf=w=>OBER[w]||w; // ein Paar je Gruppe
 const IE_BILD=IE.filter(x=>['Bie-ne','Zie-ge','Spie-gel','Stie-fel','Flie-ge','Zwie-bel','Spin-ne','Pin-sel','Bril-le'].includes(x[0])); // eindeutige Bilder
 function memoPairs(art,n){
   const c=[],used=new Set(),add=p=>{const ks=[p.a,p.b,p.sa,p.k].filter(x=>x&&x!=='🔊');if(ks.some(x=>used.has(x)))return;c.push(p);ks.forEach(x=>used.add(x))}; // k: Grundwort, damit kein Bild zu zwei Karten passt
-  const pools={mix:[()=>{const n=pick(NOMEN.filter(n=>n[2]!==n[0]));return {a:`${n[1]} ${n[0]}`,b:`die ${n[2].split('|')[0]}`,k:n[0]}},()=>{const z=pick(ZUS);return {a:`${z[0]} + ${z[2]}`,b:z[4]}},
-     ()=>{const n=pick(NOMEN.filter(n=>n[4]));return {a:n[4],b:`${n[1]} ${n[0]}`,k:n[0]}},()=>{const x=pick(IE_BILD);return {a:ieWord(x),b:x[1],k:ieWord(x)}}],
-   silben:[()=>{const w=pick(SILBEN.filter(w=>w.split('-').length>=3)),i=w.indexOf('-');return {a:w.slice(0,i+1),b:w.slice(i),sa:w.replace(/-/g,''),la:w}}],
-   hoeren:[()=>{const n=pick(NOMEN.filter(n=>n[4]));return {a:'🔊',b:n[4],sa:`${n[1]} ${n[0]}`,fa:`${n[1]} ${n[0]}`,la:`${n[1]} ${n[0]} = ${n[4]}`}}]}[art];
+  const pools={mix:[()=>{const n=pick(NOMEN.filter(n=>n[2]!==n[0]));return {a:`${n[1]} ${n[0]}`,b:`die ${n[2].split('|')[0]}`,k:oberOf(n[0])}},()=>{const z=pick(ZUS);return {a:`${z[0]} + ${z[2]}`,b:z[4],k:oberOf(z[2])}},
+     ()=>{const n=pick(NOMEN.filter(n=>n[4]));return {a:n[4],b:`${n[1]} ${n[0]}`,k:oberOf(n[0])}},()=>{const x=pick(IE_BILD);return {a:ieWord(x),b:x[1],k:oberOf(ieWord(x))}}],
+   silben:[()=>{const w=pick(SILBEN.filter(w=>w.split('-').length>=3)),i=w.indexOf('-');return {a:w.slice(0,i+1),b:w.slice(i),sa:w.replace(/-/g,''),la:w,k:'2. Silbe '+w.split('-')[1]}}],
+   hoeren:[()=>{const n=pick(NOMEN.filter(n=>n[4]));return {a:'🔊',b:n[4],sa:`${n[1]} ${n[0]}`,fa:`${n[1]} ${n[0]}`,la:`${n[1]} ${n[0]} = ${n[4]}`,k:oberOf(n[0])}}]}[art];
   for(let t=0;t<500&&c.length<n;t++)add(pick(pools)());
   return c;
 }
@@ -275,27 +266,10 @@ function memory(){ // Auswahl: Stufe und Art
   document.querySelectorAll('[data-art]').forEach(b=>b.onclick=()=>memoStart(b.dataset.art,n));
 }
 
-// Artikel-Häfen: Wort in den richtigen Hafen schicken, bevor die Zeit abläuft; drei Leben, es wird immer schneller
-const HAFEN_T=[8000,400,3000]; // Startzeit, schneller pro Treffer, schnellste Zeit (ms)
-function haefen(){G=null;M=null;X={game:'haefen',n:0,lives:3,missed:[],t:HAFEN_T[0],w:null};hafenQ()}
-function hafenQ(){
-  let w;do w=pick(NOMEN);while(w===X.w);X.w=w;X.busy=false;
-  $('#app').innerHTML=`${gameHead('Artikel-Häfen',`<div class="track timer" role="timer" aria-label="Restzeit"><i id="tm" style="width:100%;transition:width ${X.t}ms linear"></i></div>${lives(X.lives)}<span class="pill sun">${X.n}</span>`)}
-  <div class="qcard"><div class="kind">Artikel-Häfen</div><div class="prompt"><p class="big">${emo(w[4])}${w[0]}</p></div><p class="tip">Schick das Wort in den richtigen Hafen, bevor die Zeit abläuft.</p>
-  <div class="opts haefen" role="group" aria-label="Häfen, mit Pfeiltasten wählen">${['der','die','das'].map(a=>`<button class="opt nav" data-a="${a}">⚓ ${a}</button>`).join('')}</div><div id="fb"></div></div>`;
-  requestAnimationFrame(()=>requestAnimationFrame(()=>{const t=$('#tm');if(t)t.style.width='0%'}));
-  $('#bk').onclick=home;document.querySelectorAll('[data-a]').forEach(b=>b.onclick=()=>hafenA(b.dataset.a));$('[data-a]').focus();
-  const me=X;X.timer=setTimeout(()=>{if(X===me)hafenA(null)},X.t);
-}
-function hafenA(a){
-  if(!X||X.busy)return;X.busy=true;clearTimeout(X.timer);const w=X.w,ok=a===w[1],t=$('#tm');
-  if(t){t.style.width=getComputedStyle(t).width;t.style.transition='none'}
-  document.querySelectorAll('[data-a]').forEach(b=>{b.disabled=true;if(b.dataset.a===w[1])b.classList.add('right');else if(b.dataset.a===a)b.classList.add('wrong')});
-  if(ok){X.n++;X.t=Math.max(HAFEN_T[2],X.t-HAFEN_T[1])}else{X.lives--;X.missed.push(`${w[1]} ${w[0]}`);weak('nomen.artikel')}
-  $('#fb').innerHTML=`<p class="tip" role="status">${ok?'Richtig!':`${a?'':'Die Zeit ist um. '}Es heißt <b>${w[1]} ${w[0]}</b>.`}</p>`;
-  later(hafenWeiter,ok?500:1800);
-}
-const hafenWeiter=()=>X.lives>0?hafenQ():spielEnde('hafen',X.n,'Wörter in den richtigen Hafen geschickt',[...new Set(X.missed)],haefen);
+// Artikel-Häfen: Nomen in den Hafen der, die oder das schicken (gemeinsames Sortier-Spiel)
+const HAEFEN={key:'hafen',title:'Artikel-Häfen',intro:'Schick das Wort in den richtigen Hafen, bevor die Zeit abläuft.',bins:['der','die','das'],t:[8000,400,3000],endText:'Wörter in den richtigen Hafen geschickt',
+  next(){const w=pick(NOMEN);return {html:`<p class="big">${emo(w[4])}${w[0]}</p>`,bin:w[1],sol:`**${w[1]} ${w[0]}**`,wk:'nomen.artikel'}}};
+const haefen=()=>sortGame(HAEFEN);
 
 // Satz-Detektiv: Text ohne Satzzeichen, das Kind setzt Punkt oder Fragezeichen hinter das letzte Wort jedes Satzes
 const DET_N=5; // Texte pro Spiel
@@ -308,7 +282,7 @@ function detektiv(){G=null;M=null;X={game:'detektiv',i:0,n:0,missed:[]};detQ()}
 function detQ(){
   const d=X.d=detText();X.set=d.words.map(()=>'');X.busy=false;
   $('#app').innerHTML=`${gameHead('Satz-Detektiv',`<span class="brand" style="flex:1;text-align:center">Satz-Detektiv</span><span class="pill sun">Fall ${X.i+1} von ${DET_N}</span>`)}
-  <div class="qcard"><div class="kind">Wo endet ein Satz?</div><p class="tip" style="margin-top:0">Tippe hinter das letzte Wort eines Satzes: einmal für einen Punkt, zweimal für ein Fragezeichen, dreimal zum Löschen.</p>
+  <div class="qcard"><div class="kind">Wo endet ein Satz?</div><p class="tip" style="margin-top:0">Tippe hinter das letzte Wort eines Satzes, auch ganz am Ende: einmal für einen Punkt, zweimal für ein Fragezeichen, dreimal zum Löschen.</p>
   <p class="dtext" id="dt"></p><p style="margin:12px 0 0"><button class="btn" id="bp" type="button">Fertig</button></p><div id="fb"></div></div>`;
   detDraw();$('#bk').onclick=home;$('#bp').onclick=detCheck;$('.dgap').focus();
 }
@@ -319,7 +293,7 @@ function detDraw(res){ // Wörter mit Lücken dahinter; nach einem gesetzten Sat
 }
 function detCheck(){
   if(!X||X.busy)return;X.busy=true;const d=X.d,ok=X.set.join('|')===d.marks.join('|');detDraw(true);$('#bp').disabled=true;
-  if(ok)X.n++;else{X.missed.push(d.ok);weak('satz.grenzen')}X.i++;
+  if(ok)X.n++;else{X.missed.push(d.ok);weakUp('satz.grenzen')}X.i++;
   $('#fb').innerHTML=`<div class="fb ${ok?'ok':'no'}" role="status"><strong>${ok?'Fall gelöst!':'Fast! So ist es richtig:'}</strong><span class="ans">${esc(d.ok)}</span>
    <div class="row"><button class="btn" id="nx">${X.i<DET_N?'Nächster Fall':'Fertig'}</button></div></div>`;
   $('#nx').onclick=detWeiter;$('#nx').focus();
@@ -344,7 +318,7 @@ function leiterQ(){
 function leiterA(p){
   if(!X||X.busy)return;X.busy=true;const w=X.w,right=X.list.filter(x=>abcLess(x,w)).length,ok=p===right;
   document.querySelectorAll('.slot').forEach(b=>{b.disabled=true;if(+b.dataset.p===right){b.classList.add('right');b.textContent=w}else if(+b.dataset.p===p)b.classList.add('wrong')});
-  if(ok)X.n++;else{X.lives--;X.missed.push(`${w}: ${!right?`ganz oben, vor ${X.list[0]}`:right===X.list.length?`ganz unten, nach ${X.list[right-1]}`:`zwischen ${X.list[right-1]} und ${X.list[right]}`}`);weak('abc.ordnen')}
+  if(ok)X.n++;else{X.lives--;X.missed.push(`${w}: ${!right?`ganz oben, vor ${X.list[0]}`:right===X.list.length?`ganz unten, nach ${X.list[right-1]}`:`zwischen ${X.list[right-1]} und ${X.list[right]}`}`);weakUp('abc.ordnen')}
   X.list.splice(right,0,w);X.k++;
   $('#fb').innerHTML=`<p class="tip" role="status">${ok?'Richtig!':`${esc(w)} gehört an die grüne Stelle.`}</p>`;
   later(leiterWeiter,ok?600:1800);
@@ -362,7 +336,7 @@ try{localStorage.setItem('de3-test','1');localStorage.removeItem('de3-test')}cat
 /* ---------- Startseite ---------- */
 const NAMES={check:'Ich-kann-Check',mix:'Große Rundfahrt'};
 function home(){
-  G=null;M=null;if(B){clearTimeout(B.timer);B=null}if(X){clearTimeout(X.timer);X=null}
+  G=null;M=null;if(B){clearTimeout(B.timer);B=null}stopSpiel();
   const hi=save.name?`Ahoi ${esc(save.name)}!`:'Ahoi!';
   const tiles=TOPICS.map(t=>`<button class="tile" data-t="${t.id}"><h3>${t.name}</h3><span class="sub">${t.sub}</span>${starsHtml(save.best[t.id]||0)}</button>`).join('');
   const chests=TOPICS.filter(t=>(save.best[t.id]||0)>=3).length;

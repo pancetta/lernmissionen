@@ -18,6 +18,7 @@
 <div id="app"></div>
 <script src="../../gemeinsam/gemeinsam.js"></script>
 <script src="../../gemeinsam/runde.js"></script>
+<script src="../../gemeinsam/spiele.js"></script>
 <script>
 const BRAND='Mathe-Inseln',MISSED='Diese Aufgaben üben wir weiter';
 const TOPICS=[
@@ -390,6 +391,86 @@ function memory(){ // Paare: Euro und Cent, Längen, Fachwörter, große Zahlen
   memoryGame(shuffle(c),memory,'Finde die Paare, die gleich viel bedeuten: 3,67 € und 367 ct, 2 km und 2000 m …');
 }
 
+/* ---------- Spiele: Vergleichs-Duell, Kasse, Zielwurf ---------- */
+// Vergleichs-Duell (gemeinsames Sortier-Spiel): Zahlen, Längen, Geldbeträge und große Zahlen vergleichen
+function geldVergleich(){ // zwei Beträge in verschiedenen Schreibweisen, manchmal gleich viel
+  const a=R(101,99999),b=pick([a].concat(nearNums(a).filter(x=>x>100&&x<100000))),fa=money3(a);let fb=money3(b);
+  for(let t=0;t<9&&fb===fa;t++)fb=money3(b);const c=a<b?'<':a>b?'>':'=';
+  return {html:`<p class="big">${fa} ${BLOB} ${fb}</p>`,correct:c,sol:`${fa} ${c} ${fb}, denn ${a} ct ${c} ${b} ct`};
+}
+function grossVergleich(){const a=bigNum(),b=pick(nearNums(a)),c=a<b?'<':'>';return {html:`<p class="big">${fmt(a)} ${BLOB} ${fmt(b)}</p>`,correct:c,sol:`${fmt(a)} ${c} ${fmt(b)}`}}
+const VERGLEICH={key:'vergleich',title:'Größer oder kleiner?',intro:'Setze <, > oder = ein, bevor die Zeit abläuft.',bins:['<','>','='],t:[12000,500,5000],endText:'Vergleiche richtig gelöst',
+  next(){const [wk,f]=pick([['strahl.vergleich',()=>Z.vergleich()],['laenge.vergleich',()=>L_.vergleich()],['geld.ordnen',geldVergleich],[null,grossVergleich]]),q=f();return {html:q.html,bin:q.correct,sol:q.sol,wk}}};
+const vergleich=()=>sortGame(VERGLEICH);
+
+// Kasse: Wechselgeld mit Münzen und Scheinen herausgeben; jede richtige Summe zählt
+const KASSE_N=5,GELD=[2000,1000,500,200,100,50,20,10,5,2,1],geldName=v=>v>=100?`${v/100} €`:`${v} ct`;
+const wenigste=v=>{const r=[];for(const g of GELD)while(v>=g){r.push(g);v-=g}return r}; // beim Euro-Geld immer die kleinste Anzahl
+const geldBtn=(v,attr)=>`<button class="geld nav${v>=500?' schein':''}" type="button" ${attr}>${geldName(v)}</button>`;
+function kasse(){G=null;M=null;X={game:'kasse',i:0,n:0,missed:[]};kasseQ()}
+function kasseQ(){
+  const c=R(105,4999),note=[5,10,20,50].find(n=>n*100>c);Object.assign(X,{c,note,back:note*100-c,got:[],busy:false});
+  $('#app').innerHTML=`${gameHead('Kasse',`<span class="brand" style="flex:1;text-align:center">Kasse</span><span class="pill sun">Kunde ${X.i+1} von ${KASSE_N}</span>`)}
+  <div class="qcard"><div class="kind">Gib das Wechselgeld heraus</div><p>Der Einkauf kostet <b>${euro(c)}</b>. Bezahlt wird mit einem <b>${note}-€-Schein</b>.</p>
+  <div class="kasse" role="group" aria-label="Geld aus der Kasse, mit Pfeiltasten wählen">${GELD.filter(v=>v<note*100).map(v=>geldBtn(v,`data-v="${v}"`)).join('')}</div>
+  <p class="tip">Auf dem Tresen: <b id="ks">0,00 €</b>. Antippen nimmt es zurück.</p><div class="tresen" id="kt"></div>
+  <p style="margin:12px 0 0"><button class="btn" id="bp" type="button">Fertig</button></p><div id="fb"></div></div>`;
+  $('#bk').onclick=home;document.querySelectorAll('[data-v]').forEach(b=>b.onclick=()=>{if(!X.busy){X.got.push(+b.dataset.v);kasseDraw()}});
+  $('#bp').onclick=kasseCheck;$('[data-v]').focus();
+}
+function kasseDraw(){
+  X.got.sort((a,b)=>b-a);$('#ks').textContent=euro(X.got.reduce((a,b)=>a+b,0));
+  $('#kt').innerHTML=X.got.map((v,i)=>geldBtn(v,`data-k="${i}" aria-label="${geldName(v)} zurücknehmen"`)).join('');
+  document.querySelectorAll('[data-k]').forEach(b=>b.onclick=()=>{if(!X.busy){X.got.splice(+b.dataset.k,1);kasseDraw()}});
+}
+function kasseCheck(){
+  if(!X||X.busy)return;if(!X.got.length){$('#fb').innerHTML='<p class="tip">Tippe zuerst Münzen oder Scheine an.</p>';return}
+  X.busy=true;const sum=X.got.reduce((a,b)=>a+b,0),ok=sum===X.back,best=wenigste(X.back).map(geldName).join(' + '),sol=`${X.note},00 € − ${euro(X.c)} = ${euro(X.back)}`;
+  document.querySelectorAll('.geld').forEach(b=>b.disabled=true);$('#bp').disabled=true;
+  if(ok)X.n++;else{X.missed.push(sol);weakUp('geld.wechsel')}X.i++;
+  $('#fb').innerHTML=`<div class="fb ${ok?'ok':'no'}" role="status"><strong>${ok?'Stimmt genau!':`Das sind ${euro(sum)}, richtig sind ${euro(X.back)}.`}</strong>
+   <span class="ans">${esc(sol)}${ok&&X.got.length>wenigste(X.back).length?`. Mit weniger Geldstücken: ${best}`:ok?'':`, zum Beispiel ${best}`}</span>
+   <div class="row"><button class="btn" id="nx">${X.i<KASSE_N?'Nächster Kunde':'Fertig'}</button></div></div>`;
+  $('#nx').onclick=kasseWeiter;$('#nx').focus();
+}
+const kasseWeiter=()=>{if(X)X.i<KASSE_N?kasseQ():spielEnde('kasse',X.n,`von ${KASSE_N} Kunden richtig bedient`,X.missed,kasse)};
+
+// Zielwurf: Zahl auf einem Strahl schätzen, auf dem nur Anfang und Ende beschriftet sind. Punkte nach Abstand.
+const ZIEL_N=8,ZX=[20,300],zx=g=>ZX[0]+(ZX[1]-ZX[0])*g/X.max;
+const zielPunkte=(g,v,max)=>{const d=Math.abs(g-v);return d<=max*.02?3:d<=max*.05?2:d<=max*.1?1:0};
+function zielwurf(){G=null;M=null;X={game:'ziel',i:0,n:0,missed:[]};zielQ()}
+function zielQ(){
+  const max=pick([100,1000,10000]);Object.assign(X,{max,v:R(1,max-1),g:null,busy:false});
+  let t='';for(let k=0;k<=10;k++){const x=zx(k*max/10),h=k%5===0?9:5;t+=`<line class="axis" x1="${x}" x2="${x}" y1="${48-h}" y2="${48+h}"/>`}
+  $('#app').innerHTML=`${gameHead('Zielwurf',`<span class="brand" style="flex:1;text-align:center">Zielwurf</span><span class="pill sun">${X.n} Punkte</span>`)}
+  <div class="qcard"><div class="kind">Wurf ${X.i+1} von ${ZIEL_N}: Wo liegt die Zahl?</div><div class="prompt"><p class="big">${fmt(X.v)}</p></div>
+  <svg class="strahl marksvg" viewBox="0 0 320 76" tabindex="0" role="slider" aria-label="Zahlenstrahl von 0 bis ${fmt(max)}: Pfeil setzen" aria-valuemin="0" aria-valuemax="${max}">
+   <line class="axis" x1="${ZX[0]}" x2="${ZX[1]}" y1="48" y2="48"/>${t}<text x="${ZX[0]}" y="72" text-anchor="middle" font-size="12">0</text><text x="${ZX[1]}" y="72" text-anchor="middle" font-size="12">${fmt(max)}</text>
+   <rect class="hit" x="0" y="0" width="320" height="76"/><g class="mark live" style="display:none"><path d="M0 35 l-6 -12 h12 z"/><line x1="0" x2="0" y1="8" y2="26"/></g></svg>
+  <p class="tip">Tippe oder zieh den Pfeil. Mit der Tastatur: Pfeiltasten. Volltreffer (ganz nah) = 3 Punkte.</p>
+  <p style="margin:12px 0 0"><button class="btn" id="bp" type="button">Werfen</button></p><div id="fb"></div></div>`;
+  const svg=$('.marksvg');let drag=false;const at=ev=>(svgPt(svg,ev).x-ZX[0])/(ZX[1]-ZX[0])*X.max;
+  svg.onpointerdown=ev=>{if(X.busy)return;drag=true;try{svg.setPointerCapture(ev.pointerId)}catch(e){}zielSet(at(ev));ev.preventDefault()};
+  svg.onpointermove=ev=>{if(drag&&!X.busy)zielSet(at(ev))};svg.onpointerup=svg.onpointercancel=()=>{drag=false};
+  svg.onkeydown=ev=>{const d={ArrowRight:1,ArrowUp:1,ArrowLeft:-1,ArrowDown:-1}[ev.key];if(d&&!X.busy){ev.preventDefault();ev.stopPropagation();zielSet(X.g===null?X.max/2:X.g+d*X.max/100)}};
+  $('#bk').onclick=home;$('#bp').onclick=zielA;svg.focus();
+}
+function zielSet(g){ // auf ein Hundertstel der Strecke runden
+  const st=X.max/100;X.g=Math.max(0,Math.min(X.max,Math.round(g/st)*st));const svg=$('.marksvg'),m=svg.querySelector('.mark.live');
+  m.setAttribute('transform',`translate(${zx(X.g)} 0)`);m.style.display='';svg.setAttribute('aria-valuenow',X.g);svg.setAttribute('aria-valuetext',fmt(X.g));
+}
+function zielA(){
+  if(!X||X.busy)return;if(X.g===null){$('#fb').innerHTML='<p class="tip">Setze zuerst den Pfeil auf den Zahlenstrahl.</p>';return}
+  X.busy=true;const p=zielPunkte(X.g,X.v,X.max),svg=$('.marksvg');X.n+=p;X.i++;$('#bp').disabled=true;
+  if(!p)svg.querySelector('.mark.live').classList.add('bad'); // eigener Wurf bleibt orange, das Ziel ist grün
+  svg.insertAdjacentHTML('beforeend',`<g class="mark right" transform="translate(${zx(X.v)} 0)"><path d="M0 35 l-6 -12 h12 z"/><line x1="0" x2="0" y1="8" y2="26"/></g>`);
+  if(!p)X.missed.push(`${fmt(X.v)} auf dem Strahl bis ${fmt(X.max)} (dein Wurf: ${fmt(X.g)})`);
+  $('#fb').innerHTML=`<div class="fb ${p?'ok':'no'}" role="status"><strong>${['Daneben.','Nicht schlecht! +1 Punkt','Knapp daneben! +2 Punkte','Volltreffer! +3 Punkte'][p]}</strong>
+   <span class="ans">${fmt(X.v)} liegt beim grünen Pfeil, dein Wurf (${p?'orange':'rot'}) bei ${fmt(X.g)}.</span><div class="row"><button class="btn" id="nx">${X.i<ZIEL_N?'Nächster Wurf':'Fertig'}</button></div></div>`;
+  $('#nx').onclick=zielWeiter;$('#nx').focus();
+}
+const zielWeiter=()=>{if(X)X.i<ZIEL_N?zielQ():spielEnde('ziel',X.n,`Punkte aus ${ZIEL_N} Würfen (höchstens ${3*ZIEL_N})`,X.missed,zielwurf)};
+
 /* ---------- Speicher (nur Komfort, darf ausfallen) ---------- */
 let save={name:'',xp:0,best:{},weak:{},sound:false,blitz:0,memo:0};
 try{const s=localStorage.getItem('ma5-v1');if(s)save=Object.assign(save,JSON.parse(s));
@@ -404,7 +485,7 @@ try{localStorage.setItem('ma5-test','1');localStorage.removeItem('ma5-test')}cat
 /* ---------- Startseite ---------- */
 const NAMES={check:'Ich-kann-Check',mix:'Große Rundfahrt'};
 function home(){
-  G=null;M=null;if(B){clearTimeout(B.timer);B=null}
+  G=null;M=null;if(B){clearTimeout(B.timer);B=null}stopSpiel();
   const hi=save.name?`Ahoi ${esc(save.name)}!`:'Ahoi!';
   const tiles=TOPICS.map(t=>`<button class="tile" data-t="${t.id}"><h3>${t.name}</h3><span class="sub">${t.sub}</span>${starsHtml(save.best[t.id]||0)}</button>`).join('');
   const chests=TOPICS.filter(t=>(save.best[t.id]||0)>=3).length;
@@ -425,6 +506,9 @@ function home(){
    <button class="tile" data-t="mix"><h3>Große Rundfahrt</h3><span class="sub">Aufgaben von allen Inseln gemischt</span>${starsHtml(save.best.mix||0)}</button>
    <button class="tile" id="gb"><h3>Blitzrunde</h3><span class="sub">${BLITZ} Sekunden: Wie viele schaffst du?</span><span class="sub">Rekord: ${save.blitz||0} richtig</span></button>
    <button class="tile" id="gm"><h3>Memory</h3><span class="sub">Finde ${PAIRS} Paare, die gleich viel bedeuten</span><span class="sub">${save.memo?'Rekord: '+save.memo+' Züge':'Noch kein Rekord'}</span></button>
+   <button class="tile" id="gv" data-ico="⚖️"><h3>Größer oder kleiner?</h3><span class="sub">Zahlen, Längen und Geld vergleichen, immer schneller</span><span class="sub">Rekord: ${save.vergleich||0} richtig</span></button>
+   <button class="tile" id="gk" data-ico="💶"><h3>Kasse</h3><span class="sub">Gib das Wechselgeld mit Münzen und Scheinen heraus</span><span class="sub">Rekord: ${save.kasse||0} von ${KASSE_N} Kunden</span></button>
+   <button class="tile" id="gz" data-ico="🎯"><h3>Zielwurf</h3><span class="sub">Wo liegt die Zahl auf dem Zahlenstrahl? Schätze!</span><span class="sub">Rekord: ${save.ziel||0} Punkte</span></button>
   </div>
   <h2 class="sec">Inseln</h2><div class="grid isles">${tiles}</div>
   <p class="tip">${storageOK?'Dein Fortschritt wird automatisch auf diesem Gerät gespeichert.':'Speichern geht in diesem Browser gerade nicht (privates Fenster?). Dein Fortschritt geht beim Schließen verloren.'}</p>
@@ -434,7 +518,7 @@ function home(){
   $('#nm').oninput=e=>{save.name=e.target.value.trim();persist()};
   document.querySelectorAll('[data-t]').forEach(b=>{b.onclick=()=>start(b.dataset.t);
     if(b.tagName==='g')b.onkeydown=ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();start(b.dataset.t)}}});
-  $('#gb').onclick=blitz;$('#gm').onclick=memory;
+  $('#gb').onclick=blitz;$('#gm').onclick=memory;$('#gv').onclick=vergleich;$('#gk').onclick=kasse;$('#gz').onclick=zielwurf;
   if(rg)$('#rs').onclick=()=>{G=Object.assign({answered:false,res:[]},rg);show()};
   let armed=false;$('#rst').onclick=ev=>{if(!armed){armed=true;ev.target.textContent='Wirklich alles löschen? Nochmal tippen.';return}save={name:'',xp:0,best:{},weak:{},round:null,sound:false,blitz:0,memo:0};persist();home()};
 }
