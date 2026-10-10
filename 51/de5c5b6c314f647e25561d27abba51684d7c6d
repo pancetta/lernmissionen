@@ -1,0 +1,41 @@
+gemeinsam/spiele.js
+  s_54261e8a499c43::t_0296325464d7e1 1-42
+README.md
+  s_54261e8a499c43::t_7a39e603da2d40 8
+deutsch-3/woerter-und-saetze/index.html
+  s_54261e8a499c43::t_d48e503747e4ca 21,241-242,245-246,250-253,269-272,285,296,321,339
+englisch-5/vokabeln/index.html
+  s_54261e8a499c43::t_5f9dd3363e342e 22,24-25,61,70,92-93,105,274-318
+englisch-5/wortschatz.js
+  s_54261e8a499c43::t_01a82aec7fc2b7 112-117
+gemeinsam/stil.css
+  s_54261e8a499c43::t_f98eac10e063d5 177-182
+mathe-5/zahlen-und-groessen/index.html
+  s_54261e8a499c43::t_1f05b4104a99aa 21,394-473,488,509-511,521
+tests/daten_vokabeln.js
+  s_54261e8a499c43::t_cd582aabde5435 6,9
+tests/deutsch.js
+  s_54261e8a499c43::t_cbcdd226a471f0 83-87,90,95-100
+tests/layout.js
+  s_54261e8a499c43::t_040b0e9c6a49a5 19,27-29,36-38
+tests/mathe.js
+  s_54261e8a499c43::t_a81536046831d7 103-128
+tests/vokabeln.js
+  s_54261e8a499c43::t_3792ba0872ba2d 37-60
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "51de5c5b6c314f647e25561d27abba51684d7c6d",
+  "prompts": {},
+  "sessions": {
+    "s_54261e8a499c43": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "09d1c376-00da-4c7d-9fcd-87abfbea46f1",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Robert Speck <pancetta@users.noreply.github.com>"
+    }
+  }
+}
