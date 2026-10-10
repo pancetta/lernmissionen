@@ -77,7 +77,7 @@ const UMLAUT=[['🐻','Bär'],['🧀','Käse'],['🥕','Möhre'],['👑','König
 const ZWIE=[['🪣','Eimer'],['🐭','Maus'],['🌽','Mais'],['🪜','Leiter'],['🏠','Haus'],['🦉','Eule'],['🔥','Feuer'],['👗','Kleid'],['🌳','Baum'],['🚗','Auto'],['🧼','Seife'],['🦈','Hai'],['👍','Daumen'],['🍂','Laub'],['🏘️','Häuser']];
 const ZWIELAUTE=['ai','au','äu','ei','eu'];
 // Silben: Wörter mit Trennstrichen
-const SILBEN=['Hund','Ka-tze','Ba-na-ne','Schu-le','Te-le-fon','Scho-ko-la-de','Kro-ko-dil','Ap-fel','E-le-fant','Gi-raf-fe','Fahr-rad','Re-gen-schirm','Ge-burts-tag','Ku-gel-schrei-ber','Was-ser','Blu-me','Fuß-ball','Spiel-platz','Son-ne','Ta-schen-lam-pe','Pau-se','Hams-ter','Ma-ri-en-kä-fer','Schmet-ter-ling','Ei','Brot','Pau-sen-hof','Klas-sen-zim-mer','Turn-hal-le','Schul-ta-sche','Was-ser-fla-sche'];
+const SILBEN=['Hund','Kat-ze','Ba-na-ne','Schu-le','Te-le-fon','Scho-ko-la-de','Kro-ko-dil','Ap-fel','E-le-fant','Gi-raf-fe','Fahr-rad','Re-gen-schirm','Ge-burts-tag','Ku-gel-schrei-ber','Was-ser','Blu-me','Fuß-ball','Spiel-platz','Son-ne','Ta-schen-lam-pe','Pau-se','Hams-ter','Ma-ri-en-kä-fer','Schmet-ter-ling','Ei','Brot','Pau-sen-hof','Klas-sen-zim-mer','Turn-hal-le','Schul-ta-sche','Was-ser-fla-sche'];
 // ie oder i nach der Silbenmethode: [Wort in Silben, Emoji, Art]
 // 'ie': 1. Silbe offen (endet mit Selbstlaut), i lang  ·  'i': 1. Silbe geschlossen (endet mit Mitlaut), i kurz
 // 'merk': i lang in offener Silbe, aber ohne e (Merkwort). Nur zweisilbige Wörter, damit die Silbenregel sichtbar ist.
@@ -105,7 +105,8 @@ const VOKALE='aeiou';
 const NO={
  erkennen(){const n=pick(NOMEN),o=shuffle([UP(n[0])].concat(shuffle(KEIN_NOMEN).slice(0,3).map(UP)));
   return mc({label:'Welches Wort ist ein Nomen?',html:'<p>Nomen sind Wörter für Menschen, Tiere, Pflanzen und Dinge.</p>',options:o,correct:UP(n[0]),sol:`${n[1]} ${n[0]} ist ein Nomen.`,say:`${n[1]} ${n[0]}`})},
- alle(){const ns=shuffle(NOMEN).slice(0,R(2,4)),ws=shuffle(ns.map(n=>UP(n[0])).concat(shuffle(KEIN_NOMEN).slice(0,7-ns.length).map(UP)));
+// alle Nomen: ohne „Junge“ (JUNGE könnte auch das Wiewort „junge“ sein)
+ alle(){const ns=shuffle(NOMEN.filter(n=>n[0]!=='Junge')).slice(0,R(2,4)),ws=shuffle(ns.map(n=>UP(n[0])).concat(shuffle(KEIN_NOMEN).slice(0,7-ns.length).map(UP)));
   return {kind:'alle',label:'Tippe alle Nomen an',html:'<p>Nomen sind Wörter für Menschen, Tiere, Pflanzen und Dinge. Prüfe: Passt der, die oder das davor?</p>',tiles:ws,hits:ws.flatMap((w,i)=>ns.some(n=>UP(n[0])===w)?[i]:[]),sol:'Nomen: '+ns.map(n=>`${n[1]} ${n[0]}`).join(', ')}},
  artikel(){const n=pick(NOMEN);return mc({label:'Welcher Artikel passt?',html:`<p class="big">${emo(n[4])}${GAP} ${n[0]}</p>`,options:['der','die','das'],correct:n[1],sol:`${n[1]} ${n[0]}`,say:`${n[1]} ${n[0]}`})},
  unbestimmt(){const n=pick(NOMEN);return mc({label:'Welcher unbestimmte Artikel passt?',html:`<p class="big">${emo(n[4])}${GAP} ${n[0]}</p>`,options:['ein','eine'],correct:ein(n[1]),sol:`${ein(n[1])} ${n[0]} (${n[1]} ${n[0]})`,say:`${ein(n[1])} ${n[0]}`})},
@@ -129,7 +130,8 @@ const ZU={
  zerlegen(){const z=pick(ZUS),first=Math.random()<.5,[a,w]=first?[z[1],z[0]]:[z[3],z[2]],ans=`${a} ${w}`; // mit Artikel: ein falscher Artikel am richtigen Wort ist auch falsch
   const pool=uniqStr(ZUS.flatMap(x=>[`${x[1]} ${x[0]}`,`${x[3]} ${x[2]}`])).filter(x=>!x.endsWith(' '+z[0])&&!x.endsWith(' '+z[2]));
   return mc({label:'Welches Nomen fehlt? Achte auch auf den Artikel.',html:`<p class="big">${z[3]} ${z[4]} = ${first?`${GAP} + ${z[3]} ${z[2]}`:`${z[1]} ${z[0]} + ${GAP}`}</p>`,options:shuffle([ans,`${pick(['der','die','das'].filter(x=>x!==a))} ${w}`].concat(shuffle(pool).slice(0,2))),correct:ans,sol:`${z[3]} ${z[4]} = ${z[1]} ${z[0]} + ${z[3]} ${z[2]}`})},
- finden(){const zs=shuffle(ZUS).filter((z,i,a)=>a.findIndex(x=>x[4]===z[4])===i).slice(0,R(2,3)),simple=shuffle(NOMEN.filter(n=>!ZUS.some(x=>x[4]===n[0])&&n[0].length<=6)).slice(0,6-zs.length).map(n=>n[0]);
+// finden: ohne „Fahrrad“ (fahren + Rad, also nicht aus zwei Nomen)
+ finden(){const zs=shuffle(ZUS).filter((z,i,a)=>a.findIndex(x=>x[4]===z[4])===i).slice(0,R(2,3)),simple=shuffle(NOMEN.filter(n=>!ZUS.some(x=>x[4]===n[0])&&n[0]!=='Fahrrad')).slice(0,6-zs.length).map(n=>n[0]);
   const ws=shuffle(zs.map(z=>z[4]).concat(simple));
   return {kind:'alle',label:'Tippe alle zusammengesetzten Nomen an',html:'<p>Ein zusammengesetztes Nomen besteht aus zwei Nomen.</p>',tiles:ws,hits:ws.flatMap((w,i)=>zs.some(z=>z[4]===w)?[i]:[]),sol:zs.map(z=>`${z[4]} = ${z[0]} + ${z[2]}`).join(', ')}}
 };

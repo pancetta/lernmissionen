@@ -54,9 +54,10 @@ function words(n){ // 1079252849 -> "eine Milliarde neunundsiebzig Millionen zwe
   return p.join(' ');
 }
 function bigNum(){ // Millionen bis Hundertmilliarden, Dreiergruppen zum Teil null
-  const groups=R(3,4),g=[R(1,999)];
+  for(;;){const groups=R(3,4),g=[R(1,999)];
   for(let i=1;i<groups;i++)g.push(Math.random()<.25?0:R(1,999));
-  return g.reduce((a,x)=>a*1000+x,0);
+  const n=g.reduce((a,x)=>a*1000+x,0);
+  if(![Math.floor(n/1e9),Math.floor(n/1e6)%1000].some(x=>x>1&&x%100===1))return n} // nicht „hundertein(e) Millionen“: Schreibweise schwankt
 }
 const PLACES=[['Einer',1],['Zehner',10],['Hunderter',100],['Tausender',1e3],['Zehntausender',1e4],['Hunderttausender',1e5],['Millionen',1e6],['Zehnmillionen',1e7],['Hundertmillionen',1e8],['Milliarden',1e9]];
 
@@ -232,7 +233,7 @@ const M_={
  ordnen(){let cs;do{const c=R(1001,99999);cs=uniq([c].concat(shuffle(nearNums(c)).filter(x=>x>100&&x<100000)))}while(cs.length<4);cs=cs.slice(0,4); // ähnliche Ziffern: 36,62 € / 3266 ct / 36,26 €
   const shown=cs.map(c=>[c,money3(c)]),s=shown.slice().sort((a,b)=>a[0]-b[0]);
   return {kind:'build',label:'Ordne: Beginne mit dem kleinsten Betrag',html:'<p>Tipp: Rechne alle Beträge erst in Cent um.</p>',tiles:shuffle(shown.map(x=>x[1])),target:s.map(x=>x[1]).join(' '),sol:s.map(x=>x[1]).join(' < ')}},
- wechsel(){const c=R(105,19900),note=[5,10,20,50,100,200].find(n=>n*100>c),coin=Math.random()<.4?pick([10,20,50,100,200]):0,pay=note*100+coin,back=pay-c,cn=coin>=100?`${coin/100} €`:`${coin} ct`;
+ wechsel(){const c=R(105,19900),note=[5,10,20,50,100,200].find(n=>n*100>c),coin=c>=1000&&Math.random()<.4?pick([10,20,50,100,200]):0,pay=note*100+coin,back=pay-c,cn=coin>=100?`${coin/100} €`:`${coin} ct`;
   return {kind:'money',label:'Wie viel Wechselgeld gibt es zurück?',html:`<p>Der Einkauf kostet <b>${euro(c)}</b>. Bezahlt wird mit einem <b>${note}-€-Schein</b>${coin?` und <b>${cn}</b>`:''}.</p>`,ans:back,unit:'€',sol:`${euro(pay)} − ${euro(c)} = ${euro(back)}`}},
  kasse(){const it=shuffle(ITEMS).slice(0,R(3,4)),t=it.reduce((a,x)=>a+x[1],0);
   return {kind:'money',label:'Berechne den Gesamtbetrag',html:`<table class="receipt">${it.map(([n,p])=>`<tr><td>${n}</td><td>${euro(p)}</td></tr>`).join('')}<tr class="sum"><td>Gesamt</td><td>?</td></tr></table>`,ans:t,unit:'€',sol:`${it.map(x=>euro(x[1])).join(' + ')} = ${euro(t)}`}},
