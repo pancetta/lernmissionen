@@ -67,7 +67,7 @@ const GT={
 
 
 /* ---------- Rest-Insel ---------- */
-const teilung=()=>{const b=R(2,10),q=R(1,9),r=R(1,b-1);return {b,q,r,c:q*b+r}}; // c : b = q Rest r, immer mit Rest
+const teilung=(b=R(2,10),qmin=1)=>{const q=R(qmin,9),r=R(1,b-1);return {b,q,r,c:q*b+r}}; // c : b = q Rest r, immer mit Rest
 const restSol=({c,b,q,r})=>`${c} : ${b} = ${q} Rest ${r}, denn ${q} · ${b} = ${q*b} und ${q*b} + ${r} = ${c}`;
 const RS={
  ganz(){const t=teilung();return Object.assign(num(`${t.c} : ${t.b} = ${BLOB} Rest ${t.r}`,t.q,restSol(t)),{label:'Welche Zahl fehlt?'})},
@@ -87,7 +87,20 @@ const RS={
   return mc({label:'Welche Aufgabe geht ohne Rest auf?',html:'<p>Nur bei einer Aufgabe bleibt kein Rest.</p>',options:shuffle([ok].concat(ws.map(t=>`${t.c} : ${t.b}`))),correct:ok,sol:`${c} : ${b} = ${q}, denn ${q} · ${b} = ${c}`})},
  sach(){const t=teilung(),[ding,pack]=pick([['Äpfel','Tüten'],['Kinder','Gruppen'],['Stifte','Dosen'],['Eier','Schachteln'],['Murmeln','Säckchen']]),voll=Math.random()<.5;
   return {kind:'num',label:'Sachaufgabe',html:`<p>${t.c} ${ding} werden auf ${pack} verteilt, immer ${t.b} zusammen.</p><p><b>${voll?`Wie viele ${pack} werden voll?`:`Wie viele ${ding} bleiben übrig?`}</b></p>`,
-   ans:voll?t.q:t.r,sol:`${t.c} : ${t.b} = ${t.q} Rest ${t.r}: ${t.q} ${pack} werden voll, ${t.r} ${ding} bleiben übrig.`}}
+   ans:voll?t.q:t.r,sol:`${t.c} : ${t.b} = ${t.q} Rest ${t.r}: ${t.q} ${pack} werden voll, ${t.r} ${ding} bleiben übrig.`}},
+ runden(){ // Sachaufgabe mit Auf- oder Abrunden; die Gesamtzahl steht immer vorn, die Frage ist fett
+  const [hoch,b,text,frage,was]=pick([
+   [1,R(3,5),(c,b)=>`${c} Kinder fahren zum Ausflug. In jedes Auto passen ${b} Kinder.`,'Wie viele Autos braucht man, damit alle mitfahren können?','Autos'],
+   [1,pick([6,10]),(c,b)=>`${c} Eier sollen in Schachteln. In eine Schachtel passen ${b} Eier.`,'Wie viele Schachteln braucht man für alle Eier?','Schachteln'],
+   [1,R(4,8),(c,b)=>`${c} Kinder feiern ein Fest. An einen Tisch passen ${b} Kinder.`,'Wie viele Tische braucht man, damit alle sitzen können?','Tische'],
+   [1,R(5,10),(c,b)=>`${c} Bücher werden eingepackt. In eine Kiste passen ${b} Bücher.`,'Wie viele Kisten braucht man für alle Bücher?','Kisten'],
+   [0,R(2,5),(c,b)=>`Du hast ${c} €. Ein Heft kostet ${b} €.`,'Wie viele Hefte kannst du kaufen?','Hefte'],
+   [0,R(2,4),(c,b)=>`Du hast ${c} Eier. Für einen Kuchen nimmst du ${b} Eier.`,'Wie viele Kuchen kannst du backen?','Kuchen'],
+   [0,R(2,10),(c,b)=>`Ein Band ist ${c} m lang. Du schneidest Stücke von ${b} m ab.`,'Wie viele ganze Stücke bekommst du?','Stücke'],
+   [0,R(4,10),(c,b)=>`${c} Kinder spielen Fußball. Eine Mannschaft hat ${b} Kinder.`,'Wie viele volle Mannschaften gibt es?','Mannschaften']]);
+  const t=teilung(b,2),ans=hoch?t.q+1:t.q;
+  return {kind:'num',label:hoch?'Sachaufgabe: Reicht das?':'Sachaufgabe: Was ist mit dem Rest?',html:`<p>${text(t.c,t.b)}</p><p><b>${frage}</b></p><p class="tip">Rechne erst mit Rest. Dann überlege, was mit dem Rest passiert.</p>`,ans,
+   sol:`${t.c} : ${t.b} = ${t.q} Rest ${t.r}. ${hoch?`Für den Rest braucht man noch eins mehr: ${ans} ${was}.`:`Der Rest reicht nicht für noch eins: ${ans} ${was}.`}`}}
 };
 
 /* ---------- Punkt-vor-Strich-Insel ---------- */

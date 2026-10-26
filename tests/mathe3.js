@@ -23,6 +23,8 @@ each('rest','restzahl',q=>restOk(...zahlen(big(q.html).replace('●',q.ans)))||'
 each('rest','tippen',q=>{const [c,b]=zahlen(big(q.html));return q.accept.every(a=>restOk(c,b,...zahlen(a)))&&q.accept.includes(q.correct)||'Rest tippen'});
 each('rest','zugross',q=>{const st=q.options.map(zahlen),gross=st.filter(([c,b,x,r])=>r>=b);return st.every(([c,b,x,r])=>x*b+r===c)&&gross.length===1&&zahlen(q.correct)[3]>=zahlen(q.correct)[1]&&st.filter(x=>restOk(...x)).length===3||'Rest zu groß'});
 each('rest','ohne',q=>{const ok=o=>{const [c,b]=zahlen(o);return c%b===0};return q.options.filter(ok).length===1&&ok(q.correct)||'ohne Rest'});
+each('rest','runden',q=>{box.innerHTML=q.html;const [c,b]=zahlen(box.querySelector('p').textContent),hoch=/braucht man/.test(box.querySelector('b').textContent);
+  return c%b>0&&Math.floor(c/b)>=2&&q.ans===(hoch?Math.ceil(c/b):Math.floor(c/b))||'Runden'});
 each('rest','sach',q=>{box.innerHTML=q.html;const [c,b]=zahlen(box.textContent);return q.ans===(/voll/.test(box.textContent)?Math.floor(c/b):c%b)&&c%b>0||'Sachaufgabe'});
 each('punkt','zuerst',q=>{const t=big(q.html),punkt=o=>/[·:]/.test(o);return punkt(q.correct)&&q.options.filter(punkt).length===1&&q.options.every(o=>o.split(' und ').every(x=>t.includes(x)))||'Was zuerst?'});
 each('punkt','falle',q=>{const [l,r]=big(q.html).split(' = ');return (calc(l)===+r?'Stimmt':'Stimmt nicht')===q.correct||'Stimmt das?'});
@@ -30,7 +32,7 @@ for(const isl of ['plus','minus']){const m=isl==='minus',ab=t=>t.match(/\d+/g).m
   each(isl,'ohne',q=>carry(...ab(big(q.html)),m)===0||'hat einen Übertrag');
   each(isl,'mit',q=>carry(...ab(big(q.html)),m)>0||'hat keinen Übertrag');
   each(isl,'uebertrag',q=>{const c=o=>carry(...ab(o),m)>0;return q.options.filter(c).length===1&&c(q.correct)||'Übertrag'})}
-const geprueft=new Set(['mal.mal','mal.luecke','mal.tausch','mal.reihe','geteilt.durch','geteilt.luecke','geteilt.umkehr',...['auswahl','ganz','restzahl','tippen','zugross','ohne','sach'].map(s=>'rest.'+s),'punkt.rechnen','punkt.klammer','punkt.zuerst','punkt.falle',
+const geprueft=new Set(['mal.mal','mal.luecke','mal.tausch','mal.reihe','geteilt.durch','geteilt.luecke','geteilt.umkehr',...['auswahl','ganz','restzahl','tippen','zugross','ohne','sach','runden'].map(s=>'rest.'+s),'punkt.rechnen','punkt.klammer','punkt.zuerst','punkt.falle',
   ...['plus','minus'].flatMap(i=>['ohne','mit','glatt','luecke','uebertrag'].map(s=>i+'.'+s))]);
 A('jede Aufgabenart hat eine Prüfung',Object.entries(SUB).every(([i,o])=>Object.keys(o).every(k=>geprueft.has(i+'.'+k))));
 A('alle Aufgabenarten nachgerechnet: keine Fehler',probs.n===0);
