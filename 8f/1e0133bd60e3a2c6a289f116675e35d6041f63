@@ -1,0 +1,21 @@
+mathe-3/kopfrechnen/index.html
+  s_54261e8a499c43::t_95fb13ff21691e 23,57,75-76,88-91,93-101,104
+tests/mathe3.js
+  s_54261e8a499c43::t_86a945a56ed59f 16,23,29-32
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "8f1e0133bd60e3a2c6a289f116675e35d6041f63",
+  "prompts": {},
+  "sessions": {
+    "s_54261e8a499c43": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "09d1c376-00da-4c7d-9fcd-87abfbea46f1",
+        "model": "unknown"
+      },
+      "human_author": "Robert Speck <pancetta@users.noreply.github.com>"
+    }
+  }
+}
