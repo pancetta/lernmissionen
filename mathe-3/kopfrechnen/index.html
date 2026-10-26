@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Rechnen">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAIAAACyr5FlAAAD/ElEQVR4nO3dzU0cQRCG4cXizJ6ckmNAToEDhMIBUrAcg1PitBn4YGm0wvsN89Nd9VXP+5zsC1vdeqdAWPLcPTy/nYBbvmUPAF/EAYk4IBEHJOKARByQiAMScUAiDkjEAYk4IBEHJOKARByQiAMScUAiDkjEAYk4IBEHJOKARByQiAMScUAiDkj32QO4uLw+Xf/1/PKeNYkPNgck4oBEHJCIAxJx3Hb5+Tt7hHzEAYk4JJYHccw5eB/E8YUj90EckIjja4ddHsSxyDH7IA5IxLHUAZcHcaxwtD6IY51D9UEckIhjteMsD+LY4iB9EAck4tjoCMuDOLYbvg/igEQcu4y9PIhjr4H7II4GRu2DOCARRxtDLg/iaGa8PogDEnG0NNjyII7GRuqDONobpg/igEQcXYyxPIijlwH6IA5IxNFR9eVBHH2V7oM4uqvbB3FAIo4IRZcHcQSp2AdxQCKOOOWWB3GEqtUHcUQr1AdxQCKOBFWWB3HkKNEHcUAijjT+y4M4Mpn3QRzJnPsgDkjEkc92eRCHBc8+iAMScbgwXB7EYcStD+KARBxerJYHcdjx6YM4HJn0QRyQiMOUw/IgDl/pfRAHJOKwlrs8iMNdYh/EUUBWH8QBiThqSFkexFFGfB/EAYk4KgleHsRRTGQfxFFPWB/EAYk4SopZHvcBn1HR+ddj9gj52ByQiAMScUAiDkjEAenu4fktewaYYnNAIg5ICb8Eu3z8if/QMZy//4j8uITNEXzCYcTfG99WIOXEwfJYK+XG2ByQ0uJgeSyXdVeZm4M+lki8Jb6tQEqOg+UxL/d+2ByQ8uNgeSjpN5Mfx8ngFgw53IlFHPDkEofDg+LD5DZc4oAhozhMHpd0PvdgFMfJ6V6yWN2AVxywYheH1aMTzO3sdnHAh2Mcbg9QDMNTO8ZxsryprjzPaxoHHPjG4fkw9WB7Ut84kM46DttHqiHnM1rHcfK+u/3MT+ceBxIViMP88drM/1wF4kCWGnH4P2RrlThRmf+HtMRtDqbG5kAK4oBEHJCIAxJxQCIOSMQBadfvOS6vT9Ofzy/vu4fp6HrUSaGZU0Zlc0AiDki74rjedTf3tgm1nyvOHKnl5vC86/mpKs4cZm8cn6I2OdXk0zz/pq04c4oGm8P2rmduueLM8br8QOpw12tnqDhzby3f1PT/2VLCXzVGxZnDNH6Nl2o/4KibP7rizDHav+Ntfjc2P3aTj6s4c4BeLwBc/u1z1V10+rJdv3jXmbvq+3bIlJ+wdl5xxZk7CXp1aMCNBy//JjybmES/V7b5jSf+2LiZeROT/JcOr7p6k2utOPMG+XHAFv9kD4k4IBEHJOKARByQiAMScUAiDkh/ARSxEB9azzFAAAAAAElFTkSuQmCC">
+<link rel="icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAIAAACyr5FlAAAD/ElEQVR4nO3dzU0cQRCG4cXizJ6ckmNAToEDhMIBUrAcg1PitBn4YGm0wvsN89Nd9VXP+5zsC1vdeqdAWPLcPTy/nYBbvmUPAF/EAYk4IBEHJOKARByQiAMScUAiDkjEAYk4IBEHJOKARByQiAMScUAiDkjEAYk4IBEHJOKARByQiAMScUAiDkj32QO4uLw+Xf/1/PKeNYkPNgck4oBEHJCIAxJx3Hb5+Tt7hHzEAYk4JJYHccw5eB/E8YUj90EckIjja4ddHsSxyDH7IA5IxLHUAZcHcaxwtD6IY51D9UEckIhjteMsD+LY4iB9EAck4tjoCMuDOLYbvg/igEQcu4y9PIhjr4H7II4GRu2DOCARRxtDLg/iaGa8PogDEnG0NNjyII7GRuqDONobpg/igEQcXYyxPIijlwH6IA5IxNFR9eVBHH2V7oM4uqvbB3FAIo4IRZcHcQSp2AdxQCKOOOWWB3GEqtUHcUQr1AdxQCKOBFWWB3HkKNEHcUAijjT+y4M4Mpn3QRzJnPsgDkjEkc92eRCHBc8+iAMScbgwXB7EYcStD+KARBxerJYHcdjx6YM4HJn0QRyQiMOUw/IgDl/pfRAHJOKwlrs8iMNdYh/EUUBWH8QBiThqSFkexFFGfB/EAYk4KgleHsRRTGQfxFFPWB/EAYk4SopZHvcBn1HR+ddj9gj52ByQiAMScUAiDkjEAenu4fktewaYYnNAIg5ICb8Eu3z8if/QMZy//4j8uITNEXzCYcTfG99WIOXEwfJYK+XG2ByQ0uJgeSyXdVeZm4M+lki8Jb6tQEqOg+UxL/d+2ByQ8uNgeSjpN5Mfx8ngFgw53IlFHPDkEofDg+LD5DZc4oAhozhMHpd0PvdgFMfJ6V6yWN2AVxywYheH1aMTzO3sdnHAh2Mcbg9QDMNTO8ZxsryprjzPaxoHHPjG4fkw9WB7Ut84kM46DttHqiHnM1rHcfK+u/3MT+ceBxIViMP88drM/1wF4kCWGnH4P2RrlThRmf+HtMRtDqbG5kAK4oBEHJCIAxJxQCIOSMQBadfvOS6vT9Ofzy/vu4fp6HrUSaGZU0Zlc0AiDki74rjedTf3tgm1nyvOHKnl5vC86/mpKs4cZm8cn6I2OdXk0zz/pq04c4oGm8P2rmduueLM8br8QOpw12tnqDhzby3f1PT/2VLCXzVGxZnDNH6Nl2o/4KibP7rizDHav+Ntfjc2P3aTj6s4c4BeLwBc/u1z1V10+rJdv3jXmbvq+3bIlJ+wdl5xxZk7CXp1aMCNBy//JjybmES/V7b5jSf+2LiZeROT/JcOr7p6k2utOPMG+XHAFv9kD4k4IBEHJOKARByQiAMScUAiDkh/ARSxEB9azzFAAAAAAElFTkSuQmCC">
+<style>html{-webkit-text-size-adjust:100%;color-scheme:light}body{margin:0}[hidden]{display:none!important}</style>
+<title>Rechen-Inseln</title>
+<link rel="stylesheet" href="../../gemeinsam/stil.css">
+
+</head>
+<body>
+<div id="app"></div>
+<script src="../../gemeinsam/gemeinsam.js"></script>
+<script src="../../gemeinsam/runde.js"></script>
+<script src="../../gemeinsam/spiele.js"></script>
+<script>
+const BRAND='Rechen-Inseln',MISSED='Diese Aufgaben üben wir weiter';
+const TOPICS=[
+ {id:'mal',name:'Einmaleins-Insel',map:'1 · 1',sub:'3 · 7, 8 · 6 und die Reihen',can:'das kleine Einmaleins sicher rechnen'},
+ {id:'geteilt',name:'Geteilt-Insel',map:'Geteilt',sub:'42 : 7, Umkehraufgaben, Rest',can:'im Einmaleins geteilt rechnen'},
+ {id:'punkt',name:'Punkt-vor-Strich-Insel',map:'Punkt vor Strich',sub:'3 + 4 · 5 = ?',can:'Punkt- vor Strichrechnung beachten'},
+ {id:'plus',name:'Plus-Insel',map:'Plus',sub:'bis 1000, mit und ohne Übertrag',can:'bis 1000 plus rechnen'},
+ {id:'minus',name:'Minus-Insel',map:'Minus',sub:'bis 1000, mit und ohne Übertrag',can:'bis 1000 minus rechnen'}
+];
+const MAP=[[60,42],[170,42],[280,42],[225,118],[115,118]]; // Seekarte, Reihenfolge wie TOPICS
+
+/* ---------- Hilfen ---------- */
+const R=(a,b)=>a+Math.floor(Math.random()*(b-a+1));                 // ganze Zufallszahl von a bis b
+const BLOB='<span class="blob" aria-label="Klecks">●</span>';
+const mc=o=>Object.assign({kind:'mc'},o);
+const uniq=a=>[...new Set(a)];
+function opts4(correct,cands){return shuffle([correct].concat(shuffle(uniq(cands).filter(x=>x!==correct)).slice(0,3)))}
+const num=(html,ans,sol)=>({kind:'num',html:`<p class="big">${html}</p>`,ans,sol});
+// Übertrag: Anzahl der Stellen, an denen beim Plus 10 voll werden bzw. beim Minus entbündelt werden muss
+function uebertraege(a,b,minus){let n=0,c=0;while(a||b){const x=a%10,y=b%10+c;if(minus?x<y:x+y>9){n++;c=1}else c=0;a=Math.floor(a/10);b=Math.floor(b/10)}return n}
+function schritte(a,b,minus){ // halbschriftlich: erst Hunderter, dann Zehner, dann Einer
+  const op=minus?'−':'+',parts=[Math.floor(b/100)*100,Math.floor(b/10)%10*10,b%10].filter(Boolean);let v=a;
+  return parts.length<2?'':' ('+parts.map(p=>{const w=minus?v-p:v+p,s=`${v} ${op} ${p} = ${w}`;v=w;return s}).join(', ')+')';
+}
+
+/* ---------- Einmaleins-Insel ---------- */
+const EM={
+ mal(){const a=R(2,10),b=R(2,10);return num(`${a} · ${b} = ?`,a*b,`${a} · ${b} = ${a*b}`)},
+ luecke(){const a=R(2,10),b=R(2,10),c=a*b,first=Math.random()<.5;
+  return num(first?`${BLOB} · ${b} = ${c}`:`${a} · ${BLOB} = ${c}`,first?a:b,`${a} · ${b} = ${c}`)},
+ tausch(){let a,b;do{a=R(2,10);b=R(2,10)}while(a===b);const p=a*b,same=[];for(let x=2;x<=10;x++)for(let y=2;y<=10;y++)if(x*y===p&&!(x===a&&y===b))same.push(`${x} · ${y}`);
+  const ok=pick(same),wr=[];for(let t=0;t<200&&wr.length<8;t++){const x=R(2,10),y=R(2,10);if(x*y!==p)wr.push(`${x} · ${y}`)}
+  return mc({label:'Welche Aufgabe hat dasselbe Ergebnis?',html:`<p class="big">${a} · ${b}</p>`,options:opts4(ok,wr),correct:ok,sol:`${a} · ${b} = ${p} und ${ok} = ${p}`})},
+ reihe(){const r=R(2,10),ks=shuffle([1,2,3,4,5,6,7,8,9,10]).slice(0,3).map(k=>k*r);let w;do w=pick(ks)+pick([-2,-1,1,2])*(r>2?1:3);while(w<1||w%r===0||ks.includes(w));
+  return mc({label:`Welche Zahl gehört nicht zur ${r}er-Reihe?`,html:`<p>Die ${r}er-Reihe: ${r}, ${2*r}, ${3*r} …</p>`,options:shuffle(ks.concat(w).map(String)),correct:String(w),sol:`${w} gehört nicht dazu: ${w} : ${r} geht nicht ohne Rest.`})}
+};
+
+/* ---------- Geteilt-Insel ---------- */
+const GT={
+ durch(){const a=R(2,10),b=R(2,10),c=a*b;return num(`${c} : ${b} = ?`,a,`${c} : ${b} = ${a}, denn ${a} · ${b} = ${c}`)},
+ luecke(){const a=R(2,10),b=R(2,10),c=a*b;return num(`${c} : ${BLOB} = ${a}`,b,`${c} : ${b} = ${a}, denn ${a} · ${b} = ${c}`)},
+ umkehr(){const a=R(2,10),b=R(2,10),c=a*b,ok=`${a} · ${b}`;
+  return mc({label:'Welche Malaufgabe hilft dir?',html:`<p class="big">${c} : ${b} = ?</p>`,options:opts4(ok,[`${a+1} · ${b}`,`${a-1} · ${b}`,`${a} · ${b+1}`,`${a} · ${b-1}`].filter(x=>!/^1 |· 1$/.test(x))),correct:ok,sol:`${ok} = ${c}, also ${c} : ${b} = ${a}`})},
+ rest(){const b=R(2,10),q=R(1,9),r=R(1,b-1),c=q*b+r,s=(x,y)=>`${x} Rest ${y}`,ok=s(q,r);
+  const wr=[s(q+1,r),q>1?s(q-1,r):null,r+1<b?s(q,r+1):null,r>1?s(q,r-1):null].filter(Boolean);
+  return mc({label:'Teile mit Rest',html:`<p class="big">${c} : ${b} = ?</p>`,options:opts4(ok,wr),correct:ok,sol:`${c} : ${b} = ${q} Rest ${r}, denn ${q} · ${b} = ${q*b} und ${q*b} + ${r} = ${c}`})}
+};
+
+/* ---------- Punkt-vor-Strich-Insel ---------- */
+function pvs(trap){ // [Aufgabe, Ergebnis, Ergebnis von links gerechnet, zuerst, die andere Rechnung]; Ergebnisse 0 bis 100
+  for(;;){const b=R(2,10),c=R(2,10),p=b*c,a=R(2,60),d=R(2,10),q=R(2,10),e=q*d;
+    const f=pick([[`${a} + ${b} · ${c}`,a+p,(a+b)*c,`${b} · ${c}`,`${a} + ${b}`],[`${b} · ${c} + ${a}`,p+a,p+a,`${b} · ${c}`,`${c} + ${a}`],
+     [`${a} − ${b} · ${c}`,a-p,(a-b)*c,`${b} · ${c}`,`${a} − ${b}`],[`${b} · ${c} − ${a}`,p-a,p-a,`${b} · ${c}`,`${c} − ${a}`],
+     [`${a} + ${e} : ${d}`,a+q,(a+e)/d,`${e} : ${d}`,`${a} + ${e}`],[`${a} − ${e} : ${d}`,a-q,(a-e)/d,`${e} : ${d}`,`${a} − ${e}`],
+     [`${b} · ${c} + ${e} : ${d}`,p+q,(p+e)/d,`${b} · ${c} und ${e} : ${d}`,`${c} + ${e}`]]);
+    if(f[1]<0||f[1]>100)continue;
+    if(trap&&!(Number.isInteger(f[2])&&f[2]>=0&&f[2]!==f[1]))continue; // „von links gerechnet“ muss ein anderes, ganzes Ergebnis geben
+    return f;
+  }
+}
+const PV={
+ rechnen(){const f=pvs();return num(`${f[0]} = ?`,f[1],`${f[0]} = ${f[1]}: Punkt vor Strich, erst ${f[3]}`)},
+ zuerst(){const f=pvs(true);return mc({label:'Was rechnest du zuerst?',html:`<p class="big">${f[0]}</p>`,options:shuffle([f[3],f[4]]),correct:f[3],sol:`Punkt vor Strich: erst ${f[3]}, dann der Rest. ${f[0]} = ${f[1]}`})},
+ falle(){const f=pvs(true),ok=Math.random()<.4,shown=ok?f[1]:f[2],n=pick(['Tim','Lena','Ali','Emma']);
+  return mc({label:'Stimmt das?',html:`<p>${n} rechnet:</p><p class="big">${f[0]} = ${shown}</p>`,options:['Stimmt','Stimmt nicht'],correct:ok?'Stimmt':'Stimmt nicht',
+   sol:ok?`Stimmt: erst ${f[3]}, also ${f[0]} = ${f[1]}.`:`Stimmt nicht: ${n} hat von links gerechnet. Punkt vor Strich: ${f[0]} = ${f[1]}.`})},
+ klammer(){for(;;){const a=R(2,20),b=R(2,20),c=R(2,10),f=pick([[`(${a} + ${b}) · ${c}`,(a+b)*c],[`${c} · (${a} − ${b})`,c*(a-b)],[`(${a} + ${b}) : ${c}`,(a+b)/c],[`${a*c} − (${a} + ${b})`,a*c-a-b]]);
+  if(Number.isInteger(f[1])&&f[1]>=0&&f[1]<=100)return num(`${f[0]} = ?`,f[1],`Klammer zuerst: ${f[0]} = ${f[1]}`)}}
+};
+
+/* ---------- Plus- und Minus-Insel (bis 1000) ---------- */
+function paar(minus,mit){ // zwei Zahlen bis 1000; mit = mindestens ein Übertrag, sonst keiner
+  for(;;){const a=R(100,999),b=pick([R(10,99),R(100,899)]);if(minus?b>=a:a+b>1000)continue;
+    if((uebertraege(a,b,minus)>0)===mit)return [a,b]}
+}
+const glatt=minus=>{for(;;){const [a,b]=pick([[R(1,9)*100,R(1,9)*100],[R(10,99)*10,R(1,9)*10],[R(1,9)*100+R(1,99),R(1,9)*100],[R(1,9)*100,R(1,9)*10]]);
+  if(minus?b<a:a+b<=1000)return [a,b]}};
+function rechenInsel(minus){
+  const op=minus?'−':'+',f=(a,b)=>minus?a-b:a+b,auf=(a,b,s)=>num(`${a} ${op} ${b} = ?`,f(a,b),`${a} ${op} ${b} = ${f(a,b)}${s?schritte(a,b,minus):''}`);
+  return {
+   ohne(){const [a,b]=paar(minus,false);return Object.assign(auf(a,b,false),{label:'Rechne (ohne Übertrag)'})},
+   mit(){const [a,b]=paar(minus,true);return Object.assign(auf(a,b,true),{label:'Rechne (mit Übertrag)'})},
+   glatt(){const [a,b]=glatt(minus);return Object.assign(auf(a,b,false),{label:'Rechne im Kopf'})},
+   luecke(){const c=minus?R(1,9)*100:R(2,10)*100,b=Math.random()<.6?R(1,c/10-1)*10:R(1,c-1),first=Math.random()<.5;
+    // Plus: ● + b = c oder b + ● = c; Minus: ● − b = c oder c − ● = b
+    if(!minus)return Object.assign(num(first?`${BLOB} + ${b} = ${c}`:`${b} + ${BLOB} = ${c}`,c-b,`${b} + ${c-b} = ${c}`),{label:'Welche Zahl fehlt?'});
+    const t=R(1,Math.min(999-c,c));return Object.assign(first?num(`${BLOB} − ${t} = ${c}`,c+t,`${c+t} − ${t} = ${c}`):num(`${c+t} − ${BLOB} = ${c}`,t,`${c+t} − ${t} = ${c}`),{label:'Welche Zahl fehlt?'})},
+   uebertrag(){const ps=[paar(minus,true)];while(ps.length<4){const p=paar(minus,false);if(!ps.some(x=>x[0]===p[0]&&x[1]===p[1]))ps.push(p)}
+    const s=([a,b])=>`${a} ${op} ${b}`,ok=s(ps[0]);
+    return mc({label:'Bei welcher Aufgabe gibt es einen Übertrag?',html:`<p>Nur eine dieser Aufgaben hat einen Übertrag.</p>`,options:shuffle(ps.map(s)),correct:ok,sol:`${ok} = ${f(...ps[0])}${schritte(...ps[0],minus)}`})}
+  };
+}
+const PL=rechenInsel(false),MI=rechenInsel(true);
+
+/* ---------- Auswahl der Fragen ---------- */
+const SUB={mal:EM,geteilt:GT,punkt:PV,plus:PL,minus:MI};
+const LABEL={mal:{mal:'Rechne',luecke:'Welche Zahl fehlt?'},geteilt:{durch:'Rechne',luecke:'Welche Zahl fehlt?'},punkt:{rechnen:'Punkt vor Strich: Rechne',klammer:'Klammer zuerst: Rechne'}};
+function gen(isl,sub){ // eine Frage einer Insel; Unterart gewichtet nach Fehlern (wk = "insel.unterart")
+  const subs=Object.keys(SUB[isl]);
+  if(!sub){const w=subs.map(k=>1+Math.min(3,save.weak[isl+'.'+k]||0));let r=Math.random()*w.reduce((a,b)=>a+b,0);sub=subs.find((k,i)=>(r-=w[i])<0)||subs[0]}
+  const q=SUB[isl][sub]();if(!q.label)q.label=(LABEL[isl]||{})[sub]||'Rechne';
+  return Object.assign(q,{isl,sub,wk:isl+'.'+sub});
+}
+const makeQ=topic=>gen(topic==='mix'?pick(TOPICS).id:topic);
+const redoQ=q=>gen(q.isl,q.sub);                                     // nach einem Fehler: neue Aufgabe derselben Art
+function makeRound(topic){ // Ich-kann-Check: aus jedem Thema zwei verschiedene Aufgaben
+  if(topic!=='check')return null;
+  return TOPICS.flatMap(t=>shuffle(Object.keys(SUB[t.id])).slice(0,2).map(s=>gen(t.id,s)));
+}
+function mcify(q){ // Zahl-Aufgabe in eine Auswahlfrage verwandeln (für die Blitzrunde)
+  if(q.kind==='mc')return q;const a=q.ans;
+  return Object.assign({},q,{kind:'mc',options:opts4(String(a),[a+1,a-1,a+10,a-10,a+2,a+100,a-100].filter(x=>x>=0&&x!==a).map(String)),correct:String(a)});
+}
+function quickQ(){return mcify(makeQ('mix'))}
+function finishExtra(g){ // Ich-kann-Check: Ergebnis je Thema
+  if(g.topic!=='check')return '';
+  const face=k=>k===2?['😀','Kann ich']:k===1?['😐','Fast']:['🙁','Üben'];
+  return `<table class="cancheck"><tr><th>Ich kann …</th><th></th><th></th></tr>${TOPICS.map(t=>{const r=(g.res||[]).filter(x=>x.isl===t.id),k=r.filter(x=>x.ok).length,[f,w]=face(k);
+    return `<tr><td>${esc(t.can)}</td><td class="face" aria-label="${w}">${f}</td><td>${k<2?`<button class="theme" data-go="${t.id}">Üben</button>`:''}</td></tr>`}).join('')}</table>`;
+}
+
+/* ---------- Spiele: Memory, Kopfrechen-Sprint ---------- */
+function memory(){ // Paare: Aufgabe und Ergebnis; jedes Ergebnis nur einmal, damit jede Aufgabe genau zu einer Zahl passt
+  const c=[],used=new Set();
+  for(let t=0;t<300&&c.length<PAIRS;t++){const a=R(2,10),b=R(2,10),div=Math.random()<.35,task=div?`${a*b} : ${b}`:`${a} · ${b}`,r=div?a:a*b;
+    if(!used.has(r)&&!c.some(x=>x.a===task)){used.add(r);c.push({a:task,b:String(r)})}}
+  memoryGame(shuffle(c),memory,'Finde die Paare: Aufgabe und Ergebnis.');
+}
+// Kopfrechen-Sprint: 60 Sekunden lang Ergebnisse eintippen (Einmaleins, Geteilt, glatte Zahlen)
+const SPRINT=60;
+function sprintQ(){return gen(...pick([['mal','mal'],['geteilt','durch'],['plus','glatt'],['minus','glatt'],['mal','mal']]))}
+function sprint(){
+  G=null;M=null;if(B){clearTimeout(B.timer);B=null}X={game:'sprint',n:0,missed:[],busy:false};
+  $('#app').innerHTML=`${gameHead('Kopfrechen-Sprint',`<div class="track timer" role="timer" aria-label="Restzeit"><i id="tm" style="width:100%;transition:width ${SPRINT}s linear"></i></div><span class="pill sun" id="sn">0 richtig</span>`)}
+  <div class="qcard"><div class="kind">Kopfrechen-Sprint</div><div class="prompt" id="sq"></div>
+  <form class="typebox" id="tf" autocomplete="off"><input type="text" id="ti" inputmode="numeric" aria-label="Ergebnis" placeholder="Zahl"><button class="btn" type="submit">OK</button></form><div id="fb"></div></div>`;
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{const t=$('#tm');if(t)t.style.width='0%'}));
+  $('#bk').onclick=home;$('#tf').onsubmit=ev=>{ev.preventDefault();sprintA($('#ti').value)};
+  const me=X;X.timer=setTimeout(()=>{if(X===me)sprintEnde()},SPRINT*1000);sprintNeu();
+}
+function sprintNeu(){X.q=sprintQ();X.busy=false;$('#sq').innerHTML=X.q.html;$('#fb').innerHTML='';const i=$('#ti');i.value='';i.disabled=false;i.focus()} // dasselbe Eingabefeld, damit die Tastatur am Handy offen bleibt
+function sprintA(t){
+  if(!X||X.busy)return;const v=parseNum(t||'');if(v===null){$('#ti').focus();return}
+  if(v===X.q.ans){X.n++;$('#sn').textContent=X.n+' richtig';sprintNeu();return}
+  X.busy=true;X.missed.push(X.q.sol);weakUp(X.q.wk);persist();$('#ti').disabled=true;
+  $('#fb').innerHTML=`<p class="tip" role="status">Richtig ist: <b>${esc(X.q.sol)}</b></p>`;later(sprintNeu,1500);
+}
+function sprintEnde(){clearTimeout(X.timer);spielEnde('sprint',X.n,`richtige Aufgaben in ${SPRINT} Sekunden`,[...new Set(X.missed)],sprint)}
+
+/* ---------- Speicher (nur Komfort, darf ausfallen) ---------- */
+let save={name:'',xp:0,best:{},weak:{},sound:false,blitz:0,memo:0,sprint:0};
+try{const s=localStorage.getItem('ma3-v1');if(s)save=Object.assign(save,JSON.parse(s));
+  else{const v=JSON.parse(localStorage.getItem('de3-v1')||'null');if(v&&v.name)save.name=v.name} // Name von den Deutsch-Inseln übernehmen
+}catch(e){}
+save.sound=false; // hier wird nichts vorgelesen
+initRank();
+let storageOK=true;
+function persist(){try{localStorage.setItem('ma3-v1',JSON.stringify(save));storageOK=true}catch(e){storageOK=false}}
+try{localStorage.setItem('ma3-test','1');localStorage.removeItem('ma3-test')}catch(e){storageOK=false}
+
+/* ---------- Startseite ---------- */
+const NAMES={check:'Ich-kann-Check',mix:'Große Rundfahrt'};
+function home(){
+  G=null;M=null;if(B){clearTimeout(B.timer);B=null}stopSpiel();
+  const hi=save.name?`Ahoi ${esc(save.name)}!`:'Ahoi!';
+  const tiles=TOPICS.map(t=>`<button class="tile" data-t="${t.id}"><h3>${t.name}</h3><span class="sub">${t.sub}</span>${starsHtml(save.best[t.id]||0)}</button>`).join('');
+  const chests=TOPICS.filter(t=>(save.best[t.id]||0)>=3).length;
+  const rg=save.round&&save.round.queue&&save.round.queue.length?save.round:null;
+  const resume=rg?`<div class="grid" style="margin-bottom:12px"><button class="tile resume" id="rs"><h3>Weiterspielen</h3><span class="sub">${esc(NAMES[rg.topic]||(TOPICS.find(t=>t.id===rg.topic)||{}).name)}, Frage ${Math.min(rg.done+1,rg.total)} von ${rg.total}</span></button></div>`:'';
+  $('#app').innerHTML=`
+  <div class="top"><a class="back" href="../../" style="text-decoration:none">Übersicht</a><span class="brand">${BRAND}</span>${themeBtn()}</div>
+  <section class="hero"><h1>${hi} Fit im Rechnen?</h1>
+   <p>Einmaleins, Geteilt, Punkt vor Strich, Plus und Minus bis 1000. Jede Insel ist ein Thema, eine Fahrt hat ${ROUND} Aufgaben.</p>
+   <div class="rank"><span class="pill sun">${save.xp} Punkte</span><span class="pill">Rang: ${rank()}</span></div>${rankBar()}${hero}</section>
+  <div class="namebox"><label for="nm">Dein Name</label><input type="text" id="nm" maxlength="16" value="${esc(save.name)}" placeholder="z. B. Mia" autocomplete="off"></div>
+  ${resume}
+  <div class="grid"><button class="tile mix" data-t="check"><h3>Ich-kann-Check</h3><span class="sub">Probe-Arbeit: zwei Aufgaben zu jedem Thema. Am Ende siehst du, was du schon kannst.</span>${starsHtml(save.best.check||0)}</button></div>
+  <div class="maphead"><h2 class="sec" style="margin:0">Seekarte</h2><span class="pill">Schätze: ${chests} von ${TOPICS.length}</span></div>
+  ${seaMap(MAP,170)}
+  <p class="tip" style="margin-top:4px">Drei Sterne auf einer Insel, und du findest ihren Schatz.</p>
+  <h2 class="sec">Spiele</h2><div class="grid">
+   <button class="tile" data-t="mix"><h3>Große Rundfahrt</h3><span class="sub">Aufgaben von allen Inseln gemischt</span>${starsHtml(save.best.mix||0)}</button>
+   <button class="tile" id="gb"><h3>Blitzrunde</h3><span class="sub">${BLITZ} Sekunden: Wie viele schaffst du?</span><span class="sub">Rekord: ${save.blitz||0} richtig</span></button>
+   <button class="tile" id="gm"><h3>Memory</h3><span class="sub">Finde ${PAIRS} Paare: Aufgabe und Ergebnis</span><span class="sub">${save.memo?'Rekord: '+save.memo+' Züge':'Noch kein Rekord'}</span></button>
+   <button class="tile" id="gs" data-ico="⏱️"><h3>Kopfrechen-Sprint</h3><span class="sub">${SPRINT} Sekunden: Ergebnisse eintippen, so schnell du kannst</span><span class="sub">Rekord: ${save.sprint||0} richtig</span></button>
+  </div>
+  <h2 class="sec">Inseln</h2><div class="grid isles">${tiles}</div>
+  <p class="tip">${storageOK?'Dein Fortschritt wird automatisch auf diesem Gerät gespeichert.':'Speichern geht in diesem Browser gerade nicht (privates Fenster?). Dein Fortschritt geht beim Schließen verloren.'}</p>
+  <p class="tip">Sterne gibt es für richtige Antworten beim ersten Versuch: 5 von 10 = 1 Stern, 7 von 10 = 2 Sterne, 9 von 10 = 3 Sterne.</p>
+  <p class="tip"><button class="theme" id="rst">Alles zurücksetzen</button></p>`;
+  bindTheme();
+  $('#nm').oninput=e=>{save.name=e.target.value.trim();persist()};
+  document.querySelectorAll('[data-t]').forEach(b=>{b.onclick=()=>start(b.dataset.t);
+    if(b.tagName==='g')b.onkeydown=ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();start(b.dataset.t)}}});
+  $('#gb').onclick=blitz;$('#gm').onclick=memory;$('#gs').onclick=sprint;
+  if(rg)$('#rs').onclick=()=>{G=Object.assign({answered:false,res:[]},rg);show()};
+  let armed=false;$('#rst').onclick=ev=>{if(!armed){armed=true;ev.target.textContent='Wirklich alles löschen? Nochmal tippen.';return}save={name:'',xp:0,best:{},weak:{},round:null,sound:false,blitz:0,memo:0,sprint:0};persist();home()};
+}
+
+home();
+</script>
+
+</body>
+</html>

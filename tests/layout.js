@@ -24,9 +24,12 @@ if(typeof AUFG!=='undefined'){ // Deutsch
   for(const [isl,o] of Object.entries(SUB))for(const sub of Object.keys(o))play(()=>gen(isl,sub),sub==='wort2zahl'||sub==='zahl2wort'||sub==='runden'?15:3,'Mathe '+isl); // lange Zahlwörter öfter
   start('check');let g=0;while(!$('.end')&&g++<80){const q=G.queue[0];if(q.kind==='mc')answer((q.options.indexOf(q.correct)+1)%q.options.length);else if(q.kind==='widget'){if(q.w==='bars')WS.set(0,q.step);else WS.put(q.i===1?2:1);answer(null,null)}else answer(null,q.kind==='build'?'x':'999999999');$('#nx').click()}
   scan('Mathe Ende Ich-kann-Check');
+  if(typeof kasse!=='undefined'){ // Spiele Mathe 5
   for(let i=0;i<12;i++){home();$('#gv').click();scan('Vergleich');sortA(-1);scan('Vergleich Fehler')}
   home();$('#gk').click();do kasseQ();while(X.note!==50);scan('Kasse');for(const v of [2000,1000,500,200,100,50,20,10,5,2,1])$(`[data-v="${v}"]`).click();scan('Kasse voll');$('#bp').click();scan('Kasse geprüft');
   home();$('#gz').click();zielSet(X.max);$('#bp').click();scan('Zielwurf');home();
+  }
+  if(typeof sprint!=='undefined'){home();$('#gs').click();scan('Sprint');$('#ti').value='99999';$('#tf').requestSubmit();scan('Sprint Fehler');sprintEnde();scan('Sprint Ende');home()} // Mathe 3
 }else if(typeof qGap!=='undefined'){ // Pronomen
   for(const t of TOPICS)play(()=>makeQ(t.id),15,'Pronomen '+t.id);
   start('mix');let g=0;while(!$('.end')&&g++<60){const q=G.queue[0];if(q.kind==='type')answer(null,'zzz');else if(q.kind==='build')answer(null,'x');else answer((q.options.indexOf(q.correct)+1)%q.options.length);$('#nx').click()}scan('Pronomen Ende');

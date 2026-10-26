@@ -1,0 +1,47 @@
+// Rechen-Inseln (Mathe 3): jede Aufgabe aus der Anzeige unabhängig nachrechnen; Runden, Check, Spiele
+const N=250;
+const calc=s=>{const t=s.replace(/·/g,'*').replace(/:/g,'/').replace(/−/g,'-');if(!/^[\d+\-*/() ]+$/.test(t))throw Error('kein Term: '+s);
+  const v=Function('return '+t)();if(!Number.isInteger(v))throw Error('nicht ganzzahlig: '+s);return v}; // JavaScript rechnet selbst Punkt vor Strich
+const big=h=>{box.innerHTML=h;return box.querySelector('.big').textContent.trim()};
+const carry=(a,b,m)=>{const A=String(a).split('').reverse(),C=String(b).split('').reverse();let c=0,n=0; // schriftlich, Stelle für Stelle
+  for(let i=0;i<Math.max(A.length,C.length);i++){const x=+(A[i]||0),y=+(C[i]||0)+c;if(m?x<y:x+y>=10){n++;c=1}else c=0}return n};
+function each(isl,sub,f){for(let i=0;i<N;i++){const q=gen(isl,sub);try{const r=f(q);if(r!==true)P(`${isl}.${sub}: ${r} | ${q.html.replace(/<[^>]+>/g,' ')} | ${q.correct||q.ans}`)}catch(e){P(`${isl}.${sub}: ${e.message}`)}
+  if(q.kind==='mc'&&(new Set(q.options).size!==q.options.length||!q.options.includes(q.correct)||q.options.length<2))P(`${isl}.${sub}: Optionen ${q.options}`)}}
+// Rechenaufgaben „… = ?“ und Lücken „… ● … = …“: Lösung einsetzen und nachrechnen, Zahlen bis 1000
+const passt=q=>{const t=big(q.html);if(/= \?$/.test(t))return calc(t.replace(/ = \?$/,''))===q.ans||'falsch gerechnet';const [l,r]=t.replace('●',q.ans).split(' = ');return calc(l)===calc(r)||'Lücke falsch'};
+for(const [isl,subs] of [['mal',['mal','luecke']],['geteilt',['durch','luecke']],['punkt',['rechnen','klammer']],['plus',['ohne','mit','glatt','luecke']],['minus',['ohne','mit','glatt','luecke']]])
+  for(const s of subs)each(isl,s,q=>{const r=passt(q);if(r!==true)return r;return big(q.html).match(/\d+/g).map(Number).concat(q.ans).every(n=>n>=0&&n<=1000)||'Zahlenraum'});
+each('mal','mal',q=>big(q.html).match(/\d+/g).slice(0,2).every(n=>n>=2&&n<=10)||'kein kleines Einmaleins');
+each('mal','tausch',q=>{const p=calc(big(q.html));return q.options.filter(o=>calc(o)===p).length===1&&q.correct!==big(q.html)||'Tauschaufgabe'});
+each('mal','reihe',q=>{const r=+q.label.match(/zur (\d+)er/)[1];return q.options.filter(o=>o%r!==0).length===1&&q.correct%r!==0&&q.options.every(o=>o%r!==0||o/r<=10)||'Reihe'});
+each('geteilt','umkehr',q=>{const [c,b]=big(q.html).match(/\d+/g).map(Number);return q.options.filter(o=>calc(o)===c).length===1&&calc(q.correct)===c&&q.correct.endsWith(' '+b)||'Umkehraufgabe'});
+each('geteilt','rest',q=>{const [c,b]=big(q.html).match(/\d+/g).map(Number),ok=o=>{const [x,y]=o.split(' Rest ').map(Number);return x*b+y===c&&y>0&&y<b};return q.options.filter(ok).length===1&&ok(q.correct)||'Rest'});
+each('punkt','zuerst',q=>{const t=big(q.html),punkt=o=>/[·:]/.test(o);return punkt(q.correct)&&q.options.filter(punkt).length===1&&q.options.every(o=>o.split(' und ').every(x=>t.includes(x)))||'Was zuerst?'});
+each('punkt','falle',q=>{const [l,r]=big(q.html).split(' = ');return (calc(l)===+r?'Stimmt':'Stimmt nicht')===q.correct||'Stimmt das?'});
+for(const isl of ['plus','minus']){const m=isl==='minus',ab=t=>t.match(/\d+/g).map(Number);
+  each(isl,'ohne',q=>carry(...ab(big(q.html)),m)===0||'hat einen Übertrag');
+  each(isl,'mit',q=>carry(...ab(big(q.html)),m)>0||'hat keinen Übertrag');
+  each(isl,'uebertrag',q=>{const c=o=>carry(...ab(o),m)>0;return q.options.filter(c).length===1&&c(q.correct)||'Übertrag'})}
+const geprueft=new Set(['mal.mal','mal.luecke','mal.tausch','mal.reihe','geteilt.durch','geteilt.luecke','geteilt.umkehr','geteilt.rest','punkt.rechnen','punkt.klammer','punkt.zuerst','punkt.falle',
+  ...['plus','minus'].flatMap(i=>['ohne','mit','glatt','luecke','uebertrag'].map(s=>i+'.'+s))]);
+A('jede Aufgabenart hat eine Prüfung',Object.entries(SUB).every(([i,o])=>Object.keys(o).every(k=>geprueft.has(i+'.'+k))));
+A('alle Aufgabenarten nachgerechnet: keine Fehler',probs.n===0);
+// Runden, Check, Blitzrunde
+const runs=[...TOPICS.map(t=>t.id),'mix','check'].map(t=>[t,perfect(t).stars]);A('fehlerfreie Runde = 3 Sterne (alle Inseln, Rundfahrt, Check)',runs.every(r=>r[1]===3));
+start('check');A('Check: 10 Aufgaben aus allen 5 Themen',G.total===10&&new Set(G.queue.map(q=>q.isl)).size===5);
+let g=0;while(!$('.end')&&g++<80){const q=G.queue[0];g<=2?solveWrong(q):solve(q);$('#nx').click()}
+const rows=$$('.cancheck tr').slice(1).map(r=>r.querySelector('.face').textContent);
+A('Check-Tabelle: erstes Thema 🙁, Rest 😀',rows.length===5&&rows[0]==='🙁'&&rows.slice(1).every(f=>f==='😀'));
+let qq=true;for(let i=0;i<500;i++){const x=quickQ();if(x.kind!=='mc'||new Set(x.options).size!==x.options.length||!x.options.includes(x.correct)||x.options.length<2)qq=false}
+A('Blitzrunde: nur Auswahlfragen mit eindeutigen Antworten',qq);
+// Memory: jede Aufgabe passt zu genau einer Zahl
+let mOk=true;for(let i=0;i<100;i++){home();$('#gm').click();const t=M.cards.map(c=>c.t),nums=t.filter(x=>/^\d+$/.test(x));
+  if(t.length!==12||new Set(t).size!==12)mOk=false;for(const x of t.filter(x=>/[·:]/.test(x)))if(nums.filter(n=>+n===calc(x)).length!==1)mOk=false}
+A('Memory: 12 Karten, jede Aufgabe passt zu genau einer Zahl',mOk);
+// Kopfrechen-Sprint
+home();$('#gs').click();for(let k=0;k<5;k++){$('#ti').value=String(X.q.ans);$('#tf').requestSubmit()}
+A('Sprint: richtige Ergebnisse zählen, gleich die nächste Aufgabe',X.n===5&&!$('#ti').disabled&&$('#ti').value==='');
+$('#ti').value=String(X.q.ans+1);$('#tf').requestSubmit();A('Sprint: falsches Ergebnis zeigt die Lösung',$('#ti').disabled&&/Richtig ist/.test($('#fb').textContent)&&X.missed.length===1);
+sprintNeu();sprintEnde();A('Sprint: Ende mit Rekord und Fehlerliste',!!$('.end')&&save.sprint===5&&$$('.mist li').length===1);
+home();
+done();
