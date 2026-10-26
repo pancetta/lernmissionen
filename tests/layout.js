@@ -22,7 +22,7 @@ if(typeof AUFG!=='undefined'){ // Deutsch
   home();$('#gm').click();scan('Memory-Auswahl');memoStart('silben',10);$$('.card').forEach((b,i)=>b.textContent=M.cards[i].t);scan('Memory Silben aufgedeckt');home();
 }else if(typeof SUB!=='undefined'){ // Mathe
   for(const [isl,o] of Object.entries(SUB))for(const sub of Object.keys(o))play(()=>gen(isl,sub),sub==='wort2zahl'||sub==='zahl2wort'||sub==='runden'?15:3,'Mathe '+isl); // lange Zahlwörter öfter
-  start('check');let g=0;while(!$('.end')&&g++<80){const q=G.queue[0];if(q.kind==='mc')answer((q.options.indexOf(q.correct)+1)%q.options.length);else if(q.kind==='widget'){if(q.w==='bars')WS.set(0,q.step);else WS.put(q.i===1?2:1);answer(null,null)}else answer(null,q.kind==='build'?'x':'999999999');$('#nx').click()}
+  start('check');let g=0;while(!$('.end')&&g++<80){const q=G.queue[0];if(q.kind==='mc')answer((q.options.indexOf(q.correct)+1)%q.options.length);else if(q.kind==='widget')solveWrong(q);else answer(null,q.kind==='build'?'x':'999999999');$('#nx').click()}
   scan('Mathe Ende Ich-kann-Check');
   if(typeof kasse!=='undefined'){ // Spiele Mathe 5
   for(let i=0;i<12;i++){home();$('#gv').click();scan('Vergleich');sortA(-1);scan('Vergleich Fehler')}

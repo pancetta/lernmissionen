@@ -6,7 +6,7 @@ const RANKS=[[0,'Leichtmatrose'],[100,'Matrose'],[300,'Bootsmann/-frau'],[600,'S
  [2800,'Flottenkapitän/in'],[3600,'Kommodore'],[4500,'Konteradmiral/in'],[5500,'Vizeadmiral/in'],[6600,'Admiral/in'],[7800,'Großadmiral/in'],[9100,'Legende der sieben Meere']];
 const LEGEND=1500;
 const ROUND=10, BLITZ=60, PAIRS=6;
-const CHEER=['Richtig!','Super!','Genau!','Stark!','Yes!','Perfekt!','Great!'];
+const CHEER=['Richtig!','Super!','Genau!','Stark!','Klasse!','Perfekt!','Toll!'];
 const OOPS=['Fast!','Nicht schlimm.','Merk dir das gut.','Beim nächsten Mal klappt es.'];
 
 /* ---------- Hilfen ---------- */

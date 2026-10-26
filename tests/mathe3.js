@@ -36,16 +36,29 @@ for(const isl of ['plus','minus']){const m=isl==='minus',ab=t=>t.match(/\d+/g).m
   each(isl,'ohne',q=>carry(...ab(big(q.html)),m)===0||'hat einen Übertrag');
   each(isl,'mit',q=>carry(...ab(big(q.html)),m)>0||'hat keinen Übertrag');
   each(isl,'uebertrag',q=>{const c=o=>carry(...ab(o),m)>0;return q.options.filter(c).length===1&&c(q.correct)||'Übertrag'})}
-const geprueft=new Set(['mal.mal','mal.luecke','mal.tausch','mal.reihe','geteilt.durch','geteilt.luecke','geteilt.umkehr',...['auswahl','ganz','restzahl','tippen','zugross','ohne','sach','runden'].map(s=>'rest.'+s),'punkt.rechnen','punkt.klammer','punkt.zuerst','punkt.falle',
+// Schriftlich: Tabelle aus der Anzeige lesen (Zeilen: Kopf, Zahl 1, Zahl 2, [Übertrag], Ergebnis)
+const tab=h=>{box.innerHTML=h;const z=[...box.querySelectorAll('.spalten tr')].slice(1).map(r=>[...r.cells].slice(1).map(c=>c.textContent.trim()).join(''));return z};
+for(const s of ['plus','minus'])each('schrift',s,q=>{box.innerHTML=WIDGETS.spalten.html(q);const [a,b]=tab(box.innerHTML).map(Number);return q.ans===(s==='plus'?a+b:a-b)&&q.ans>=0&&q.ans<=1000&&box.querySelectorAll('.ziffer').length===4||'schriftlich'});
+each('schrift','wohin',q=>{const [a,b]=tab(q.html).map(Number),e=a%10+b%10>9,z=Math.floor(a/10)%10+Math.floor(b/10)%10+(e?1:0)>9;
+  return q.correct===(e&&z?'zu den Zehnern und zu den Hundertern':e?'zu den Zehnern':z?'zu den Hundertern':'kein Übertrag')||'Übertrag wohin'});
+each('schrift','fehler',q=>{const t=tab(q.html),a=+t[0],b=+t[1],erg=+t[t.length-1],r=String(a+b).padStart(4),g=String(erg).padStart(4),diff=[...r].map((d,i)=>d!==g[i]?i:-1).filter(i=>i>=0);
+  if(erg===a+b)return q.correct==='Alles richtig'||'ist richtig';return diff.length===1&&q.correct===['','bei den Hundertern','bei den Zehnern','bei den Einern'][diff[0]]||'Fehlerstelle'});
+// Sachaufgaben: aus dem Text nachrechnen
+const sachWert=t=>{const n=zahlen(t),f=t.match(/[^.]*\?$/)[0];
+  return /bezahlen\?/.test(f)?n[0]+n[1]:/zurück\?/.test(f)?n[2]-n[0]-n[1]:/mehr als/.test(f)?n[0]-n[1]:/zusammen\?/.test(f)?n[1]+n[2]:/sind in \d+/.test(f)?n[0]*zahlen(f)[0]:/in jeder Gruppe/.test(f)?n[0]/n[1]:
+   /Wie viele Murmeln sind es/.test(f)?n[0]*n[1]:/in jede Tüte/.test(f)?n[0]/n[1]:/jetzt\?/.test(f)?n[0]+n[1]:/noch\?/.test(f)?n[0]-n[1]:NaN};
+for(const s of ['einkauf','rueckgeld','unterschied','sammeln','mal','geteilt'])each('sach',s,q=>{box.innerHTML=q.html;const v=sachWert(box.textContent.trim());return v===q.ans&&v>0&&Number.isInteger(v)||'Sachaufgabe '+v});
+each('sach','rechnung',q=>{box.innerHTML=q.html;const v=sachWert(box.textContent.trim()),ok=q.options.filter(o=>calc(o)===v);return ok.length===1&&ok[0]===q.correct&&new Set(q.options.map(calc)).size===q.options.length||'Rechnung '+v});
+const geprueft=new Set([...['plus','minus','wohin','fehler'].map(x=>'schrift.'+x),...['einkauf','rueckgeld','unterschied','sammeln','mal','geteilt','rechnung'].map(x=>'sach.'+x),'mal.mal','mal.luecke','mal.tausch','mal.reihe','geteilt.durch','geteilt.luecke','geteilt.umkehr',...['auswahl','ganz','restzahl','tippen','zugross','ohne','sach','runden'].map(s=>'rest.'+s),'punkt.rechnen','punkt.klammer','punkt.zuerst','punkt.falle',
   ...['plus','minus'].flatMap(i=>['ohne','mit','glatt','luecke','uebertrag'].map(s=>i+'.'+s))]);
 A('jede Aufgabenart hat eine Prüfung',Object.entries(SUB).every(([i,o])=>Object.keys(o).every(k=>geprueft.has(i+'.'+k))));
 A('alle Aufgabenarten nachgerechnet: keine Fehler',probs.n===0);
 // Runden, Check, Blitzrunde
 const runs=[...TOPICS.map(t=>t.id),'mix','check'].map(t=>[t,perfect(t).stars]);A('fehlerfreie Runde = 3 Sterne (alle Inseln, Rundfahrt, Check)',runs.every(r=>r[1]===3));
-start('check');A('Check: 12 Aufgaben aus allen 6 Themen',G.total===12&&new Set(G.queue.map(q=>q.isl)).size===6);
+start('check');A('Check: 16 Aufgaben aus allen 8 Themen',G.total===16&&new Set(G.queue.map(q=>q.isl)).size===8);
 let g=0;while(!$('.end')&&g++<80){const q=G.queue[0];g<=2?solveWrong(q):solve(q);$('#nx').click()}
 const rows=$$('.cancheck tr').slice(1).map(r=>r.querySelector('.face').textContent);
-A('Check-Tabelle: erstes Thema 🙁, Rest 😀',rows.length===6&&rows[0]==='🙁'&&rows.slice(1).every(f=>f==='😀'));
+A('Check-Tabelle: erstes Thema 🙁, Rest 😀',rows.length===8&&rows[0]==='🙁'&&rows.slice(1).every(f=>f==='😀'));
 let qq=true;for(let i=0;i<500;i++){const x=quickQ();if(x.kind!=='mc'||new Set(x.options).size!==x.options.length||!x.options.includes(x.correct)||x.options.length<2)qq=false}
 A('Blitzrunde: nur Auswahlfragen mit eindeutigen Antworten',qq);
 {const ein=(t,x)=>{start('rest');const q=gen('rest','tippen');G.queue=[q];G.total=1;show();const [c,b]=zahlen(big(q.html));answer(null,t(Math.floor(c/b),c%b));return G.first===x};
@@ -55,6 +68,12 @@ A('Blitzrunde: nur Auswahlfragen mit eindeutigen Antworten',qq);
   bs=$$('.opt'),nicht=bs.filter(b=>+b.textContent%r!==0);if(nicht.length!==1){ok=false;P('Reihe: '+bs.map(b=>b.textContent));continue}
   nicht[0].click();if(G.first!==1||!nicht[0].classList.contains('right')||$$('.opt.right').length!==1){ok=false;P(`Reihe ${r}: ${bs.map(b=>b.textContent)} → ${q.correct}`)}}
  A('Reihe: die Zahl, die nicht dazugehört, antippen zählt als richtig und wird grün',ok)}
+// Schriftlich wie ein Kind: Ziffern von rechts eintippen, das Kästchen springt nach links; Lücke im Ergebnis wird bemerkt
+{start('schrift');const q=gen('schrift','plus');G.queue=[q];G.total=1;show();const zs=$$('.ziffer'),d=String(q.ans).split('').reverse();let ok=document.activeElement===zs[3];
+ d.forEach((c,i)=>{const z=document.activeElement;z.value=c;z.dispatchEvent(new Event('input'));if(z!==zs[3-i])ok=false});
+ A('Schriftlich: Ziffern von rechts nach links eintippen, dann richtig',ok&&($('#bp').click(),G.first===1)&&$$('.ziffer.good').length===4);
+ start('schrift');const q2=gen('schrift','minus');G.queue=[q2];G.total=1;show();const z2=$$('.ziffer');z2[3].value='1';z2[1].value='1';$('#bp').click();
+ A('Schriftlich: Lücke im Ergebnis wird bemerkt, keine Wertung',!G.answered&&/fehlt noch eine Ziffer/.test($('#fb').textContent))}
 // Memory: jede Aufgabe passt zu genau einer Zahl
 let mOk=true;for(let i=0;i<100;i++){home();$('#gm').click();const t=M.cards.map(c=>c.t),nums=t.filter(x=>/^\d+$/.test(x));
   if(t.length!==12||new Set(t).size!==12)mOk=false;for(const x of t.filter(x=>/[·:]/.test(x)))if(nums.filter(n=>+n===calc(x)).length!==1)mOk=false}

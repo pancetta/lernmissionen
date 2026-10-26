@@ -27,9 +27,11 @@ const TOPICS=[
  {id:'rest',name:'Rest-Insel',map:'Rest',sub:'23 : 5 = 4 Rest 3',can:'mit Rest teilen'},
  {id:'punkt',name:'Punkt-vor-Strich-Insel',map:'Punkt vor Strich',sub:'3 + 4 · 5 = ?',can:'Punkt- vor Strichrechnung beachten'},
  {id:'plus',name:'Plus-Insel',map:'Plus',sub:'bis 1000, mit und ohne Übertrag',can:'bis 1000 plus rechnen'},
- {id:'minus',name:'Minus-Insel',map:'Minus',sub:'bis 1000, mit und ohne Übertrag',can:'bis 1000 minus rechnen'}
+ {id:'minus',name:'Minus-Insel',map:'Minus',sub:'bis 1000, mit und ohne Übertrag',can:'bis 1000 minus rechnen'},
+ {id:'schrift',name:'Schriftlich-Insel',map:'Schriftlich',sub:'untereinander plus und minus',can:'schriftlich plus und minus rechnen'},
+ {id:'sach',name:'Sachaufgaben-Insel',map:'Sachaufgaben',sub:'Einkaufen, Sammeln, Verteilen',can:'Sachaufgaben lösen'}
 ];
-const MAP=[[50,42],[150,42],[250,42],[290,118],[190,118],[90,118]]; // Seekarte, Reihenfolge wie TOPICS
+const MAP=[[45,42],[125,42],[205,42],[285,42],[285,118],[205,118],[125,118],[45,118]]; // Seekarte, Reihenfolge wie TOPICS
 
 /* ---------- Hilfen ---------- */
 const R=(a,b)=>a+Math.floor(Math.random()*(b-a+1));                 // ganze Zufallszahl von a bis b
@@ -150,8 +152,85 @@ function rechenInsel(minus){
 }
 const PL=rechenInsel(false),MI=rechenInsel(true);
 
+/* ---------- Schriftlich-Insel: untereinander rechnen ---------- */
+const STELLEN=['T','H','Z','E'],STELLE={T:'Tausender',H:'Hunderter',Z:'Zehner',E:'Einer'};
+const ziffern=n=>String(n).padStart(4,' ').split('').map(d=>d.trim());
+function spaltenTab(a,b,op,erg){ // Aufgabe untereinander; erg = Ergebniszeile (fertige Zahl) oder Eingabekästchen
+  const row=(n,s)=>`<tr><td class="op">${s}</td>${ziffern(n).map(d=>`<td>${d}</td>`).join('')}</tr>`;
+  const unten=erg!==undefined?row(erg,'=').replace('<tr>','<tr class="erg">'):`<tr class="ue"><td class="op">Ü</td>${STELLEN.map((s,k)=>`<td>${k<3?`<input class="ueb" inputmode="numeric" maxlength="1" autocomplete="off" aria-label="Übertrag zu den ${STELLE[s]}n">`:''}</td>`).join('')}</tr>
+   <tr class="erg"><td class="op">=</td>${STELLEN.map(s=>`<td><input class="ziffer" inputmode="numeric" maxlength="1" autocomplete="off" aria-label="Ergebnis: ${STELLE[s]}"></td>`).join('')}</tr>`;
+  return `<table class="spalten" aria-label="${a} ${op} ${b} untereinander"><tr class="kopf"><td></td>${STELLEN.map(s=>`<td>${s}</td>`).join('')}</tr>${row(a,'')}${row(b,op)}${unten}</table>`;
+}
+let WS=null; // Zustand der gerade sichtbaren Spalten-Aufgabe (wird nicht gespeichert)
+const WIDGETS={spalten:{
+  html:q=>`${spaltenTab(q.a,q.b,q.op)}<p class="tip" style="margin:6px 0 0">Rechne von rechts nach links: Einer, Zehner, Hunderter. Den Übertrag kannst du in die Reihe Ü schreiben.</p>`,
+  init(){const zs=[...document.querySelectorAll('.spalten .ziffer')];
+    WS={zs,fill:n=>{const d=ziffern(n);zs.forEach((z,i)=>z.value=d[i])}};
+    document.querySelectorAll('.spalten input').forEach(inp=>{
+      inp.oninput=()=>{inp.value=inp.value.replace(/\D/g,'').slice(-1);const i=zs.indexOf(inp);if(inp.value&&i>0)zs[i-1].focus()}; // weiter nach links, wie beim schriftlichen Rechnen
+      inp.onkeydown=ev=>{const i=zs.indexOf(inp);if(ev.key==='Enter'){ev.preventDefault();$('#bp').click()}else if(ev.key==='Backspace'&&!inp.value&&i>=0&&i<3){ev.preventDefault();zs[i+1].focus()}}});
+    zs[3].focus()},
+  empty(){const v=WS.zs.map(z=>z.value),f=v.findIndex(Boolean);return f<0?'Schreibe das Ergebnis in die Kästchen.':v.slice(f).some(x=>!x)?'Im Ergebnis fehlt noch eine Ziffer.':''},
+  check:q=>+WS.zs.map(z=>z.value).join('')===q.ans,
+  done(q){const d=ziffern(q.ans);WS.zs.forEach((z,i)=>{z.disabled=true;z.classList.add(z.value===d[i]?'good':'bad')});document.querySelectorAll('.spalten .ueb').forEach(u=>u.disabled=true)}
+}};
+function plusSchritte(a,b){ // Spalte für Spalte mit Übertrag
+  const A=ziffern(a).reverse(),B=ziffern(b).reverse(),s=[];let c=0;
+  for(let i=0;i<4;i++){if(!A[i]&&!B[i]){if(c)s.push(`${STELLE[STELLEN[3-i]]}: Übertrag 1`);break}
+    const x=+(A[i]||0),y=+(B[i]||0),t=x+y+c;s.push(`${STELLE[STELLEN[3-i]]}: ${c?'1 + ':''}${x} + ${y} = ${t}${t>9?`, schreibe ${t%10}, Übertrag 1`:''}`);c=t>9?1:0}
+  return s.join('. ');
+}
+function schriftPaar(minus){for(;;){const a=R(100,999),b=pick([R(100,899),R(10,99)]);if(minus?b>=a:a+b>1000)continue;
+  if(uebertraege(a,b,minus)===0&&Math.random()<.8)continue;return [a,b]}} // meistens mit Übertrag
+const SR={
+ plus(){const [a,b]=schriftPaar(false);return {kind:'widget',w:'spalten',label:'Rechne schriftlich',a,b,op:'+',ans:a+b,sol:`${a} + ${b} = ${a+b}. ${plusSchritte(a,b)}.`}},
+ minus(){const [a,b]=schriftPaar(true);return {kind:'widget',w:'spalten',label:'Rechne schriftlich',a,b,op:'−',ans:a-b,sol:`${a} − ${b} = ${a-b}. Probe: ${a-b} + ${b} = ${a}`}},
+ wohin(){ // Übertrag zu den Zehnern, zu den Hundertern, zu beiden oder zu keiner Spalte
+  const art=pick(['Z','H','beide','keine']);let a,b;
+  for(;;){a=R(100,899);b=R(100,899);if(a+b>999)continue;const e=a%10+b%10>9,z=Math.floor(a/10)%10+Math.floor(b/10)%10+(e?1:0)>9;
+   if((art==='Z'&&e&&!z)||(art==='H'&&!e&&z)||(art==='beide'&&e&&z)||(art==='keine'&&!e&&!z))break}
+  const opt={Z:'zu den Zehnern',H:'zu den Hundertern',beide:'zu den Zehnern und zu den Hundertern',keine:'kein Übertrag'};
+  return mc({label:'Wohin kommt ein Übertrag?',html:spaltenTab(a,b,'+',''),options:Object.values(opt),correct:opt[art],sol:`${plusSchritte(a,b)}.`})},
+ fehler(){ // ein Kind hat den Übertrag vergessen (oder alles richtig gerechnet)
+  const art=pick(['Z','H','ok']);let a,b,erg;
+  for(;;){a=R(100,899);b=R(100,899);const r=a+b;if(r>999)continue;const e=a%10+b%10>9,z=Math.floor(a/10)%10+Math.floor(b/10)%10+(e?1:0)>9;
+   const eine=x=>ziffern(x).filter((d,i)=>d!==ziffern(r)[i]).length===1; // genau eine falsche Ziffer, sonst wäre die Stelle nicht eindeutig
+   if(art==='Z'&&e&&eine(r-10)){erg=r-10;break}if(art==='H'&&z&&eine(r-100)){erg=r-100;break}if(art==='ok'&&(e||z)){erg=r;break}}
+  const opt={E:'bei den Einern',Z:'bei den Zehnern',H:'bei den Hundertern',ok:'Alles richtig'},n=pick(['Tim','Lena','Ali','Emma']);
+  return mc({label:'Wo ist der Fehler?',html:`<p>${n} hat so gerechnet:</p>${spaltenTab(a,b,'+',erg)}`,options:Object.values(opt),correct:opt[art],
+   sol:art==='ok'?`Alles richtig: ${a} + ${b} = ${a+b}.`:`${opt[art][0].toUpperCase()+opt[art].slice(1)}: Der Übertrag wurde vergessen. Richtig ist ${a} + ${b} = ${a+b}.`})}
+};
+
+/* ---------- Sachaufgaben-Insel ---------- */
+const KIDS=['Lea','Tim','Mia','Ben','Ali','Emma','Noah','Lina'];
+const sach=(text,frage,ans,unit,sol)=>({kind:'num',label:'Sachaufgabe',html:`<p>${text}</p><p><b>${frage}</b></p>`,ans,unit,sol});
+const SA={
+ einkauf(){const n=pick(KIDS),[x,y]=pick([['ein Buch','ein Spiel'],['eine Mütze','einen Schal'],['einen Ball','ein Springseil'],['ein Puzzle','einen Malkasten']]),p=R(5,39),q=R(5,39);
+  return sach(`${n} kauft ${x} für ${p} € und ${y} für ${q} €.`,`Wie viel Euro muss ${n} bezahlen?`,p+q,'€',`${p} € + ${q} € = ${p+q} €`)},
+ rueckgeld(){const n=pick(KIDS),p=R(5,39),q=R(5,39),s=[50,100].find(x=>x>p+q);
+  return sach(`${n} kauft ein Buch für ${p} € und ein Spiel für ${q} €. ${n} bezahlt mit einem ${s}-€-Schein.`,`Wie viel Euro bekommt ${n} zurück?`,s-p-q,'€',`${p} € + ${q} € = ${p+q} €, ${s} € − ${p+q} € = ${s-p-q} €`)},
+ unterschied(){const [n,m]=shuffle(KIDS).slice(0,2),d=pick(['Sticker','Murmeln','Sammelkarten']),a=R(150,900),b=R(50,a-20);
+  return sach(`${n} hat ${a} ${d}. ${m} hat ${b} ${d}.`,`Wie viele ${d} hat ${n} mehr als ${m}?`,a-b,d,`${a} − ${b} = ${a-b}`)},
+ sammeln(){const k=pick(['3a','3b','3c']),d=pick(['Flaschen','Dosen','Kastanien']),a=R(120,480),b=R(120,480);
+  return sach(`Die Klasse ${k} sammelt ${d}. In der ersten Woche sind es ${a}, in der zweiten Woche ${b}.`,`Wie viele ${d} sind es zusammen?`,a+b,d,`${a} + ${b} = ${a+b}`)},
+ mal(){const [d,p,ein]=pick([['Eier','Packungen','einer Packung'],['Stifte','Schachteln','einer Schachtel'],['Bonbons','Tüten','einer Tüte'],['Brötchen','Körben','einem Korb']]),b=R(2,10),a=R(2,10);
+  return sach(`In ${ein} sind ${b} ${d}.`,`Wie viele ${d} sind in ${a} ${p}?`,a*b,d,`${a} · ${b} = ${a*b}`)},
+ geteilt(){const g=R(2,10),je=R(2,10),c=g*je;
+  return sach(`${c} Kinder bilden ${g} gleich große Gruppen.`,'Wie viele Kinder sind in jeder Gruppe?',je,'Kinder',`${c} : ${g} = ${je}`)},
+ rechnung(){ // Welche Rechnung passt? Nur Antworten mit verschiedenen Ergebnissen, damit niemand über das Ergebnis raten kann
+  for(;;){const a=R(3,10),b=R(2,9);if(a===b)continue;const n=pick(KIDS),f=pick([
+    [`${n} hat ${a} Tüten mit je ${b} Murmeln.`,'Wie viele Murmeln sind es?',`${a} · ${b}`],
+    [`${n} hat ${a*b} Murmeln und verteilt sie gleichmäßig auf ${b} Tüten.`,'Wie viele Murmeln kommen in jede Tüte?',`${a*b} : ${b}`],
+    [`${n} hat ${a} Murmeln und bekommt ${b} dazu.`,`Wie viele Murmeln hat ${n} jetzt?`,`${a} + ${b}`],
+    [`${n} hat ${a} Murmeln und verliert ${b}.`,`Wie viele Murmeln hat ${n} noch?`,`${a} − ${b}`]]);
+   const [x,y]=f[2].split(/ [·:+−] /).map(Number),os=[`${x} · ${y}`,`${x} : ${y}`,`${x} + ${y}`,`${x} − ${y}`].filter(o=>{const [p,q]=o.split(/ [·:+−] /).map(Number),op=o.match(/[·:+−]/)[0];return op===':'?p%q===0:op==='−'?p>q:true});
+   const val=o=>{const [p,q]=o.split(/ [·:+−] /).map(Number);return {'·':p*q,':':p/q,'+':p+q,'−':p-q}[o.match(/[·:+−]/)[0]]};
+   if(new Set(os.map(val)).size!==os.length||os.length<3)continue;
+   return mc({label:'Welche Rechnung passt?',html:`<p>${f[0]}</p><p><b>${f[1]}</b></p>`,options:shuffle(os),correct:f[2],sol:`${f[2]} = ${val(f[2])}`})}}
+};
+
 /* ---------- Auswahl der Fragen ---------- */
-const SUB={mal:EM,geteilt:GT,rest:RS,punkt:PV,plus:PL,minus:MI};
+const SUB={mal:EM,geteilt:GT,rest:RS,punkt:PV,plus:PL,minus:MI,schrift:SR,sach:SA};
 const LABEL={mal:{mal:'Rechne',luecke:'Welche Zahl fehlt?'},geteilt:{durch:'Rechne',luecke:'Welche Zahl fehlt?'},punkt:{rechnen:'Punkt vor Strich: Rechne',klammer:'Klammer zuerst: Rechne'}};
 function gen(isl,sub){ // eine Frage einer Insel; Unterart gewichtet nach Fehlern (wk = "insel.unterart")
   const subs=Object.keys(SUB[isl]);
@@ -169,7 +248,7 @@ function mcify(q){ // Zahl-Aufgabe in eine Auswahlfrage verwandeln (für die Bli
   if(q.kind==='mc')return q;const a=q.ans;
   return Object.assign({},q,{kind:'mc',options:opts4(String(a),[a+1,a-1,a+10,a-10,a+2,a+100,a-100].filter(x=>x>=0&&x!==a).map(String)),correct:String(a)});
 }
-function quickQ(){let q;do q=makeQ('mix');while(q.kind==='type');return mcify(q)}
+function quickQ(){let q;do q=makeQ('mix');while(q.kind==='type'||q.kind==='widget');return mcify(q)}
 function finishExtra(g){ // Ich-kann-Check: Ergebnis je Thema
   if(g.topic!=='check')return '';
   const face=k=>k===2?['😀','Kann ich']:k===1?['😐','Fast']:['🙁','Üben'];
@@ -228,7 +307,7 @@ function home(){
   $('#app').innerHTML=`
   <div class="top"><a class="back" href="../../" style="text-decoration:none">Übersicht</a><span class="brand">${BRAND}</span>${themeBtn()}</div>
   <section class="hero"><h1>${hi} Fit im Rechnen?</h1>
-   <p>Einmaleins, Geteilt, Teilen mit Rest, Punkt vor Strich, Plus und Minus bis 1000. Jede Insel ist ein Thema, eine Fahrt hat ${ROUND} Aufgaben.</p>
+   <p>Einmaleins, Geteilt, Teilen mit Rest, Punkt vor Strich, Plus und Minus bis 1000, schriftlich rechnen und Sachaufgaben. Jede Insel ist ein Thema, eine Fahrt hat ${ROUND} Aufgaben.</p>
    <div class="rank"><span class="pill sun">${save.xp} Punkte</span><span class="pill">Rang: ${rank()}</span></div>${rankBar()}${hero}</section>
   <div class="namebox"><label for="nm">Dein Name</label><input type="text" id="nm" maxlength="16" value="${esc(save.name)}" placeholder="z. B. Mia" autocomplete="off"></div>
   ${resume}
