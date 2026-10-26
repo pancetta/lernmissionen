@@ -54,7 +54,7 @@ const EM={
   const ok=pick(same),wr=[];for(let t=0;t<200&&wr.length<8;t++){const x=R(2,10),y=R(2,10);if(x*y!==p)wr.push(`${x} · ${y}`)}
   return mc({label:'Welche Aufgabe hat dasselbe Ergebnis?',html:`<p class="big">${a} · ${b}</p>`,options:opts4(ok,wr),correct:ok,sol:`${a} · ${b} = ${p} und ${ok} = ${p}`})},
  reihe(){const r=R(2,10),ks=shuffle([1,2,3,4,5,6,7,8,9,10]).slice(0,3).map(k=>k*r);let w;do w=pick(ks)+pick([-2,-1,1,2])*(r>2?1:3);while(w<1||w%r===0||ks.includes(w));
-  return mc({label:'Welche Zahl gehört nicht dazu?',html:`<p>Welche Zahl gehört <b>nicht</b> zur ${r}er‑Reihe?</p><p class="tip">Die ${r}er‑Reihe: ${r}, ${2*r}, ${3*r} …</p>`,options:shuffle(ks.concat(w).map(String)),correct:String(w),sol:`${w} gehört nicht dazu: ${w} : ${r} geht nicht ohne Rest.`})}
+  return mc({label:'Welche Zahl gehört nicht dazu?',html:`<p>Welche Zahl gehört <b>nicht</b> zur ${r}er‑Reihe?</p><p class="tip">Die ${r}er‑Reihe: ${r}, ${2*r}, ${3*r} …</p>`,options:shuffle(ks.concat(w).map(String)),correct:String(w),sol:`${w} gehört nicht zur ${r}er‑Reihe, denn ${w} : ${r} geht nicht ohne Rest.`})}
 };
 
 /* ---------- Geteilt-Insel ---------- */

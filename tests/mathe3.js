@@ -50,6 +50,11 @@ let qq=true;for(let i=0;i<500;i++){const x=quickQ();if(x.kind!=='mc'||new Set(x.
 A('Blitzrunde: nur Auswahlfragen mit eindeutigen Antworten',qq);
 {const ein=(t,x)=>{start('rest');const q=gen('rest','tippen');G.queue=[q];G.total=1;show();const [c,b]=zahlen(big(q.html));answer(null,t(Math.floor(c/b),c%b));return G.first===x};
  A('Rest eintippen: „4 Rest 3“, „4 rest 3“, „4 r 3“, „4R3“ richtig, falscher Rest falsch',ein((q,r)=>`${q} Rest ${r}`,1)&&ein((q,r)=>`${q} rest ${r}`,1)&&ein((q,r)=>`${q} r ${r}`,1)&&ein((q,r)=>`${q}R${r}`,1)&&ein((q,r)=>`${q} Rest ${r+1}`,0))}
+// Reihe im Browser wie ein Kind: die Zahl antippen, die nicht durch die Reihenzahl teilbar ist; sie wird grün, alle anderen gehören zur Reihe
+{let ok=true;for(let i=0;i<300;i++){start('mal');const q=gen('mal','reihe');G.queue=[q];G.total=1;show();const r=+$('.prompt').textContent.match(/zur (\d+)er.Reihe/)[1],
+  bs=$$('.opt'),nicht=bs.filter(b=>+b.textContent%r!==0);if(nicht.length!==1){ok=false;P('Reihe: '+bs.map(b=>b.textContent));continue}
+  nicht[0].click();if(G.first!==1||!nicht[0].classList.contains('right')||$$('.opt.right').length!==1){ok=false;P(`Reihe ${r}: ${bs.map(b=>b.textContent)} → ${q.correct}`)}}
+ A('Reihe: die Zahl, die nicht dazugehört, antippen zählt als richtig und wird grün',ok)}
 // Memory: jede Aufgabe passt zu genau einer Zahl
 let mOk=true;for(let i=0;i<100;i++){home();$('#gm').click();const t=M.cards.map(c=>c.t),nums=t.filter(x=>/^\d+$/.test(x));
   if(t.length!==12||new Set(t).size!==12)mOk=false;for(const x of t.filter(x=>/[·:]/.test(x)))if(nums.filter(n=>+n===calc(x)).length!==1)mOk=false}
