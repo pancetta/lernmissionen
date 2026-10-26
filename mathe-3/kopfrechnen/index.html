@@ -20,7 +20,7 @@
 <script src="../../gemeinsam/runde.js"></script>
 <script src="../../gemeinsam/spiele.js"></script>
 <script>
-const BRAND='Rechen-Inseln',MISSED='Diese Aufgaben üben wir weiter',TYPE_PH='z. B. 4 Rest 3';
+const BRAND='Rechen-Inseln',MISSED='Diese Aufgaben üben wir weiter',TYPE_PH='… Rest …';
 const TOPICS=[
  {id:'mal',name:'Einmaleins-Insel',map:'1 · 1',sub:'3 · 7, 8 · 6 und die Reihen',can:'das kleine Einmaleins sicher rechnen'},
  {id:'geteilt',name:'Geteilt-Insel',map:'Geteilt',sub:'42 : 7 und Umkehraufgaben',can:'im Einmaleins geteilt rechnen'},
@@ -54,7 +54,7 @@ const EM={
   const ok=pick(same),wr=[];for(let t=0;t<200&&wr.length<8;t++){const x=R(2,10),y=R(2,10);if(x*y!==p)wr.push(`${x} · ${y}`)}
   return mc({label:'Welche Aufgabe hat dasselbe Ergebnis?',html:`<p class="big">${a} · ${b}</p>`,options:opts4(ok,wr),correct:ok,sol:`${a} · ${b} = ${p} und ${ok} = ${p}`})},
  reihe(){const r=R(2,10),ks=shuffle([1,2,3,4,5,6,7,8,9,10]).slice(0,3).map(k=>k*r);let w;do w=pick(ks)+pick([-2,-1,1,2])*(r>2?1:3);while(w<1||w%r===0||ks.includes(w));
-  return mc({label:`Welche Zahl gehört nicht zur ${r}er-Reihe?`,html:`<p>Die ${r}er-Reihe: ${r}, ${2*r}, ${3*r} …</p>`,options:shuffle(ks.concat(w).map(String)),correct:String(w),sol:`${w} gehört nicht dazu: ${w} : ${r} geht nicht ohne Rest.`})}
+  return mc({label:'Welche Zahl gehört nicht dazu?',html:`<p>Welche Zahl gehört <b>nicht</b> zur ${r}er‑Reihe?</p><p class="tip">Die ${r}er‑Reihe: ${r}, ${2*r}, ${3*r} …</p>`,options:shuffle(ks.concat(w).map(String)),correct:String(w),sol:`${w} gehört nicht dazu: ${w} : ${r} geht nicht ohne Rest.`})}
 };
 
 /* ---------- Geteilt-Insel ---------- */
@@ -72,8 +72,8 @@ const restSol=({c,b,q,r})=>`${c} : ${b} = ${q} Rest ${r}, denn ${q} · ${b} = ${
 const RS={
  ganz(){const t=teilung();return Object.assign(num(`${t.c} : ${t.b} = ${BLOB} Rest ${t.r}`,t.q,restSol(t)),{label:'Welche Zahl fehlt?'})},
  restzahl(){const t=teilung();return Object.assign(num(`${t.c} : ${t.b} = ${t.q} Rest ${BLOB}`,t.r,restSol(t)),{label:'Wie groß ist der Rest?'})},
- tippen(){const t=teilung(),{q,r}=t;
-  return {kind:'type',label:'Teile mit Rest',html:`<p class="big">${t.c} : ${t.b} = ?</p><p class="tip">Schreibe zum Beispiel: 4 Rest 3</p>`,accept:[`${q} Rest ${r}`,`${q} rest ${r}`,`${q} R ${r}`,`${q} r ${r}`,`${q}R${r}`,`${q}r${r}`],correct:`${q} Rest ${r}`,sol:restSol(t)}},
+ tippen(){const t=teilung(),{q,r}=t,bsp=q===1&&r===1?'2 Rest 1':'1 Rest 1'; // das Beispiel zeigt nur die Schreibweise, nie die Lösung
+  return {kind:'type',label:'Teile mit Rest',html:`<p class="big">${t.c} : ${t.b} = ?</p><p class="tip">Schreibe zum Beispiel: ${bsp}</p>`,accept:[`${q} Rest ${r}`,`${q} rest ${r}`,`${q} R ${r}`,`${q} r ${r}`,`${q}R${r}`,`${q}r${r}`],correct:`${q} Rest ${r}`,sol:restSol(t)}},
  auswahl(){const {b,q,r,c}=teilung(),s=(x,y)=>`${x} Rest ${y}`,ok=s(q,r);
   const wr=[s(q+1,r),q>1?s(q-1,r):null,r+1<b?s(q,r+1):null,r>1?s(q,r-1):null].filter(Boolean);
   return mc({label:'Teile mit Rest',html:`<p class="big">${c} : ${b} = ?</p>`,options:opts4(ok,wr),correct:ok,sol:restSol({c,b,q,r})})},
@@ -85,22 +85,23 @@ const RS={
  ohne(){const b=R(2,10),q=R(2,9),c=q*b,ws=[];while(ws.length<3){const t=teilung();if(t.b!==b||t.c!==c)if(!ws.some(x=>x.c===t.c&&x.b===t.b))ws.push(t)}
   const ok=`${c} : ${b}`;
   return mc({label:'Welche Aufgabe geht ohne Rest auf?',html:'<p>Nur bei einer Aufgabe bleibt kein Rest.</p>',options:shuffle([ok].concat(ws.map(t=>`${t.c} : ${t.b}`))),correct:ok,sol:`${c} : ${b} = ${q}, denn ${q} · ${b} = ${c}`})},
- sach(){const t=teilung(),[ding,pack]=pick([['Äpfel','Tüten'],['Kinder','Gruppen'],['Stifte','Dosen'],['Eier','Schachteln'],['Murmeln','Säckchen']]),voll=Math.random()<.5;
-  return {kind:'num',label:'Sachaufgabe',html:`<p>${t.c} ${ding} werden auf ${pack} verteilt, immer ${t.b} zusammen.</p><p><b>${voll?`Wie viele ${pack} werden voll?`:`Wie viele ${ding} bleiben übrig?`}</b></p>`,
-   ans:voll?t.q:t.r,sol:`${t.c} : ${t.b} = ${t.q} Rest ${t.r}: ${t.q} ${pack} werden voll, ${t.r} ${ding} bleiben übrig.`}},
+ sach(){const t=teilung(undefined,2),[ding,eins,pack]=pick([['Äpfel','Apfel','Tüten'],['Kinder','Kind','Gruppen'],['Stifte','Stift','Dosen'],['Eier','Ei','Schachteln'],['Murmeln','Murmel','Säckchen']]),voll=Math.random()<.5,
+   uebrig=t.r===1?`1 ${eins} bleibt übrig`:`${t.r} ${ding} bleiben übrig`;
+  return {kind:'num',label:'Sachaufgabe',html:`<p>${t.c} ${ding} werden auf ${pack} verteilt, immer ${t.b} zusammen.</p><p><b>${voll?`Wie viele volle ${pack} gibt es?`:`Wie viele ${ding} bleiben übrig?`}</b></p>`,
+   ans:voll?t.q:t.r,sol:`${t.c} : ${t.b} = ${t.q} Rest ${t.r}: ${t.q} volle ${pack}, ${uebrig}.`}},
  runden(){ // Sachaufgabe mit Auf- oder Abrunden; die Gesamtzahl steht immer vorn, die Frage ist fett
-  const [hoch,b,text,frage,was]=pick([
-   [1,R(3,5),(c,b)=>`${c} Kinder fahren zum Ausflug. In jedes Auto passen ${b} Kinder.`,'Wie viele Autos braucht man, damit alle mitfahren können?','Autos'],
-   [1,pick([6,10]),(c,b)=>`${c} Eier sollen in Schachteln. In eine Schachtel passen ${b} Eier.`,'Wie viele Schachteln braucht man für alle Eier?','Schachteln'],
-   [1,R(4,8),(c,b)=>`${c} Kinder feiern ein Fest. An einen Tisch passen ${b} Kinder.`,'Wie viele Tische braucht man, damit alle sitzen können?','Tische'],
-   [1,R(5,10),(c,b)=>`${c} Bücher werden eingepackt. In eine Kiste passen ${b} Bücher.`,'Wie viele Kisten braucht man für alle Bücher?','Kisten'],
-   [0,R(2,5),(c,b)=>`Du hast ${c} €. Ein Heft kostet ${b} €.`,'Wie viele Hefte kannst du kaufen?','Hefte'],
-   [0,R(2,4),(c,b)=>`Du hast ${c} Eier. Für einen Kuchen nimmst du ${b} Eier.`,'Wie viele Kuchen kannst du backen?','Kuchen'],
-   [0,R(2,10),(c,b)=>`Ein Band ist ${c} m lang. Du schneidest Stücke von ${b} m ab.`,'Wie viele ganze Stücke bekommst du?','Stücke'],
-   [0,R(4,10),(c,b)=>`${c} Kinder spielen Fußball. Eine Mannschaft hat ${b} Kinder.`,'Wie viele volle Mannschaften gibt es?','Mannschaften']]);
+  const [hoch,b,text,frage,was,noch]=pick([
+   [1,R(3,5),(c,b)=>`${c} Kinder fahren zum Ausflug. In jedes Auto passen ${b} Kinder.`,'Wie viele Autos braucht man, damit alle mitfahren können?','Autos','ein Auto'],
+   [1,pick([6,10]),(c,b)=>`${c} Eier sollen in Schachteln. In eine Schachtel passen ${b} Eier.`,'Wie viele Schachteln braucht man für alle Eier?','Schachteln','eine Schachtel'],
+   [1,R(4,8),(c,b)=>`${c} Kinder feiern ein Fest. An einen Tisch passen ${b} Kinder.`,'Wie viele Tische braucht man, damit alle sitzen können?','Tische','einen Tisch'],
+   [1,R(5,10),(c,b)=>`${c} Bücher werden eingepackt. In eine Kiste passen ${b} Bücher.`,'Wie viele Kisten braucht man für alle Bücher?','Kisten','eine Kiste'],
+   [0,R(2,5),(c,b)=>`Du hast ${c} €. Ein Heft kostet ${b} €.`,'Wie viele Hefte kannst du kaufen?','Hefte','ein Heft'],
+   [0,R(2,4),(c,b)=>`Du hast ${c} Eier. Für einen Kuchen nimmst du ${b} Eier.`,'Wie viele Kuchen kannst du backen?','Kuchen','einen Kuchen'],
+   [0,R(2,10),(c,b)=>`Ein Band ist ${c} m lang. Du schneidest Stücke von ${b} m ab.`,'Wie viele ganze Stücke bekommst du?','Stücke','ein Stück'],
+   [0,R(4,10),(c,b)=>`${c} Kinder spielen Fußball. Eine Mannschaft hat ${b} Kinder.`,'Wie viele volle Mannschaften gibt es?','Mannschaften','eine Mannschaft']]);
   const t=teilung(b,2),ans=hoch?t.q+1:t.q;
   return {kind:'num',label:hoch?'Sachaufgabe: Reicht das?':'Sachaufgabe: Was ist mit dem Rest?',html:`<p>${text(t.c,t.b)}</p><p><b>${frage}</b></p><p class="tip">Rechne erst mit Rest. Dann überlege, was mit dem Rest passiert.</p>`,ans,
-   sol:`${t.c} : ${t.b} = ${t.q} Rest ${t.r}. ${hoch?`Für den Rest braucht man noch eins mehr: ${ans} ${was}.`:`Der Rest reicht nicht für noch eins: ${ans} ${was}.`}`}}
+   sol:`${t.c} : ${t.b} = ${t.q} Rest ${t.r}. ${hoch?`Für den Rest braucht man noch ${noch}: ${ans} ${was}.`:`Der Rest reicht nicht mehr für ${noch}: ${ans} ${was}.`}`}}
 };
 
 /* ---------- Punkt-vor-Strich-Insel ---------- */

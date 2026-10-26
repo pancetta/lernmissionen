@@ -13,19 +13,23 @@ for(const [isl,subs] of [['mal',['mal','luecke']],['geteilt',['durch','luecke']]
   for(const s of subs)each(isl,s,q=>{const r=passt(q);if(r!==true)return r;return big(q.html).match(/\d+/g).map(Number).concat(q.ans).every(n=>n>=0&&n<=1000)||'Zahlenraum'});
 each('mal','mal',q=>big(q.html).match(/\d+/g).slice(0,2).every(n=>n>=2&&n<=10)||'kein kleines Einmaleins');
 each('mal','tausch',q=>{const p=calc(big(q.html));return q.options.filter(o=>calc(o)===p).length===1&&q.correct!==big(q.html)||'Tauschaufgabe'});
-each('mal','reihe',q=>{const r=+q.label.match(/zur (\d+)er/)[1];return q.options.filter(o=>o%r!==0).length===1&&q.correct%r!==0&&q.options.every(o=>o%r!==0||o/r<=10)||'Reihe'});
+each('mal','reihe',q=>{box.innerHTML=q.html;const r=+box.textContent.match(/zur (\d+)er.Reihe/)[1];return q.options.filter(o=>o%r!==0).length===1&&q.correct%r!==0&&q.options.every(o=>o%r!==0||o/r<=10)||'Reihe'});
 each('geteilt','umkehr',q=>{const [c,b]=big(q.html).match(/\d+/g).map(Number);return q.options.filter(o=>calc(o)===c).length===1&&calc(q.correct)===c&&q.correct.endsWith(' '+b)||'Umkehraufgabe'});
 // Rest: c : b = q Rest r stimmt, wenn q · b + r = c und 0 < r < b
 const restOk=(c,b,q,r)=>q*b+r===c&&r>0&&r<b,zahlen=t=>t.match(/\d+/g).map(Number);
 each('rest','auswahl',q=>{const [c,b]=zahlen(big(q.html)),ok=o=>restOk(c,b,...zahlen(o));return q.options.filter(ok).length===1&&ok(q.correct)||'Rest'});
 each('rest','ganz',q=>restOk(...zahlen(big(q.html).replace('●',q.ans)))||'Rest-Lücke');
 each('rest','restzahl',q=>restOk(...zahlen(big(q.html).replace('●',q.ans)))||'Rest-Lücke');
-each('rest','tippen',q=>{const [c,b]=zahlen(big(q.html));return q.accept.every(a=>restOk(c,b,...zahlen(a)))&&q.accept.includes(q.correct)||'Rest tippen'});
+each('rest','tippen',q=>{const [c,b]=zahlen(big(q.html));box.innerHTML=q.html;if(q.accept.some(x=>box.querySelector('.tip').textContent.endsWith(' '+x)))return 'Beispiel verrät die Lösung';return q.accept.every(a=>restOk(c,b,...zahlen(a)))&&q.accept.includes(q.correct)||'Rest tippen'});
 each('rest','zugross',q=>{const st=q.options.map(zahlen),gross=st.filter(([c,b,x,r])=>r>=b);return st.every(([c,b,x,r])=>x*b+r===c)&&gross.length===1&&zahlen(q.correct)[3]>=zahlen(q.correct)[1]&&st.filter(x=>restOk(...x)).length===3||'Rest zu groß'});
 each('rest','ohne',q=>{const ok=o=>{const [c,b]=zahlen(o);return c%b===0};return q.options.filter(ok).length===1&&ok(q.correct)||'ohne Rest'});
 each('rest','runden',q=>{box.innerHTML=q.html;const [c,b]=zahlen(box.querySelector('p').textContent),hoch=/braucht man/.test(box.querySelector('b').textContent);
   return c%b>0&&Math.floor(c/b)>=2&&q.ans===(hoch?Math.ceil(c/b):Math.floor(c/b))||'Runden'});
 each('rest','sach',q=>{box.innerHTML=q.html;const [c,b]=zahlen(box.textContent);return q.ans===(/voll/.test(box.textContent)?Math.floor(c/b):c%b)&&c%b>0||'Sachaufgabe'});
+// Sprache: keine Mehrzahl nach „1“ („1 Eier“), keine Großbuchstaben-Zahl in Überschriften („2ER-REIHE“)
+{let ok=true;for(const isl of Object.keys(SUB))for(const sub of Object.keys(SUB[isl]))for(let i=0;i<150;i++){const q=gen(isl,sub),t=(q.html||'').replace(/<[^>]+>/g,' ')+' '+q.sol;
+  if(/\b1 (Eier|Äpfel|Kinder|Stifte|Murmeln|Tüten|Gruppen|Dosen|Schachteln|Säckchen|Autos|Tische|Kisten|Hefte|Stücke|Mannschaften)\b/.test(t)||/\d(er|ER)\b/.test(q.label)){ok=false;P(`Sprache ${isl}.${sub}: ${q.label} | ${t}`)}}
+ A('Sprache: Einzahl nach 1, keine Zahl mit Endung in der Überschrift',ok)}
 each('punkt','zuerst',q=>{const t=big(q.html),punkt=o=>/[·:]/.test(o);return punkt(q.correct)&&q.options.filter(punkt).length===1&&q.options.every(o=>o.split(' und ').every(x=>t.includes(x)))||'Was zuerst?'});
 each('punkt','falle',q=>{const [l,r]=big(q.html).split(' = ');return (calc(l)===+r?'Stimmt':'Stimmt nicht')===q.correct||'Stimmt das?'});
 for(const isl of ['plus','minus']){const m=isl==='minus',ab=t=>t.match(/\d+/g).map(Number);
