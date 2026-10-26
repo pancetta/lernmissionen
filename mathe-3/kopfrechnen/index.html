@@ -20,15 +20,16 @@
 <script src="../../gemeinsam/runde.js"></script>
 <script src="../../gemeinsam/spiele.js"></script>
 <script>
-const BRAND='Rechen-Inseln',MISSED='Diese Aufgaben üben wir weiter';
+const BRAND='Rechen-Inseln',MISSED='Diese Aufgaben üben wir weiter',TYPE_PH='z. B. 4 Rest 3';
 const TOPICS=[
  {id:'mal',name:'Einmaleins-Insel',map:'1 · 1',sub:'3 · 7, 8 · 6 und die Reihen',can:'das kleine Einmaleins sicher rechnen'},
- {id:'geteilt',name:'Geteilt-Insel',map:'Geteilt',sub:'42 : 7, Umkehraufgaben, Rest',can:'im Einmaleins geteilt rechnen'},
+ {id:'geteilt',name:'Geteilt-Insel',map:'Geteilt',sub:'42 : 7 und Umkehraufgaben',can:'im Einmaleins geteilt rechnen'},
+ {id:'rest',name:'Rest-Insel',map:'Rest',sub:'23 : 5 = 4 Rest 3',can:'mit Rest teilen'},
  {id:'punkt',name:'Punkt-vor-Strich-Insel',map:'Punkt vor Strich',sub:'3 + 4 · 5 = ?',can:'Punkt- vor Strichrechnung beachten'},
  {id:'plus',name:'Plus-Insel',map:'Plus',sub:'bis 1000, mit und ohne Übertrag',can:'bis 1000 plus rechnen'},
  {id:'minus',name:'Minus-Insel',map:'Minus',sub:'bis 1000, mit und ohne Übertrag',can:'bis 1000 minus rechnen'}
 ];
-const MAP=[[60,42],[170,42],[280,42],[225,118],[115,118]]; // Seekarte, Reihenfolge wie TOPICS
+const MAP=[[50,42],[150,42],[250,42],[290,118],[190,118],[90,118]]; // Seekarte, Reihenfolge wie TOPICS
 
 /* ---------- Hilfen ---------- */
 const R=(a,b)=>a+Math.floor(Math.random()*(b-a+1));                 // ganze Zufallszahl von a bis b
@@ -61,10 +62,32 @@ const GT={
  durch(){const a=R(2,10),b=R(2,10),c=a*b;return num(`${c} : ${b} = ?`,a,`${c} : ${b} = ${a}, denn ${a} · ${b} = ${c}`)},
  luecke(){const a=R(2,10),b=R(2,10),c=a*b;return num(`${c} : ${BLOB} = ${a}`,b,`${c} : ${b} = ${a}, denn ${a} · ${b} = ${c}`)},
  umkehr(){const a=R(2,10),b=R(2,10),c=a*b,ok=`${a} · ${b}`;
-  return mc({label:'Welche Malaufgabe hilft dir?',html:`<p class="big">${c} : ${b} = ?</p>`,options:opts4(ok,[`${a+1} · ${b}`,`${a-1} · ${b}`,`${a} · ${b+1}`,`${a} · ${b-1}`].filter(x=>!/^1 |· 1$/.test(x))),correct:ok,sol:`${ok} = ${c}, also ${c} : ${b} = ${a}`})},
- rest(){const b=R(2,10),q=R(1,9),r=R(1,b-1),c=q*b+r,s=(x,y)=>`${x} Rest ${y}`,ok=s(q,r);
+  return mc({label:'Welche Malaufgabe hilft dir?',html:`<p class="big">${c} : ${b} = ?</p>`,options:opts4(ok,[`${a+1} · ${b}`,`${a-1} · ${b}`,`${a} · ${b+1}`,`${a} · ${b-1}`].filter(x=>!/^1 |· 1$/.test(x))),correct:ok,sol:`${ok} = ${c}, also ${c} : ${b} = ${a}`})}
+};
+
+
+/* ---------- Rest-Insel ---------- */
+const teilung=()=>{const b=R(2,10),q=R(1,9),r=R(1,b-1);return {b,q,r,c:q*b+r}}; // c : b = q Rest r, immer mit Rest
+const restSol=({c,b,q,r})=>`${c} : ${b} = ${q} Rest ${r}, denn ${q} · ${b} = ${q*b} und ${q*b} + ${r} = ${c}`;
+const RS={
+ ganz(){const t=teilung();return Object.assign(num(`${t.c} : ${t.b} = ${BLOB} Rest ${t.r}`,t.q,restSol(t)),{label:'Welche Zahl fehlt?'})},
+ restzahl(){const t=teilung();return Object.assign(num(`${t.c} : ${t.b} = ${t.q} Rest ${BLOB}`,t.r,restSol(t)),{label:'Wie groß ist der Rest?'})},
+ tippen(){const t=teilung(),{q,r}=t;
+  return {kind:'type',label:'Teile mit Rest',html:`<p class="big">${t.c} : ${t.b} = ?</p><p class="tip">Schreibe zum Beispiel: 4 Rest 3</p>`,accept:[`${q} Rest ${r}`,`${q} rest ${r}`,`${q} R ${r}`,`${q} r ${r}`,`${q}R${r}`,`${q}r${r}`],correct:`${q} Rest ${r}`,sol:restSol(t)}},
+ auswahl(){const {b,q,r,c}=teilung(),s=(x,y)=>`${x} Rest ${y}`,ok=s(q,r);
   const wr=[s(q+1,r),q>1?s(q-1,r):null,r+1<b?s(q,r+1):null,r>1?s(q,r-1):null].filter(Boolean);
-  return mc({label:'Teile mit Rest',html:`<p class="big">${c} : ${b} = ?</p>`,options:opts4(ok,wr),correct:ok,sol:`${c} : ${b} = ${q} Rest ${r}, denn ${q} · ${b} = ${q*b} und ${q*b} + ${r} = ${c}`})}
+  return mc({label:'Teile mit Rest',html:`<p class="big">${c} : ${b} = ?</p>`,options:opts4(ok,wr),correct:ok,sol:restSol({c,b,q,r})})},
+ zugross(){const ts=[];while(ts.length<4){const t=teilung();if(!ts.some(x=>x.c===t.c&&x.b===t.b))ts.push(t)}
+  const w=ts[0],q2=w.q-1,r2=w.r+w.b,s=(c,b,q,r)=>`${c} : ${b} = ${q} Rest ${r}`;if(q2<1)return RS.zugross(); // der Rest ist so groß wie der Teiler oder größer: dann passt der Teiler noch einmal
+  const ok=s(w.c,w.b,q2,r2);
+  return mc({label:'Wo ist der Rest zu groß?',html:'<p>Der Rest muss immer kleiner sein als die Zahl, durch die du teilst.</p>',options:shuffle([ok].concat(ts.slice(1).map(t=>s(t.c,t.b,t.q,t.r)))),correct:ok,
+   sol:`${ok}: Der Rest ${r2} ist nicht kleiner als ${w.b}. Richtig: ${s(w.c,w.b,w.q,w.r)}`})},
+ ohne(){const b=R(2,10),q=R(2,9),c=q*b,ws=[];while(ws.length<3){const t=teilung();if(t.b!==b||t.c!==c)if(!ws.some(x=>x.c===t.c&&x.b===t.b))ws.push(t)}
+  const ok=`${c} : ${b}`;
+  return mc({label:'Welche Aufgabe geht ohne Rest auf?',html:'<p>Nur bei einer Aufgabe bleibt kein Rest.</p>',options:shuffle([ok].concat(ws.map(t=>`${t.c} : ${t.b}`))),correct:ok,sol:`${c} : ${b} = ${q}, denn ${q} · ${b} = ${c}`})},
+ sach(){const t=teilung(),[ding,pack]=pick([['Äpfel','Tüten'],['Kinder','Gruppen'],['Stifte','Dosen'],['Eier','Schachteln'],['Murmeln','Säckchen']]),voll=Math.random()<.5;
+  return {kind:'num',label:'Sachaufgabe',html:`<p>${t.c} ${ding} werden auf ${pack} verteilt, immer ${t.b} zusammen.</p><p><b>${voll?`Wie viele ${pack} werden voll?`:`Wie viele ${ding} bleiben übrig?`}</b></p>`,
+   ans:voll?t.q:t.r,sol:`${t.c} : ${t.b} = ${t.q} Rest ${t.r}: ${t.q} ${pack} werden voll, ${t.r} ${ding} bleiben übrig.`}}
 };
 
 /* ---------- Punkt-vor-Strich-Insel ---------- */
@@ -114,7 +137,7 @@ function rechenInsel(minus){
 const PL=rechenInsel(false),MI=rechenInsel(true);
 
 /* ---------- Auswahl der Fragen ---------- */
-const SUB={mal:EM,geteilt:GT,punkt:PV,plus:PL,minus:MI};
+const SUB={mal:EM,geteilt:GT,rest:RS,punkt:PV,plus:PL,minus:MI};
 const LABEL={mal:{mal:'Rechne',luecke:'Welche Zahl fehlt?'},geteilt:{durch:'Rechne',luecke:'Welche Zahl fehlt?'},punkt:{rechnen:'Punkt vor Strich: Rechne',klammer:'Klammer zuerst: Rechne'}};
 function gen(isl,sub){ // eine Frage einer Insel; Unterart gewichtet nach Fehlern (wk = "insel.unterart")
   const subs=Object.keys(SUB[isl]);
@@ -132,7 +155,7 @@ function mcify(q){ // Zahl-Aufgabe in eine Auswahlfrage verwandeln (für die Bli
   if(q.kind==='mc')return q;const a=q.ans;
   return Object.assign({},q,{kind:'mc',options:opts4(String(a),[a+1,a-1,a+10,a-10,a+2,a+100,a-100].filter(x=>x>=0&&x!==a).map(String)),correct:String(a)});
 }
-function quickQ(){return mcify(makeQ('mix'))}
+function quickQ(){let q;do q=makeQ('mix');while(q.kind==='type');return mcify(q)}
 function finishExtra(g){ // Ich-kann-Check: Ergebnis je Thema
   if(g.topic!=='check')return '';
   const face=k=>k===2?['😀','Kann ich']:k===1?['😐','Fast']:['🙁','Üben'];
@@ -149,7 +172,7 @@ function memory(){ // Paare: Aufgabe und Ergebnis; jedes Ergebnis nur einmal, da
 }
 // Kopfrechen-Sprint: 60 Sekunden lang Ergebnisse eintippen (Einmaleins, Geteilt, glatte Zahlen)
 const SPRINT=60;
-function sprintQ(){return gen(...pick([['mal','mal'],['geteilt','durch'],['plus','glatt'],['minus','glatt'],['mal','mal']]))}
+function sprintQ(){return gen(...pick([['mal','mal'],['geteilt','durch'],['rest','restzahl'],['plus','glatt'],['minus','glatt'],['mal','mal']]))}
 function sprint(){
   G=null;M=null;if(B){clearTimeout(B.timer);B=null}X={game:'sprint',n:0,missed:[],busy:false};
   $('#app').innerHTML=`${gameHead('Kopfrechen-Sprint',`<div class="track timer" role="timer" aria-label="Restzeit"><i id="tm" style="width:100%;transition:width ${SPRINT}s linear"></i></div><span class="pill sun" id="sn">0 richtig</span>`)}
@@ -191,7 +214,7 @@ function home(){
   $('#app').innerHTML=`
   <div class="top"><a class="back" href="../../" style="text-decoration:none">Übersicht</a><span class="brand">${BRAND}</span>${themeBtn()}</div>
   <section class="hero"><h1>${hi} Fit im Rechnen?</h1>
-   <p>Einmaleins, Geteilt, Punkt vor Strich, Plus und Minus bis 1000. Jede Insel ist ein Thema, eine Fahrt hat ${ROUND} Aufgaben.</p>
+   <p>Einmaleins, Geteilt, Teilen mit Rest, Punkt vor Strich, Plus und Minus bis 1000. Jede Insel ist ein Thema, eine Fahrt hat ${ROUND} Aufgaben.</p>
    <div class="rank"><span class="pill sun">${save.xp} Punkte</span><span class="pill">Rang: ${rank()}</span></div>${rankBar()}${hero}</section>
   <div class="namebox"><label for="nm">Dein Name</label><input type="text" id="nm" maxlength="16" value="${esc(save.name)}" placeholder="z. B. Mia" autocomplete="off"></div>
   ${resume}

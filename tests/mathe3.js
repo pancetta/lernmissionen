@@ -15,25 +15,35 @@ each('mal','mal',q=>big(q.html).match(/\d+/g).slice(0,2).every(n=>n>=2&&n<=10)||
 each('mal','tausch',q=>{const p=calc(big(q.html));return q.options.filter(o=>calc(o)===p).length===1&&q.correct!==big(q.html)||'Tauschaufgabe'});
 each('mal','reihe',q=>{const r=+q.label.match(/zur (\d+)er/)[1];return q.options.filter(o=>o%r!==0).length===1&&q.correct%r!==0&&q.options.every(o=>o%r!==0||o/r<=10)||'Reihe'});
 each('geteilt','umkehr',q=>{const [c,b]=big(q.html).match(/\d+/g).map(Number);return q.options.filter(o=>calc(o)===c).length===1&&calc(q.correct)===c&&q.correct.endsWith(' '+b)||'Umkehraufgabe'});
-each('geteilt','rest',q=>{const [c,b]=big(q.html).match(/\d+/g).map(Number),ok=o=>{const [x,y]=o.split(' Rest ').map(Number);return x*b+y===c&&y>0&&y<b};return q.options.filter(ok).length===1&&ok(q.correct)||'Rest'});
+// Rest: c : b = q Rest r stimmt, wenn q · b + r = c und 0 < r < b
+const restOk=(c,b,q,r)=>q*b+r===c&&r>0&&r<b,zahlen=t=>t.match(/\d+/g).map(Number);
+each('rest','auswahl',q=>{const [c,b]=zahlen(big(q.html)),ok=o=>restOk(c,b,...zahlen(o));return q.options.filter(ok).length===1&&ok(q.correct)||'Rest'});
+each('rest','ganz',q=>restOk(...zahlen(big(q.html).replace('●',q.ans)))||'Rest-Lücke');
+each('rest','restzahl',q=>restOk(...zahlen(big(q.html).replace('●',q.ans)))||'Rest-Lücke');
+each('rest','tippen',q=>{const [c,b]=zahlen(big(q.html));return q.accept.every(a=>restOk(c,b,...zahlen(a)))&&q.accept.includes(q.correct)||'Rest tippen'});
+each('rest','zugross',q=>{const st=q.options.map(zahlen),gross=st.filter(([c,b,x,r])=>r>=b);return st.every(([c,b,x,r])=>x*b+r===c)&&gross.length===1&&zahlen(q.correct)[3]>=zahlen(q.correct)[1]&&st.filter(x=>restOk(...x)).length===3||'Rest zu groß'});
+each('rest','ohne',q=>{const ok=o=>{const [c,b]=zahlen(o);return c%b===0};return q.options.filter(ok).length===1&&ok(q.correct)||'ohne Rest'});
+each('rest','sach',q=>{box.innerHTML=q.html;const [c,b]=zahlen(box.textContent);return q.ans===(/voll/.test(box.textContent)?Math.floor(c/b):c%b)&&c%b>0||'Sachaufgabe'});
 each('punkt','zuerst',q=>{const t=big(q.html),punkt=o=>/[·:]/.test(o);return punkt(q.correct)&&q.options.filter(punkt).length===1&&q.options.every(o=>o.split(' und ').every(x=>t.includes(x)))||'Was zuerst?'});
 each('punkt','falle',q=>{const [l,r]=big(q.html).split(' = ');return (calc(l)===+r?'Stimmt':'Stimmt nicht')===q.correct||'Stimmt das?'});
 for(const isl of ['plus','minus']){const m=isl==='minus',ab=t=>t.match(/\d+/g).map(Number);
   each(isl,'ohne',q=>carry(...ab(big(q.html)),m)===0||'hat einen Übertrag');
   each(isl,'mit',q=>carry(...ab(big(q.html)),m)>0||'hat keinen Übertrag');
   each(isl,'uebertrag',q=>{const c=o=>carry(...ab(o),m)>0;return q.options.filter(c).length===1&&c(q.correct)||'Übertrag'})}
-const geprueft=new Set(['mal.mal','mal.luecke','mal.tausch','mal.reihe','geteilt.durch','geteilt.luecke','geteilt.umkehr','geteilt.rest','punkt.rechnen','punkt.klammer','punkt.zuerst','punkt.falle',
+const geprueft=new Set(['mal.mal','mal.luecke','mal.tausch','mal.reihe','geteilt.durch','geteilt.luecke','geteilt.umkehr',...['auswahl','ganz','restzahl','tippen','zugross','ohne','sach'].map(s=>'rest.'+s),'punkt.rechnen','punkt.klammer','punkt.zuerst','punkt.falle',
   ...['plus','minus'].flatMap(i=>['ohne','mit','glatt','luecke','uebertrag'].map(s=>i+'.'+s))]);
 A('jede Aufgabenart hat eine Prüfung',Object.entries(SUB).every(([i,o])=>Object.keys(o).every(k=>geprueft.has(i+'.'+k))));
 A('alle Aufgabenarten nachgerechnet: keine Fehler',probs.n===0);
 // Runden, Check, Blitzrunde
 const runs=[...TOPICS.map(t=>t.id),'mix','check'].map(t=>[t,perfect(t).stars]);A('fehlerfreie Runde = 3 Sterne (alle Inseln, Rundfahrt, Check)',runs.every(r=>r[1]===3));
-start('check');A('Check: 10 Aufgaben aus allen 5 Themen',G.total===10&&new Set(G.queue.map(q=>q.isl)).size===5);
+start('check');A('Check: 12 Aufgaben aus allen 6 Themen',G.total===12&&new Set(G.queue.map(q=>q.isl)).size===6);
 let g=0;while(!$('.end')&&g++<80){const q=G.queue[0];g<=2?solveWrong(q):solve(q);$('#nx').click()}
 const rows=$$('.cancheck tr').slice(1).map(r=>r.querySelector('.face').textContent);
-A('Check-Tabelle: erstes Thema 🙁, Rest 😀',rows.length===5&&rows[0]==='🙁'&&rows.slice(1).every(f=>f==='😀'));
+A('Check-Tabelle: erstes Thema 🙁, Rest 😀',rows.length===6&&rows[0]==='🙁'&&rows.slice(1).every(f=>f==='😀'));
 let qq=true;for(let i=0;i<500;i++){const x=quickQ();if(x.kind!=='mc'||new Set(x.options).size!==x.options.length||!x.options.includes(x.correct)||x.options.length<2)qq=false}
 A('Blitzrunde: nur Auswahlfragen mit eindeutigen Antworten',qq);
+{const ein=(t,x)=>{start('rest');const q=gen('rest','tippen');G.queue=[q];G.total=1;show();const [c,b]=zahlen(big(q.html));answer(null,t(Math.floor(c/b),c%b));return G.first===x};
+ A('Rest eintippen: „4 Rest 3“, „4 rest 3“, „4 r 3“, „4R3“ richtig, falscher Rest falsch',ein((q,r)=>`${q} Rest ${r}`,1)&&ein((q,r)=>`${q} rest ${r}`,1)&&ein((q,r)=>`${q} r ${r}`,1)&&ein((q,r)=>`${q}R${r}`,1)&&ein((q,r)=>`${q} Rest ${r+1}`,0))}
 // Memory: jede Aufgabe passt zu genau einer Zahl
 let mOk=true;for(let i=0;i<100;i++){home();$('#gm').click();const t=M.cards.map(c=>c.t),nums=t.filter(x=>/^\d+$/.test(x));
   if(t.length!==12||new Set(t).size!==12)mOk=false;for(const x of t.filter(x=>/[·:]/.test(x)))if(nums.filter(n=>+n===calc(x)).length!==1)mOk=false}
