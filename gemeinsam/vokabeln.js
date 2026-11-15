@@ -65,7 +65,9 @@ function home(){
   <div class="namebox"><label for="nm">Dein Name</label><input type="text" id="nm" maxlength="16" value="${esc(save.name)}" placeholder="z. B. Mia" autocomplete="off"></div>
   ${resume}
   <div class="grid" style="margin-bottom:12px"><button class="tile" id="glern" data-ico="📘"><h3>Neue Wörter lernen</h3><span class="sub">Immer ${PORTION} neue Wörter: anschauen, anhören, üben</span><span class="sub">${W.filter(gelernt).length} von ${W.length} Wörtern kennengelernt</span></button>
-   <button class="tile" id="gkann" data-ico="✅"><h3>Ich kann …</h3><span class="sub">Was kannst du schon? Deine Liste nach Themen</span></button></div>
+   <button class="tile" id="gkann" data-ico="✅"><h3>Ich kann …</h3><span class="sub">Was kannst du schon? Deine Liste nach Themen</span></button>
+   <button class="tile" id="grg" data-ico="🔍"><h3>Regel-Detektiv</h3><span class="sub">Finde Grammatik-Regeln selbst heraus</span><span class="sub">${Object.keys(save.regeln||{}).length} von ${GRAMMATIK.length} Regeln entdeckt</span></button>
+   <button class="tile" id="gsz" data-ico="🎭"><h3>Szenen</h3><span class="sub">Gespräche mitspielen: antworten, anhören, nachsprechen</span><span class="sub">${Object.keys(save.szenen||{}).length} von ${SZENEN.length} Szenen gespielt</span></button></div>
   <div class="maphead"><h2 class="sec" style="margin:0">Seekarte</h2><span class="pill">Schätze: ${chests} von ${TOPICS.length}</span></div>
   ${seaMap(MAP,222,new Set(TOPICS.filter(t=>neuZeigen(t.id)).map(t=>t.id)))}
   <p class="tip" style="margin-top:4px">Drei Sterne auf einer Insel, und du findest ihren Schatz.</p>
@@ -90,7 +92,7 @@ function home(){
   $('#nm').oninput=e=>{save.name=e.target.value.trim();persist()};
   document.querySelectorAll('[data-t]').forEach(b=>{b.onclick=()=>start(b.dataset.t);
     if(b.tagName==='g')b.onkeydown=ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();start(b.dataset.t)}}});
-  $('#gb').onclick=blitz;$('#gm').onclick=()=>memory('words');$('#gd').onclick=duell;$('#gt').onclick=truhe;$('#glh').onclick=lesen;$('#glern').onclick=lernen;$('#gkann').onclick=ichKann;if($('#gart'))$('#gart').onclick=artikelSpiel;if($('#gbs'))$('#gbs').onclick=units;
+  $('#gb').onclick=blitz;$('#gm').onclick=()=>memory('words');$('#gd').onclick=duell;$('#gt').onclick=truhe;$('#glh').onclick=lesen;$('#glern').onclick=lernen;$('#gkann').onclick=ichKann;$('#grg').onclick=regeln;$('#gsz').onclick=szenen;if($('#gart'))$('#gart').onclick=artikelSpiel;if($('#gbs'))$('#gbs').onclick=units;
   if(rg)$('#rs').onclick=()=>{G=rg;show()};
   let armed=false;$('#rst').onclick=ev=>{if(!armed){armed=true;ev.target.textContent='Wirklich alles löschen? Nochmal tippen.';return}save={name:'',xp:0,best:{},weak:{},round:null,sound:save.sound,blitz:0,memo:0};persist();home()};
 }
@@ -421,6 +423,83 @@ function leseText(id){
     if(!offen){const L=save.lesen=save.lesen||{};L[id]=Math.max(L[id]||0,richtig);persist();
       $('#fb').innerHTML=`<div class="fb ${richtig===t.fragen.length?'ok':'no'}" role="status"><strong>${richtig} von ${t.fragen.length} richtig</strong>${rankUp()}<span class="ans">${schon?'Diesen Text hast du schon ganz richtig gelöst.':`+${richtig*3} Punkte`}</span><div class="row"><button class="btn" id="nx">Weiter lesen</button></div></div>`;
       $('#nx').onclick=lesen;$('#nx').focus()}}));
+}
+
+/* ---------- Regel-Detektiv: Beispiele anschauen, die Regel selbst finden, dann üben (Daten: grammatik.js) ---------- */
+const sprech=t=>t.replace(/\*\*/g,'').replace(/ → /g,', ');
+const kopf=t=>`<div class="q-head"><button class="back" id="bk">Zurück</button><span class="brand" style="flex:1;text-align:center">${t}</span></div>`;
+const hoerBtn=t=>canSpeak()?`<button class="theme" type="button" data-say="${esc(sprech(t))}" aria-label="Anhören">🔊</button>`:'';
+const hoerBind=()=>document.querySelectorAll('[data-say]').forEach(b=>b.onclick=()=>say(b.dataset.say));
+function regeln(){
+  G=null;M=null;stopSpiel();const R=save.regeln||{};
+  $('#app').innerHTML=`${topBar()}<h2 class="sec">Regel-Detektiv</h2><p class="tip">Schau dir Beispiele an und finde die Regel selbst heraus. Danach übst du sie.</p>
+  <div class="grid">${GRAMMATIK.map(g=>`<button class="tile" data-rg="${g.id}" data-ico="🔍"><h3>${esc(g.titel)}</h3><span class="sub">${R[g.id]===undefined?'Noch nicht entdeckt':R[g.id]===g.aufgaben.length?'✓ alles richtig':`${R[g.id]} von ${g.aufgaben.length} richtig`}</span></button>`).join('')}</div>
+  <p style="margin-top:14px"><button class="btn ghost" id="hm">Zur Seekarte</button></p>`;
+  bindTheme();$('#hm').onclick=home;document.querySelectorAll('[data-rg]').forEach(b=>b.onclick=()=>regel(b.dataset.rg));
+}
+function regel(id){ // Beispiele und „Was fällt dir auf?“ (Fehler kosten nichts), dann die Regel, dann üben
+  const g=GRAMMATIK.find(x=>x.id===id),opts=shuffle(g.antworten.slice());
+  $('#app').innerHTML=`${kopf('🔍 Regel-Detektiv')}<div class="qcard"><h2 style="margin:0 0 6px">${esc(g.titel)}</h2>
+   <ul class="bsp">${g.beispiele.map(([f,d])=>`<li><span class="f">${fett(f)}</span><span class="d">${esc(d)}</span>${hoerBtn(f)}</li>`).join('')}</ul>
+   <div class="kind">Was fällt dir auf?</div><p class="prompt">${esc(g.frage)}</p>
+   <div class="opts">${opts.map((o,k)=>`<button class="opt" data-k="${k}">${esc(o)}</button>`).join('')}</div><div id="fb"></div></div>`;
+  $('#bk').onclick=regeln;hoerBind();
+  document.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{
+    if(opts[+b.dataset.k]!==g.antworten[0]){b.disabled=true;b.classList.add('wrong');$('#fb').innerHTML='<p class="tip" role="status">Schau dir die Beispiele noch einmal genau an.</p>';return}
+    document.querySelectorAll('.opt').forEach(x=>x.disabled=true);b.classList.add('right');
+    $('#fb').innerHTML=`<div class="fb ok" role="status"><strong>Gut beobachtet!</strong><span class="ans">Die Regel: ${esc(g.regel)}</span><div class="row"><button class="btn" id="nx">Jetzt üben</button></div></div>`;
+    $('#nx').onclick=()=>regelUeben(g);$('#nx').focus()});
+}
+function regelUeben(g){
+  const auf=shuffle(g.aufgaben.slice()),schon=(save.regeln||{})[g.id]===g.aufgaben.length;let i=0,richtig=0; // Punkte nur, bis alles einmal richtig war
+  const frage=()=>{const a=auf[i],opts=shuffle(a.slice(1)),satz=a[0].includes('___')?a[0].replace('___',a[1]):a[1];
+    $('#app').innerHTML=`${kopf(`Aufgabe ${i+1} von ${auf.length}`)}<div class="qcard"><div class="kind">${esc(g.auftrag)}</div><p class="big">${esc(a[0])}</p>
+     <div class="opts">${opts.map((o,k)=>`<button class="opt" data-k="${k}">${esc(o)}</button>`).join('')}</div><div id="fb"></div></div>`;
+    $('#bk').onclick=regeln;
+    document.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{const ok=opts[+b.dataset.k]===a[1];
+      document.querySelectorAll('.opt').forEach((x,k)=>{x.disabled=true;if(opts[k]===a[1])x.classList.add('right');else if(x===b)x.classList.add('wrong')});
+      if(ok){richtig++;if(!schon)save.xp+=2}say(satz);
+      $('#fb').innerHTML=`<div class="fb ${ok?'ok':'no'}" role="status"><strong>${ok?'Richtig!':'Nicht ganz.'}</strong>${ok?'':`<span class="ans">Richtig ist: ${esc(a[1])}</span><p class="tip">${esc(g.regel)}</p>`}<div class="row"><button class="btn" id="nx">${i+1<auf.length?'Weiter':'Fertig'}</button></div></div>`;
+      $('#nx').onclick=()=>{i++;i<auf.length?frage():ende()};$('#nx').focus()})};
+  const ende=()=>{const R=save.regeln=save.regeln||{};R[g.id]=Math.max(R[g.id]||0,richtig);persist();const alle=richtig===auf.length;
+    $('#app').innerHTML=`${topBar()}<div class="qcard end"><h2>${alle?'Alles richtig!':'Geschafft!'}</h2>${alle?confetti():''}<div class="bignum pop">${richtig}</div><p>von ${auf.length} Aufgaben richtig</p>${rankUp()}
+     <div class="stats"><span class="pill sun">${schon?'Diese Regel kannst du schon.':`+${richtig*2} Punkte`}</span></div>
+     <div class="mist"><h3>Die Regel</h3><p>${esc(g.regel)}</p></div>
+     <div class="actions"><button class="btn" id="nochmal">Nochmal üben</button><button class="btn ghost" id="andere">Andere Regel</button><button class="btn ghost" id="hm">Zur Seekarte</button></div></div>`;
+    bindTheme();$('#nochmal').onclick=()=>regelUeben(g);$('#andere').onclick=regeln;$('#hm').onclick=home;$('#nochmal').focus()};
+  frage();
+}
+
+/* ---------- Szenen: Gespräche mitspielen – passende Antwort wählen, anhören, laut nachsprechen (ohne Bewertung, keine Spracherkennung) ---------- */
+function szenen(){
+  G=null;M=null;stopSpiel();const S=save.szenen||{};
+  $('#app').innerHTML=`${topBar()}<h2 class="sec">Szenen</h2><p class="tip">Spiel kurze Gespräche mit: Wähle die passende Antwort, hör sie dir an und sprich sie laut nach.</p>
+  <div class="grid">${SZENEN.map(s=>`<button class="tile" data-sz="${s.id}" data-ico="${s.ico}"><h3>${esc(s.titel)}</h3><span class="sub">${esc(s.info)}</span><span class="sub">${S[s.id]===undefined?'Noch nicht gespielt':S[s.id]===0?'✓ ohne Fehler gespielt':'Gespielt'}</span></button>`).join('')}</div>
+  <p style="margin-top:14px"><button class="btn ghost" id="hm">Zur Seekarte</button></p>`;
+  bindTheme();$('#hm').onclick=home;document.querySelectorAll('[data-sz]').forEach(b=>b.onclick=()=>szene(b.dataset.sz));
+}
+function szene(id){
+  const s=SZENEN.find(x=>x.id===id),schon=(save.szenen||{})[id]===0;let i=0,fehler=0; // Punkte nur, bis die Szene einmal ohne Fehler gelang
+  $('#app').innerHTML=`${kopf(`${s.ico} ${esc(s.titel)}`)}<div class="qcard"><p class="tip" style="margin-top:0">${esc(s.info)}</p><div class="chat" id="chat"></div><div id="wahl"></div></div>`;
+  $('#bk').onclick=szenen;
+  const blase=(du,t,de)=>{$('#chat').insertAdjacentHTML('beforeend',`<div class="sz${du?' du':''}"><span class="wer">${du?'Du':esc(s.wer)}</span><p><span>${esc(t)}</span>${hoerBtn(t)}</p><span class="de">${esc(de)}</span></div>`);hoerBind()};
+  const weiter=()=>{let vor=[];while(i<s.zeilen.length&&s.zeilen[i][0]==='a'){const z=s.zeilen[i++];blase(false,z[1],z[2]);vor.push(z[1])}
+    if(vor.length)say(vor.join(' '));
+    if(i>=s.zeilen.length)return ende();
+    const z=s.zeilen[i],opts=shuffle(z[1].slice());let falsch=false;
+    $('#wahl').innerHTML=`<div class="kind">Was sagst du?</div><div class="opts">${opts.map((o,k)=>`<button class="opt" data-k="${k}">${esc(o)}</button>`).join('')}</div><div id="fb"></div>`;
+    document.querySelectorAll('#wahl .opt').forEach(b=>b.onclick=()=>{
+      if(opts[+b.dataset.k]!==z[1][0]){b.disabled=true;b.classList.add('wrong');if(!falsch)fehler++;falsch=true;$('#fb').innerHTML=`<p class="tip" role="status">Das passt hier nicht. Lies noch einmal, was ${esc(s.wer)} sagt.</p>`;return}
+      if(!falsch&&!schon)save.xp+=2;i++;blase(true,z[1][0],z[2]);say(z[1][0]);
+      $('#wahl').innerHTML=`<div class="fb ok" role="status"><strong>Passt!</strong><span class="ans">🗣️ ${canSpeak()?'Hör gut zu und sprich den Satz laut nach.':'Lies den Satz laut vor.'}</span>
+       <div class="row">${canSpeak()?'<button class="btn ghost small" id="hear" type="button">🔊 Nochmal</button><button class="btn ghost small" id="slow" type="button">🐢 langsam</button>':''}<button class="btn" id="nx">Weiter</button></div></div>`;
+      if(canSpeak()){$('#hear').onclick=()=>say(z[1][0]);$('#slow').onclick=()=>say(z[1][0],true)}
+      $('#nx').onclick=weiter;$('#nx').focus()})};
+  const ende=()=>{const S=save.szenen=save.szenen||{};S[id]=Math.min(S[id]??99,fehler);persist();
+    $('#wahl').innerHTML=`<div class="fb ok" role="status"><strong>Szene geschafft!</strong><span class="ans">${fehler?`${fehler} ${fehler===1?'Antwort':'Antworten'} erst im zweiten Versuch`:'Alles gleich richtig!'}${schon?'':` · +${2*s.zeilen.filter(z=>z[0]==='du').length-2*fehler} Punkte`}</span>${rankUp()}
+     <div class="row"><button class="btn" id="nochmal">Nochmal spielen</button><button class="btn ghost" id="andere">Andere Szene</button></div></div>`;
+    $('#nochmal').onclick=()=>szene(id);$('#andere').onclick=szenen;$('#nochmal').focus()};
+  weiter();
 }
 
 /* ---------- Memory: englisches Wort und deutsche Bedeutung als Paar ---------- */

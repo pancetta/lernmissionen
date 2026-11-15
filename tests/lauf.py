@@ -11,13 +11,13 @@ D, M3, M3Z, S = 'deutsch-3/woerter-und-saetze', 'mathe-3/kopfrechnen', 'mathe-3/
 # Jede Seite wird einmal in Chrome geladen (ein Start kostet etwa 6 s), darin laufen ihre Tests nacheinander.
 # Gemeinsamer Code (gemeinsam.js, runde.js) wird dort geprüft, wo er läuft, nicht in jeder Mission erneut.
 # layout.js zuletzt, weil es die Seite schmal macht (288 px = iPhone SE; was hier passt, passt auch breiter).
-SUITES = [(V, ['vokabeln.js', 'raenge.js', 'layout.js']),                 # eigener Rundenablauf der Vokabel-Inseln
+SUITES = [(V, ['vokabeln.js', 'werkstatt.js', 'raenge.js', 'layout.js']),                 # eigener Rundenablauf der Vokabel-Inseln
           (P, ['pronomen.js', 'layout.js']),
           (M, ['mathe.js', 'mathe_ziehen.js', 'raenge.js', 'layout.js']),  # gemeinsamer Rundenablauf (runde.js)
           (D, ['deutsch.js', 'layout.js']),
           (M3, ['mathe3.js', 'layout.js']),
           (M3Z, ['mathe3z.js', 'layout.js']),
-          (S, ['spanisch.js', 'layout.js'])]                                  # gleiche Vokabel-Logik wie Englisch (gemeinsam/vokabeln.js)
+          (S, ['spanisch.js', 'werkstatt.js', 'layout.js'])]                                  # gleiche Vokabel-Logik wie Englisch (gemeinsam/vokabeln.js)
 
 def run(rel, tests):
     base = os.path.join(ROOT, rel); s = open(os.path.join(base, 'index.html')).read()
