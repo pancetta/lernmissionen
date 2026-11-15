@@ -82,7 +82,7 @@ function home(){
    ${ART_W.length?`<button class="tile" id="gart" data-ico="🏷️"><h3>${ARTIKELSPIEL.title}</h3><span class="sub">Welcher Artikel passt? Schnell entscheiden, es wird immer schneller</span><span class="sub">Rekord: ${save.artikel||0} richtig</span></button>`:''}
    <button class="tile" id="glh" data-ico="📚"><h3>Lese-Hafen</h3><span class="sub">Kurze Geschichten, Witze und Fun Facts – nur mit Wörtern, die du kennst</span><span class="sub">${Object.keys(save.lesen||{}).length} von ${TEXTE.length} Texten gelesen</span></button>
   </div>
-  <h2 class="sec">Inseln</h2><p class="tip">Lernweg jeder Insel: ① kennengelernt ② geübt (1 Stern) ③ sicher (3 Sterne) ④ behalten (alle Wörter mindestens in Fach 3 des Karteikastens)</p><div class="grid isles">${tiles}</div>
+  <h2 class="sec">Inseln</h2><p class="tip">Lernweg jeder Insel: ① geübt (1 Stern) ② sicher (3 Sterne) ③ alle Wörter kennengelernt (beim Lernen oder in einer Fahrt) ④ behalten (alle Wörter mindestens in Fach 3 des Karteikastens)</p><div class="grid isles">${tiles}</div>
   <p class="tip">${storageOK?'Dein Fortschritt wird automatisch auf diesem Gerät gespeichert.':'Speichern geht in diesem Browser gerade nicht (privates Fenster?). Dein Fortschritt geht beim Schließen verloren.'}</p>
   <p class="tip">Sterne gibt es für richtige Antworten beim ersten Versuch: 5 von 10 = 1 Stern, 7 von 10 = 2 Sterne, 9 von 10 = 3 Sterne.</p>
   <p class="tip">${VOICE?`<button class="theme" id="snd">${save.sound?'🔊 Ton an':'🔇 Ton aus'}</button> Hör-Fragen und Vorlesen nutzen die Stimme dieses Geräts.${/Firefox/.test(navigator.userAgent)&&/Macintosh/.test(navigator.userAgent)?' In Firefox auf dem Mac knackt die Stimme am Ende, in Safari oder Chrome klingt sie sauber.':''}${/iPhone/.test(navigator.userAgent)?' Kein Ton auf dem iPhone? Stummschalter ausschalten (Klingeln an) und lauter stellen.':''}`:'Auf diesem Gerät ist keine englische Stimme eingebaut, deshalb gibt es hier keine Hör-Fragen.'}</p>
@@ -340,9 +340,9 @@ document.addEventListener('keydown',ev=>{if(X&&X.game==='truhe'&&!X.busy&&ev.key
 /* ---------- Neue Wörter lernen: anschauen und anhören, dann vom Wiedererkennen bis zum Schreiben; „Ich kann …“-Liste ---------- */
 const PORTION=5,gelernt=e=>!!(save.gelernt||{})[key(e)]||fach(e)>0,fach=e=>(save.kasten||{})[key(e)]||0,inselW=t=>W.filter(e=>e[0]===t),inselName=t=>TOPICS.find(x=>x.id===t).name;
 const lernStand=t=>{const ws=inselW(t);return {n:ws.length,k:ws.filter(gelernt).length}};
-const WEG=['kennengelernt','geübt (1 Stern)','sicher (3 Sterne)','behalten (alle Wörter mindestens in Fach 3)'];
-const lernweg=t=>{const ws=inselW(t),b=save.best[t]||0;return [ws.every(gelernt),b>=1,b>=3,inselW(t).every(e=>fach(e)>=3)]}; // die vier Stationen einer Insel
-const wegHtml=t=>`<span class="weg" aria-label="Lernweg: ${lernweg(t).filter(Boolean).length} von 4 Stationen">${lernweg(t).map((x,i)=>`<i class="${x?'an':''}" title="${WEG[i]}">${i+1}</i>`).join('')}</span>`;
+const WEG=['geübt (1 Stern)','sicher (3 Sterne)','alle Wörter kennengelernt','behalten (alle Wörter mindestens in Fach 3)'];
+const lernweg=t=>{const ws=inselW(t),b=save.best[t]||0;return [b>=1,b>=3,ws.every(gelernt),ws.every(e=>fach(e)>=3)]}; // die vier Stationen einer Insel
+const wegHtml=t=>`<span class="weg" aria-label="Lernweg: ${lernweg(t).filter(Boolean).length} von 4 Stationen">${lernweg(t).map((x,i)=>`<i class="${x?'an':''}" title="${WEG[i]}">${i+1}</i>`).join('')}${(s=>s.k<s.n?`<small>${s.k} von ${s.n} Wörtern kennengelernt</small>`:'')(lernStand(t))}</span>`;
 function lernen(){ // Auswahl der Insel, Fortschritt je Insel
   G=null;M=null;stopSpiel();const g=W.filter(e=>fach(e)>0).length,F=[1,2,3,4,5].map(f=>W.filter(e=>fach(e)===f).length);
   const kasten=g?`<h3 class="sec">Dein Karteikasten</h3><div class="kasten">${F.map((n,i)=>`<div><b>${n}</b><span>Fach ${i+1}</span></div>`).join('')}</div><p class="tip">Richtig: Das Wort rutscht ein Fach weiter. Falsch: zurück in Fach 1. Beim Wiederholen kommen Wörter aus den vorderen Fächern öfter dran – egal, wann du zuletzt geübt hast.</p>`:'';

@@ -72,9 +72,10 @@ A('Ich kann: jede Insel hat einen Kann-Satz',TOPICS.every(t=>/^Ich kann /.test(t
 {save.gelernt={};save.kasten={};save.best={};home();const weg=id=>$$(`.isles [data-t="${id}"] .weg i`).map(i=>i.classList.contains('an')?1:0).join('');
  A('Lernweg: am Anfang keine Station',weg('colores')==='0000');
  W.filter(e=>e[0]==='colores').forEach(e=>{save.gelernt[key(e)]=1;save.kasten[key(e)]=3});save.best.colores=3;home();
- A('Lernweg: kennengelernt, geübt, sicher, behalten = alle vier Stationen',weg('colores')==='1111');
- save.best.colores=1;save.kasten[key(W.find(e=>e[0]==='colores'))]=2;home();A('Lernweg: 1 Stern und ein Wort in Fach 2 = Stationen 1 und 2',weg('colores')==='1100');
- save.gelernt={};home();A('Lernweg: Wörter aus dem Karteikasten zählen auch als kennengelernt',weg('colores')==='1100');
+ A('Lernweg: geübt, sicher, kennengelernt, behalten = alle vier Stationen, keine Zählung mehr',weg('colores')==='1111'&&!$('.isles [data-t="colores"] .weg small'));
+ save.best.colores=1;save.kasten[key(W.find(e=>e[0]==='colores'))]=2;home();A('Lernweg: 1 Stern, alle kennengelernt, ein Wort in Fach 2 = Stationen 1 und 3',weg('colores')==='1010');
+ save.gelernt={};home();A('Lernweg: Wörter aus dem Karteikasten zählen auch als kennengelernt',weg('colores')==='1010');
+ delete save.kasten[key(W.find(e=>e[0]==='colores'))];home();A('Lernweg: ein Wort fehlt = Station 3 aus, Zählung „11 von 12“',weg('colores')==='1000'&&/11 von 12 Wörtern kennengelernt/.test($('.isles [data-t="colores"] .weg').textContent));save.kasten[key(W.find(e=>e[0]==='colores'))]=2;
  $('#glern').click();A('Lernen: Wörter aus dem Karteikasten gelten als kennengelernt, die Insel bietet keine neuen Karten',/alle Wörter kennengelernt/.test($('[data-lt="colores"]').textContent))}
 {save.best={numeros:2,cuerpo:1};save.gelernt={};save.kasten={};home();$('#gkann').click();const f=id=>$(`tr[data-k="${id}"] .face`).textContent;
  A('Ich kann: 😀 ab zwei Sternen, 😐 bei einem Stern, sonst 🙁 mit Knopf „Lernen“',$$('tr[data-k]').length===TOPICS.length&&f('numeros')==='😀'&&f('cuerpo')==='😐'&&f('colores')==='🙁'&&!!$('[data-kl="colores"]'));
