@@ -76,7 +76,7 @@ const geprueft=['bild.lesen','bild.zeichnen','bild.plaettchen','bild.legen','bil
 A('jede Aufgabenart hat eine Prüfung',Object.entries(SUB).every(([i,o])=>Object.keys(o).every(k=>geprueft.includes(i+'.'+k))));
 // Sprache: keine Mehrzahl nach „1“, keine Zahl mit Endung in der Überschrift
 {let ok=true;for(const isl of Object.keys(SUB))for(const sub of Object.keys(SUB[isl]))for(let i=0;i<100;i++){const q=gen(isl,sub),t=text(q.html||'')+' '+q.sol;
-  if(/(^|\D)1 (Quadrate|Striche|Punkte|Schritte|Ecken|Kanten)\b/.test(t)||/\d(er|ER)\b/.test(q.label)){ok=false;P(`Sprache ${isl}.${sub}: ${q.label} | ${t}`)}}A('Sprache: Einzahl nach 1, keine Zahl mit Endung in der Überschrift',ok)}
+  if(/(^|\D)1 (Quadrate|Striche|Punkte|Schritte|Ecken|Kanten|Flächen|Zeilen|Spalten)\b/.test(t)||/\?:/.test(t)||/\d(er|ER)\b/.test(q.label)){ok=false;P(`Sprache ${isl}.${sub}: ${q.label} | ${t}`)}}A('Sprache: Einzahl nach 1, keine Zahl mit Endung in der Überschrift',ok)}
 A('alle Aufgabenarten nachgeprüft: keine Fehler',probs.n===0);
 // Bedienen wie ein Kind: Zeichnen mit + und −, Pfeil setzen
 {start('bild');const q=gen('bild','zeichnen');G.queue=[q];G.total=1;show();const [h,z,e]=String(q.ans).padStart(3,'0').split('').map(Number),plus=i=>$$(`.zaehler [data-i="${i}"][data-s="1"]`)[0];

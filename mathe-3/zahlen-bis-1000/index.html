@@ -166,9 +166,10 @@ const ZL={
  stelle(){const n=zahl3(),i=R(0,2);return num(big(`${n}`)+`<p>Welche Ziffer steht an der <b>${['Hunderterstelle','Zehnerstelle','Einerstelle'][i]}</b>?</p>`,hze(n)[i],`${n}: ${hze(n).map((x,j)=>`${x} ${HZE[j]}`).join(', ')}`,'Stellenwert')},
  wert(){let n;do n=R(100,999);while(!ziffernVon(n)||hze(n).includes(0));const i=R(0,2),d=hze(n)[i],w=d*[100,10,1][i];
   return mc({label:'Welchen Wert hat die Ziffer?',html:big(`${n}`)+`<p>Welchen Wert hat die Ziffer <b>${d}</b>?</p>`,options:[d,d*10,d*100].map(String),correct:String(w),sol:`Die ${d} steht bei den ${STELLE[HZE[i]]}: ${w}`})},
- tausender(){const f=pick([['10 Hunderter sind …','1000',['100','110','10 000']],['Wie viele Hunderter sind 1000?','10',['100','1000','1']],['Wie viele Zehner sind 1000?','100',['10','1000','110']],
-   ['Wie viele Zehner sind 100?','10',['100','1','20']],['10 Zehner sind …','100',['10','1000','110']],['1000 Einer sind …','1 Tausender',['1 Hunderter','10 Tausender','100 Tausender']]]);
-  return mc({label:'Der Tausender',html:`<p>${f[0]}</p>`,options:shuffle([f[1]].concat(f[2])),correct:f[1],sol:`${f[0].replace(' …','')}: ${f[1]}`})}
+ tausender(){const f=pick([['10 Hunderter sind …','1000',['100','110','10 000'],'10 Hunderter sind 1000.'],['Wie viele Hunderter sind 1000?','10',['100','1000','1'],'1000 sind 10 Hunderter.'],
+   ['Wie viele Zehner sind 1000?','100',['10','1000','110'],'1000 sind 100 Zehner.'],['Wie viele Zehner sind 100?','10',['100','1','20'],'100 sind 10 Zehner.'],
+   ['10 Zehner sind …','100',['10','1000','110'],'10 Zehner sind 100.'],['1000 Einer sind …','1 Tausender',['1 Hunderter','10 Tausender','100 Tausender'],'1000 Einer sind 1 Tausender.']]);
+  return mc({label:'Der Tausender',html:`<p>${f[0]}</p>`,options:shuffle([f[1]].concat(f[2])),correct:f[1],sol:f[3]})}
 };
 
 /* ---------- Zahlwort-Insel ---------- */
@@ -238,7 +239,7 @@ const KO={
  alltag(){const [d,k]=pick([['ein Ball','Kugel'],['eine Murmel','Kugel'],['eine Dose','Zylinder'],['eine Kerze','Zylinder'],['ein Spielwürfel','Würfel'],['ein Schuhkarton','Quader'],['ein Ziegelstein','Quader'],['eine Eistüte (ohne Eis)','Kegel'],['ein Partyhut','Kegel'],['eine Pyramide in Ägypten','Pyramide']]);
   return mc({label:'Welche Form hat das?',html:`<p>Welche Form hat <b>${d}</b>?</p>`,options:opts4(k,paarFrei(k,KOERPER)),correct:k,sol:`${d[0].toUpperCase()+d.slice(1)}: ${k}`})},
  steckbrief(){const k=pick(Object.keys(STECKBRIEF)),i=R(0,2),w=['Ecken','Kanten','Flächen'][i];
-  return num(koerperSvg(k)+`<p>Wie viele <b>${w}</b> hat ${['Kugel','Pyramide'].includes(k)?'eine':'ein'} ${k}?</p>`,STECKBRIEF[k][i],`${k}: ${STECKBRIEF[k][0]} Ecken, ${STECKBRIEF[k][1]} Kanten, ${STECKBRIEF[k][2]} Flächen`,'Steckbrief')},
+  return num(koerperSvg(k)+`<p>Wie viele <b>${w}</b> hat ${['Kugel','Pyramide'].includes(k)?'eine':'ein'} ${k}?</p>`,STECKBRIEF[k][i],`${k}: ${stk(STECKBRIEF[k][0],'Ecke','Ecken')}, ${stk(STECKBRIEF[k][1],'Kante','Kanten')}, ${stk(STECKBRIEF[k][2],'Fläche','Flächen')}`,'Steckbrief')},
  raetsel(){const [t,k]=pick([['Ich habe 6 Flächen. Alle sind gleich große Quadrate.','Würfel'],['Ich habe 6 Flächen, 8 Ecken und 12 Kanten. Meine Flächen sind nicht alle gleich groß.','Quader'],
    ['Ich habe keine Ecken und keine Kanten. Ich kann in alle Richtungen rollen.','Kugel'],['Ich habe zwei Kreise als Flächen und eine gewölbte Fläche. Ich kann rollen.','Zylinder'],
    ['Ich habe eine Spitze. Unten bin ich ein Kreis.','Kegel'],['Ich habe 5 Ecken. Unten bin ich ein Quadrat, die anderen Flächen sind Dreiecke.','Pyramide']]);
