@@ -1,0 +1,23 @@
+gemeinsam/stil.css
+  s_54261e8a499c43::t_92f258ed1de7c4 278-280
+gemeinsam/vokabeln.js
+  s_54261e8a499c43::t_ca3c0778001fbd 54,83,106-107,119-120,212-213,339,341-343,345-346,349,370
+tests/spanisch.js
+  s_54261e8a499c43::t_c81491898bc52a 61-77
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "93bbd8c0821d2ad3070296edfcfc135fd96e566f",
+  "prompts": {},
+  "sessions": {
+    "s_54261e8a499c43": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "09d1c376-00da-4c7d-9fcd-87abfbea46f1",
+        "model": "unknown"
+      },
+      "human_author": "Robert Speck <pancetta@users.noreply.github.com>"
+    }
+  }
+}
