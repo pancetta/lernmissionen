@@ -327,7 +327,7 @@ document.addEventListener('keydown',ev=>{if(X&&X.game==='truhe'&&!X.busy&&ev.key
 /* ---------- Lese-Hafen: kurze Texte nur mit bekannten Wörtern (Wortcheck im Test); Antippen zeigt die Bedeutung ---------- */
 const {GRUND,TEXTE}=LESETEXTE,ART={'Geschichte':'📖','Witz':'😂','Fun Fact':'💡','Hintergrund':'🌍'};
 const wtok=t=>t.toLowerCase().replace(/[‘’]/g,"'").match(/\p{L}[\p{L}'-]*\p{L}|\p{L}/gu)||[];
-const ALT=W.map(e=>[e,e[1].split('|').map(a=>a.toLowerCase().replace(/[‘’]/g,"'").replace(/^to /,'').replace(/ ?(\.\.\.|…)$/,'').replace(/[.?!]+$/,''))]);
+const ALT=W.map(e=>[e,e[1].split('|').map(a=>a.toLowerCase().replace(/[‘’]/g,"'").replace(/^to /,'').replace(/ ?(\.\.\.|…)$/,'').replace(/[.?!]+$/,'')).flatMap(a=>SPRACHE.artikel?[a,a.replace(SPRACHE.artikel,'')]:[a])]); // Nomen auch ohne Artikel (perro → el perro)
 function bedeutung(ws,i){ // längste Wendung aus der Wortliste mit dem angetippten Wort (throws → throw, Tim's → Tim); sonst Grundwort; sonst ein Beispiel
   for(let len=4;len>=1;len--)for(let s=Math.max(0,i-len+1);s<=i&&s+len<=ws.length;s++){const b=ws.slice(s,s+len),l=b[len-1];
     for(const v of [l,l.replace(/'s$/,''),l.replace(/es$/,''),l.replace(/s$/,'')]){const ph=b.slice(0,-1).concat(v).join(' '),h=ALT.find(([e,a])=>a.includes(ph));if(h)return {von:s,bis:s+len-1,en:enShow(h[0]),de:deShow(h[0])}}}

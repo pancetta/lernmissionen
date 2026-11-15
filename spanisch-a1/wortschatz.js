@@ -96,6 +96,7 @@ const NAH=[['la madre','la mamá'],['el padre','el papá'],['ser','estar'],['gra
  ['la comida','el desayuno','la cena'],['el pájaro','el pato'],['la clase','el colegio'],['mucho','muy'],['correr','ir'],['mirar','escuchar'],
  ...['el perro','el gato','el pájaro','el pez','el caballo','el conejo','el ratón','la vaca','el cerdo','la oveja','el pato','el león','el elefante','el oso','el mono','la jirafa','la serpiente','la tortuga','la rana'].map(x=>['el animal',x]),
  ...['la manzana','el plátano','la naranja'].map(x=>['la fruta',x]),
+ ...['el pan','la leche','el agua','el zumo','la manzana','el plátano','la naranja','la fruta','el queso','el huevo','el pollo','la sopa','la pizza','el helado','el chocolate','el bocadillo'].map(x=>['la comida',x]), // la comida heißt auch „Essen“
  ...['la cabeza','el pelo','el ojo','la nariz','la boca','la oreja','el diente','la mano','el brazo','la pierna','el pie','el dedo','la espalda'].map(x=>['el cuerpo',x]),
  ...['la camiseta','los pantalones','la falda','el vestido','los zapatos','el jersey','la chaqueta','el gorro','la gorra','los calcetines'].map(x=>['la ropa',x]),
  ...['rojo','azul','amarillo','verde','negro','blanco','naranja','rosa','morado','marrón','gris'].map(x=>['el color',x])];

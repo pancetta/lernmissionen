@@ -34,5 +34,11 @@ A('fehlerfreie Runde = 3 Sterne (alle Inseln und Rundfahrt)',runs.every(r=>r[1]=
 {let ohne=0;for(const t of TEXTE){leseText(t.id);for(const b of $$('.lw')){b.click();if(!$('.lw.an')){ohne++;P(`Lesetext ${t.id}: keine Bedeutung für „${b.textContent}“`)}}}
  A('Lesetexte: jedes Wort zeigt beim Antippen eine Bedeutung, Fragen auf Spanisch',ohne===0&&/Verdadero o falso/.test($('#app').textContent))}
 leseText('lunes');{const b=$$('.lw').find(x=>x.textContent==='sol');b.click();A('Lesetexte: „sol“ zeigt die Wendung „Hace sol.“',/Hace sol/.test($('#lb').textContent)&&/Sonne/.test($('#lb').textContent))}
+leseText('toby');{const b=$$('.lw').find(x=>x.textContent==='perros');b.click();A('Lesetexte: „perros“ zeigt direkt „el perro = Hund“, nicht als Beispiel',/el perro = Hund/.test($('#lb').textContent)&&!/Beispiel/.test($('#lb').textContent))}
+{let bsp=0;for(const t of TEXTE){leseText(t.id);for(const b of $$('.lw')){b.click();const w=b.textContent.toLowerCase();
+  if(/Beispiel/.test($('#lb').textContent)&&W.some(e=>e[1].split('|').some(a=>a.replace(SPRACHE.artikel,'').toLowerCase()===w))){bsp++;P('als Beispiel statt direkt: '+w)}}}
+ A('Lesetexte: Wörter aus der Wortliste zeigen ihre Bedeutung direkt, nicht als Beispiel',bsp===0)}
+{let ok=true;const comida=W.find(e=>e[1]==='la comida');for(const x of W.filter(e=>e[0]==='comida'&&e!==comida))if(nah(comida,x)!==true)ok=false;
+ A('„la comida“ (auch: Essen) steht nie gegen ein Lebensmittel',ok)}
 home();
 done();
