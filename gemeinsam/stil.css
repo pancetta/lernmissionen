@@ -269,3 +269,5 @@ details.mist summary{cursor:pointer}
 /* Schild „neu“ für Inseln mit neuen Vokabeln (Seekarte und Kacheln) */
 .map .neu rect{fill:var(--coral)}.map .neu text{fill:var(--coral-ink);font-size:8.5px;font-weight:800;text-anchor:middle}
 .pill.neu{background:var(--coral);border-color:var(--coral);color:var(--coral-ink);font-size:.75rem;padding:1px 8px;vertical-align:middle}.tile .herkunft{font-size:.8rem}
+/* Sonderzeichen-Tasten unter dem Eingabefeld (Spanisch: á é í ó ú ñ ü ¿ ¡) */
+.sonder{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}.sonder .btn{min-width:40px;padding:6px 10px;font-size:1.05rem}

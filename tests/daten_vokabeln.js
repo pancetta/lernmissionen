@@ -1,7 +1,7 @@
 const fs=require('fs');console.assert=(c,m)=>{if(!c){console.error('Fehler: '+m);process.exitCode=1}};
 for(const f of process.argv.slice(2)){
   const dir=require('path').dirname(f),inc=n=>fs.existsSync(dir+'/'+n)?fs.readFileSync(dir+'/'+n,'utf8'):'';
-  const js=inc('../wortschatz.js')+'\n'+inc('../lesetexte.js')+'\n'+inc('../../gemeinsam/gemeinsam.js')+'\n'+fs.readFileSync(f,'utf8').match(/<script>([\s\S]*)<\/script>/)[1].replace(/^home\(\);$/m,'');
+  const js=[...fs.readFileSync(f,'utf8').matchAll(/<script(?: src="([^"]+)")?>([\s\S]*?)<\/script>/g)].map(m=>m[1]?inc(m[1]):m[2]).join('\n').replace(/^home\(\);$/m,''); // alle Skripte der Seite in ihrer Reihenfolge
   const stub={querySelector:()=>null,querySelectorAll:()=>[],addEventListener(){},documentElement:{dataset:{}}};
   const r=new Function('window','document','localStorage','location','matchMedia',js+';return {W,TOPICS,makeQ,NOTYPE,NAH:typeof NAH==="undefined"?null:NAH,G:typeof G}')({},stub,{getItem:()=>null,setItem(){},removeItem(){}},{hash:''},()=>({matches:false}));
   const {W,TOPICS,makeQ}=r, ids=new Set(TOPICS.map(t=>t.id));

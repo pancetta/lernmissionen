@@ -38,7 +38,7 @@ const confetti=()=>'<div class="confetti" aria-hidden="true">'+Array.from({lengt
 const chest=(x,y)=>`<g transform="translate(${x} ${y})" aria-hidden="true"><rect y="5" width="18" height="11" rx="2" fill="#a0522d"/><path d="M0 7Q9-2 18 7z" fill="#7a3b17"/><rect x="7.5" y="7" width="3" height="5" fill="#ffc93c"/><path class="spark" d="M17 0l1.2 2.8 2.8 1.2-2.8 1.2L17 8l-1.2-2.8L13 4l2.8-1.2z"/></g>`;
 const flag=(x,y)=>`<g transform="translate(${x} ${y})" aria-hidden="true"><path d="M0 0v17" class="pole"/><path d="M1 1h11l-3 4 3 4H1z" fill="#ff5a4e"/></g>`;
 // Wörter für Satzbaukasten: Satzzeichen und "..." als eigene Kärtchen
-const toks=s=>s.match(/\.\.\.|[\wÀ-ÿ'’\/]+|[?!.,]/g)||[];
+const toks=s=>s.match(/\.\.\.|[\wÀ-ÿ'’\/]+|[?!.,¿¡]/g)||[];
 function scramble(t){let s=t;for(let i=0;i<10&&s.join(' ')===t.join(' ');i++)s=shuffle(t);return s}
 
 /* ---------- Stimme ---------- */
@@ -48,9 +48,9 @@ let VOICE=null;
 const ODD=/^(Albert|Bad News|Bahh|Bells|Boing|Bubbles|Cellos|Deranged|Good News|Hysterical|Jester|Junior|Organ|Pipe Organ|Ralph|Fred|Kathy|Superstar|Trinoids|Whisper|Wobble|Zarvox)\b/i;
 function pickVoice(){
   try{
-    // Sprache der Mission: <html data-voice="de"> für Deutsch, sonst Englisch (britisch bevorzugt)
-    const de=document.documentElement.dataset.voice==='de',lang=de?/^de[-_]/i:/^en[-_]/i;
-    const score=v=>(de?(/^de[-_]DE/i.test(v.lang)?4:0):/^en[-_]GB/i.test(v.lang)?4:/^en[-_](US|IE|AU)/i.test(v.lang)?2:0)+(/Enhanced|Premium|verbessert/i.test(v.name)?3:0)+(v.default?1:0);
+    // Sprache der Mission: <html data-voice="de"> Deutsch, "es" Spanisch (aus Spanien bevorzugt), sonst Englisch (britisch bevorzugt)
+    const sp=document.documentElement.dataset.voice||'en',lang=new RegExp(`^${sp==='de'?'de':sp==='es'?'es':'en'}[-_]`,'i');
+    const score=v=>(sp==='de'?(/^de[-_]DE/i.test(v.lang)?4:0):sp==='es'?(/^es[-_]ES/i.test(v.lang)?4:2):/^en[-_]GB/i.test(v.lang)?4:/^en[-_](US|IE|AU)/i.test(v.lang)?2:0)+(/Enhanced|Premium|verbessert/i.test(v.name)?3:0)+(v.default?1:0);
     const vs=speechSynthesis.getVoices().filter(v=>v.localService&&lang.test(v.lang)&&!ODD.test(v.name));
     VOICE=vs.sort((a,b)=>score(b)-score(a))[0]||null;
   }catch(e){VOICE=null}

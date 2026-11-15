@@ -7,7 +7,7 @@ import os, re, sys, json, html, subprocess, tempfile, time
 T = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.dirname(T)
 CHROME = os.environ.get('CHROME', '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome')
 V, P, M = 'englisch-5/vokabeln', 'englisch-5/pronomen', 'mathe-5/zahlen-und-groessen'
-D, M3, M3Z = 'deutsch-3/woerter-und-saetze', 'mathe-3/kopfrechnen', 'mathe-3/zahlen-bis-1000'
+D, M3, M3Z, S = 'deutsch-3/woerter-und-saetze', 'mathe-3/kopfrechnen', 'mathe-3/zahlen-bis-1000', 'spanisch-a1/vokabeln'
 # Jede Seite wird einmal in Chrome geladen (ein Start kostet etwa 6 s), darin laufen ihre Tests nacheinander.
 # Gemeinsamer Code (gemeinsam.js, runde.js) wird dort geprüft, wo er läuft, nicht in jeder Mission erneut.
 # layout.js zuletzt, weil es die Seite schmal macht (288 px = iPhone SE; was hier passt, passt auch breiter).
@@ -16,7 +16,8 @@ SUITES = [(V, ['vokabeln.js', 'raenge.js', 'layout.js']),                 # eige
           (M, ['mathe.js', 'mathe_ziehen.js', 'raenge.js', 'layout.js']),  # gemeinsamer Rundenablauf (runde.js)
           (D, ['deutsch.js', 'layout.js']),
           (M3, ['mathe3.js', 'layout.js']),
-          (M3Z, ['mathe3z.js', 'layout.js'])]
+          (M3Z, ['mathe3z.js', 'layout.js']),
+          (S, ['spanisch.js', 'layout.js'])]                                  # gleiche Vokabel-Logik wie Englisch (gemeinsam/vokabeln.js)
 
 def run(rel, tests):
     base = os.path.join(ROOT, rel); s = open(os.path.join(base, 'index.html')).read()
@@ -46,9 +47,10 @@ def run(rel, tests):
 def main():
     if not os.path.exists(CHROME): sys.exit(f'Chrome nicht gefunden: {CHROME} (Pfad mit CHROME=... angeben)')
     bad = 0
-    d = subprocess.run(['node', os.path.join(T, 'daten_vokabeln.js'), os.path.join(ROOT, V, 'index.html')], capture_output=True, text=True)
-    ok = d.returncode == 0 and not d.stderr.strip(); bad += not ok
-    print(('✓' if ok else '✗'), 'Wortliste der Vokabel-Inseln', '' if ok else d.stderr.strip()[:300], flush=True)
+    for rel in (V, S):  # Wortlisten: doppelte Wörter, Antwortmöglichkeiten, bedeutungsnahe Wörter
+        d = subprocess.run(['node', os.path.join(T, 'daten_vokabeln.js'), os.path.join(ROOT, rel, 'index.html')], capture_output=True, text=True)
+        ok = d.returncode == 0 and not d.stderr.strip(); bad += not ok
+        print(('✓' if ok else '✗'), 'Wortliste', rel, '' if ok else d.stderr.strip()[:300], flush=True)
     pick = sys.argv[1:]  # optional: nur Seiten/Tests, deren Name eines dieser Wörter enthält
     for rel, tests in SUITES:
         tests = [t for t in tests if not pick or any(w in rel + t for w in pick)]
