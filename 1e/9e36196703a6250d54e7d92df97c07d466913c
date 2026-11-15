@@ -1,0 +1,27 @@
+gemeinsam/vokabeln.js
+  s_54261e8a499c43::t_408ff7b36293fd 78,91,291-295
+spanisch-a1/lesetexte.js
+  s_54261e8a499c43::t_90112bbec574d1 9,18-28
+spanisch-a1/vokabeln/index.html
+  s_54261e8a499c43::t_273de25b4b1fab 26
+tests/spanisch.js
+  s_54261e8a499c43::t_43836b8a7b027c 43-49
+tests/vokabeln.js
+  s_54261e8a499c43::t_b15e61698cf02f 92
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "1e9e36196703a6250d54e7d92df97c07d466913c",
+  "prompts": {},
+  "sessions": {
+    "s_54261e8a499c43": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "09d1c376-00da-4c7d-9fcd-87abfbea46f1",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Robert Speck <pancetta@users.noreply.github.com>"
+    }
+  }
+}
