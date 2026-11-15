@@ -75,6 +75,7 @@ function home(){
    <button class="tile" id="gm"><h3>Memory</h3><span class="sub">Finde ${PAIRS} Wortpaare</span><span class="sub">${save.memo?'Rekord: '+save.memo+' Züge':'Noch kein Rekord'}</span></button>
    <button class="tile" id="gd" data-ico="⚖️"><h3>Stimmt’s?</h3><span class="sub">${esc(SPRACHE.beispiel)} Schnell entscheiden, es wird immer schneller</span><span class="sub">Rekord: ${save.duell||0} richtig</span></button>
    <button class="tile" id="gt" data-ico="🗝️"><h3>Schatztruhe</h3><span class="sub">Errate das ${SPRACHE.adj} Wort Buchstabe für Buchstabe</span><span class="sub">Rekord: ${save.truhe||0} von ${TRUHE_N} Truhen</span></button>
+   ${ART_W.length?`<button class="tile" id="gart" data-ico="🏷️"><h3>${ARTIKELSPIEL.title}</h3><span class="sub">Welcher Artikel passt? Schnell entscheiden, es wird immer schneller</span><span class="sub">Rekord: ${save.artikel||0} richtig</span></button>`:''}
    <button class="tile" id="glh" data-ico="📚"><h3>Lese-Hafen</h3><span class="sub">Kurze Geschichten, Witze und Fun Facts – nur mit Wörtern, die du kennst</span><span class="sub">${Object.keys(save.lesen||{}).length} von ${TEXTE.length} Texten gelesen</span></button>
   </div>
   <h2 class="sec">Inseln</h2><div class="grid isles">${tiles}</div>
@@ -87,7 +88,7 @@ function home(){
   $('#nm').oninput=e=>{save.name=e.target.value.trim();persist()};
   document.querySelectorAll('[data-t]').forEach(b=>{b.onclick=()=>start(b.dataset.t);
     if(b.tagName==='g')b.onkeydown=ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();start(b.dataset.t)}}});
-  $('#gb').onclick=blitz;$('#gm').onclick=()=>memory('words');$('#gd').onclick=duell;$('#gt').onclick=truhe;$('#glh').onclick=lesen;if($('#gbs'))$('#gbs').onclick=units;
+  $('#gb').onclick=blitz;$('#gm').onclick=()=>memory('words');$('#gd').onclick=duell;$('#gt').onclick=truhe;$('#glh').onclick=lesen;if($('#gart'))$('#gart').onclick=artikelSpiel;if($('#gbs'))$('#gbs').onclick=units;
   if(rg)$('#rs').onclick=()=>{G=rg;show()};
   let armed=false;$('#rst').onclick=ev=>{if(!armed){armed=true;ev.target.textContent='Wirklich alles löschen? Nochmal tippen.';return}save={name:'',xp:0,best:{},weak:{},round:null,sound:save.sound,blitz:0,memo:0};persist();home()};
 }
@@ -287,6 +288,11 @@ const DUELL={key:'duell',title:'Stimmt’s?',intro:'Passt die Bedeutung? Entsche
   next(){const e=pickEntries('words',1)[0],d=Math.random()<.5?deShow(e):distractors(e,deShow)[0];
     return {html:`<p class="big">${esc(enShow(e))} = ${esc(d)}</p>`,bin:passt(e,d)?'Stimmt':'Stimmt nicht',sol:`**${enShow(e)}** = ${deShow(e)}`,wk:key(e),say:enShow(e)}}};
 const duell=()=>sortGame(DUELL);
+// el oder la? (nur Sprachen mit Artikeln): Nomen dem richtigen Artikel zuordnen; vorgelesen wird nur das Nomen, sonst hört man die Lösung
+const ART_W=SPRACHE.artikelSpiel?W.filter(e=>!NOTYPE.includes(e[0])&&SPRACHE.artikelSpiel.includes(enShow(e).split(' ')[0])&&enShow(e).split(' ').length===2):[];
+const ARTIKELSPIEL={key:'artikel',title:'el oder la?',intro:'Welcher Artikel passt? Entscheide, bevor die Zeit abläuft.',bins:SPRACHE.artikelSpiel||[],t:[7000,300,3000],endText:'Artikel richtig gewählt',
+  next(){const e=pick(ART_W),[a,n]=enShow(e).split(' ');return {html:`<p class="big">${esc(n)}</p><p class="tip">${esc(deShow(e))}</p>`,bin:a,sol:`**${enShow(e)}** = ${deShow(e)}`,wk:key(e),say:n}}};
+const artikelSpiel=()=>sortGame(ARTIKELSPIEL);
 
 // Schatztruhe: das englische Wort Buchstabe für Buchstabe erraten; der deutsche Hinweis und der erste Buchstabe stehen schon da
 const TRUHE_N=5,TRUHE_LEBEN=6,ABC_EN=SPRACHE.abc;

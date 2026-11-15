@@ -89,4 +89,5 @@ A('Lieferungen: „Unit 5“ beginnt bei twenty-one und enthält half past ten, 
  A('Nach Units üben: Auswahl „Start“ übt nur Wörter vor Unit 5',G.topic==='L:0'&&G.queue.every(q=>W.indexOf(q.e)<NEU.von))}
 {const r=perfect(liefTopic([NEU.i]));home();A('Fahrt „Neue Wörter“ fehlerfrei = 3 Sterne, Sterne auf der Kachel',r.stars===3&&$(`[data-t="${liefTopic([NEU.i])}"] .stars`)!==null)}
 home();
+home();A('Englisch: kein Artikel-Spiel',!$('#gart')&&ART_W.length===0);
 done();

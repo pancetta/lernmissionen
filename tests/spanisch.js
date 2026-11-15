@@ -40,5 +40,12 @@ leseText('toby');{const b=$$('.lw').find(x=>x.textContent==='perros');b.click();
  A('Lesetexte: Wörter aus der Wortliste zeigen ihre Bedeutung direkt, nicht als Beispiel',bsp===0)}
 {let ok=true;const comida=W.find(e=>e[1]==='la comida');for(const x of W.filter(e=>e[0]==='comida'&&e!==comida))if(nah(comida,x)!==true)ok=false;
  A('„la comida“ (auch: Essen) steht nie gegen ein Lebensmittel',ok)}
+// el oder la?: nur Nomen im Singular mit el oder la, Lösung aus der Wortliste, vorgelesen wird nur das Nomen
+{let ok=true,el=0;for(let i=0;i<300;i++){const it=ARTIKELSPIEL.next();box.innerHTML=it.html;const n=box.querySelector('.big').textContent,e=W.find(x=>x[1].split('|').includes(it.bin+' '+n));
+  if(!e||!['el','la'].includes(it.bin)||it.say!==n||/\b(el|la|los|las)\b/.test(n))ok=false;if(it.bin==='el')el++}
+ A('el oder la?: jede Aufgabe aus der Wortliste, beide Artikel kommen vor, Lösung wird nicht vorgelesen',ok&&el>60&&el<240)}
+home();$('#gart').click();$(`[data-b="${ARTIKELSPIEL.bins.indexOf(X.it.bin)}"]`).click();A('el oder la?: richtige Antwort zählt',X.n===1);
+sortWeiter();for(let k=0;k<3;k++){$(`[data-b="${1-ARTIKELSPIEL.bins.indexOf(X.it.bin)}"]`).click();sortWeiter()}
+A('el oder la?: nach drei Fehlern Ende mit Rekord',!!$('.end')&&save.artikel===1);
 home();
 done();
