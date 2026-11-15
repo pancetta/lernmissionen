@@ -1,0 +1,21 @@
+mathe-3/zahlen-bis-1000/index.html
+  s_54261e8a499c43::t_68dde07b3ae3cd 169-172,242
+tests/mathe3z.js
+  s_54261e8a499c43::t_adc45080f1e5d3 79
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "4d03409fa3f2652d692fd77b9e02873eefccb1e5",
+  "prompts": {},
+  "sessions": {
+    "s_54261e8a499c43": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "09d1c376-00da-4c7d-9fcd-87abfbea46f1",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Robert Speck <pancetta@users.noreply.github.com>"
+    }
+  }
+}
