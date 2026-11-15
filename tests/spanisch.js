@@ -58,7 +58,23 @@ A('Ich kann: jede Insel hat einen Kann-Satz',TOPICS.every(t=>/^Ich kann /.test(t
  A('Lernen: danach fünf Wörter kennengelernt (auch nach einem Fehler)',W.filter(gelernt).length===5&&/5 neue Wörter kennengelernt/.test($('h2').textContent)&&/5 von 12/.test($('.end').textContent));
  $('#mehr').click();A('Lernen: „Die nächsten Wörter lernen“ zeigt Wort 6 der Insel',$('.lernkarte .big').textContent===enShow(CO[5]))}
 {home();$('#glern').click();$('[data-lt="hola"]').click();while($('.lernkarte'))$('#nx').click();A('Lernen: Satz-Insel übt in Stufe 3 Bauen statt Tippen',G.queue.slice(10).every(q=>q.kind==='build'||q.kind==='mc'))}
-{home();$('#glern').click();$('#wdh').click();A('Gelerntes wiederholen: nur kennengelernte Wörter',G.topic==='gelernt'&&G.queue.every(q=>gelernt(q.e)))}
+{home();$('#glern').click();A('Karteikasten: neu kennengelernte Wörter liegen mindestens in Fach 1',$$('.kasten div').length===5&&W.filter(gelernt).every(e=>fach(e)>=1));
+ $('#wdh').click();A('Wiederholen: nur Wörter aus dem Karteikasten',G.topic==='gelernt'&&G.queue.every(q=>fach(q.e)>0))}
+// Karteikasten: richtig = ein Fach weiter, aber nur einmal pro Runde; falsch = Fach 1
+{save.kasten={};const e=W.find(x=>x[1]==='el perro'),k=key(e);start('animales');const q1=makeQ(e,false,false,{kind:'mc',dir:'en2de'}),q2=makeQ(e,false,false,{kind:'mc',dir:'de2en'});
+ G.queue=[q1,q2];G.total=2;show();solve(q1);$('#nx').click();solve(q2);$('#nx').click();const nachRunde=save.kasten[k];
+ start('animales');G.queue=[makeQ(e,false,false,{kind:'mc',dir:'en2de'})];G.total=1;show();solveWrong(G.queue[0]);
+ A('Karteikasten: zweimal richtig in einer Runde = nur ein Fach weiter, falsch = Fach 1',nachRunde===1&&save.kasten[k]===1);
+ save.kasten={};const a=W.find(x=>x[1]==='el gato'),b=W.find(x=>x[1]==='el oso');save.kasten[key(a)]=1;save.kasten[key(b)]=5;let na=0,nb=0;
+ for(let i=0;i<600;i++){const x=pickEntries('gelernt',1)[0];if(x===a)na++;if(x===b)nb++}
+ A('Wiederholen: Fach 1 kommt deutlich öfter dran als Fach 5',na>nb*3&&na+nb===600)}
+// Lernweg: vier Stationen auf der Inselkachel
+{save.gelernt={};save.kasten={};save.best={};home();const weg=id=>$$(`.isles [data-t="${id}"] .weg i`).map(i=>i.classList.contains('an')?1:0).join('');
+ A('Lernweg: am Anfang keine Station',weg('colores')==='0000');
+ W.filter(e=>e[0]==='colores').forEach(e=>{save.gelernt[key(e)]=1;save.kasten[key(e)]=3});save.best.colores=3;home();
+ A('Lernweg: kennengelernt, geübt, sicher, behalten = alle vier Stationen',weg('colores')==='1111');
+ save.best.colores=1;save.kasten[key(W.find(e=>e[0]==='colores'))]=2;home();A('Lernweg: 1 Stern und ein Wort in Fach 2 = Stationen 1 und 2',weg('colores')==='1100');
+ save.gelernt={};home();A('Lernweg: Wörter aus dem Karteikasten zählen auch als kennengelernt',weg('colores')==='1100')}
 {save.best={numeros:2,cuerpo:1};save.gelernt={};home();$('#gkann').click();const f=id=>$(`tr[data-k="${id}"] .face`).textContent;
  A('Ich kann: 😀 ab zwei Sternen, 😐 bei einem Stern, sonst 🙁 mit Knopf „Lernen“',$$('tr[data-k]').length===TOPICS.length&&f('numeros')==='😀'&&f('cuerpo')==='😐'&&f('colores')==='🙁'&&!!$('[data-kl="colores"]'));
  $('[data-kl="colores"]').click();A('Ich kann: „Lernen“ startet die Wortkarten der Insel',!!$('.lernkarte'))}

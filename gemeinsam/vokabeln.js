@@ -51,7 +51,7 @@ function mistList(list){return list.length?`<div class="mist"><h3>Diese Wörter 
 function home(){
   G=null;M=null;if(B){clearTimeout(B.timer);B=null}stopSpiel();
   const hi=save.name?`Ahoi ${esc(save.name)}!`:'Ahoi!';
-  const tiles=TOPICS.map(t=>`<button class="tile" data-t="${t.id}"><h3>${t.name}${neuZeigen(t.id)?' <span class="pill neu">neu</span>':''}</h3><span class="sub">${t.sub}</span><span class="sub herkunft">Wörter aus: ${esc(herkunft(t.id))}</span>${starsHtml(save.best[t.id]||0)}</button>`).join('');
+  const tiles=TOPICS.map(t=>`<button class="tile" data-t="${t.id}"><h3>${t.name}${neuZeigen(t.id)?' <span class="pill neu">neu</span>':''}</h3><span class="sub">${t.sub}</span><span class="sub herkunft">Wörter aus: ${esc(herkunft(t.id))}</span>${wegHtml(t.id)}${starsHtml(save.best[t.id]||0)}</button>`).join('');
   const chests=TOPICS.filter(t=>(save.best[t.id]||0)>=3).length;
   let resume='';
   const rg=save.round?unpackRound(save.round):null;
@@ -80,7 +80,7 @@ function home(){
    ${ART_W.length?`<button class="tile" id="gart" data-ico="🏷️"><h3>${ARTIKELSPIEL.title}</h3><span class="sub">Welcher Artikel passt? Schnell entscheiden, es wird immer schneller</span><span class="sub">Rekord: ${save.artikel||0} richtig</span></button>`:''}
    <button class="tile" id="glh" data-ico="📚"><h3>Lese-Hafen</h3><span class="sub">Kurze Geschichten, Witze und Fun Facts – nur mit Wörtern, die du kennst</span><span class="sub">${Object.keys(save.lesen||{}).length} von ${TEXTE.length} Texten gelesen</span></button>
   </div>
-  <h2 class="sec">Inseln</h2><div class="grid isles">${tiles}</div>
+  <h2 class="sec">Inseln</h2><p class="tip">Lernweg jeder Insel: ① kennengelernt ② geübt (1 Stern) ③ sicher (3 Sterne) ④ behalten (alle Wörter mindestens in Fach 3 des Karteikastens)</p><div class="grid isles">${tiles}</div>
   <p class="tip">${storageOK?'Dein Fortschritt wird automatisch auf diesem Gerät gespeichert.':'Speichern geht in diesem Browser gerade nicht (privates Fenster?). Dein Fortschritt geht beim Schließen verloren.'}</p>
   <p class="tip">Sterne gibt es für richtige Antworten beim ersten Versuch: 5 von 10 = 1 Stern, 7 von 10 = 2 Sterne, 9 von 10 = 3 Sterne.</p>
   <p class="tip">${VOICE?`<button class="theme" id="snd">${save.sound?'🔊 Ton an':'🔇 Ton aus'}</button> Hör-Fragen und Vorlesen nutzen die Stimme dieses Geräts.${/Firefox/.test(navigator.userAgent)&&/Macintosh/.test(navigator.userAgent)?' In Firefox auf dem Mac knackt die Stimme am Ende, in Safari oder Chrome klingt sie sauber.':''}${/iPhone/.test(navigator.userAgent)?' Kein Ton auf dem iPhone? Stummschalter ausschalten (Klingeln an) und lauter stellen.':''}`:'Auf diesem Gerät ist keine englische Stimme eingebaut, deshalb gibt es hier keine Hör-Fragen.'}</p>
@@ -103,8 +103,8 @@ const neuIn=t=>LIEF.length>1&&liefW(NEU).some(e=>e[0]===t);
 const neuZeigen=neuIn; // Schild „neu“ bis zur nächsten Unit
 const herkunft=t=>LIEF.filter(l=>liefW(l).some(e=>e[0]===t)).map(liefName).join(', ');
 const liefTopic=is=>'L:'+is.join(','),liefAus=topic=>topic.slice(2).split(',').map(Number).map(i=>LIEF[i]);
-const topicName=t=>t==='gelernt'?'Gelerntes wiederholen':t.startsWith('lernen:')?'Neue Wörter lernen':t==='mix'?'Große Rundfahrt':t.startsWith('L:')?(t===liefTopic([NEU.i])?'Neue Wörter: ':'Units: ')+liefAus(t).map(liefName).join(', '):(TOPICS.find(x=>x.id===t)||{}).name;
-const poolFor=topic=>topic==='gelernt'?W.filter(gelernt):topic.startsWith('L:')?liefAus(topic).flatMap(liefW):W.filter(e=>topic==='mix'||(topic==='words'?!NOTYPE.includes(e[0]):e[0]===topic));
+const topicName=t=>t==='gelernt'?'Wiederholen aus dem Karteikasten':t.startsWith('lernen:')?'Neue Wörter lernen':t==='mix'?'Große Rundfahrt':t.startsWith('L:')?(t===liefTopic([NEU.i])?'Neue Wörter: ':'Units: ')+liefAus(t).map(liefName).join(', '):(TOPICS.find(x=>x.id===t)||{}).name;
+const poolFor=topic=>topic==='gelernt'?W.filter(e=>fach(e)>0):topic.startsWith('L:')?liefAus(topic).flatMap(liefW):W.filter(e=>topic==='mix'||(topic==='words'?!NOTYPE.includes(e[0]):e[0]===topic));
 function units(){ // Auswahl: genau die Wörter bestimmter Units üben
   const an=new Set([NEU.i]),zeig=()=>{$('#bsn').textContent=`${[...an].reduce((a,i)=>a+liefW(LIEF[i]).length,0)} Wörter`;$('#bsgo').disabled=!an.size};
   $('#app').innerHTML=`${topBar()}<h2 class="sec">Nach Units üben</h2><p class="tip">Wähle, welche Units du üben möchtest, zum Beispiel vor einem Vokabeltest. Die Fahrt mischt die Wörter von allen Inseln.</p>
@@ -116,8 +116,8 @@ function units(){ // Auswahl: genau die Wörter bestimmter Units üben
 }
 function pickEntries(topic,n=ROUND){
   const pool=poolFor(topic);
-  // schwache Wörter häufiger ziehen
-  const weighted=[];pool.forEach(e=>{const w=1+Math.min(3,save.weak[key(e)]||0);for(let i=0;i<w;i++)weighted.push(e)});
+  // schwache Wörter häufiger ziehen; beim Wiederholen Wörter aus den unteren Fächern des Karteikastens
+  const weighted=[];pool.forEach(e=>{const w=topic==='gelernt'?6-fach(e):1+Math.min(3,save.weak[key(e)]||0);for(let i=0;i<w;i++)weighted.push(e)});
   const out=[];for(const e of shuffle(weighted)){if(!out.includes(e))out.push(e);if(out.length>=Math.min(n,pool.length))break}
   return out;
 }
@@ -209,6 +209,8 @@ function answer(i,text){
   }else{ok=q.options[i]===q.correct;markOpts(q,i)}
   G.answered=true;
   const k=key(e);
+  const kz=G.kz=G.kz||new Set(),KK=save.kasten=save.kasten||{}; // Karteikasten: richtig = ein Fach weiter (einmal pro Runde), falsch = Fach 1
+  if(!kz.has(k)){kz.add(k);KK[k]=ok&&!q.redo?Math.min(5,(KK[k]||0)+1):1}
   if(!q.redo){
     if(ok){G.first++;G.streak++;G.best=Math.max(G.best,G.streak);const gain=(G.hint?5:10)+Math.min(G.streak-1,5);G.xp+=gain;save.xp+=gain;if(save.weak[k])save.weak[k]--}
     else{G.streak=0;save.weak[k]=(save.weak[k]||0)+1;G.missed.push(e);G.queue.push(makeQ(e,true))}
@@ -334,13 +336,17 @@ const truheWeiter=()=>{if(X)X.i<TRUHE_N?truheQ():spielEnde('truhe',X.n,`von ${TR
 document.addEventListener('keydown',ev=>{if(X&&X.game==='truhe'&&!X.busy&&ev.key.length===1&&ABC_EN.includes(grund(ev.key))&&!ev.ctrlKey&&!ev.metaKey&&!ev.altKey){ev.preventDefault();truheRate(grund(ev.key))}});
 
 /* ---------- Neue Wörter lernen: anschauen und anhören, dann vom Wiedererkennen bis zum Schreiben; „Ich kann …“-Liste ---------- */
-const PORTION=5,gelernt=e=>!!(save.gelernt||{})[key(e)],inselW=t=>W.filter(e=>e[0]===t),inselName=t=>TOPICS.find(x=>x.id===t).name;
+const PORTION=5,gelernt=e=>!!(save.gelernt||{})[key(e)],fach=e=>(save.kasten||{})[key(e)]||0,inselW=t=>W.filter(e=>e[0]===t),inselName=t=>TOPICS.find(x=>x.id===t).name;
 const lernStand=t=>{const ws=inselW(t);return {n:ws.length,k:ws.filter(gelernt).length}};
+const WEG=['kennengelernt','geübt (1 Stern)','sicher (3 Sterne)','behalten (alle Wörter mindestens in Fach 3)'];
+const lernweg=t=>{const ws=inselW(t),b=save.best[t]||0;return [ws.every(e=>gelernt(e)||fach(e)>0),b>=1,b>=3,inselW(t).every(e=>fach(e)>=3)]}; // die vier Stationen einer Insel
+const wegHtml=t=>`<span class="weg" aria-label="Lernweg: ${lernweg(t).filter(Boolean).length} von 4 Stationen">${lernweg(t).map((x,i)=>`<i class="${x?'an':''}" title="${WEG[i]}">${i+1}</i>`).join('')}</span>`;
 function lernen(){ // Auswahl der Insel, Fortschritt je Insel
-  G=null;M=null;stopSpiel();const g=W.filter(gelernt).length;
+  G=null;M=null;stopSpiel();const g=W.filter(e=>fach(e)>0).length,F=[1,2,3,4,5].map(f=>W.filter(e=>fach(e)===f).length);
+  const kasten=g?`<h3 class="sec">Dein Karteikasten</h3><div class="kasten">${F.map((n,i)=>`<div><b>${n}</b><span>Fach ${i+1}</span></div>`).join('')}</div><p class="tip">Richtig: Das Wort rutscht ein Fach weiter. Falsch: zurück in Fach 1. Beim Wiederholen kommen Wörter aus den vorderen Fächern öfter dran – egal, wann du zuletzt geübt hast.</p>`:'';
   $('#app').innerHTML=`${topBar()}<h2 class="sec">Neue Wörter lernen</h2><p class="tip">Immer ${PORTION} neue Wörter: Erst schaust du sie an und hörst sie, dann übst du sie Schritt für Schritt – vom Wiedererkennen bis zum Schreiben.</p>
   <div class="grid">${TOPICS.map(t=>{const s=lernStand(t.id);return `<button class="tile" data-lt="${t.id}"${s.k===s.n?' disabled':''}><h3>${t.name}</h3><span class="sub">${s.k===s.n?'✓ alle Wörter kennengelernt':`${s.k} von ${s.n} Wörtern kennengelernt`}</span><span class="lbar" aria-hidden="true"><i style="width:${Math.round(100*s.k/s.n)}%"></i></span></button>`}).join('')}</div>
-  <p style="margin-top:14px">${g?`<button class="btn" id="wdh">Gelerntes wiederholen (${g} Wörter)</button> `:''}<button class="btn ghost" id="hm">Zur Seekarte</button></p>`;
+  ${kasten}<p style="margin-top:14px">${g?`<button class="btn" id="wdh">Wiederholen (${g} Wörter im Kasten)</button> `:''}<button class="btn ghost" id="hm">Zur Seekarte</button></p>`;
   bindTheme();$('#hm').onclick=home;if($('#wdh'))$('#wdh').onclick=()=>start('gelernt');
   document.querySelectorAll('[data-lt]').forEach(b=>b.onclick=()=>lernPortion(b.dataset.lt));
 }
@@ -361,7 +367,7 @@ function lernUeben(es){ // drei Stufen: wiedererkennen, zuordnen, selbst schreib
   G={topic:'lernen:'+es.map(idx).join(','),queue,total:queue.length,done:0,first:0,xp:0,streak:0,best:0,missed:[],answered:false};show();
 }
 function lernEnde(){ // die Wörter gelten jetzt als kennengelernt (auch nach Fehlern: sie kommen beim Üben und Wiederholen wieder)
-  const r=G,es=r.topic.slice(7).split(',').map(i=>W[+i]),t=es[0][0],L=save.gelernt=save.gelernt||{};es.forEach(e=>L[key(e)]=1);save.round=null;persist();
+  const r=G,es=r.topic.slice(7).split(',').map(i=>W[+i]),t=es[0][0],L=save.gelernt=save.gelernt||{},KK=save.kasten=save.kasten||{};es.forEach(e=>{L[key(e)]=1;KK[key(e)]=KK[key(e)]||1});save.round=null;persist();
   const s=lernStand(t);
   $('#app').innerHTML=`${topBar()}<div class="qcard end"><h2>${es.length} neue Wörter kennengelernt!</h2>${confetti()}${rankUp()}
    <div class="stats"><span class="pill">${r.first} von ${r.total} gleich richtig</span><span class="pill sun">+${r.xp} Punkte</span><span class="pill">${s.k} von ${s.n} auf der ${esc(inselName(t))}</span></div>
