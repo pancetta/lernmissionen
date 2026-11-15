@@ -1,0 +1,31 @@
+README.md
+  s_54261e8a499c43::t_3ef6fad0278a9c 8
+englisch-5/lesetexte.js
+  s_54261e8a499c43::t_3f7b4deda42a71 1-28
+englisch-5/vokabeln/index.html
+  s_54261e8a499c43::t_dc8d0e455cfe18 21,95,107,321-357
+gemeinsam/stil.css
+  s_54261e8a499c43::t_7d03870e6a4555 264-268
+tests/daten_vokabeln.js
+  s_54261e8a499c43::t_e615037a07a2ee 4
+tests/layout.js
+  s_54261e8a499c43::t_a9b8c04836ad64 39
+tests/vokabeln.js
+  s_54261e8a499c43::t_4f9457558c9e7a 64-76
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "0a39f2042491f3a3d30fb53ef9c800a4fa0db8e5",
+  "prompts": {},
+  "sessions": {
+    "s_54261e8a499c43": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "09d1c376-00da-4c7d-9fcd-87abfbea46f1",
+        "model": "unknown"
+      },
+      "human_author": "Robert Speck <pancetta@users.noreply.github.com>"
+    }
+  }
+}
