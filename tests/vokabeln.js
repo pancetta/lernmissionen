@@ -61,4 +61,17 @@ home();
 {let ok=true;for(let i=0;i<300;i++){memory('words');const es=[...new Set(M.cards.map(c=>c.e))].map(p=>W.find(e=>enShow(e)===p.a&&deShow(e)===p.b));
   if(es.length!==PAIRS||es.some((e,j)=>!e||es.some((x,k)=>k!==j&&nah(x,e))))ok=false}home();
  A('Memory: nie zwei bedeutungsnahe Wörter im selben Spiel (hour und lesson, mum und mother)',ok)}
+// Lese-Hafen: Wortcheck – jeder Text (mit Titel und Fragen) nur mit Wörtern aus der Wortliste und den Grundwörtern
+{const tk=t=>t.toLowerCase().replace(/[‘’]/g,"'").match(/[a-z][a-z'-]*[a-z]|[a-z]/g)||[],known=new Set([...W.flatMap(e=>e[1].split('|').flatMap(tk)),...Object.keys(LESETEXTE.GRUND)]);
+ const ok=w=>[w,w.replace(/'s$/,''),w.replace(/es$/,''),w.replace(/s$/,'')].some(v=>known.has(v));let fremd=0;
+ for(const t of LESETEXTE.TEXTE){const bad=[...new Set([t.titel,t.text,...t.fragen.map(f=>f[0])].flatMap(tk).filter(w=>!ok(w)))];if(bad.length){fremd++;P(`Lesetext ${t.id}: unbekannte Wörter ${bad.join(', ')}`)}}
+ A('Lesetexte: nur Wörter aus der Wortliste und Grundwörter',fremd===0)}
+A('Lesetexte: Daten (eindeutige id, Art, mindestens 2 Fragen mit true/false)',new Set(TEXTE.map(t=>t.id)).size===TEXTE.length&&TEXTE.every(t=>ART[t.art]&&t.fragen.length>=2&&t.fragen.every(f=>typeof f[1]==='boolean')));
+{let ohne=0;for(const t of TEXTE){leseText(t.id);for(const b of $$('.lw')){b.click();if(!$('.lw.an')){ohne++;P(`Lesetext ${t.id}: keine Bedeutung für „${b.textContent}“`)}}}
+ A('Lesetexte: jedes Wort zeigt beim Antippen eine Bedeutung',ohne===0)}
+leseText('uhr');{const b=$$('.lw').find(x=>x.textContent==='half');b.click();A('Lesetexte: „half“ in „half past ten“ zeigt die ganze Wendung',/half past ten/.test($('#lb').textContent)&&/halb elf/.test($('#lb').textContent)&&$$('.lw.an').length===3)}
+leseText('mia');{const b=$$('.lw').find(x=>x.textContent==='throws');b.click();A('Lesetexte: „throws“ findet „to throw = werfen“',/werfen/.test($('#lb').textContent))}
+{save.lesen={};const xp=save.xp,t=TEXTE[0];leseText(t.id);$$('.tf').forEach((d,i)=>d.querySelector(`[data-v="${t.fragen[i][1]?1:0}"]`).click());
+ A('Lesetexte: Fragen richtig beantwortet, Punkte und Haken in der Übersicht',save.lesen[t.id]===t.fragen.length&&save.xp===xp+3*t.fragen.length&&!!$('#nx')&&($('#nx').click(),/alles richtig/.test($(`[data-lid="${t.id}"]`).textContent)))}
+home();
 done();
