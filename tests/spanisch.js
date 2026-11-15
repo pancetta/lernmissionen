@@ -47,5 +47,21 @@ leseText('toby');{const b=$$('.lw').find(x=>x.textContent==='perros');b.click();
 home();$('#gart').click();$(`[data-b="${ARTIKELSPIEL.bins.indexOf(X.it.bin)}"]`).click();A('el oder la?: richtige Antwort zählt',X.n===1);
 sortWeiter();for(let k=0;k<3;k++){$(`[data-b="${1-ARTIKELSPIEL.bins.indexOf(X.it.bin)}"]`).click();sortWeiter()}
 A('el oder la?: nach drei Fehlern Ende mit Rekord',!!$('.end')&&save.artikel===1);
+// Neue Wörter lernen: fünf Karten, dann drei Stufen; danach kennengelernt, die nächsten fünf folgen
+A('Ich kann: jede Insel hat einen Kann-Satz',TOPICS.every(t=>/^Ich kann /.test(t.can||'')));
+{save.gelernt={};save.round=null;home();$('#glern').click();A('Lernen: jede Insel mit Fortschritt',$$('[data-lt]').length===TOPICS.length&&/0 von 12/.test($('[data-lt="colores"]').textContent));
+ $('[data-lt="colores"]').click();const CO=W.filter(e=>e[0]==='colores');let karten=[];while($('.lernkarte')){karten.push($('.lernkarte .big').textContent);$('#nx').click()}
+ A('Lernen: fünf Karten mit den ersten Wörtern der Insel',karten.join()===CO.slice(0,5).map(enShow).join());
+ A('Lernen: 15 Aufgaben in drei Stufen (erkennen, zuordnen, schreiben)',G.total===15&&G.queue.slice(0,5).every(q=>q.kind==='mc'&&q.dir==='en2de')&&G.queue.slice(5,10).every(q=>q.kind==='mc'&&q.dir==='de2en')&&G.queue.slice(10).every(q=>q.kind==='type')&&G.queue.every(q=>CO.slice(0,5).includes(q.e)));
+ solve(G.queue[0]);$('#nx').click();solveWrong(G.queue[0]);$('#nx').click();home();A('Lernen: Unterbrechen und Weiterspielen',/Neue Wörter lernen/.test($('#rs').textContent));
+ $('#rs').click();let g=0;while(G&&!$('.end')&&g++<60){solve(G.queue[0]);$('#nx').click()}
+ A('Lernen: danach fünf Wörter kennengelernt (auch nach einem Fehler)',W.filter(gelernt).length===5&&/5 neue Wörter kennengelernt/.test($('h2').textContent)&&/5 von 12/.test($('.end').textContent));
+ $('#mehr').click();A('Lernen: „Die nächsten Wörter lernen“ zeigt Wort 6 der Insel',$('.lernkarte .big').textContent===enShow(CO[5]))}
+{home();$('#glern').click();$('[data-lt="hola"]').click();while($('.lernkarte'))$('#nx').click();A('Lernen: Satz-Insel übt in Stufe 3 Bauen statt Tippen',G.queue.slice(10).every(q=>q.kind==='build'||q.kind==='mc'))}
+{home();$('#glern').click();$('#wdh').click();A('Gelerntes wiederholen: nur kennengelernte Wörter',G.topic==='gelernt'&&G.queue.every(q=>gelernt(q.e)))}
+{save.best={numeros:2,cuerpo:1};save.gelernt={};home();$('#gkann').click();const f=id=>$(`tr[data-k="${id}"] .face`).textContent;
+ A('Ich kann: 😀 ab zwei Sternen, 😐 bei einem Stern, sonst 🙁 mit Knopf „Lernen“',$$('tr[data-k]').length===TOPICS.length&&f('numeros')==='😀'&&f('cuerpo')==='😐'&&f('colores')==='🙁'&&!!$('[data-kl="colores"]'));
+ $('[data-kl="colores"]').click();A('Ich kann: „Lernen“ startet die Wortkarten der Insel',!!$('.lernkarte'))}
+save.best={};save.gelernt={};save.round=null;
 home();
 done();

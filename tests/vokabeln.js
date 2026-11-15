@@ -90,4 +90,5 @@ A('Lieferungen: „Unit 5“ beginnt bei twenty-one und enthält half past ten, 
 {const r=perfect(liefTopic([NEU.i]));home();A('Fahrt „Neue Wörter“ fehlerfrei = 3 Sterne, Sterne auf der Kachel',r.stars===3&&$(`[data-t="${liefTopic([NEU.i])}"] .stars`)!==null)}
 home();
 home();A('Englisch: kein Artikel-Spiel',!$('#gart')&&ART_W.length===0);
+A('Ich kann: jede Insel hat einen Kann-Satz, Kacheln für Lernen und Ich kann',TOPICS.every(t=>/^Ich kann /.test(t.can||''))&&(home(),!!$('#glern')&&!!$('#gkann')));
 done();

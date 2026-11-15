@@ -271,3 +271,7 @@ details.mist summary{cursor:pointer}
 .pill.neu{background:var(--coral);border-color:var(--coral);color:var(--coral-ink);font-size:.75rem;padding:1px 8px;vertical-align:middle}.tile .herkunft{font-size:.8rem}
 /* Sonderzeichen-Tasten unter dem Eingabefeld (Spanisch: á é í ó ú ñ ü ¿ ¡) */
 .sonder{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}.sonder .btn{min-width:40px;padding:6px 10px;font-size:1.05rem}
+/* Neue Wörter lernen: Karte und Fortschritt je Insel */
+.lernkarte{text-align:center}.lernkarte .big{font-size:clamp(1.8rem,8vw,2.6rem);margin:10px 0 4px}.lernkarte .lde{font-size:1.25rem;color:var(--muted);margin:0 0 12px}.lernkarte .row{justify-content:center}
+.lbar{display:block;height:8px;background:var(--sea-soft);border-radius:999px;overflow:hidden;margin-top:6px}.lbar i{display:block;height:100%;background:var(--good)}
+.cancheck .theme{white-space:nowrap;overflow-wrap:normal;hyphens:none}

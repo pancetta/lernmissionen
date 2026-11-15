@@ -119,20 +119,20 @@ const W = [
  ['saetze','When is the lunch break at your school?','Wann ist die Mittagspause an deiner Schule?']
 ];
 const TOPICS = [
- {id:'zahlen',name:'Zahlen-Insel',map:'Zahlen',sub:'one bis a hundred, Telefonnummern'},
- {id:'zeit',name:'Uhren-Insel',map:'Uhren',sub:'Wochentage, Uhrzeit, Termine'},
- {id:'farben',name:'Farben-Insel',map:'Farben',sub:'Farben und was man anzieht'},
- {id:'beschreiben',name:'Wie-ist-das-Insel',map:'Wie ist das?',sub:'groß, kurz, albern, freundlich ...'},
- {id:'tiere',name:'Tier-Insel',map:'Tiere',sub:'vom Meerschweinchen bis zum Wal'},
- {id:'klasse',name:'Klassenzimmer-Insel',map:'Klasse',sub:'Tafel, Lineal, Radiergummi ...'},
- {id:'schule',name:'Schul-Insel',map:'Schule',sub:'Lehrer, Unterricht, Sprache ...'},
- {id:'leute',name:'Familien-Insel',map:'Familie',sub:'Mama, Papa, Geschwister, Zuhause'},
- {id:'stadt',name:'Hafen-Insel',map:'Hafen',sub:'Meer, Burg, Riesenrad ...'},
- {id:'verben',name:'Tu-Wörter-Insel',map:'Tu-Wörter',sub:'sehen, sagen, geben, vergessen ...'},
- {id:'kleine',name:'Mini-Wörter-Insel',map:'Mini',sub:'mit, ohne, aber, wer, wo ...'},
- {id:'hallo',name:'Hallo-Insel',map:'Hallo',sub:'Sich vorstellen und begrüßen'},
- {id:'saetze',name:'Plauder-Insel',map:'Plaudern',sub:'Sätze für jeden Tag'},
- {id:'tag',name:'Stundenplan-Insel',map:'Stundenplan',sub:'Schulfächer, Pausen, Uhrzeiten'}
+ {id:'zahlen',name:'Zahlen-Insel',map:'Zahlen',sub:'one bis a hundred, Telefonnummern',can:'Ich kann bis hundert zählen und Telefonnummern sagen.'},
+ {id:'zeit',name:'Uhren-Insel',map:'Uhren',sub:'Wochentage, Uhrzeit, Termine',can:'Ich kann Wochentage und Uhrzeiten nennen.'},
+ {id:'farben',name:'Farben-Insel',map:'Farben',sub:'Farben und was man anzieht',can:'Ich kann Farben und Kleidung nennen.'},
+ {id:'beschreiben',name:'Wie-ist-das-Insel',map:'Wie ist das?',sub:'groß, kurz, albern, freundlich ...',can:'Ich kann Dinge und Menschen beschreiben.'},
+ {id:'tiere',name:'Tier-Insel',map:'Tiere',sub:'vom Meerschweinchen bis zum Wal',can:'Ich kann Tiere benennen.'},
+ {id:'klasse',name:'Klassenzimmer-Insel',map:'Klasse',sub:'Tafel, Lineal, Radiergummi ...',can:'Ich kann Dinge im Klassenzimmer benennen.'},
+ {id:'schule',name:'Schul-Insel',map:'Schule',sub:'Lehrer, Unterricht, Sprache ...',can:'Ich kann über die Schule sprechen.'},
+ {id:'leute',name:'Familien-Insel',map:'Familie',sub:'Mama, Papa, Geschwister, Zuhause',can:'Ich kann meine Familie vorstellen.'},
+ {id:'stadt',name:'Hafen-Insel',map:'Hafen',sub:'Meer, Burg, Riesenrad ...',can:'Ich kann Orte in meiner Stadt benennen.'},
+ {id:'verben',name:'Tu-Wörter-Insel',map:'Tu-Wörter',sub:'sehen, sagen, geben, vergessen ...',can:'Ich kann sagen, was jemand tut.'},
+ {id:'kleine',name:'Mini-Wörter-Insel',map:'Mini',sub:'mit, ohne, aber, wer, wo ...',can:'Ich kann kleine Wörter und Fragewörter verstehen.'},
+ {id:'hallo',name:'Hallo-Insel',map:'Hallo',sub:'Sich vorstellen und begrüßen',can:'Ich kann jemanden begrüßen und mich vorstellen.'},
+ {id:'saetze',name:'Plauder-Insel',map:'Plaudern',sub:'Sätze für jeden Tag',can:'Ich kann einfache Sätze für jeden Tag sagen.'},
+ {id:'tag',name:'Stundenplan-Insel',map:'Stundenplan',sub:'Schulfächer, Pausen, Uhrzeiten',can:'Ich kann über meinen Stundenplan sprechen.'}
 ];
 const NOTYPE=['hallo','saetze']; // Satz-Inseln: nicht zum Tippen, dafür Satzbaukasten
 // Bedeutungsnahe Wörter (englisch, wie angezeigt): nie gegeneinander als falsche Antwort, denn „mum = Mutter“ oder „photo = Bild“ ist nicht falsch

@@ -64,6 +64,8 @@ function home(){
    <div class="rank"><span class="pill sun">${save.xp} Punkte</span><span class="pill">Rang: ${rank()}</span></div>${rankBar()}${hero}</section>
   <div class="namebox"><label for="nm">Dein Name</label><input type="text" id="nm" maxlength="16" value="${esc(save.name)}" placeholder="z. B. Mia" autocomplete="off"></div>
   ${resume}
+  <div class="grid" style="margin-bottom:12px"><button class="tile" id="glern" data-ico="📘"><h3>Neue Wörter lernen</h3><span class="sub">Immer ${PORTION} neue Wörter: anschauen, anhören, üben</span><span class="sub">${W.filter(gelernt).length} von ${W.length} Wörtern kennengelernt</span></button>
+   <button class="tile" id="gkann" data-ico="✅"><h3>Ich kann …</h3><span class="sub">Was kannst du schon? Deine Liste nach Themen</span></button></div>
   <div class="maphead"><h2 class="sec" style="margin:0">Seekarte</h2><span class="pill">Schätze: ${chests} von ${TOPICS.length}</span></div>
   ${seaMap(MAP,222,new Set(TOPICS.filter(t=>neuZeigen(t.id)).map(t=>t.id)))}
   <p class="tip" style="margin-top:4px">Drei Sterne auf einer Insel, und du findest ihren Schatz.</p>
@@ -88,7 +90,7 @@ function home(){
   $('#nm').oninput=e=>{save.name=e.target.value.trim();persist()};
   document.querySelectorAll('[data-t]').forEach(b=>{b.onclick=()=>start(b.dataset.t);
     if(b.tagName==='g')b.onkeydown=ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();start(b.dataset.t)}}});
-  $('#gb').onclick=blitz;$('#gm').onclick=()=>memory('words');$('#gd').onclick=duell;$('#gt').onclick=truhe;$('#glh').onclick=lesen;if($('#gart'))$('#gart').onclick=artikelSpiel;if($('#gbs'))$('#gbs').onclick=units;
+  $('#gb').onclick=blitz;$('#gm').onclick=()=>memory('words');$('#gd').onclick=duell;$('#gt').onclick=truhe;$('#glh').onclick=lesen;$('#glern').onclick=lernen;$('#gkann').onclick=ichKann;if($('#gart'))$('#gart').onclick=artikelSpiel;if($('#gbs'))$('#gbs').onclick=units;
   if(rg)$('#rs').onclick=()=>{G=rg;show()};
   let armed=false;$('#rst').onclick=ev=>{if(!armed){armed=true;ev.target.textContent='Wirklich alles löschen? Nochmal tippen.';return}save={name:'',xp:0,best:{},weak:{},round:null,sound:save.sound,blitz:0,memo:0};persist();home()};
 }
@@ -101,8 +103,8 @@ const neuIn=t=>LIEF.length>1&&liefW(NEU).some(e=>e[0]===t);
 const neuZeigen=neuIn; // Schild „neu“ bis zur nächsten Unit
 const herkunft=t=>LIEF.filter(l=>liefW(l).some(e=>e[0]===t)).map(liefName).join(', ');
 const liefTopic=is=>'L:'+is.join(','),liefAus=topic=>topic.slice(2).split(',').map(Number).map(i=>LIEF[i]);
-const topicName=t=>t==='mix'?'Große Rundfahrt':t.startsWith('L:')?(t===liefTopic([NEU.i])?'Neue Wörter: ':'Units: ')+liefAus(t).map(liefName).join(', '):(TOPICS.find(x=>x.id===t)||{}).name;
-const poolFor=topic=>topic.startsWith('L:')?liefAus(topic).flatMap(liefW):W.filter(e=>topic==='mix'||(topic==='words'?!NOTYPE.includes(e[0]):e[0]===topic));
+const topicName=t=>t==='gelernt'?'Gelerntes wiederholen':t.startsWith('lernen:')?'Neue Wörter lernen':t==='mix'?'Große Rundfahrt':t.startsWith('L:')?(t===liefTopic([NEU.i])?'Neue Wörter: ':'Units: ')+liefAus(t).map(liefName).join(', '):(TOPICS.find(x=>x.id===t)||{}).name;
+const poolFor=topic=>topic==='gelernt'?W.filter(gelernt):topic.startsWith('L:')?liefAus(topic).flatMap(liefW):W.filter(e=>topic==='mix'||(topic==='words'?!NOTYPE.includes(e[0]):e[0]===topic));
 function units(){ // Auswahl: genau die Wörter bestimmter Units üben
   const an=new Set([NEU.i]),zeig=()=>{$('#bsn').textContent=`${[...an].reduce((a,i)=>a+liefW(LIEF[i]).length,0)} Wörter`;$('#bsgo').disabled=!an.size};
   $('#app').innerHTML=`${topBar()}<h2 class="sec">Nach Units üben</h2><p class="tip">Wähle, welche Units du üben möchtest, zum Beispiel vor einem Vokabeltest. Die Fahrt mischt die Wörter von allen Inseln.</p>
@@ -127,9 +129,9 @@ function pickKind(e,quick){
   for(const k in w)if((r-=w[k])<0)return k;
   return 'mc';
 }
-function makeQ(e,forceMC,quick){
-  const kind=forceMC?'mc':pickKind(e,quick);
-  const q={e,kind,type:kind==='type',redo:!!forceMC,dir:kind==='type'||kind==='listen'?'de2en':(Math.random()<.5?'en2de':'de2en')};
+function makeQ(e,forceMC,quick,wie){ // wie: feste Frageart und Richtung (beim Lernen neuer Wörter)
+  const kind=wie?wie.kind:forceMC?'mc':pickKind(e,quick);
+  const q={e,kind,type:kind==='type',redo:!!forceMC,dir:wie&&wie.dir||(kind==='type'||kind==='listen'?'de2en':(Math.random()<.5?'en2de':'de2en'))};
   if(kind==='mc'||kind==='listen'){
     const label=x=>q.dir==='en2de'?deShow(x):enShow(x);
     q.correct=label(e);q.options=shuffle([q.correct].concat(distractors(e,label)));
@@ -223,6 +225,7 @@ function answer(i,text){
   document.querySelector('.streak').textContent=G.streak>=2?'Serie '+G.streak:'Serie 0';
 }
 function finish(){
+  if(G.topic.startsWith('lernen:'))return lernEnde();
   // Sterne nach Anteil, damit auch kleine Inseln (weniger als 10 Wörter) drei Sterne erlauben. Bei 10 Fragen: 9 / 7 / 5.
   const n=G.first,need=p=>Math.ceil(G.total*p),stars=n>=need(.9)?3:n>=need(.7)?2:n>=need(.5)?1:0;
   const tk=G.topic,before=save.best[tk]||0;if(stars>before)save.best[tk]=stars;
@@ -329,6 +332,53 @@ function truheEnde(ok){
 }
 const truheWeiter=()=>{if(X)X.i<TRUHE_N?truheQ():spielEnde('truhe',X.n,`von ${TRUHE_N} Truhen geöffnet`,X.missed,truhe)};
 document.addEventListener('keydown',ev=>{if(X&&X.game==='truhe'&&!X.busy&&ev.key.length===1&&ABC_EN.includes(grund(ev.key))&&!ev.ctrlKey&&!ev.metaKey&&!ev.altKey){ev.preventDefault();truheRate(grund(ev.key))}});
+
+/* ---------- Neue Wörter lernen: anschauen und anhören, dann vom Wiedererkennen bis zum Schreiben; „Ich kann …“-Liste ---------- */
+const PORTION=5,gelernt=e=>!!(save.gelernt||{})[key(e)],inselW=t=>W.filter(e=>e[0]===t),inselName=t=>TOPICS.find(x=>x.id===t).name;
+const lernStand=t=>{const ws=inselW(t);return {n:ws.length,k:ws.filter(gelernt).length}};
+function lernen(){ // Auswahl der Insel, Fortschritt je Insel
+  G=null;M=null;stopSpiel();const g=W.filter(gelernt).length;
+  $('#app').innerHTML=`${topBar()}<h2 class="sec">Neue Wörter lernen</h2><p class="tip">Immer ${PORTION} neue Wörter: Erst schaust du sie an und hörst sie, dann übst du sie Schritt für Schritt – vom Wiedererkennen bis zum Schreiben.</p>
+  <div class="grid">${TOPICS.map(t=>{const s=lernStand(t.id);return `<button class="tile" data-lt="${t.id}"${s.k===s.n?' disabled':''}><h3>${t.name}</h3><span class="sub">${s.k===s.n?'✓ alle Wörter kennengelernt':`${s.k} von ${s.n} Wörtern kennengelernt`}</span><span class="lbar" aria-hidden="true"><i style="width:${Math.round(100*s.k/s.n)}%"></i></span></button>`}).join('')}</div>
+  <p style="margin-top:14px">${g?`<button class="btn" id="wdh">Gelerntes wiederholen (${g} Wörter)</button> `:''}<button class="btn ghost" id="hm">Zur Seekarte</button></p>`;
+  bindTheme();$('#hm').onclick=home;if($('#wdh'))$('#wdh').onclick=()=>start('gelernt');
+  document.querySelectorAll('[data-lt]').forEach(b=>b.onclick=()=>lernPortion(b.dataset.lt));
+}
+function lernPortion(t){ // die nächsten Wörter der Insel (in der Reihenfolge der Wortliste) erst als Karten zeigen
+  const es=inselW(t).filter(e=>!gelernt(e)).slice(0,PORTION);if(!es.length)return lernen();
+  let i=0;const karte=()=>{const e=es[i];
+    $('#app').innerHTML=`<div class="q-head"><button class="back" id="bk">Ende</button><span class="brand" style="flex:1;text-align:center">Neues Wort ${i+1} von ${es.length}</span></div>
+    <div class="qcard lernkarte"><div class="kind">${esc(inselName(t))}</div><p class="big">${esc(enShow(e))}</p><p class="lde">${esc(deShow(e))}</p>
+     ${canSpeak()?'<p><button class="btn ghost small" id="hear" type="button">🔊 Anhören</button> <button class="btn ghost small" id="slow" type="button">🐢 langsam</button></p><p class="tip">Hör genau hin und sprich das Wort laut nach.</p>':'<p class="tip">Lies das Wort laut und merk dir die Bedeutung.</p>'}
+     <div class="row"><button class="btn" id="nx">${i+1<es.length?'Nächstes Wort':'Jetzt üben'}</button></div></div>`;
+    $('#bk').onclick=home;if(canSpeak()){say(enShow(e));$('#hear').onclick=()=>say(enShow(e));$('#slow').onclick=()=>say(enShow(e),true)}
+    $('#nx').onclick=()=>{i++;i<es.length?karte():lernUeben(es)};$('#nx').focus()};
+  karte();
+}
+function lernUeben(es){ // drei Stufen: wiedererkennen, zuordnen, selbst schreiben (Sätze: bauen)
+  const stufe3=e=>NOTYPE.includes(e[0])?(canBuild(e)?{kind:'build'}:{kind:'mc',dir:'de2en'}):{kind:'type',dir:'de2en'};
+  const queue=[...shuffle(es).map(e=>makeQ(e,false,false,{kind:'mc',dir:'en2de'})),...shuffle(es).map(e=>makeQ(e,false,false,{kind:'mc',dir:'de2en'})),...shuffle(es).map(e=>makeQ(e,false,false,stufe3(e)))];
+  G={topic:'lernen:'+es.map(idx).join(','),queue,total:queue.length,done:0,first:0,xp:0,streak:0,best:0,missed:[],answered:false};show();
+}
+function lernEnde(){ // die Wörter gelten jetzt als kennengelernt (auch nach Fehlern: sie kommen beim Üben und Wiederholen wieder)
+  const r=G,es=r.topic.slice(7).split(',').map(i=>W[+i]),t=es[0][0],L=save.gelernt=save.gelernt||{};es.forEach(e=>L[key(e)]=1);save.round=null;persist();
+  const s=lernStand(t);
+  $('#app').innerHTML=`${topBar()}<div class="qcard end"><h2>${es.length} neue Wörter kennengelernt!</h2>${confetti()}${rankUp()}
+   <div class="stats"><span class="pill">${r.first} von ${r.total} gleich richtig</span><span class="pill sun">+${r.xp} Punkte</span><span class="pill">${s.k} von ${s.n} auf der ${esc(inselName(t))}</span></div>
+   <div class="mist"><h3>Deine neuen Wörter</h3><ul>${es.map(e=>`<li><b>${esc(enShow(e))}</b> = ${esc(deShow(e))}</li>`).join('')}</ul></div>
+   <div class="actions">${s.k<s.n?'<button class="btn" id="mehr">Die nächsten Wörter lernen</button>':''}<button class="btn ghost" id="ler">Andere Insel</button><button class="btn ghost" id="hm">Zur Seekarte</button></div></div>`;
+  bindTheme();if($('#mehr'))$('#mehr').onclick=()=>lernPortion(t);$('#ler').onclick=lernen;$('#hm').onclick=home;($('#mehr')||$('#ler')).focus();
+}
+function ichKann(){ // „Ich kann …“: 😀 ab zwei Sternen, 😐 bei einem Stern oder der Hälfte der Wörter kennengelernt
+  G=null;M=null;stopSpiel();
+  const stand=t=>{const b=save.best[t.id]||0,s=lernStand(t.id);return b>=2?['😀','Kann ich']:b===1||s.k*2>=s.n?['😐','Fast']:['🙁','Noch üben']};
+  $('#app').innerHTML=`${topBar()}<h2 class="sec">Ich kann …</h2><p class="tip">😀 ab zwei Sternen auf der Insel. 😐 bei einem Stern oder wenn du die Hälfte der Wörter kennengelernt hast.</p>
+  <table class="cancheck"><tr><th>Ich kann …</th><th></th><th></th></tr>${TOPICS.map(t=>{const [f,w]=stand(t),s=lernStand(t.id);
+    return `<tr data-k="${t.id}"><td>${esc(t.can)}</td><td class="face" aria-label="${w}">${f}</td><td>${f==='😀'?'':s.k<s.n?`<button class="theme" data-kl="${t.id}">Lernen</button>`:`<button class="theme" data-ku="${t.id}">Üben</button>`}</td></tr>`}).join('')}</table>
+  <p style="margin-top:14px"><button class="btn ghost" id="hm">Zur Seekarte</button></p>`;
+  bindTheme();$('#hm').onclick=home;
+  document.querySelectorAll('[data-kl]').forEach(b=>b.onclick=()=>lernPortion(b.dataset.kl));document.querySelectorAll('[data-ku]').forEach(b=>b.onclick=()=>start(b.dataset.ku));
+}
 
 /* ---------- Lese-Hafen: kurze Texte nur mit bekannten Wörtern (Wortcheck im Test); Antippen zeigt die Bedeutung ---------- */
 const {GRUND,TEXTE}=LESETEXTE,ART={'Geschichte':'📖','Witz':'😂','Fun Fact':'💡','Hintergrund':'🌍'};

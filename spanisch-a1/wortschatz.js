@@ -73,21 +73,21 @@ const W = [
  ['frases','Me gusta jugar al fútbol.','Ich spiele gern Fußball.'],['frases','Mi hermano tiene diez años.','Mein Bruder ist zehn Jahre alt.']
 ];
 const TOPICS = [
- {id:'hola',name:'Hola-Insel',map:'Hola',sub:'Begrüßen und sich vorstellen'},
- {id:'numeros',name:'Zahlen-Insel',map:'Zahlen',sub:'cero bis veinte'},
- {id:'colores',name:'Farben-Insel',map:'Farben',sub:'rojo, azul, verde …'},
- {id:'familia',name:'Familien-Insel',map:'Familie',sub:'Mama, Papa, Geschwister, Freunde'},
- {id:'animales',name:'Tier-Insel',map:'Tiere',sub:'vom Hund bis zur Giraffe'},
- {id:'escuela',name:'Schul-Insel',map:'Schule',sub:'Klassenzimmer und Schulsachen'},
- {id:'comida',name:'Essens-Insel',map:'Essen',sub:'Essen und Trinken'},
- {id:'cuerpo',name:'Körper-Insel',map:'Körper',sub:'Kopf, Hand, Fuß …'},
- {id:'ropa',name:'Kleider-Insel',map:'Kleidung',sub:'Was ziehst du an?'},
- {id:'tiempo',name:'Tage-und-Wetter-Insel',map:'Tage & Wetter',sub:'Wochentage, heute, Wetter'},
- {id:'casa',name:'Haus-Insel',map:'Haus',sub:'Zimmer und Möbel'},
- {id:'verbos',name:'Tu-Wörter-Insel',map:'Tu-Wörter',sub:'spielen, essen, schlafen …'},
- {id:'como',name:'Wie-ist-das-Insel',map:'Wie ist das?',sub:'groß, klein, lustig …'},
- {id:'mini',name:'Mini-Wörter-Insel',map:'Mini',sub:'ja, nein, und, aber …'},
- {id:'frases',name:'Plauder-Insel',map:'Plaudern',sub:'Sätze für jeden Tag'}
+ {id:'hola',name:'Hola-Insel',map:'Hola',sub:'Begrüßen und sich vorstellen',can:'Ich kann jemanden begrüßen und mich vorstellen.'},
+ {id:'numeros',name:'Zahlen-Insel',map:'Zahlen',sub:'cero bis veinte',can:'Ich kann bis zwanzig zählen.'},
+ {id:'colores',name:'Farben-Insel',map:'Farben',sub:'rojo, azul, verde …',can:'Ich kann Farben nennen.'},
+ {id:'familia',name:'Familien-Insel',map:'Familie',sub:'Mama, Papa, Geschwister, Freunde',can:'Ich kann meine Familie vorstellen.'},
+ {id:'animales',name:'Tier-Insel',map:'Tiere',sub:'vom Hund bis zur Giraffe',can:'Ich kann Tiere benennen.'},
+ {id:'escuela',name:'Schul-Insel',map:'Schule',sub:'Klassenzimmer und Schulsachen',can:'Ich kann Dinge im Klassenzimmer benennen.'},
+ {id:'comida',name:'Essens-Insel',map:'Essen',sub:'Essen und Trinken',can:'Ich kann sagen, was ich esse und trinke.'},
+ {id:'cuerpo',name:'Körper-Insel',map:'Körper',sub:'Kopf, Hand, Fuß …',can:'Ich kann Körperteile benennen.'},
+ {id:'ropa',name:'Kleider-Insel',map:'Kleidung',sub:'Was ziehst du an?',can:'Ich kann sagen, was ich anhabe.'},
+ {id:'tiempo',name:'Tage-und-Wetter-Insel',map:'Tage & Wetter',sub:'Wochentage, heute, Wetter',can:'Ich kann die Wochentage nennen und sagen, wie das Wetter ist.'},
+ {id:'casa',name:'Haus-Insel',map:'Haus',sub:'Zimmer und Möbel',can:'Ich kann die Zimmer meines Hauses benennen.'},
+ {id:'verbos',name:'Tu-Wörter-Insel',map:'Tu-Wörter',sub:'spielen, essen, schlafen …',can:'Ich kann sagen, was ich gern tue.'},
+ {id:'como',name:'Wie-ist-das-Insel',map:'Wie ist das?',sub:'groß, klein, lustig …',can:'Ich kann Dinge und Menschen beschreiben.'},
+ {id:'mini',name:'Mini-Wörter-Insel',map:'Mini',sub:'ja, nein, und, aber …',can:'Ich kann kleine Wörter und Fragewörter verstehen.'},
+ {id:'frases',name:'Plauder-Insel',map:'Plaudern',sub:'Sätze für jeden Tag',can:'Ich kann einfache Sätze für jeden Tag sagen.'}
 ];
 const NOTYPE=['hola','frases']; // Satz-Inseln: nicht zum Tippen, dafür Satzbaukasten
 // Bedeutungsnahe Wörter (spanisch, wie angezeigt): nie gegeneinander als falsche Antwort
