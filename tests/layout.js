@@ -36,7 +36,7 @@ if(typeof AUFG!=='undefined'){ // Deutsch
 }else{ // Vokabeln (eigener Ablauf)
   for(const t of TOPICS){for(let r=0;r<12;r++){start(t.id);const q=G.queue[0];scan('Vokabeln Frage '+t.id);
     if(kindOf(q)==='type')answer(null,'zzz');else if(kindOf(q)==='build')answer(null,'x');else answer((q.options.indexOf(q.correct)+1)%q.options.length);scan('Vokabeln falsch '+t.id)}}
-  home();$('#glh').click();scan('Lese-Hafen');for(const t of TEXTE){leseText(t.id);$$('.lw').forEach(b=>b.click());scan('Lesetext '+t.id);$$('.tf .opt[data-v="0"]').forEach(b=>b.click());scan('Lesetext Ende '+t.id)}
+  home();$('#gbs').click();scan('Buchseiten-Auswahl');  home();$('#glh').click();scan('Lese-Hafen');for(const t of TEXTE){leseText(t.id);$$('.lw').forEach(b=>b.click());scan('Lesetext '+t.id);$$('.tf .opt[data-v="0"]').forEach(b=>b.click());scan('Lesetext Ende '+t.id)}
   for(let i=0;i<15;i++){home();$('#gd').click();scan('Stimmt’s');sortA(-1);scan('Stimmt’s Fehler')}
   for(let i=0;i<10;i++){home();$('#gt').click();X.w=TRUHE_W.reduce((a,e)=>enShow(e).length>a.length?enShow(e):a,'');truheDraw();scan('Truhe langes Wort');[...ABC_EN].slice(0,6).forEach(c=>$(`[data-c="${c}"]`).click());scan('Truhe Ende')}
   home();

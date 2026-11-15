@@ -5,6 +5,6 @@ Die Seiten sammeln keine Daten, nutzen kein Tracking und laden nichts von fremde
 Der Lernfortschritt wird nur im Browser des jeweiligen Geräts gespeichert (localStorage) und verlässt dieses Gerät nie.
 
 Aufbau: `index.html` ist die Übersicht, jede Mission liegt in einem eigenen Ordner `fach-klasse/mission/index.html`.
-Alle Missionen teilen sich Gestaltung und Spielablauf im Ordner `gemeinsam/` (`stil.css`, `gemeinsam.js`, `runde.js`, `spiele.js` für Spiele wie Artikel-Häfen oder „Größer oder kleiner?“). Die Englisch-Missionen nutzen zusätzlich die Wortliste `englisch-5/wortschatz.js` (neue Wörter nur hinten anhängen). Die Lesetexte stehen in `englisch-5/lesetexte.js`; ein Test erlaubt darin nur Wörter aus der Wortliste und eine kleine Liste von Grundwörtern.
+Alle Missionen teilen sich Gestaltung und Spielablauf im Ordner `gemeinsam/` (`stil.css`, `gemeinsam.js`, `runde.js`, `spiele.js` für Spiele wie Artikel-Häfen oder „Größer oder kleiner?“). Die Englisch-Missionen nutzen zusätzlich die Wortliste `englisch-5/wortschatz.js` (neue Wörter nur hinten anhängen und in `LIEFERUNGEN` die neue Lieferung mit Buchseiten eintragen; die Seite zeigt dann „neu“ an den betroffenen Inseln). Die Lesetexte stehen in `englisch-5/lesetexte.js`; ein Test erlaubt darin nur Wörter aus der Wortliste und eine kleine Liste von Grundwörtern.
 
 Tests: `python3 tests/lauf.py` prüft alle Missionen automatisch in Google Chrome ohne Fenster (etwa 1 Minute; braucht Chrome und Node.js). Mit Stichwort nur einen Teil, zum Beispiel `python3 tests/lauf.py mathe`.

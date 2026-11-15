@@ -22,7 +22,7 @@
 <script src="../../gemeinsam/gemeinsam.js"></script>
 <script src="../../gemeinsam/spiele.js"></script>
 <script>
-const {W,TOPICS,NOTYPE,NAH}=WORTSCHATZ;
+const {W,TOPICS,NOTYPE,NAH,LIEFERUNGEN}=WORTSCHATZ;
 const nah=(a,b)=>NAH.some(g=>g.includes(enShow(a))&&g.includes(enShow(b)));
 const BRAND='Vokabel-Inseln';
 const MAP=[[40,40],[105,40],[170,40],[235,40],[300,40],[300,115],[235,115],[170,115],[105,115],[40,115],[40,190],[125,190],[210,190],[295,190]]; // Seekarte, Reihenfolge wie TOPICS
@@ -70,11 +70,11 @@ function mistList(list){return list.length?`<div class="mist"><h3>Diese Wörter 
 function home(){
   G=null;M=null;if(B){clearTimeout(B.timer);B=null}stopSpiel();
   const hi=save.name?`Ahoi ${esc(save.name)}!`:'Ahoi!';
-  const tiles=TOPICS.map(t=>`<button class="tile" data-t="${t.id}"><h3>${t.name}</h3><span class="sub">${t.sub}</span>${starsHtml(save.best[t.id]||0)}</button>`).join('');
+  const tiles=TOPICS.map(t=>`<button class="tile" data-t="${t.id}"><h3>${t.name}${neuZeigen(t.id)?' <span class="pill neu">neu</span>':''}</h3><span class="sub">${t.sub}</span><span class="sub herkunft">Wörter aus: ${esc(herkunft(t.id))}</span>${starsHtml(save.best[t.id]||0)}</button>`).join('');
   const chests=TOPICS.filter(t=>(save.best[t.id]||0)>=3).length;
   let resume='';
   const rg=save.round?unpackRound(save.round):null;
-  if(rg){const tn=rg.topic==='mix'?'Große Rundfahrt':(TOPICS.find(t=>t.id===rg.topic)||{}).name;
+  if(rg){const tn=topicName(rg.topic);
     resume=`<div class="grid" style="margin-bottom:12px"><button class="tile resume" id="rs"><h3>Weiterspielen</h3><span class="sub">${esc(tn)}, Frage ${Math.min(rg.done+1,rg.total)} von ${rg.total}</span></button></div>`;}
   $('#app').innerHTML=`
   <div class="top"><a class="back" href="../../" style="text-decoration:none">Übersicht</a><span class="brand">Vokabel-Inseln</span>${themeBtn()}</div>
@@ -84,10 +84,12 @@ function home(){
   <div class="namebox"><label for="nm">Dein Name</label><input type="text" id="nm" maxlength="16" value="${esc(save.name)}" placeholder="z. B. Mia" autocomplete="off"></div>
   ${resume}
   <div class="maphead"><h2 class="sec" style="margin:0">Seekarte</h2><span class="pill">Schätze: ${chests} von ${TOPICS.length}</span></div>
-  ${seaMap(MAP)}
+  ${seaMap(MAP,222,new Set(TOPICS.filter(t=>neuZeigen(t.id)).map(t=>t.id)))}
   <p class="tip" style="margin-top:4px">Drei Sterne auf einer Insel, und du findest ihren Schatz.</p>
   <h2 class="sec">Spiele</h2><div class="grid">
    <button class="tile mix" data-t="mix"><h3>Große Rundfahrt</h3><span class="sub">Alle Inseln auf einmal, die schwierigste Fahrt</span>${starsHtml(save.best.mix||0)}</button>
+   ${LIEF.length>1?`<button class="tile" data-t="${liefTopic([NEU.i])}" data-ico="✨"><h3>Neue Wörter</h3><span class="sub">Nur die Wörter aus ${esc(liefName(NEU))}, von allen Inseln</span>${starsHtml(save.best[liefTopic([NEU.i])]||0)}</button>
+   <button class="tile" id="gbs" data-ico="📑"><h3>Nach Buchseiten üben</h3><span class="sub">Wähle Seiten aus, zum Beispiel vor einem Vokabeltest</span></button>`:''}
    <button class="tile" id="gb"><h3>Blitzrunde</h3><span class="sub">${BLITZ} Sekunden: Wie viele schaffst du?</span><span class="sub">Rekord: ${save.blitz||0} richtig</span></button>
    <button class="tile" id="gm"><h3>Memory</h3><span class="sub">Finde ${PAIRS} Wortpaare</span><span class="sub">${save.memo?'Rekord: '+save.memo+' Züge':'Noch kein Rekord'}</span></button>
    <button class="tile" id="gd" data-ico="⚖️"><h3>Stimmt’s?</h3><span class="sub">dog = Hund? Schnell entscheiden, es wird immer schneller</span><span class="sub">Rekord: ${save.duell||0} richtig</span></button>
@@ -104,12 +106,30 @@ function home(){
   $('#nm').oninput=e=>{save.name=e.target.value.trim();persist()};
   document.querySelectorAll('[data-t]').forEach(b=>{b.onclick=()=>start(b.dataset.t);
     if(b.tagName==='g')b.onkeydown=ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();start(b.dataset.t)}}});
-  $('#gb').onclick=blitz;$('#gm').onclick=()=>memory('words');$('#gd').onclick=duell;$('#gt').onclick=truhe;$('#glh').onclick=lesen;
+  $('#gb').onclick=blitz;$('#gm').onclick=()=>memory('words');$('#gd').onclick=duell;$('#gt').onclick=truhe;$('#glh').onclick=lesen;if($('#gbs'))$('#gbs').onclick=buchseiten;
   if(rg)$('#rs').onclick=()=>{G=rg;show()};
   let armed=false;$('#rst').onclick=ev=>{if(!armed){armed=true;ev.target.textContent='Wirklich alles löschen? Nochmal tippen.';return}save={name:'',xp:0,best:{},weak:{},round:null,sound:save.sound,blitz:0,memo:0};persist();home()};
 }
 
-const poolFor=topic=>W.filter(e=>topic==='mix'||(topic==='words'?!NOTYPE.includes(e[0]):e[0]===topic));
+/* ---------- Lieferungen: welche Wörter mit welchen Buchseiten dazukamen (Inseln bleiben nach Themen geordnet) ---------- */
+const LIEF=LIEFERUNGEN.map((l,i)=>Object.assign({i,von:W.findIndex(e=>e[1]===l.ab)},l));
+LIEF.forEach((l,i)=>l.bis=i+1<LIEF.length?LIEF[i+1].von:W.length);
+const NEU=LIEF[LIEF.length-1],liefW=l=>W.slice(l.von,l.bis),liefName=l=>l.seiten?`${l.name} (${l.seiten})`:l.name;
+const neuIn=t=>LIEF.length>1&&liefW(NEU).some(e=>e[0]===t);
+const neuZeigen=t=>neuIn(t)&&(save.gesehen||{})[t]!==NEU.name; // Schild „neu“, bis das Kind diese Insel gespielt hat
+const herkunft=t=>LIEF.filter(l=>liefW(l).some(e=>e[0]===t)).map(liefName).join(', ');
+const liefTopic=is=>'L:'+is.join(','),liefAus=topic=>topic.slice(2).split(',').map(Number).map(i=>LIEF[i]);
+const topicName=t=>t==='mix'?'Große Rundfahrt':t.startsWith('L:')?(t===liefTopic([NEU.i])?'Neue Wörter: ':'Buchseiten: ')+liefAus(t).map(liefName).join(', '):(TOPICS.find(x=>x.id===t)||{}).name;
+const poolFor=topic=>topic.startsWith('L:')?liefAus(topic).flatMap(liefW):W.filter(e=>topic==='mix'||(topic==='words'?!NOTYPE.includes(e[0]):e[0]===topic));
+function buchseiten(){ // Auswahl: genau die Wörter bestimmter Buchseiten üben
+  const an=new Set([NEU.i]),zeig=()=>{$('#bsn').textContent=`${[...an].reduce((a,i)=>a+liefW(LIEF[i]).length,0)} Wörter`;$('#bsgo').disabled=!an.size};
+  $('#app').innerHTML=`${topBar()}<h2 class="sec">Nach Buchseiten üben</h2><p class="tip">Wähle, welche Seiten du üben möchtest, zum Beispiel vor einem Vokabeltest. Die Fahrt mischt die Wörter von allen Inseln.</p>
+  <div class="levels" role="group" aria-label="Buchseiten">${LIEF.map(l=>`<button class="chip nav" type="button" data-li="${l.i}" aria-pressed="${an.has(l.i)}">${esc(liefName(l))}</button>`).join('')}</div>
+  <p><span class="pill" id="bsn"></span></p><p><button class="btn" id="bsgo">Los geht’s</button> <button class="btn ghost" id="hm">Zur Seekarte</button></p>`;
+  bindTheme();$('#hm').onclick=home;zeig();
+  document.querySelectorAll('[data-li]').forEach(b=>b.onclick=()=>{const i=+b.dataset.li;an.has(i)?an.delete(i):an.add(i);b.setAttribute('aria-pressed',an.has(i));zeig()});
+  $('#bsgo').onclick=()=>{if(an.size)start(liefTopic([...an].sort((a,b)=>a-b)))};
+}
 function pickEntries(topic,n=ROUND){
   const pool=poolFor(topic);
   // schwache Wörter häufiger ziehen
@@ -143,6 +163,8 @@ const labelOf=q=>({type:'Schreibe das englische Wort',listen:'Was hörst du?',tf
 function markOpts(q,i){document.querySelectorAll('.opt').forEach((b,k)=>{b.disabled=true;if(q.options[k]===q.correct)b.classList.add('right');else if(k===i)b.classList.add('wrong')})}
 
 function start(topic){
+  const gs=save.gesehen=save.gesehen||{}; // gespielt: Schild „neu“ weg (eine Fahrt mit den neuen Wörtern zählt für alle Inseln)
+  if(TOPICS.some(t=>t.id===topic))gs[topic]=NEU.name;else if(topic.startsWith('L:')&&liefAus(topic).includes(NEU))TOPICS.forEach(t=>{if(neuIn(t.id))gs[t.id]=NEU.name});
   const es=pickEntries(topic);
   G={topic,queue:es.map(e=>makeQ(e)),total:es.length,done:0,first:0,xp:0,streak:0,best:0,missed:[],answered:false};
   show();
@@ -222,7 +244,7 @@ function finish(){
   const tk=G.topic,before=save.best[tk]||0;if(stars>before)save.best[tk]=stars;
   const bonus=stars*10;G.xp+=bonus;save.xp+=bonus;save.round=null;persist();
   const msg=stars===3?'Insel erobert. Das war Spitze!':stars===2?'Sehr gut! Eine Runde noch für den dritten Stern?':stars===1?'Gut gemacht. Mit etwas Übung klappen mehr Sterne.':'Das war ein Anfang. Probiere es noch einmal, es wird jedes Mal leichter.';
-  const treasure=stars===3&&before<3&&tk!=='mix'?`<p class="treasure pop"><svg viewBox="0 0 18 16" width="40" aria-hidden="true">${chest(0,0)}</svg> Du hast den Schatz der ${esc(TOPICS.find(t=>t.id===tk).name)} gefunden!</p>`:'';
+  const isl=TOPICS.find(t=>t.id===tk),treasure=stars===3&&before<3&&isl?`<p class="treasure pop"><svg viewBox="0 0 18 16" width="40" aria-hidden="true">${chest(0,0)}</svg> Du hast den Schatz der ${esc(isl.name)} gefunden!</p>`:'';
   const memoTopic=tk==='mix'?'words':tk;
   $('#app').innerHTML=`${topBar()}
   <div class="qcard end"><h2>${esc(msg)}</h2>

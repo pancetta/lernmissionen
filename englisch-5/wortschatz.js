@@ -142,7 +142,10 @@ const NAH=[['mum','mother'],['dad','father'],['pen','pencil'],['glue','glue stic
  ['rabbit','guinea pig','rat'],['when','when?'],['help','to help'],['answer','to answer'],['zero','o'],['so','So?'],['hour','lesson'],['Miss Bell','Mrs Brown'],
  ['English','in English'],['ball','football'],['lunch','break'],
  ...['art','design and technology','French','geography','history','ICT','maths','music','PE','religion','science'].map(f=>['subject',f])]; // jedes Fach ist ein Schulfach
-return {W,TOPICS,NOTYPE,NAH};
+// Lieferungen: ab welchem Wort (Englisch genau wie in W) neue Vokabeln dazukamen, mit Buchseiten.
+// Neue Lieferung = Wörter hinten an W anhängen und hier eine Zeile ergänzen. Die letzte Zeile gilt auf der Seite als „neu“.
+const LIEFERUNGEN=[{name:'Start',seiten:'',ab:'one'},{name:'Unit 1',seiten:'S. 192–193',ab:'twenty-one|twenty one'}];
+return {W,TOPICS,NOTYPE,NAH,LIEFERUNGEN};
 })();
 const enShow=e=>e[1].split('|')[0];
 const deShow=e=>e[2].replace(/ \/ /g,' / ');

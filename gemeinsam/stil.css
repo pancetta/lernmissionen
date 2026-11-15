@@ -266,3 +266,6 @@ details.mist summary{cursor:pointer}
 .lw{background:none;border:0;border-bottom:1px dotted var(--muted);padding:0 1px;margin:0;font:inherit;color:inherit;cursor:pointer}.lw.an{background:var(--sun);color:var(--sun-ink);border-radius:4px}
 .lbox{position:sticky;top:6px;z-index:2;background:var(--sea-soft);border-radius:12px;padding:8px 12px;margin:8px 0 12px;min-height:2.6em;overflow-wrap:anywhere}
 .tf{margin:0 0 10px}.tf p{margin:0 0 6px;font-weight:700}.opts.tfo{grid-template-columns:1fr 1fr}
+/* Schild „neu“ für Inseln mit neuen Vokabeln (Seekarte und Kacheln) */
+.map .neu rect{fill:var(--coral)}.map .neu text{fill:var(--coral-ink);font-size:8.5px;font-weight:800;text-anchor:middle}
+.pill.neu{background:var(--coral);border-color:var(--coral);color:var(--coral-ink);font-size:.75rem;padding:1px 8px;vertical-align:middle}.tile .herkunft{font-size:.8rem}

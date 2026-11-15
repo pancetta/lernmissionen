@@ -67,13 +67,13 @@ let G=null, B=null, M=null; // laufende Runde, Blitzrunde, Memory
 function themeBtn(){return '<button class="theme" id="tg" aria-label="Hell oder dunkel wechseln">hell / dunkel</button>'}
 function bindTheme(){const b=$('#tg');if(!b)return;b.onclick=()=>{const r=document.documentElement;const dark=r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;r.dataset.theme=dark?'light':'dark'}}
 const topBar=()=>`<div class="top"><span class="brand">${BRAND}</span>${themeBtn()}</div>`;
-function seaMap(P,h=222){ // P: Inselpositionen in der Reihenfolge von TOPICS
+function seaMap(P,h=222,neu=new Set()){ // P: Inselpositionen in der Reihenfolge von TOPICS; neu: Inseln mit Schild „Neu“
   // Inseln im Zickzack entlang einer Route. Drei Sterne = Schatztruhe, ein oder zwei = Fähnchen. Das Boot wartet an der ersten Insel ohne Schatz.
   const next=TOPICS.findIndex(t=>(save.best[t.id]||0)<3);
   const isl=TOPICS.map((t,i)=>{const [x,y]=P[i],n=save.best[t.id]||0;
     return `<g class="isl" data-t="${t.id}" tabindex="0" role="button" aria-label="${t.name}, ${n} von 3 Sternen">
      <ellipse class="foam" cx="${x}" cy="${y+1}" rx="29" ry="13"/>${i===next?`<ellipse class="ping" cx="${x}" cy="${y}" rx="27" ry="12"/>`:''}<ellipse class="sand" cx="${x}" cy="${y}" rx="25" ry="11"/><ellipse class="green" cx="${x-5}" cy="${y-3}" rx="12" ry="5"/>
-     ${n>=3?chest(x-14,y-20):n>0?flag(x-12,y-22):''}<text x="${x}" y="${y+23}">${esc(t.map)}</text></g>`}).join('');
+     ${n>=3?chest(x-14,y-20):n>0?flag(x-12,y-22):''}<text x="${x}" y="${y+23}">${esc(t.map)}</text>${neu.has(t.id)?`<g class="neu" aria-label="neue Wörter"><rect x="${x+8}" y="${y-22}" width="22" height="11" rx="5"/><text x="${x+19}" y="${y-13.5}">neu</text></g>`:''}</g>`}).join('');
   // Markierung links auf der Insel, Boot rechts daneben (an einer Insel mit Schatz steht nie das Boot)
   const b=next>=0?`<g class="bob">${boat.replace('<svg',`<svg x="${P[next][0]+2}" y="${P[next][1]-26}" width="26" height="23" class="mapboat"`)}</g>`:'';
   // Wellenkringel zwischen den Inselreihen
