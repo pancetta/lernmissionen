@@ -1,5 +1,5 @@
 // Vokabel-Inseln (eigener Rundenablauf): Fragearten, Satzbau, Tastatur, alte Spielstände, Blitzrunde, Memory, Sterne
-A('Startseite: 13 Inseln auf der Karte, Spiele',$$('.isl').length===13&&!!$('#gb')&&!!$('#gm'));
+A('Startseite: jede Insel auf der Karte und mit Platz auf der Seekarte, Spiele',$$('.isl').length===TOPICS.length&&MAP.length===TOPICS.length&&!!$('#gb')&&!!$('#gm'));
 const cnt=(e,n,quick)=>{const c={};for(let i=0;i<n;i++){const k=makeQ(e,false,quick).kind;c[k]=(c[k]||0)+1}return c};
 const lion=W.find(e=>e[1]==='lion'),hs=W.find(e=>e[1]==='How old are you?');
 const wc=cnt(lion,800),sc=cnt(hs,800);

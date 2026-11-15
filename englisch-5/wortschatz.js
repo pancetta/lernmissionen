@@ -91,10 +91,35 @@ const W = [
  ['saetze',"A snake isn't a good pet.",'Eine Schlange ist kein gutes Haustier.'],['saetze','an elephant','ein Elefant'],
  ['saetze',"she's ...",'sie ist ...'],['saetze',"they're ...",'sie sind ...'],['saetze',"he/she/it isn't ...",'er/sie/es ist nicht ...'],
  ['saetze',"you aren't ...",'du bist nicht ... / ihr seid nicht ...'],['saetze','lots of ...|a lot of ...','viel ... / viele ...'],
- ['saetze','on the way to ...','auf dem Weg zu ...']
+ ['saetze','on the way to ...','auf dem Weg zu ...'],
+ // Unit 1, Seite 192 und 193 (neue Wörter immer hier hinten anhängen)
+ ['zahlen','twenty-one|twenty one','einundzwanzig'],['zahlen','twenty-two|twenty two','zweiundzwanzig'],['zahlen','twenty-three|twenty three','dreiundzwanzig'],
+ ['zahlen','twenty-four|twenty four','vierundzwanzig'],['zahlen','twenty-five|twenty five','fünfundzwanzig'],['zahlen','twenty-six|twenty six','sechsundzwanzig'],
+ ['zahlen','thirty','dreißig'],['zahlen','thirty-one|thirty one','einunddreißig'],['zahlen','thirty-two|thirty two','zweiunddreißig'],
+ ['zahlen','forty','vierzig'],['zahlen','fifty','fünfzig'],['zahlen','sixty','sechzig'],['zahlen','seventy','siebzig'],['zahlen','eighty','achtzig'],['zahlen','ninety','neunzig'],
+ ['zahlen','a hundred|one hundred','hundert / einhundert'],['zahlen','zero','Null'],['zahlen','o','Null (in Telefonnummern)'],['zahlen','double','Doppel-'],['zahlen','telephone|phone','Telefon'],
+ ['zeit','birthday','Geburtstag'],['zeit','September','September'],
+ ['tag','subject|school subject','Schulfach'],['tag','art','Kunst'],['tag','design and technology','Design und Technik'],['tag','French','Französisch'],
+ ['tag','geography','Geografie'],['tag','history','Geschichte'],['tag','ICT','Informations- und Kommunikationstechnologie'],['tag','maths','Mathematik'],
+ ['tag','music','Musik'],['tag','PE','Sportunterricht / Turnen'],['tag','religion','Religion'],['tag','science','Naturwissenschaft'],
+ ['tag','timetable','Stundenplan'],['tag','hour','Stunde'],['tag','lunch','Mittagessen'],['tag','break','Pause'],
+ ['tag','quarter past ten','Viertel nach zehn'],['tag','half past ten','halb elf'],['tag','quarter to eleven','Viertel vor elf'],
+ ['klasse','ball','Ball'],['klasse','football','Fußball'],
+ ['schule','question','Frage'],['schule','answer','Antwort'],['schule','word','Wort'],['schule','letter','Buchstabe'],
+ ['schule','in English','auf Englisch'],['schule','in German','auf Deutsch'],
+ ['schule','Miss Bell','Frau Bell (Anrede für Lehrerinnen)'],['schule','Mr Brown','Herr Brown'],['schule','Mrs Brown','Frau Brown'],
+ ['stadt','street','Straße'],
+ ['verben','to help|help','helfen'],['verben','to come in|come in','hereinkommen'],['verben','to start|start','anfangen / beginnen'],['verben','to throw|throw','werfen'],
+ ['verben','to ask|ask','fragen'],['verben','to catch|catch','fangen'],['verben','to answer|answer','antworten / beantworten'],['verben','to do|do','machen / tun'],
+ ['verben','to live|live','leben / wohnen'],['verben','to learn|learn','lernen'],
+ ['kleine','help','Hilfe'],['kleine','so','also / deshalb / daher'],['kleine','then','dann'],['kleine','again','wieder / noch einmal'],['kleine','only','nur / bloß'],['kleine','when?','wann?'],
+ ['hallo','Good morning.','Guten Morgen.'],['hallo','about yourself','über dich selbst'],
+ ['saetze','Can you help me, please?','Kannst du mir bitte helfen?'],['saetze','Can you say that again, please?','Kannst du das bitte noch einmal sagen?'],
+ ['saetze','Can I ask you a question?','Kann ich dir eine Frage stellen?'],['saetze','They live at 88 School Street.','Sie wohnen in der Schulstraße 88.'],
+ ['saetze','When is the lunch break at your school?','Wann ist die Mittagspause an deiner Schule?']
 ];
 const TOPICS = [
- {id:'zahlen',name:'Zahlen-Insel',map:'Zahlen',sub:'one bis twenty'},
+ {id:'zahlen',name:'Zahlen-Insel',map:'Zahlen',sub:'one bis a hundred, Telefonnummern'},
  {id:'zeit',name:'Uhren-Insel',map:'Uhren',sub:'Wochentage, Uhrzeit, Termine'},
  {id:'farben',name:'Farben-Insel',map:'Farben',sub:'Farben und was man anzieht'},
  {id:'beschreiben',name:'Wie-ist-das-Insel',map:'Wie ist das?',sub:'groß, kurz, albern, freundlich ...'},
@@ -106,14 +131,16 @@ const TOPICS = [
  {id:'verben',name:'Tu-Wörter-Insel',map:'Tu-Wörter',sub:'sehen, sagen, geben, vergessen ...'},
  {id:'kleine',name:'Mini-Wörter-Insel',map:'Mini',sub:'mit, ohne, aber, wer, wo ...'},
  {id:'hallo',name:'Hallo-Insel',map:'Hallo',sub:'Sich vorstellen und begrüßen'},
- {id:'saetze',name:'Plauder-Insel',map:'Plaudern',sub:'Sätze für jeden Tag'}
+ {id:'saetze',name:'Plauder-Insel',map:'Plaudern',sub:'Sätze für jeden Tag'},
+ {id:'tag',name:'Stundenplan-Insel',map:'Stundenplan',sub:'Schulfächer, Pausen, Uhrzeiten'}
 ];
 const NOTYPE=['hallo','saetze']; // Satz-Inseln: nicht zum Tippen, dafür Satzbaukasten
 // Bedeutungsnahe Wörter (englisch, wie angezeigt): nie gegeneinander als falsche Antwort, denn „mum = Mutter“ oder „photo = Bild“ ist nicht falsch
 const NAH=[['mum','mother'],['dad','father'],['pen','pencil'],['glue','glue stick'],['class','lesson','classroom'],['student','classmate'],['home','at home','flat'],
  ['map','card'],['picture','photo'],['to say','to speak','to talk to'],['to see','to look at'],['nice','good','great','big'],['strange','silly'],['navy','blue','dark','black'],['shoe','trainer'],
- ['pet','animal'],['Monday','on Monday'],['book','exercise book','library'],['town','hometown'],['to think','to know'],['to put','to give'],['clock','watch','time'],['to go','to come','to go home','to come home'],
- ['rabbit','guinea pig','rat']];
+ ['pet','animal'],['Monday','on Monday'],['book','exercise book','library'],['town','hometown'],['to think','to know'],['to put','to give'],['clock','watch','time'],['to go','to come','to come in','to go home','to come home'],
+ ['rabbit','guinea pig','rat'],['when','when?'],['help','to help'],['answer','to answer'],['zero','o'],['so','So?'],['hour','lesson'],['Miss Bell','Mrs Brown'],
+ ['English','in English'],['ball','football'],['lunch','break']];
 return {W,TOPICS,NOTYPE,NAH};
 })();
 const enShow=e=>e[1].split('|')[0];
