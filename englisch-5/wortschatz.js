@@ -92,7 +92,7 @@ const W = [
  ['saetze',"she's ...",'sie ist ...'],['saetze',"they're ...",'sie sind ...'],['saetze',"he/she/it isn't ...",'er/sie/es ist nicht ...'],
  ['saetze',"you aren't ...",'du bist nicht ... / ihr seid nicht ...'],['saetze','lots of ...|a lot of ...','viel ... / viele ...'],
  ['saetze','on the way to ...','auf dem Weg zu ...'],
- // Unit 1, Seite 192 und 193 (neue Wörter immer hier hinten anhängen)
+ // Unit 5 (neue Wörter immer hier hinten anhängen)
  ['zahlen','twenty-one|twenty one','einundzwanzig'],['zahlen','twenty-two|twenty two','zweiundzwanzig'],['zahlen','twenty-three|twenty three','dreiundzwanzig'],
  ['zahlen','twenty-four|twenty four','vierundzwanzig'],['zahlen','twenty-five|twenty five','fünfundzwanzig'],['zahlen','twenty-six|twenty six','sechsundzwanzig'],
  ['zahlen','thirty','dreißig'],['zahlen','thirty-one|thirty one','einunddreißig'],['zahlen','thirty-two|thirty two','zweiunddreißig'],
@@ -142,9 +142,9 @@ const NAH=[['mum','mother'],['dad','father'],['pen','pencil'],['glue','glue stic
  ['rabbit','guinea pig','rat'],['when','when?'],['help','to help'],['answer','to answer'],['zero','o'],['so','So?'],['hour','lesson'],['Miss Bell','Mrs Brown'],
  ['English','in English'],['ball','football'],['lunch','break'],
  ...['art','design and technology','French','geography','history','ICT','maths','music','PE','religion','science'].map(f=>['subject',f])]; // jedes Fach ist ein Schulfach
-// Lieferungen: ab welchem Wort (Englisch genau wie in W) neue Vokabeln dazukamen, mit Buchseiten.
-// Neue Lieferung = Wörter hinten an W anhängen und hier eine Zeile ergänzen. Die letzte Zeile gilt auf der Seite als „neu“.
-const LIEFERUNGEN=[{name:'Start',seiten:'',ab:'one'},{name:'Unit 1',seiten:'S. 192–193',ab:'twenty-one|twenty one'}];
+// Lieferungen (Units): ab welchem Wort (Englisch genau wie in W) neue Vokabeln dazukamen.
+// Neue Unit = Wörter hinten an W anhängen und hier eine Zeile ergänzen. Die letzte Zeile gilt bis zur nächsten Unit als „neu“.
+const LIEFERUNGEN=[{name:'Start',ab:'one'},{name:'Unit 5',ab:'twenty-one|twenty one'}];
 return {W,TOPICS,NOTYPE,NAH,LIEFERUNGEN};
 })();
 const enShow=e=>e[1].split('|')[0];

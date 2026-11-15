@@ -89,7 +89,7 @@ function home(){
   <h2 class="sec">Spiele</h2><div class="grid">
    <button class="tile mix" data-t="mix"><h3>Große Rundfahrt</h3><span class="sub">Alle Inseln auf einmal, die schwierigste Fahrt</span>${starsHtml(save.best.mix||0)}</button>
    ${LIEF.length>1?`<button class="tile" data-t="${liefTopic([NEU.i])}" data-ico="✨"><h3>Neue Wörter</h3><span class="sub">Nur die Wörter aus ${esc(liefName(NEU))}, von allen Inseln</span>${starsHtml(save.best[liefTopic([NEU.i])]||0)}</button>
-   <button class="tile" id="gbs" data-ico="📑"><h3>Nach Buchseiten üben</h3><span class="sub">Wähle Seiten aus, zum Beispiel vor einem Vokabeltest</span></button>`:''}
+   <button class="tile" id="gbs" data-ico="📑"><h3>Nach Units üben</h3><span class="sub">Wähle Units aus, zum Beispiel vor einem Vokabeltest</span></button>`:''}
    <button class="tile" id="gb"><h3>Blitzrunde</h3><span class="sub">${BLITZ} Sekunden: Wie viele schaffst du?</span><span class="sub">Rekord: ${save.blitz||0} richtig</span></button>
    <button class="tile" id="gm"><h3>Memory</h3><span class="sub">Finde ${PAIRS} Wortpaare</span><span class="sub">${save.memo?'Rekord: '+save.memo+' Züge':'Noch kein Rekord'}</span></button>
    <button class="tile" id="gd" data-ico="⚖️"><h3>Stimmt’s?</h3><span class="sub">dog = Hund? Schnell entscheiden, es wird immer schneller</span><span class="sub">Rekord: ${save.duell||0} richtig</span></button>
@@ -106,25 +106,25 @@ function home(){
   $('#nm').oninput=e=>{save.name=e.target.value.trim();persist()};
   document.querySelectorAll('[data-t]').forEach(b=>{b.onclick=()=>start(b.dataset.t);
     if(b.tagName==='g')b.onkeydown=ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();start(b.dataset.t)}}});
-  $('#gb').onclick=blitz;$('#gm').onclick=()=>memory('words');$('#gd').onclick=duell;$('#gt').onclick=truhe;$('#glh').onclick=lesen;if($('#gbs'))$('#gbs').onclick=buchseiten;
+  $('#gb').onclick=blitz;$('#gm').onclick=()=>memory('words');$('#gd').onclick=duell;$('#gt').onclick=truhe;$('#glh').onclick=lesen;if($('#gbs'))$('#gbs').onclick=units;
   if(rg)$('#rs').onclick=()=>{G=rg;show()};
   let armed=false;$('#rst').onclick=ev=>{if(!armed){armed=true;ev.target.textContent='Wirklich alles löschen? Nochmal tippen.';return}save={name:'',xp:0,best:{},weak:{},round:null,sound:save.sound,blitz:0,memo:0};persist();home()};
 }
 
-/* ---------- Lieferungen: welche Wörter mit welchen Buchseiten dazukamen (Inseln bleiben nach Themen geordnet) ---------- */
+/* ---------- Lieferungen (Units): welche Wörter mit welcher Unit dazukamen (Inseln bleiben nach Themen geordnet) ---------- */
 const LIEF=LIEFERUNGEN.map((l,i)=>Object.assign({i,von:W.findIndex(e=>e[1]===l.ab)},l));
 LIEF.forEach((l,i)=>l.bis=i+1<LIEF.length?LIEF[i+1].von:W.length);
-const NEU=LIEF[LIEF.length-1],liefW=l=>W.slice(l.von,l.bis),liefName=l=>l.seiten?`${l.name} (${l.seiten})`:l.name;
+const NEU=LIEF[LIEF.length-1],liefW=l=>W.slice(l.von,l.bis),liefName=l=>l.name;
 const neuIn=t=>LIEF.length>1&&liefW(NEU).some(e=>e[0]===t);
-const neuZeigen=t=>neuIn(t)&&(save.gesehen||{})[t]!==NEU.name; // Schild „neu“, bis das Kind diese Insel gespielt hat
+const neuZeigen=neuIn; // Schild „neu“ bis zur nächsten Unit
 const herkunft=t=>LIEF.filter(l=>liefW(l).some(e=>e[0]===t)).map(liefName).join(', ');
 const liefTopic=is=>'L:'+is.join(','),liefAus=topic=>topic.slice(2).split(',').map(Number).map(i=>LIEF[i]);
-const topicName=t=>t==='mix'?'Große Rundfahrt':t.startsWith('L:')?(t===liefTopic([NEU.i])?'Neue Wörter: ':'Buchseiten: ')+liefAus(t).map(liefName).join(', '):(TOPICS.find(x=>x.id===t)||{}).name;
+const topicName=t=>t==='mix'?'Große Rundfahrt':t.startsWith('L:')?(t===liefTopic([NEU.i])?'Neue Wörter: ':'Units: ')+liefAus(t).map(liefName).join(', '):(TOPICS.find(x=>x.id===t)||{}).name;
 const poolFor=topic=>topic.startsWith('L:')?liefAus(topic).flatMap(liefW):W.filter(e=>topic==='mix'||(topic==='words'?!NOTYPE.includes(e[0]):e[0]===topic));
-function buchseiten(){ // Auswahl: genau die Wörter bestimmter Buchseiten üben
+function units(){ // Auswahl: genau die Wörter bestimmter Units üben
   const an=new Set([NEU.i]),zeig=()=>{$('#bsn').textContent=`${[...an].reduce((a,i)=>a+liefW(LIEF[i]).length,0)} Wörter`;$('#bsgo').disabled=!an.size};
-  $('#app').innerHTML=`${topBar()}<h2 class="sec">Nach Buchseiten üben</h2><p class="tip">Wähle, welche Seiten du üben möchtest, zum Beispiel vor einem Vokabeltest. Die Fahrt mischt die Wörter von allen Inseln.</p>
-  <div class="levels" role="group" aria-label="Buchseiten">${LIEF.map(l=>`<button class="chip nav" type="button" data-li="${l.i}" aria-pressed="${an.has(l.i)}">${esc(liefName(l))}</button>`).join('')}</div>
+  $('#app').innerHTML=`${topBar()}<h2 class="sec">Nach Units üben</h2><p class="tip">Wähle, welche Units du üben möchtest, zum Beispiel vor einem Vokabeltest. Die Fahrt mischt die Wörter von allen Inseln.</p>
+  <div class="levels" role="group" aria-label="Units">${LIEF.map(l=>`<button class="chip nav" type="button" data-li="${l.i}" aria-pressed="${an.has(l.i)}">${esc(liefName(l))}</button>`).join('')}</div>
   <p><span class="pill" id="bsn"></span></p><p><button class="btn" id="bsgo">Los geht’s</button> <button class="btn ghost" id="hm">Zur Seekarte</button></p>`;
   bindTheme();$('#hm').onclick=home;zeig();
   document.querySelectorAll('[data-li]').forEach(b=>b.onclick=()=>{const i=+b.dataset.li;an.has(i)?an.delete(i):an.add(i);b.setAttribute('aria-pressed',an.has(i));zeig()});
@@ -163,8 +163,6 @@ const labelOf=q=>({type:'Schreibe das englische Wort',listen:'Was hörst du?',tf
 function markOpts(q,i){document.querySelectorAll('.opt').forEach((b,k)=>{b.disabled=true;if(q.options[k]===q.correct)b.classList.add('right');else if(k===i)b.classList.add('wrong')})}
 
 function start(topic){
-  const gs=save.gesehen=save.gesehen||{}; // gespielt: Schild „neu“ weg (eine Fahrt mit den neuen Wörtern zählt für alle Inseln)
-  if(TOPICS.some(t=>t.id===topic))gs[topic]=NEU.name;else if(topic.startsWith('L:')&&liefAus(topic).includes(NEU))TOPICS.forEach(t=>{if(neuIn(t.id))gs[t.id]=NEU.name});
   const es=pickEntries(topic);
   G={topic,queue:es.map(e=>makeQ(e)),total:es.length,done:0,first:0,xp:0,streak:0,best:0,missed:[],answered:false};
   show();
@@ -343,7 +341,7 @@ document.addEventListener('keydown',ev=>{if(X&&X.game==='truhe'&&!X.busy&&/^[a-z
 /* ---------- Lese-Hafen: kurze Texte nur mit bekannten Wörtern (Wortcheck im Test); Antippen zeigt die Bedeutung ---------- */
 const {GRUND,TEXTE}=LESETEXTE,ART={'Geschichte':'📖','Witz':'😂','Fun Fact':'💡','Hintergrund':'🌍'};
 const wtok=t=>t.toLowerCase().replace(/[‘’]/g,"'").match(/[a-z][a-z'-]*[a-z]|[a-z]/g)||[];
-const ALT=W.map(e=>[e,e[1].split('|').map(a=>a.toLowerCase().replace(/[‘’]/g,"'").replace(/^to /,'').replace(/[.?!]+$/,''))]);
+const ALT=W.map(e=>[e,e[1].split('|').map(a=>a.toLowerCase().replace(/[‘’]/g,"'").replace(/^to /,'').replace(/ ?(\.\.\.|…)$/,'').replace(/[.?!]+$/,''))]);
 function bedeutung(ws,i){ // längste Wendung aus der Wortliste mit dem angetippten Wort (throws → throw, Tim's → Tim); sonst Grundwort; sonst ein Beispiel
   for(let len=4;len>=1;len--)for(let s=Math.max(0,i-len+1);s<=i&&s+len<=ws.length;s++){const b=ws.slice(s,s+len),l=b[len-1];
     for(const v of [l,l.replace(/'s$/,''),l.replace(/es$/,''),l.replace(/s$/,'')]){const ph=b.slice(0,-1).concat(v).join(' '),h=ALT.find(([e,a])=>a.includes(ph));if(h)return {von:s,bis:s+len-1,en:enShow(h[0]),de:deShow(h[0])}}}
@@ -368,12 +366,12 @@ function leseText(id){
   $('#bk').onclick=lesen;if($('#vor'))$('#vor').onclick=()=>say(t.text.replace(/^[^:\n]+: /gm,''));
   document.querySelectorAll('.lw').forEach(b=>b.onclick=()=>{const r=bedeutung(ws,+b.dataset.k);document.querySelectorAll('.lw.an').forEach(x=>x.classList.remove('an'));
     if(!r)return;for(let i=r.von;i<=r.bis;i++)$(`.lw[data-k="${i}"]`).classList.add('an');$('#lb').innerHTML=`<b>${esc(r.en)}</b> = ${esc(r.de)}${r.bsp?' <span class="tip">(Beispiel aus der Wortliste)</span>':''}`;if(canSpeak())say(r.en)});
-  let richtig=0,offen=t.fragen.length;
+  let richtig=0,offen=t.fragen.length;const schon=(save.lesen||{})[id]===t.fragen.length; // Punkte nur, bis der Text einmal ganz richtig gelöst ist
   document.querySelectorAll('.tf').forEach(d=>d.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{const f=t.fragen[+d.dataset.f],ok=(b.dataset.v==='1')===f[1];
     d.querySelectorAll('.opt').forEach(x=>{x.disabled=true;if((x.dataset.v==='1')===f[1])x.classList.add('right');else if(x===b)x.classList.add('wrong')});
-    if(ok){richtig++;save.xp+=3}offen--;
+    if(ok){richtig++;if(!schon)save.xp+=3}offen--;
     if(!offen){const L=save.lesen=save.lesen||{};L[id]=Math.max(L[id]||0,richtig);persist();
-      $('#fb').innerHTML=`<div class="fb ${richtig===t.fragen.length?'ok':'no'}" role="status"><strong>${richtig} von ${t.fragen.length} richtig</strong>${rankUp()}<span class="ans">+${richtig*3} Punkte</span><div class="row"><button class="btn" id="nx">Weiter lesen</button></div></div>`;
+      $('#fb').innerHTML=`<div class="fb ${richtig===t.fragen.length?'ok':'no'}" role="status"><strong>${richtig} von ${t.fragen.length} richtig</strong>${rankUp()}<span class="ans">${schon?'Diesen Text hast du schon ganz richtig gelöst.':`+${richtig*3} Punkte`}</span><div class="row"><button class="btn" id="nx">Weiter lesen</button></div></div>`;
       $('#nx').onclick=lesen;$('#nx').focus()}}));
 }
 

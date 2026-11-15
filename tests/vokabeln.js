@@ -70,21 +70,23 @@ A('Lesetexte: Daten (eindeutige id, Art, mindestens 2 Fragen mit true/false)',ne
 {let ohne=0;for(const t of TEXTE){leseText(t.id);for(const b of $$('.lw')){b.click();if(!$('.lw.an')){ohne++;P(`Lesetext ${t.id}: keine Bedeutung für „${b.textContent}“`)}}}
  A('Lesetexte: jedes Wort zeigt beim Antippen eine Bedeutung',ohne===0)}
 leseText('uhr');{const b=$$('.lw').find(x=>x.textContent==='half');b.click();A('Lesetexte: „half“ in „half past ten“ zeigt die ganze Wendung',/half past ten/.test($('#lb').textContent)&&/halb elf/.test($('#lb').textContent)&&$$('.lw.an').length===3)}
+leseText('sam');{const b=$$('.lw').find(x=>x.textContent==='Lots');b.click();A('Lesetexte: „Lots“ zeigt die Wendung „lots of …“',/lots of/.test($('#lb').textContent)&&!/Beispiel/.test($('#lb').textContent))}
 leseText('mia');{const b=$$('.lw').find(x=>x.textContent==='throws');b.click();A('Lesetexte: „throws“ findet „to throw = werfen“',/werfen/.test($('#lb').textContent))}
 {save.lesen={};const xp=save.xp,t=TEXTE[0];leseText(t.id);$$('.tf').forEach((d,i)=>d.querySelector(`[data-v="${t.fragen[i][1]?1:0}"]`).click());
  A('Lesetexte: Fragen richtig beantwortet, Punkte und Haken in der Übersicht',save.lesen[t.id]===t.fragen.length&&save.xp===xp+3*t.fragen.length&&!!$('#nx')&&($('#nx').click(),/alles richtig/.test($(`[data-lid="${t.id}"]`).textContent)))}
+{const xp=save.xp,t=TEXTE[0];leseText(t.id);$$('.tf').forEach((d,i)=>d.querySelector(`[data-v="${t.fragen[i][1]?1:0}"]`).click());A('Lesetexte: noch einmal gelesen gibt keine neuen Punkte',save.xp===xp&&/schon ganz richtig/.test($('#fb').textContent))}
 home();
-// Lieferungen: Grenzen, neue Wörter, Schild „neu“, Herkunft, Fahrten nach Buchseiten
+// Lieferungen: Grenzen, neue Wörter, Schild „neu“, Herkunft, Fahrten nach Units
 A('Lieferungen: beginnen bei 0, aufsteigend, jede mit gefundenem ersten Wort',LIEF[0].von===0&&LIEF.every((l,i)=>l.von>=0&&(i===0||l.von>LIEF[i-1].von))&&LIEF[LIEF.length-1].bis===W.length);
-A('Lieferungen: „Unit 1“ beginnt bei twenty-one und enthält half past ten',NEU.name==='Unit 1'&&W[NEU.von][1].startsWith('twenty-one')&&liefW(NEU).some(e=>e[1].startsWith('half past ten')));
-{save.gesehen={};home();const mit=TOPICS.filter(t=>liefW(NEU).some(e=>e[0]===t.id)).map(t=>t.id),schild=$$('.map .isl').filter(g=>g.querySelector('.neu')).map(g=>g.dataset.t);
+A('Lieferungen: „Unit 5“ beginnt bei twenty-one und enthält half past ten, keine Seitenzahlen',LIEFERUNGEN.every(l=>!('seiten' in l))&&LIEF.map(l=>l.name).join()==='Start,Unit 5'&&NEU.name==='Unit 5'&&W[NEU.von][1].startsWith('twenty-one')&&liefW(NEU).some(e=>e[1].startsWith('half past ten')));
+{home();const mit=TOPICS.filter(t=>liefW(NEU).some(e=>e[0]===t.id)).map(t=>t.id),schild=$$('.map .isl').filter(g=>g.querySelector('.neu')).map(g=>g.dataset.t);
  A('Seekarte: Schild „neu“ genau an den Inseln mit Wörtern der neuesten Lieferung',schild.join()===mit.join()&&mit.includes('tag')&&!mit.includes('tiere'));
- start('zahlen');home();A('Schild „neu“ verschwindet, wenn die Insel gespielt wurde',!$('.map .isl[data-t="zahlen"] .neu')&&!!$('.map .isl[data-t="zeit"] .neu')&&!$('[data-t="zahlen"] .pill.neu'));
+ start('zahlen');home();A('Schild „neu“ bleibt bis zur nächsten Unit, auch nach dem Spielen',!!$('.map .isl[data-t="zahlen"] .neu')&&!!$('.isles [data-t="zahlen"] .pill.neu'));
  const z=$('.isles [data-t="zahlen"]').textContent,tg=$('.isles [data-t="tag"]').textContent;
- A('Inselkacheln: Herkunft der Wörter (Start, Unit 1 mit Seiten)',/Start, Unit 1 \(S\. 192–193\)/.test(z)&&/Wörter aus: Unit 1/.test(tg)&&!/Start/.test(tg));
- $(`[data-t="${liefTopic([NEU.i])}"]`).click();A('„Neue Wörter“: nur Wörter der neuesten Lieferung, danach kein Schild mehr',G.queue.every(q=>W.indexOf(q.e)>=NEU.von)&&(home(),!$('.map .neu')))}
+ A('Inselkacheln: Herkunft der Wörter nach Units',/Wörter aus: Start, Unit 5$/.test($('.isles [data-t="zahlen"] .herkunft').textContent)&&/Wörter aus: Unit 5$/.test($('.isles [data-t="tag"] .herkunft').textContent)&&!/S\./.test(z+tg));
+ $(`[data-t="${liefTopic([NEU.i])}"]`).click();A('„Neue Wörter“: nur Wörter der neuesten Unit',G.queue.every(q=>W.indexOf(q.e)>=NEU.von))}
 {home();$('#gbs').click();const chips=$$('[data-li]');chips[1].click();chips[0].click();$('#bsgo').click();
- A('Nach Buchseiten üben: Auswahl „Start“ übt nur Wörter vor Unit 1',G.topic==='L:0'&&G.queue.every(q=>W.indexOf(q.e)<NEU.von))}
+ A('Nach Units üben: Auswahl „Start“ übt nur Wörter vor Unit 5',G.topic==='L:0'&&G.queue.every(q=>W.indexOf(q.e)<NEU.von))}
 {const r=perfect(liefTopic([NEU.i]));home();A('Fahrt „Neue Wörter“ fehlerfrei = 3 Sterne, Sterne auf der Kachel',r.stars===3&&$(`[data-t="${liefTopic([NEU.i])}"] .stars`)!==null)}
 home();
 done();

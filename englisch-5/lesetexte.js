@@ -10,7 +10,7 @@ const GRUND={a:'ein / eine',an:'ein / eine',the:'der / die / das',and:'und',i:'i
  tim:'Tim (Name)',ben:'Ben (Name)',lea:'Lea (Name)',mia:'Mia (Name)',sam:'Sam (Name)',plymouth:'Plymouth (Stadt in England)'};
 const TEXTE=[
  {id:'uhr',art:'Witz',titel:'What time is it?',text:"Miss Bell: Tim, what time is it?\nTim: I don't know. I don't have a watch.\nMiss Bell: Look at the clock, please!\nTim: Oh, it's half past ten. So it's time for the break!",
-  fragen:[["Tim has a watch.",false],["It's half past ten.",true],["Tim looks at the clock.",true]]},
+  fragen:[["Tim has a watch.",false],["It's half past ten.",true],["Miss Bell asks Tim a question.",true]]},
  {id:'sam',art:'Hintergrund',titel:'A British school day',text:"Hello! My name is Sam. I'm eleven years old and I live in Plymouth.\nSchool starts at nine o'clock. Lots of British students wear a school uniform. My uniform is navy and white.\nOur lunch break is an hour long. In class, we say 'Miss' to our teacher.\nMy favourite subject is PE. What about you?",
   fragen:[["Sam lives in Plymouth.",true],["School starts at ten o'clock.",false],["Sam's favourite subject is maths.",false]]},
  {id:'mia',art:'Geschichte',titel:'The new girl',text:"It's the first day at school. A new girl comes in.\n'Good morning,' says Miss Bell. 'This is Mia. She is from Germany.'\nMia is ten years old. She is sad and she doesn't say a word.\nThen Ben throws a ball to Mia. Mia catches the ball.\n'Can I ask you a question?' says Ben. 'What's your favourite colour?'\nMia answers: 'Green! And you?' Now Mia isn't sad.",
