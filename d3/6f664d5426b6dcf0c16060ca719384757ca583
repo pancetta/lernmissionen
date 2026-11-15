@@ -1,0 +1,40 @@
+README.md
+  s_54261e8a499c43::t_2dfc217e37f358 8
+englisch-5/grammatik.js
+  s_54261e8a499c43::t_3d907a6ae1facb 1-85
+spanisch-a1/grammatik.js
+  s_54261e8a499c43::t_29c35913c94072 1-87
+tests/werkstatt.js
+  s_54261e8a499c43::t_61fd9392a6e09b 1-34,37-40
+  s_54261e8a499c43::t_f5aa6f0ccca9bb 35-36
+englisch-5/vokabeln/index.html
+  s_54261e8a499c43::t_1a92b73b280672 22
+gemeinsam/stil.css
+  s_54261e8a499c43::t_ce662090a199ae 281-283
+gemeinsam/vokabeln.js
+  s_54261e8a499c43::t_7a93621b436d91 68-70,95,428-504
+spanisch-a1/lesetexte.js
+  s_54261e8a499c43::t_854b04ab7af1e1 9
+spanisch-a1/vokabeln/index.html
+  s_54261e8a499c43::t_6aafdc8b3d6b41 22
+tests/lauf.py
+  s_54261e8a499c43::t_dc991e7e545701 14,20
+tests/layout.js
+  s_54261e8a499c43::t_23af4e0e66ff54 39-40
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "d36f664d5426b6dcf0c16060ca719384757ca583",
+  "prompts": {},
+  "sessions": {
+    "s_54261e8a499c43": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "09d1c376-00da-4c7d-9fcd-87abfbea46f1",
+        "model": "unknown"
+      },
+      "human_author": "Robert Speck <pancetta@users.noreply.github.com>"
+    }
+  }
+}
