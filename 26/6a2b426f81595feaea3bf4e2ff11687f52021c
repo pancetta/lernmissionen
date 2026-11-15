@@ -1,0 +1,23 @@
+gemeinsam/vokabeln.js
+  s_54261e8a499c43::t_4fa81d1ed0c60c 330
+spanisch-a1/wortschatz.js
+  s_54261e8a499c43::t_735d0dd971d066 99
+tests/spanisch.js
+  s_54261e8a499c43::t_5766d09ac41bcd 37-42
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "266a2b426f81595feaea3bf4e2ff11687f52021c",
+  "prompts": {},
+  "sessions": {
+    "s_54261e8a499c43": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "09d1c376-00da-4c7d-9fcd-87abfbea46f1",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Robert Speck <pancetta@users.noreply.github.com>"
+    }
+  }
+}
