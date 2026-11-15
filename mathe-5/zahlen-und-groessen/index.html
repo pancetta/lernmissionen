@@ -351,7 +351,7 @@ Z.markieren=function(){ // Zahl (oder Mitte zwischen zwei Zahlen) selbst auf dem
   if(Math.random()<.3){const dd=R(1,Math.min(i,20-i)),a=i-dd,b=i+dd;text=`Markiere die Zahl, die genau in der Mitte zwischen <b>${fmt(start+a*st)}</b> und <b>${fmt(start+b*st)}</b> liegt.`}
   else text=`Markiere die Zahl <b>${fmt(start+i*st)}</b>.`;
   const v=start+i*st,ref=i<10?0:10;
-  return {kind:'widget',w:'strahl',label:'Markiere auf dem Zahlenstrahl',html:`<p>${text}</p>`,start,step:st,i,sol:`${fmt(v)}: ${i-ref} Teilstriche nach ${fmt(start+ref*st)} (ein Teilstrich = ${fmt(st)})`};
+  return {kind:'widget',w:'strahl',label:'Markiere auf dem Zahlenstrahl',html:`<p>${text}</p>`,start,step:st,i,sol:`${fmt(v)}: ${i-ref} Teilstrich${i-ref===1?'':'e'} nach ${fmt(start+ref*st)} (ein Teilstrich = ${fmt(st)})`};
 };
 
 /* ---------- Auswahl der Fragen ---------- */

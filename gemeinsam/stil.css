@@ -253,3 +253,11 @@ details.mist summary{cursor:pointer}
 .spalten tr.erg td{border-top:3px solid var(--ink)}.spalten tr.ue td{height:1.7rem}.spalten tr.ue+tr.erg td{border-top:3px solid var(--ink)}
 .spalten input{width:1.8rem;height:2rem;text-align:center;font:inherit;border:2px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink);padding:0}
 .spalten .ueb{width:1.3rem;height:1.4rem;font-size:.9rem;border-style:dashed}.spalten input.good{border-color:var(--good);background:var(--good-soft)}.spalten input.bad{border-color:var(--bad);background:var(--bad-soft)}
+/* Zahlen bis 1000 (Mathe 3): Geheimschrift, Plättchen in der Stellenwerttafel, Tafel-Ausschnitt, Körper, Zähler zum Zeichnen */
+.geheim{display:block;height:68px;width:auto;max-width:100%;margin:6px 0}
+.geheim .hq{fill:none;stroke:var(--ink);stroke-width:2}.geheim .zs{stroke:var(--ink);stroke-width:2.5}.geheim .ep{fill:var(--ink)}
+.stw{border-collapse:collapse;margin:6px 0}.stw th,.stw td{border:2px solid var(--line);width:80px;text-align:center;padding:4px}.stw th{color:var(--muted);font-size:.9rem}
+.stw td{height:48px;line-height:0}.pl{display:inline-block;width:12px;height:12px;border-radius:50%;background:var(--coral);margin:2px}
+.tafel{border-collapse:collapse;margin:6px 0;font:700 1.2rem var(--f-display)}.tafel td{border:2px solid var(--line);width:3.2rem;height:2.4rem;text-align:center}
+.koerper{display:block;width:150px;height:auto;margin:4px 0}.koerper path,.koerper circle,.koerper ellipse{fill:none;stroke:var(--ink);stroke-width:2.5;stroke-linejoin:round}.koerper .dash{stroke-dasharray:5 4;stroke-width:1.8;opacity:.7}
+.zbild{min-height:74px}.zaehler{display:grid;gap:6px;margin-top:6px}.zr{display:flex;align-items:center;gap:8px}.zr span{flex:1}.zr b{min-width:1.5em;text-align:center;font-size:1.2rem}

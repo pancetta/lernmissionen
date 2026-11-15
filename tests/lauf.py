@@ -7,7 +7,7 @@ import os, re, sys, json, html, subprocess, tempfile, time
 T = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.dirname(T)
 CHROME = os.environ.get('CHROME', '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome')
 V, P, M = 'englisch-5/vokabeln', 'englisch-5/pronomen', 'mathe-5/zahlen-und-groessen'
-D, M3 = 'deutsch-3/woerter-und-saetze', 'mathe-3/kopfrechnen'
+D, M3, M3Z = 'deutsch-3/woerter-und-saetze', 'mathe-3/kopfrechnen', 'mathe-3/zahlen-bis-1000'
 # Jede Seite wird einmal in Chrome geladen (ein Start kostet etwa 6 s), darin laufen ihre Tests nacheinander.
 # Gemeinsamer Code (gemeinsam.js, runde.js) wird dort geprüft, wo er läuft, nicht in jeder Mission erneut.
 # layout.js zuletzt, weil es die Seite schmal macht (288 px = iPhone SE; was hier passt, passt auch breiter).
@@ -15,7 +15,8 @@ SUITES = [(V, ['vokabeln.js', 'raenge.js', 'layout.js']),                 # eige
           (P, ['pronomen.js', 'layout.js']),
           (M, ['mathe.js', 'mathe_ziehen.js', 'raenge.js', 'layout.js']),  # gemeinsamer Rundenablauf (runde.js)
           (D, ['deutsch.js', 'layout.js']),
-          (M3, ['mathe3.js', 'layout.js'])]
+          (M3, ['mathe3.js', 'layout.js']),
+          (M3Z, ['mathe3z.js', 'layout.js'])]
 
 def run(rel, tests):
     base = os.path.join(ROOT, rel); s = open(os.path.join(base, 'index.html')).read()

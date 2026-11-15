@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Tausender">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAIAAACyr5FlAAAD/ElEQVR4nO3dzU0cQRCG4cXizJ6ckmNAToEDhMIBUrAcg1PitBn4YGm0wvsN89Nd9VXP+5zsC1vdeqdAWPLcPTy/nYBbvmUPAF/EAYk4IBEHJOKARByQiAMScUAiDkjEAYk4IBEHJOKARByQiAMScUAiDkjEAYk4IBEHJOKARByQiAMScUAiDkj32QO4uLw+Xf/1/PKeNYkPNgck4oBEHJCIAxJx3Hb5+Tt7hHzEAYk4JJYHccw5eB/E8YUj90EckIjja4ddHsSxyDH7IA5IxLHUAZcHcaxwtD6IY51D9UEckIhjteMsD+LY4iB9EAck4tjoCMuDOLYbvg/igEQcu4y9PIhjr4H7II4GRu2DOCARRxtDLg/iaGa8PogDEnG0NNjyII7GRuqDONobpg/igEQcXYyxPIijlwH6IA5IxNFR9eVBHH2V7oM4uqvbB3FAIo4IRZcHcQSp2AdxQCKOOOWWB3GEqtUHcUQr1AdxQCKOBFWWB3HkKNEHcUAijjT+y4M4Mpn3QRzJnPsgDkjEkc92eRCHBc8+iAMScbgwXB7EYcStD+KARBxerJYHcdjx6YM4HJn0QRyQiMOUw/IgDl/pfRAHJOKwlrs8iMNdYh/EUUBWH8QBiThqSFkexFFGfB/EAYk4KgleHsRRTGQfxFFPWB/EAYk4SopZHvcBn1HR+ddj9gj52ByQiAMScUAiDkjEAenu4fktewaYYnNAIg5ICb8Eu3z8if/QMZy//4j8uITNEXzCYcTfG99WIOXEwfJYK+XG2ByQ0uJgeSyXdVeZm4M+lki8Jb6tQEqOg+UxL/d+2ByQ8uNgeSjpN5Mfx8ngFgw53IlFHPDkEofDg+LD5DZc4oAhozhMHpd0PvdgFMfJ6V6yWN2AVxywYheH1aMTzO3sdnHAh2Mcbg9QDMNTO8ZxsryprjzPaxoHHPjG4fkw9WB7Ut84kM46DttHqiHnM1rHcfK+u/3MT+ceBxIViMP88drM/1wF4kCWGnH4P2RrlThRmf+HtMRtDqbG5kAK4oBEHJCIAxJxQCIOSMQBadfvOS6vT9Ofzy/vu4fp6HrUSaGZU0Zlc0AiDki74rjedTf3tgm1nyvOHKnl5vC86/mpKs4cZm8cn6I2OdXk0zz/pq04c4oGm8P2rmduueLM8br8QOpw12tnqDhzby3f1PT/2VLCXzVGxZnDNH6Nl2o/4KibP7rizDHav+Ntfjc2P3aTj6s4c4BeLwBc/u1z1V10+rJdv3jXmbvq+3bIlJ+wdl5xxZk7CXp1aMCNBy//JjybmES/V7b5jSf+2LiZeROT/JcOr7p6k2utOPMG+XHAFv9kD4k4IBEHJOKARByQiAMScUAiDkh/ARSxEB9azzFAAAAAAElFTkSuQmCC">
+<link rel="icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAIAAACyr5FlAAAD/ElEQVR4nO3dzU0cQRCG4cXizJ6ckmNAToEDhMIBUrAcg1PitBn4YGm0wvsN89Nd9VXP+5zsC1vdeqdAWPLcPTy/nYBbvmUPAF/EAYk4IBEHJOKARByQiAMScUAiDkjEAYk4IBEHJOKARByQiAMScUAiDkjEAYk4IBEHJOKARByQiAMScUAiDkj32QO4uLw+Xf/1/PKeNYkPNgck4oBEHJCIAxJx3Hb5+Tt7hHzEAYk4JJYHccw5eB/E8YUj90EckIjja4ddHsSxyDH7IA5IxLHUAZcHcaxwtD6IY51D9UEckIhjteMsD+LY4iB9EAck4tjoCMuDOLYbvg/igEQcu4y9PIhjr4H7II4GRu2DOCARRxtDLg/iaGa8PogDEnG0NNjyII7GRuqDONobpg/igEQcXYyxPIijlwH6IA5IxNFR9eVBHH2V7oM4uqvbB3FAIo4IRZcHcQSp2AdxQCKOOOWWB3GEqtUHcUQr1AdxQCKOBFWWB3HkKNEHcUAijjT+y4M4Mpn3QRzJnPsgDkjEkc92eRCHBc8+iAMScbgwXB7EYcStD+KARBxerJYHcdjx6YM4HJn0QRyQiMOUw/IgDl/pfRAHJOKwlrs8iMNdYh/EUUBWH8QBiThqSFkexFFGfB/EAYk4KgleHsRRTGQfxFFPWB/EAYk4SopZHvcBn1HR+ddj9gj52ByQiAMScUAiDkjEAenu4fktewaYYnNAIg5ICb8Eu3z8if/QMZy//4j8uITNEXzCYcTfG99WIOXEwfJYK+XG2ByQ0uJgeSyXdVeZm4M+lki8Jb6tQEqOg+UxL/d+2ByQ8uNgeSjpN5Mfx8ngFgw53IlFHPDkEofDg+LD5DZc4oAhozhMHpd0PvdgFMfJ6V6yWN2AVxywYheH1aMTzO3sdnHAh2Mcbg9QDMNTO8ZxsryprjzPaxoHHPjG4fkw9WB7Ut84kM46DttHqiHnM1rHcfK+u/3MT+ceBxIViMP88drM/1wF4kCWGnH4P2RrlThRmf+HtMRtDqbG5kAK4oBEHJCIAxJxQCIOSMQBadfvOS6vT9Ofzy/vu4fp6HrUSaGZU0Zlc0AiDki74rjedTf3tgm1nyvOHKnl5vC86/mpKs4cZm8cn6I2OdXk0zz/pq04c4oGm8P2rmduueLM8br8QOpw12tnqDhzby3f1PT/2VLCXzVGxZnDNH6Nl2o/4KibP7rizDHav+Ntfjc2P3aTj6s4c4BeLwBc/u1z1V10+rJdv3jXmbvq+3bIlJ+wdl5xxZk7CXp1aMCNBy//JjybmES/V7b5jSf+2LiZeROT/JcOr7p6k2utOPMG+XHAFv9kD4k4IBEHJOKARByQiAMScUAiDkh/ARSxEB9azzFAAAAAAElFTkSuQmCC">
+<style>html{-webkit-text-size-adjust:100%;color-scheme:light}body{margin:0}[hidden]{display:none!important}</style>
+<title>Tausender-Inseln</title>
+<link rel="stylesheet" href="../../gemeinsam/stil.css">
+
+</head>
+<body>
+<div id="app"></div>
+<script src="../../gemeinsam/gemeinsam.js"></script>
+<script src="../../gemeinsam/runde.js"></script>
+<script src="../../gemeinsam/spiele.js"></script>
+<script>
+const BRAND='Tausender-Inseln',MISSED='Diese Aufgaben üben wir weiter';
+const TOPICS=[
+ {id:'bild',name:'Zahlbild-Insel',map:'Zahlbilder',sub:'Geheimschrift und Plättchen',can:'Zahlbilder lesen und zeichnen, Plättchen in der Stellenwerttafel'},
+ {id:'buch',name:'Tausenderbuch-Insel',map:'Tausenderbuch',sub:'Hundertertafeln: unter, über, neben',can:'mich im Tausenderbuch zurechtfinden'},
+ {id:'zerlegen',name:'Zerlege-Insel',map:'Zerlegen',sub:'637 = 600 + 30 + 7',can:'Zahlen zerlegen'},
+ {id:'wort',name:'Zahlwort-Insel',map:'Zahlwörter',sub:'einhundertsiebenunddreißig',can:'Zahlwörter lesen'},
+ {id:'strahl',name:'Zahlenstrahl-Insel',map:'Zahlenstrahl',sub:'ablesen und eintragen',can:'Zahlen am Zahlenstrahl ablesen'},
+ {id:'nachbar',name:'Nachbar-Insel',map:'Nachbarn',sub:'Nachbarzahlen, -zehner, -hunderter',can:'Nachbarzahlen, Nachbarzehner und Nachbarhunderter finden'},
+ {id:'ordnen',name:'Ordnungs-Insel',map:'Ordnen',sub:'größer, kleiner, der Reihe nach',can:'Zahlen der Größe nach ordnen'},
+ {id:'koerper',name:'Körper-Insel',map:'Körper',sub:'Würfel, Quader, Kugel …',can:'geometrische Körper erkennen'}
+];
+const MAP=[[45,42],[125,42],[205,42],[285,42],[285,118],[205,118],[125,118],[45,118]]; // Seekarte, Reihenfolge wie TOPICS
+
+/* ---------- Hilfen ---------- */
+const R=(a,b)=>a+Math.floor(Math.random()*(b-a+1));                 // ganze Zufallszahl von a bis b
+const BLOB='<span class="blob" aria-label="Klecks">●</span>';
+const mc=o=>Object.assign({kind:'mc'},o);
+const uniq=a=>[...new Set(a)];
+function opts4(correct,cands){return shuffle([correct].concat(shuffle(uniq(cands).filter(x=>x!==correct)).slice(0,3)))}
+const num=(html,ans,sol,label)=>({kind:'num',html,ans,sol,label});
+const big=t=>`<p class="big">${t}</p>`;
+const hze=n=>[Math.floor(n/100)%10,Math.floor(n/10)%10,n%10];
+const wert=([h,z,e])=>h*100+z*10+e;
+function zahl3(){const d=hze(R(100,999));if(Math.random()<.25)d[pick([1,2])]=0;return wert(d)} // manchmal mit einer 0 (305, 740)
+const STELLE={H:'Hundertern',Z:'Zehnern',E:'Einern'},HZE=['H','Z','E'];
+const stk=(n,eins,viele)=>`${n} ${n===1?eins:viele}`,bildText=([h,z,e])=>`${stk(h,'Quadrat','Quadrate')}, ${stk(z,'Strich','Striche')}, ${stk(e,'Punkt','Punkte')}`;
+const ziffernVon=n=>uniq(String(n).split('')).length===String(n).length; // alle Ziffern verschieden
+
+/* ---------- Zahlwörter ---------- */
+const ONES=['','ein','zwei','drei','vier','fünf','sechs','sieben','acht','neun','zehn','elf','zwölf','dreizehn','vierzehn','fünfzehn','sechzehn','siebzehn','achtzehn','neunzehn'];
+const TENS=['','','zwanzig','dreißig','vierzig','fünfzig','sechzig','siebzig','achtzig','neunzig'];
+function w999(n){const h=Math.floor(n/100),r=n%100;let s=h?ONES[h]+'hundert':'';if(r)s+=r<20?ONES[r]:(r%10?ONES[r%10]+'und':'')+TENS[Math.floor(r/10)];return s}
+const words=n=>n===1000?'eintausend':w999(n)+(n%100===1?'s':'');
+
+/* ---------- Bilder: Geheimschrift, Plättchen, Zahlenstrahl ---------- */
+function geheim(n){ // Quadrate = Hunderter, Striche = Zehner, Punkte = Einer
+  const [h,z,e]=hze(n);let s='',x=4;
+  for(let i=0;i<h;i++)s+=`<rect class="hq" x="${4+(i%5)*30}" y="${4+Math.floor(i/5)*32}" width="26" height="26"/>`;
+  if(h)x+=Math.min(h,5)*30+6;
+  for(let i=0;i<z;i++)s+=`<line class="zs" x1="${x}" x2="${x+30}" y1="${8+i*6.5}" y2="${8+i*6.5}"/>`;
+  if(z)x+=38;
+  for(let i=0;i<e;i++)s+=`<circle class="ep" cx="${x+4+(i%5)*9}" cy="${10+Math.floor(i/5)*10}" r="3"/>`;
+  if(e)x+=Math.min(e,5)*9+4;
+  return `<svg class="geheim" viewBox="0 0 ${Math.max(x,40)} 68" role="img" aria-label="Zahlbild: ${h} Quadrate, ${z} Striche, ${e} Punkte">${s}</svg>`;
+}
+const plaettchen=n=>`<table class="stw" aria-label="Stellenwerttafel mit Plättchen"><tr><th>H</th><th>Z</th><th>E</th></tr><tr>${hze(n).map(k=>`<td>${'<i class="pl"></i>'.repeat(k)}</td>`).join('')}</tr></table>`;
+const SX=k=>30+k*13; // Teilstrich k auf dem Zahlenstrahl
+function strahlSvg(start,step,i){ // 20 Teilstriche, beschriftet bei 0, 10 und 20; Pfeil bei Teilstrich i (ohne Pfeil: i = null)
+  let s=`<svg class="strahl" viewBox="0 0 320 74" role="img" aria-label="Zahlenstrahl"><line class="axis" x1="22" x2="298" y1="44" y2="44"/>`;
+  for(let k=0;k<=20;k++){const h=k%10===0?9:k%5===0?6:4;s+=`<line class="axis" x1="${SX(k)}" x2="${SX(k)}" y1="${44-h}" y2="${44+h}"/>`;if(k%10===0)s+=`<text x="${SX(k)}" y="68" text-anchor="middle" font-size="12">${start+k*step}</text>`}
+  return s+(i===null?'':`<path class="arrow" d="M${SX(i)} 31 l-6 -12 h12 z"/><line class="arrowline" x1="${SX(i)}" x2="${SX(i)}" y1="4" y2="22"/>`)+'</svg>';
+}
+const strahl0=st=>R(0,Math.floor((1000-20*st)/(10*st)))*10*st; // der ganze Strahl liegt zwischen 0 und 1000
+const svgPt=(svg,ev)=>{const r=svg.getBoundingClientRect(),vb=svg.viewBox.baseVal;return {x:(ev.clientX-r.left)*vb.width/r.width,y:(ev.clientY-r.top)*vb.height/r.height}};
+const arrowAt=(k,cls)=>`<g class="mark ${cls}" transform="translate(${SX(k)} 0)"><path d="M0 31 l-6 -12 h12 z"/><line x1="0" x2="0" y1="4" y2="22"/></g>`;
+function markSvg(q){ // Zahlenstrahl ohne Pfeil, der Pfeil wird gesetzt
+  let s=`<svg class="strahl marksvg" viewBox="0 0 320 74" tabindex="0" role="slider" aria-label="Zahlenstrahl: Pfeil setzen" aria-valuemin="0" aria-valuemax="20"><line class="axis" x1="22" x2="298" y1="44" y2="44"/>`;
+  for(let t=0;t<=20;t++){const h=t%10===0?9:t%5===0?6:4;s+=`<line class="axis" x1="${SX(t)}" x2="${SX(t)}" y1="${44-h}" y2="${44+h}"/>`;if(t%10===0)s+=`<text x="${SX(t)}" y="68" text-anchor="middle" font-size="12">${q.start+t*q.step}</text>`}
+  return s+`<rect class="hit" x="0" y="0" width="320" height="74"/><g class="mark live" style="display:none"><path d="M0 31 l-6 -12 h12 z"/><line x1="0" x2="0" y1="4" y2="22"/></g></svg>`;
+}
+// Geometrische Körper als einfache Strichzeichnungen; verdeckte Kanten gestrichelt
+const KSVG={
+ 'Würfel':'<path d="M20 40h50v50h-50zM20 40l22-22h50l-22 22M70 90l22-22v-50"/><path class="dash" d="M20 90l22-22h50M42 68v-50"/>',
+ 'Quader':'<path d="M10 50h76v40h-76zM10 50l20-18h76l-20 18M86 90l20-18v-40"/><path class="dash" d="M10 90l20-18h76M30 72v-40"/>',
+ 'Kugel':'<circle cx="60" cy="55" r="38"/><path d="M22 55a38 11 0 0 0 76 0"/><path class="dash" d="M22 55a38 11 0 0 1 76 0"/>',
+ 'Zylinder':'<ellipse cx="60" cy="22" rx="32" ry="10"/><path d="M28 22v62a32 10 0 0 0 64 0v-62"/><path class="dash" d="M28 84a32 10 0 0 1 64 0"/>',
+ 'Kegel':'<path d="M60 8L26 82a34 10 0 0 0 68 0Z"/><path class="dash" d="M26 82a34 10 0 0 1 68 0"/>',
+ 'Pyramide':'<path d="M60 8L18 80h60zM60 8l42 52-24 20"/><path class="dash" d="M18 80l24-20h60M60 8l-18 52"/>'
+};
+const KOERPER=Object.keys(KSVG);
+const koerperSvg=k=>`<svg class="koerper" viewBox="0 0 120 100" role="img" aria-label="ein geometrischer Körper">${KSVG[k]}</svg>`;
+const paarFrei=(ok,os)=>os.filter(o=>!(ok==='Würfel'&&o==='Quader'||ok==='Quader'&&o==='Würfel')); // ein Würfel ist auch ein besonderer Quader: nie beide anbieten
+
+/* ---------- Zum Zeichnen und Setzen ---------- */
+let WS=null; // Zustand der gerade sichtbaren Zeichen- oder Setz-Aufgabe (wird nicht gespeichert)
+const ZEICHEN={geheim:{bild:geheim,namen:['Quadrate (Hunderter)','Striche (Zehner)','Punkte (Einer)']},plaettchen:{bild:plaettchen,namen:['Plättchen bei H','Plättchen bei Z','Plättchen bei E']}};
+const WIDGETS={
+ zeichnen:{
+  html:q=>`<div class="zbild" id="zb"></div><div class="zaehler">${ZEICHEN[q.stil].namen.map((t,i)=>`<div class="zr"><span>${t}</span><button class="btn ghost small" type="button" data-i="${i}" data-s="-1" aria-label="${t}: eins weniger">−</button><b id="zc${i}">0</b><button class="btn ghost small" type="button" data-i="${i}" data-s="1" aria-label="${t}: eins mehr">+</button></div>`).join('')}</div>`,
+  init(q){const c=[0,0,0],draw=()=>{$('#zb').innerHTML=ZEICHEN[q.stil].bild(wert(c));c.forEach((v,i)=>$('#zc'+i).textContent=v)};
+   WS={c,fill:n=>{hze(n).forEach((d,i)=>c[i]=d);draw()}};
+   document.querySelectorAll('.zaehler button').forEach(b=>b.onclick=()=>{if(G.answered)return;const i=+b.dataset.i;c[i]=Math.max(0,Math.min(9,c[i]+ +b.dataset.s));draw()});draw()},
+  empty:()=>WS.c.some(Boolean)?'':'Tippe auf +, um zu zeichnen.',
+  check:q=>wert(WS.c)===q.ans,
+  done(q,ok){document.querySelectorAll('.zaehler button').forEach(b=>b.disabled=true);if(!ok)$('#zb').insertAdjacentHTML('afterend',`<p class="tip">So ist es richtig:</p>${ZEICHEN[q.stil].bild(q.ans)}`)}
+ },
+ strahl:{
+  html:q=>`<p class="tip" style="margin:0 0 6px">Tippe auf den richtigen Teilstrich oder zieh den Pfeil dorthin. Mit der Tastatur: Zahlenstrahl auswählen, dann Pfeiltasten.</p>${markSvg(q)}`,
+  init(q){
+    const svg=$('.marksvg');WS={k:null,svg};
+    const put=k=>{k=Math.max(0,Math.min(20,k));WS.k=k;const m=svg.querySelector('.mark.live');m.setAttribute('transform',`translate(${SX(k)} 0)`);m.style.display='';
+      svg.setAttribute('aria-valuenow',k);svg.setAttribute('aria-valuetext',q.start+k*q.step)};
+    WS.put=put;let drag=false;const at=ev=>Math.round((svgPt(svg,ev).x-30)/13);
+    svg.onpointerdown=ev=>{if(G.answered)return;drag=true;try{svg.setPointerCapture(ev.pointerId)}catch(e){}put(at(ev));ev.preventDefault()};
+    svg.onpointermove=ev=>{if(drag&&!G.answered)put(at(ev))};svg.onpointerup=svg.onpointercancel=()=>{drag=false};
+    svg.onkeydown=ev=>{if(G.answered)return;const d={ArrowRight:1,ArrowUp:1,ArrowLeft:-1,ArrowDown:-1}[ev.key];if(d){ev.preventDefault();ev.stopPropagation();put(WS.k===null?(d>0?0:20):WS.k+d)}};
+  },
+  empty:()=>WS.k===null?'Setze zuerst den Pfeil auf den Zahlenstrahl.':'',
+  check:q=>WS.k===q.i,
+  done(q,ok){WS.svg.querySelector('.mark.live').classList.add(ok?'good':'bad');if(!ok)WS.svg.insertAdjacentHTML('beforeend',arrowAt(q.i,'right'))}
+ }
+};
+
+/* ---------- Zahlbild-Insel ---------- */
+const ZB={
+ lesen(){const n=zahl3(),[h,z,e]=hze(n);return num(`<p>Welche Zahl ist in Geheimschrift dargestellt?</p>${geheim(n)}<p class="tip">Quadrat = Hunderter, Strich = Zehner, Punkt = Einer</p>`,n,`${bildText([h,z,e])}: ${h} H ${z} Z ${e} E = ${n}`,'Zahlbild lesen')},
+ zeichnen(){const n=zahl3(),[h,z,e]=hze(n);return {kind:'widget',w:'zeichnen',stil:'geheim',label:'Zeichne in Geheimschrift',html:`<p>Zeichne die Zahl <b>${n}</b> in Geheimschrift.</p>`,ans:n,sol:`${n}: ${bildText([h,z,e])}`}},
+ plaettchen(){const n=zahl3(),[h,z,e]=hze(n);return num(`<p>Welche Zahl zeigen die Plättchen?</p>${plaettchen(n)}`,n,`${h} H ${z} Z ${e} E = ${n}`,'Plättchen lesen')},
+ legen(){const n=zahl3(),[h,z,e]=hze(n);return {kind:'widget',w:'zeichnen',stil:'plaettchen',label:'Lege mit Plättchen',html:`<p>Lege die Zahl <b>${n}</b> mit Plättchen in die Stellenwerttafel.</p>`,ans:n,sol:`${n}: ${h} Plättchen bei H, ${z} bei Z, ${e} bei E`}},
+ schieben(){for(;;){const n=zahl3(),d=hze(n),[a,b]=shuffle([0,1,2]).slice(0,2);if(!d[a]||d[b]===9)continue;const m=n-[100,10,1][a]+[100,10,1][b];
+   return num(`${plaettchen(n)}<p>Ein Plättchen wird von den <b>${STELLE[HZE[a]]}</b> zu den <b>${STELLE[HZE[b]]}</b> geschoben. Welche Zahl entsteht?</p>`,m,`${n} wird zu ${m}`,'Plättchen verschieben')}},
+ mitk(){const k=R(2,5),sum=x=>hze(x).reduce((a,b)=>a+b,0),hits=[],other=[];
+  for(let t=0;t<2000&&(hits.length<3||other.length<3);t++){const x=R(1,999);if(sum(x)===k){if(hits.length<3&&!hits.includes(x))hits.push(x)}else if(Math.abs(sum(x)-k)===1&&other.length<3&&!other.includes(x))other.push(x)}
+  const ws=shuffle(hits.concat(other).map(String));
+  return {kind:'alle',label:'Tippe alle passenden Zahlen an',html:`<p>Welche Zahlen kann man mit genau <b>${k} Plättchen</b> legen?</p><p class="tip">Zähle die Ziffern zusammen: So viele Plättchen braucht man.</p>`,tiles:ws,hits:ws.flatMap((w,i)=>sum(+w)===k?[i]:[]),sol:`Mit ${k} Plättchen: ${hits.join(', ')}`}}
+};
+
+/* ---------- Tausenderbuch-Insel (Hundertertafeln: 1 bis 100, 101 bis 200 …) ---------- */
+const zeile=n=>Math.floor(((n-1)%100)/10)+1,spalte=n=>(n-1)%10+1;
+const TB={
+ nachbar(){const [w,d,ok]=pick([['direkt unter',10,n=>zeile(n)<10],['direkt über',-10,n=>zeile(n)>1],['direkt links neben',-1,n=>spalte(n)>1],['direkt rechts neben',1,n=>spalte(n)<10]]);let n;do n=R(1,1000);while(!ok(n));
+  return num(`<p>Welche Zahl steht im Tausenderbuch <b>${w} ${n}</b>?</p>`,n+d,`${w[0].toUpperCase()+w.slice(1)} ${n} steht ${n+d}.`,'Tausenderbuch')},
+ lage(){const n=R(1,1000),z=Math.random()<.5;
+  return num(big(`${n}`)+`<p>In welcher <b>${z?'Zeile':'Spalte'}</b> seiner Hundertertafel steht ${n}?</p><p class="tip">Jede Hundertertafel hat 10 Zeilen und 10 Spalten.</p>`,z?zeile(n):spalte(n),`${n} steht in der ${zeile(n)}. Zeile und ${spalte(n)}. Spalte.`,'Zeilen und Spalten')},
+ ausschnitt(){let n;do n=R(1,1000);while(zeile(n)<2||zeile(n)>9||spalte(n)<2||spalte(n)>9);const hide=pick([-11,-10,-9,-1,1,9,10,11].map(o=>n+o));
+  const rows=[-10,0,10].map(r=>`<tr>${[-1,0,1].map(c=>{const v=n+r+c;return `<td>${v===hide?BLOB:v}</td>`}).join('')}</tr>`).join('');
+  return num(`<p>Ein Ausschnitt aus dem Tausenderbuch. Welche Zahl fehlt?</p><table class="tafel">${rows}</table>`,hide,`Es fehlt ${hide}.`,'Welche Zahl fehlt?')},
+ schritte(){const b=R(2,10)*100,a=b-R(3,19);return num(`<p>Wie viele Schritte sind es von <b>${a}</b> bis <b>${b}</b>?</p>`,b-a,`${a} + ${b-a} = ${b}`,'Schritte zählen')},
+ gemeinsam(){for(;;){const h=R(1,9),d=R(1,9);if(d===h)continue;const gleicheEiner=Math.random()<.5,ts=shuffle([0,1,2,3,4,5,6,7,8,9]).slice(0,3).sort((a,b)=>a-b);
+  const ns=ts.map(t=>gleicheEiner?h*100+t*10+d:h*100+d*10+t);
+  if(ns.some(x=>hze(x).filter(y=>y===d).length>1))continue; // die Ziffer d nur an einer Stelle, sonst stimmen zwei Antworten
+  const o={e:`Alle haben an der Einerstelle eine ${d}.`,z:`Alle haben an der Zehnerstelle eine ${d}.`,h:`Alle haben an der Hunderterstelle eine ${d}.`},ok=gleicheEiner?o.e:o.z;
+  return mc({label:'Was haben die Zahlen gemeinsam?',html:big(ns.join(', ')),options:shuffle(Object.values(o)),correct:ok,sol:ok})}}
+};
+
+/* ---------- Zerlege-Insel ---------- */
+const teile=n=>hze(n).map((d,i)=>d*[100,10,1][i]).filter(Boolean);
+const ZL={
+ luecke(){let n,t;do{n=zahl3();t=teile(n)}while(t.length<2);const i=R(0,t.length-1),show=t.map((x,j)=>j===i?BLOB:x);
+  return num(big(`${n} = ${show.join(' + ')}`),t[i],`${n} = ${t.join(' + ')}`,'Welche Zahl fehlt?')},
+ zusammen(){let n,t;do{n=zahl3();t=teile(n)}while(t.length<2);const s=Math.random()<.4?shuffle(t):t;return num(big(`${s.join(' + ')} = ?`),n,`${t.join(' + ')} = ${n}`,'Setze zusammen')},
+ hze(){const n=zahl3(),d=hze(n);let p=HZE.map((k,i)=>[k,d[i]]).filter(x=>x[1]);if(Math.random()<.4)p=shuffle(p);
+  return num(big(`${p.map(([k,v])=>`${v} ${k}`).join(' ')} = ?`),n,`${d[0]} H ${d[1]} Z ${d[2]} E = ${n}`,'Stellenwerttafel')},
+ stelle(){const n=zahl3(),i=R(0,2);return num(big(`${n}`)+`<p>Welche Ziffer steht an der <b>${['Hunderterstelle','Zehnerstelle','Einerstelle'][i]}</b>?</p>`,hze(n)[i],`${n}: ${hze(n).map((x,j)=>`${x} ${HZE[j]}`).join(', ')}`,'Stellenwert')},
+ wert(){let n;do n=R(100,999);while(!ziffernVon(n)||hze(n).includes(0));const i=R(0,2),d=hze(n)[i],w=d*[100,10,1][i];
+  return mc({label:'Welchen Wert hat die Ziffer?',html:big(`${n}`)+`<p>Welchen Wert hat die Ziffer <b>${d}</b>?</p>`,options:[d,d*10,d*100].map(String),correct:String(w),sol:`Die ${d} steht bei den ${STELLE[HZE[i]]}: ${w}`})},
+ tausender(){const f=pick([['10 Hunderter sind …','1000',['100','110','10 000']],['Wie viele Hunderter sind 1000?','10',['100','1000','1']],['Wie viele Zehner sind 1000?','100',['10','1000','110']],
+   ['Wie viele Zehner sind 100?','10',['100','1','20']],['10 Zehner sind …','100',['10','1000','110']],['1000 Einer sind …','1 Tausender',['1 Hunderter','10 Tausender','100 Tausender']]]);
+  return mc({label:'Der Tausender',html:`<p>${f[0]}</p>`,options:shuffle([f[1]].concat(f[2])),correct:f[1],sol:`${f[0].replace(' …','')}: ${f[1]}`})}
+};
+
+/* ---------- Zahlwort-Insel ---------- */
+const ZW={
+ lesen(){const n=zahl3();return num(`<p class="words">${words(n)}</p><p>Schreibe die Zahl mit Ziffern.</p>`,n,`${words(n)} = ${n}`,'Zahlwort lesen')},
+ schreiben(){let n;do n=R(100,999);while(!ziffernVon(n)||n%10===0);const ps=uniq([...String(n)].flatMap((a,i,s)=>s.flatMap((b,j)=>s.map((c,k)=>i!==j&&j!==k&&i!==k?a+b+c:'')))).filter(x=>x&&x[0]!=='0').map(Number);
+  return mc({label:'Welches Zahlwort passt?',html:big(`${n}`),options:opts4(words(n),ps.map(words)),correct:words(n),sol:`${n} = ${words(n)}`})},
+ dreher(){let n;do n=R(100,999);while(n%10===0||Math.floor(n/10)%10===0||n%10===Math.floor(n/10)%10||n%100<20);const [h,z,e]=hze(n),dreh=h*100+e*10+z,ok=Math.random()<.5;
+  return mc({label:'Stimmt das?',html:`<p class="words">${words(n)}</p>`+big(`= ${ok?n:dreh}`),options:['Stimmt','Stimmt nicht'],correct:ok?'Stimmt':'Stimmt nicht',
+   sol:ok?`Stimmt: ${words(n)} = ${n}.`:`Stimmt nicht: Das Zahlwort nennt erst die Einer (${ONES[e]}), dann die Zehner. Richtig ist ${n}.`})}
+};
+
+/* ---------- Zahlenstrahl-Insel ---------- */
+const ZS={
+ pfeil(){const st=pick([1,10]),start=strahl0(st),i=pick([...Array(19).keys()].map(k=>k+1).filter(k=>k!==10)),v=start+i*st;
+  return num(strahlSvg(start,st,i)+'<p>Welche Zahl zeigt der Pfeil?</p>',v,`${v} (von Strich zu Strich sind es ${st})`,'Am Zahlenstrahl ablesen')},
+ markieren(){const st=pick([1,10]),start=strahl0(st),i=pick([...Array(19).keys()].map(k=>k+1).filter(k=>k!==10)),v=start+i*st,ref=i<10?0:10;
+  return {kind:'widget',w:'strahl',label:'Markiere auf dem Zahlenstrahl',html:`<p>Markiere die Zahl <b>${v}</b>.</p>`,start,step:st,i,sol:`${v}: ${stk(i-ref,'Strich','Striche')} nach ${start+ref*st} (von Strich zu Strich ${st})`}},
+ schritt(){const st=pick([1,10]),start=strahl0(st);return mc({label:'Von Strich zu Strich',html:strahlSvg(start,st,null)+'<p>Wie viel ist es von einem Strich zum nächsten?</p>',options:['1','5','10','100'],correct:String(st),sol:`Von ${start} bis ${start+10*st} sind es 10 Striche, also ${st} pro Strich.`})},
+ zwischen(){const a=R(10,98)*10,b=a+10,ok=R(a+1,b-1),w=[a-R(1,9),b+R(1,9),ok+100>1000?ok-100:ok+100];
+  return mc({label:'Welche Zahl liegt dazwischen?',html:`<p>Welche Zahl liegt zwischen <b>${a}</b> und <b>${b}</b>?</p>`,options:shuffle([ok].concat(w).map(String)),correct:String(ok),sol:`${a} < ${ok} < ${b}`})}
+};
+
+/* ---------- Nachbar-Insel ---------- */
+const NB={
+ vn(){const vor=Math.random()<.5,n=pick([R(1,99)*10,R(1,10)*100,R(101,999),R(100,999)])+(vor?0:-1),v=vor?n-1:n+1;
+  if(n<1||v>1000)return NB.vn();
+  return num(`<p>Wie heißt der <b>${vor?'Vorgänger':'Nachfolger'}</b> von <b>${n}</b>?</p>`,v,vor?`${v} kommt direkt vor ${n}.`:`${v} kommt direkt nach ${n}.`,vor?'Vorgänger':'Nachfolger')},
+ nz(){let n;do n=R(11,989);while(n%10===0);const lo=Math.floor(n/10)*10,s=(a,b)=>`${a} und ${b}`,ok=s(lo,lo+10);
+  return mc({label:'Nachbarzehner',html:`<p>Wie heißen die Nachbarzehner von <b>${n}</b>?</p>`,options:opts4(ok,[s(lo-10,lo),s(lo+10,lo+20),s(Math.floor(n/100)*100,Math.floor(n/100)*100+100)].filter(x=>x.split(' und ').every(v=>+v>=0&&+v<=1000))),correct:ok,sol:`${lo} < ${n} < ${lo+10}`})},
+ nh(){let n;do n=R(101,989);while(n%100===0);const lo=Math.floor(n/100)*100,s=(a,b)=>`${a} und ${b}`,ok=s(lo,lo+100);
+  return mc({label:'Nachbarhunderter',html:`<p>Wie heißen die Nachbarhunderter von <b>${n}</b>?</p>`,options:opts4(ok,[s(lo-100,lo),s(lo+100,lo+200),s(Math.floor(n/10)*10,Math.floor(n/10)*10+10)].filter(x=>x.split(' und ').every(v=>+v>0&&+v<=1000))),correct:ok,sol:`${lo} < ${n} < ${lo+100}`})},
+ naeher(){const z=Math.random()<.5,st=z?10:100;let n;do n=R(11,989);while(n%st===0||n%st===st/2||(!z&&n<100)); // genau in der Mitte gäbe es keinen näheren
+  const lo=Math.floor(n/st)*st,ans=n-lo<st/2?lo:lo+st;
+  return num(`<p>Welcher <b>${z?'Nachbarzehner':'Nachbarhunderter'}</b> liegt näher an <b>${n}</b>?</p>`,ans,`Die ${z?'Nachbarzehner':'Nachbarhunderter'} von ${n} sind ${lo} und ${lo+st}. ${ans} liegt näher.`,'Was liegt näher?')},
+ ergaenzen(){let n;do n=R(101,989);while(n%10===0);const plus=Math.random()<.5,lo=Math.floor(n/10)*10,ans=plus?lo+10-n:n-lo;
+  return num(big(plus?`${n} + ${BLOB} = ${lo+10}`:`${n} − ${BLOB} = ${lo}`),ans,plus?`${n} + ${ans} = ${lo+10}`:`${n} − ${ans} = ${lo}`,'Bis zum Nachbarzehner')},
+ folge(){for(;;){const st=pick([10,20,30,100,200]),vor=Math.random()<.6,a=R(0,1000),f=[0,1,2,3].map(k=>vor?a+k*st:a-k*st);if(f.some(x=>x<0||x>1000))continue;
+  return num(big(`${f.slice(0,3).join(', ')}, ${BLOB}`),f[3],`Immer ${st} ${vor?'weiter':'zurück'}: ${f.join(', ')}`,'Zähle in Schritten')}}
+};
+
+/* ---------- Ordnungs-Insel ---------- */
+function aehnlich(k){ // k verschiedene Zahlen aus denselben Ziffern, zwei- und dreistellig
+  for(;;){const dg=shuffle([1,2,3,4,5,6,7,8,9]).slice(0,3),ns=[];
+   for(let t=0;t<200&&ns.length<k;t++){const p=shuffle(dg),len=Math.random()<.75?3:2,n=+p.slice(0,len).join('');if(!ns.includes(n))ns.push(n)}
+   if(ns.length===k)return ns}
+}
+const darstellung=n=>{const t=teile(n),d=hze(n);return pick([`${n}`,`${n}`,t.join(' + '),HZE.map((k,i)=>[k,d[i]]).filter(x=>x[1]).map(([k,v])=>`${v} ${k}`).join(' ')])};
+const OR={
+ ordnen(){const ns=aehnlich(5),up=Math.random()<.5,s=ns.slice().sort((a,b)=>up?a-b:b-a);
+  return {kind:'build',label:up?'Ordne: Beginne mit der kleinsten Zahl':'Ordne: Beginne mit der größten Zahl',html:'<p>Tippe die Zahlen der Reihe nach an.</p>',tiles:shuffle(ns.map(String)),target:s.join(' '),sol:s.join(up?' < ':' > ')}},
+ vergleich(){const a=zahl3();let b;const r=Math.random();
+  if(r<.2)b=a;else if(r<.6){const d=hze(a),[i,j]=shuffle([0,1,2]).slice(0,2);[d[i],d[j]]=[d[j],d[i]];b=wert(d);if(b<100||b===a)b=a+pick([-1,1])*pick([1,10,100])}else b=a+pick([-1,1])*pick([1,10,100]);
+  if(b<100||b>999)b=a-1; // 1000 lässt sich nicht als H Z E schreiben
+  const c=a<b?'<':a>b?'>':'=',x=darstellung(a);let y=darstellung(b);if(a===b)for(let t=0;t<9&&y===x;t++)y=darstellung(b);
+  return mc({label:'Setze <, > oder = ein',html:big(`${x} ${BLOB} ${y}`),options:['<','>','='],correct:c,sol:`${a} ${c} ${b}`})},
+ groesste(){const ns=aehnlich(4),g=Math.random()<.5,ok=g?Math.max(...ns):Math.min(...ns);
+  return mc({label:g?'Welche Zahl ist die größte?':'Welche Zahl ist die kleinste?',html:'<p>Vergleiche erst die Hunderter, dann die Zehner, dann die Einer.</p>',options:shuffle(ns.map(String)),correct:String(ok),sol:ns.slice().sort((a,b)=>a-b).join(' < ')})},
+ ziffern(){const dg=shuffle([1,2,3,4,5,6,7,8,9]).slice(0,3),g=Math.random()<.5,s=dg.slice().sort((a,b)=>g?b-a:a-b),ans=+s.join('');
+  return num(`<p>Bilde aus den Ziffern <b>${dg.join(', ')}</b> die <b>${g?'größte':'kleinste'}</b> dreistellige Zahl. Nimm jede Ziffer einmal.</p>`,ans,`${g?'Die größte Ziffer':'Die kleinste Ziffer'} kommt zu den Hundertern: ${ans}`,'Zahlen bilden')}
+};
+
+/* ---------- Körper-Insel ---------- */
+const STECKBRIEF={'Würfel':[8,12,6],'Quader':[8,12,6],'Pyramide':[5,8,5],'Kugel':[0,0,1],'Zylinder':[0,2,3]}; // Ecken, Kanten, Flächen; ohne Kegel (Spitze als Ecke zählen Bücher verschieden)
+const KO={
+ name(){const k=pick(KOERPER);return mc({label:'Wie heißt dieser Körper?',html:koerperSvg(k),options:opts4(k,paarFrei(k,KOERPER)),correct:k,sol:`Das ist ein${['Kugel','Pyramide'].includes(k)?'e':''} ${k}.`})},
+ alltag(){const [d,k]=pick([['ein Ball','Kugel'],['eine Murmel','Kugel'],['eine Dose','Zylinder'],['eine Kerze','Zylinder'],['ein Spielwürfel','Würfel'],['ein Schuhkarton','Quader'],['ein Ziegelstein','Quader'],['eine Eistüte (ohne Eis)','Kegel'],['ein Partyhut','Kegel'],['eine Pyramide in Ägypten','Pyramide']]);
+  return mc({label:'Welche Form hat das?',html:`<p>Welche Form hat <b>${d}</b>?</p>`,options:opts4(k,paarFrei(k,KOERPER)),correct:k,sol:`${d[0].toUpperCase()+d.slice(1)}: ${k}`})},
+ steckbrief(){const k=pick(Object.keys(STECKBRIEF)),i=R(0,2),w=['Ecken','Kanten','Flächen'][i];
+  return num(koerperSvg(k)+`<p>Wie viele <b>${w}</b> hat ${['Kugel','Pyramide'].includes(k)?'eine':'ein'} ${k}?</p>`,STECKBRIEF[k][i],`${k}: ${STECKBRIEF[k][0]} Ecken, ${STECKBRIEF[k][1]} Kanten, ${STECKBRIEF[k][2]} Flächen`,'Steckbrief')},
+ raetsel(){const [t,k]=pick([['Ich habe 6 Flächen. Alle sind gleich große Quadrate.','Würfel'],['Ich habe 6 Flächen, 8 Ecken und 12 Kanten. Meine Flächen sind nicht alle gleich groß.','Quader'],
+   ['Ich habe keine Ecken und keine Kanten. Ich kann in alle Richtungen rollen.','Kugel'],['Ich habe zwei Kreise als Flächen und eine gewölbte Fläche. Ich kann rollen.','Zylinder'],
+   ['Ich habe eine Spitze. Unten bin ich ein Kreis.','Kegel'],['Ich habe 5 Ecken. Unten bin ich ein Quadrat, die anderen Flächen sind Dreiecke.','Pyramide']]);
+  return mc({label:'Körperrätsel: Wer bin ich?',html:`<p>${t}</p>`,options:opts4(k,paarFrei(k,KOERPER)),correct:k,sol:`Das ist ${['Kugel','Pyramide'].includes(k)?'die':'der'} ${k}.`})},
+ rollen(){const ecken=Math.random()<.5,ks=ecken?KOERPER.filter(k=>k!=='Kegel'):KOERPER.slice(),ws=shuffle(ks),f=ecken?k=>STECKBRIEF[k][0]>0:k=>['Kugel','Zylinder','Kegel'].includes(k);
+  return {kind:'alle',label:ecken?'Tippe alle Körper an, die Ecken haben':'Tippe alle Körper an, die rollen können',html:`<p>${ecken?'Welche Körper haben Ecken?':'Welche Körper können rollen?'}</p>`,tiles:ws,hits:ws.flatMap((k,i)=>f(k)?[i]:[]),sol:ws.filter(f).join(', ')}}
+};
+
+/* ---------- Auswahl der Fragen ---------- */
+const SUB={bild:ZB,buch:TB,zerlegen:ZL,wort:ZW,strahl:ZS,nachbar:NB,ordnen:OR,koerper:KO};
+function gen(isl,sub){ // eine Frage einer Insel; Unterart gewichtet nach Fehlern (wk = "insel.unterart")
+  const subs=Object.keys(SUB[isl]);
+  if(!sub){const w=subs.map(k=>1+Math.min(3,save.weak[isl+'.'+k]||0));let r=Math.random()*w.reduce((a,b)=>a+b,0);sub=subs.find((k,i)=>(r-=w[i])<0)||subs[0]}
+  const q=SUB[isl][sub]();if(!q.label)q.label='Welche Zahl ist es?';
+  return Object.assign(q,{isl,sub,wk:isl+'.'+sub});
+}
+const makeQ=topic=>gen(topic==='mix'?pick(TOPICS).id:topic);
+const redoQ=q=>gen(q.isl,q.sub);                                     // nach einem Fehler: neue Aufgabe derselben Art
+function makeRound(topic){ // Ich-kann-Check: aus jedem Thema der Checkliste zwei verschiedene Aufgaben
+  if(topic!=='check')return null;
+  return TOPICS.flatMap(t=>shuffle(Object.keys(SUB[t.id])).slice(0,2).map(s=>gen(t.id,s)));
+}
+function mcify(q){ // Zahl-Aufgabe in eine Auswahlfrage verwandeln (für die Blitzrunde)
+  if(q.kind==='mc')return q;const a=q.ans;
+  return Object.assign({},q,{kind:'mc',options:opts4(String(a),[a+1,a-1,a+10,a-10,a+100,a-100].filter(x=>x>=0&&x!==a).map(String)),correct:String(a)});
+}
+function quickQ(){let q;do q=makeQ('mix');while(q.kind!=='mc'&&q.kind!=='num');return mcify(q)}
+function finishExtra(g){ // Ich-kann-Check: Ergebnis je Thema wie auf der Checkliste
+  if(g.topic!=='check')return '';
+  const face=k=>k===2?['😀','Kann ich']:k===1?['😐','Fast']:['🙁','Üben'];
+  return `<table class="cancheck"><tr><th>Ich kann …</th><th></th><th></th></tr>${TOPICS.map(t=>{const r=(g.res||[]).filter(x=>x.isl===t.id),k=r.filter(x=>x.ok).length,[f,w]=face(k);
+    return `<tr><td>${esc(t.can)}</td><td class="face" aria-label="${w}">${f}</td><td>${k<2?`<button class="theme" data-go="${t.id}">Üben</button>`:''}</td></tr>`}).join('')}</table>`;
+}
+
+/* ---------- Spiele: Memory, Größer oder kleiner? ---------- */
+function memory(){ // Paare: Zahlwort oder Stellenwerte und Zahl; jede Zahl nur einmal
+  const c=[],used=new Set();
+  for(let t=0;t<300&&c.length<PAIRS;t++){const n=zahl3(),d=hze(n),a=Math.random()<.5?words(n):HZE.map((k,i)=>`${d[i]} ${k}`).join(' ');
+    if(!used.has(n)){used.add(n);c.push({a,b:String(n)})}}
+  memoryGame(shuffle(c),memory,'Finde die Paare: Zahlwort oder Stellenwerte und die passende Zahl.');
+}
+const VERGLEICH={key:'vergleich',title:'Größer oder kleiner?',intro:'Setze <, > oder = ein, bevor die Zeit abläuft.',bins:['<','>','='],t:[10000,400,4000],endText:'Vergleiche richtig gelöst',
+  next(){const q=OR.vergleich();return {html:q.html,bin:q.correct,sol:q.sol,wk:'ordnen.vergleich'}}};
+const vergleich=()=>sortGame(VERGLEICH);
+
+/* ---------- Speicher (nur Komfort, darf ausfallen) ---------- */
+let save={name:'',xp:0,best:{},weak:{},sound:false,blitz:0,memo:0,vergleich:0};
+try{const s=localStorage.getItem('ma3z-v1');if(s)save=Object.assign(save,JSON.parse(s));
+  else{const v=JSON.parse(localStorage.getItem('ma3-v1')||localStorage.getItem('de3-v1')||'null');if(v&&v.name)save.name=v.name} // Name von den anderen Klasse-3-Missionen übernehmen
+}catch(e){}
+save.sound=false; // hier wird nichts vorgelesen
+initRank();
+let storageOK=true;
+function persist(){try{localStorage.setItem('ma3z-v1',JSON.stringify(save));storageOK=true}catch(e){storageOK=false}}
+try{localStorage.setItem('ma3z-test','1');localStorage.removeItem('ma3z-test')}catch(e){storageOK=false}
+
+/* ---------- Startseite ---------- */
+const NAMES={check:'Ich-kann-Check',mix:'Große Rundfahrt'};
+function home(){
+  G=null;M=null;if(B){clearTimeout(B.timer);B=null}stopSpiel();
+  const hi=save.name?`Ahoi ${esc(save.name)}!`:'Ahoi!';
+  const tiles=TOPICS.map(t=>`<button class="tile" data-t="${t.id}"><h3>${t.name}</h3><span class="sub">${t.sub}</span>${starsHtml(save.best[t.id]||0)}</button>`).join('');
+  const chests=TOPICS.filter(t=>(save.best[t.id]||0)>=3).length;
+  const rg=save.round&&save.round.queue&&save.round.queue.length?save.round:null;
+  const resume=rg?`<div class="grid" style="margin-bottom:12px"><button class="tile resume" id="rs"><h3>Weiterspielen</h3><span class="sub">${esc(NAMES[rg.topic]||(TOPICS.find(t=>t.id===rg.topic)||{}).name)}, Frage ${Math.min(rg.done+1,rg.total)} von ${rg.total}</span></button></div>`:'';
+  $('#app').innerHTML=`
+  <div class="top"><a class="back" href="../../" style="text-decoration:none">Übersicht</a><span class="brand">${BRAND}</span>${themeBtn()}</div>
+  <section class="hero"><h1>${hi} Fit für die Mathearbeit?</h1>
+   <p>Zahlen bis 1000: Zahlbilder, Tausenderbuch, Zerlegen, Zahlwörter, Zahlenstrahl, Nachbarzahlen, Ordnen und Körper. Jede Insel ist ein Punkt der Checkliste, eine Fahrt hat ${ROUND} Aufgaben.</p>
+   <div class="rank"><span class="pill sun">${save.xp} Punkte</span><span class="pill">Rang: ${rank()}</span></div>${rankBar()}${hero}</section>
+  <div class="namebox"><label for="nm">Dein Name</label><input type="text" id="nm" maxlength="16" value="${esc(save.name)}" placeholder="z. B. Mia" autocomplete="off"></div>
+  ${resume}
+  <div class="grid"><button class="tile mix" data-t="check"><h3>Ich-kann-Check</h3><span class="sub">Probe-Arbeit: zwei Aufgaben zu jedem Thema. Am Ende siehst du, was du schon kannst.</span>${starsHtml(save.best.check||0)}</button></div>
+  <div class="maphead"><h2 class="sec" style="margin:0">Seekarte</h2><span class="pill">Schätze: ${chests} von ${TOPICS.length}</span></div>
+  ${seaMap(MAP,170)}
+  <p class="tip" style="margin-top:4px">Drei Sterne auf einer Insel, und du findest ihren Schatz.</p>
+  <h2 class="sec">Spiele</h2><div class="grid">
+   <button class="tile" data-t="mix"><h3>Große Rundfahrt</h3><span class="sub">Aufgaben von allen Inseln gemischt</span>${starsHtml(save.best.mix||0)}</button>
+   <button class="tile" id="gb"><h3>Blitzrunde</h3><span class="sub">${BLITZ} Sekunden: Wie viele schaffst du?</span><span class="sub">Rekord: ${save.blitz||0} richtig</span></button>
+   <button class="tile" id="gm"><h3>Memory</h3><span class="sub">Finde ${PAIRS} Paare: Zahlwort und Zahl</span><span class="sub">${save.memo?'Rekord: '+save.memo+' Züge':'Noch kein Rekord'}</span></button>
+   <button class="tile" id="gv" data-ico="⚖️"><h3>Größer oder kleiner?</h3><span class="sub">Zahlen bis 1000 vergleichen, immer schneller</span><span class="sub">Rekord: ${save.vergleich||0} richtig</span></button>
+  </div>
+  <h2 class="sec">Inseln</h2><div class="grid isles">${tiles}</div>
+  <p class="tip">${storageOK?'Dein Fortschritt wird automatisch auf diesem Gerät gespeichert.':'Speichern geht in diesem Browser gerade nicht (privates Fenster?). Dein Fortschritt geht beim Schließen verloren.'}</p>
+  <p class="tip">Sterne gibt es für richtige Antworten beim ersten Versuch: 5 von 10 = 1 Stern, 7 von 10 = 2 Sterne, 9 von 10 = 3 Sterne.</p>
+  <p class="tip"><button class="theme" id="rst">Alles zurücksetzen</button></p>`;
+  bindTheme();
+  $('#nm').oninput=e=>{save.name=e.target.value.trim();persist()};
+  document.querySelectorAll('[data-t]').forEach(b=>{b.onclick=()=>start(b.dataset.t);
+    if(b.tagName==='g')b.onkeydown=ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();start(b.dataset.t)}}});
+  $('#gb').onclick=blitz;$('#gm').onclick=memory;$('#gv').onclick=vergleich;
+  if(rg)$('#rs').onclick=()=>{G=Object.assign({answered:false,res:[]},rg);show()};
+  let armed=false;$('#rst').onclick=ev=>{if(!armed){armed=true;ev.target.textContent='Wirklich alles löschen? Nochmal tippen.';return}save={name:'',xp:0,best:{},weak:{},round:null,sound:false,blitz:0,memo:0,vergleich:0};persist();home()};
+}
+
+home();
+</script>
+
+</body>
+</html>
