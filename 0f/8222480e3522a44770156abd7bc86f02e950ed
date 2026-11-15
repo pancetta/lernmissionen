@@ -1,0 +1,31 @@
+englisch-5/wortschatz.js
+  s_defc4032430111::t_8c3038b1da8b17 122-135
+gemeinsam/stil.css
+  s_defc4032430111::t_1a022d56dc5239 274-277
+gemeinsam/vokabeln.js
+  s_defc4032430111::t_4c79ffea2ec6f6 67-68,93,106-107,132-134,228,336-382
+spanisch-a1/wortschatz.js
+  s_defc4032430111::t_205c5df78c7b51 76-90
+tests/layout.js
+  s_defc4032430111::t_20d5d93793a956 39
+tests/spanisch.js
+  s_defc4032430111::t_baac8a860ac8dd 50-65
+tests/vokabeln.js
+  s_defc4032430111::t_e37048f7313efa 93
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "0f8222480e3522a44770156abd7bc86f02e950ed",
+  "prompts": {},
+  "sessions": {
+    "s_defc4032430111": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "f329317f-a187-41f4-be8c-5ec2f144f3b4",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Robert Speck <pancetta@users.noreply.github.com>"
+    }
+  }
+}
