@@ -58,4 +58,7 @@ for(let k=0;k<TRUHE_N-1;k++){const w=X.w.toLowerCase(),ls=[...new Set(w.replace(
  A('Schatztruhe: sechs falsche Buchstaben, dann ist die Truhe zu',/Keine Schlüssel/.test($('#fb').textContent)&&$$('.abc .wrong').length===TRUHE_LEBEN);$('#nx').click()}
 A('Schatztruhe: Antippen und Tastatur, Ende mit Rekord',tOk&&!!$('.end')&&save.truhe===TRUHE_N-1);
 home();
+{let ok=true;for(let i=0;i<300;i++){memory('words');const es=[...new Set(M.cards.map(c=>c.e))].map(p=>W.find(e=>enShow(e)===p.a&&deShow(e)===p.b));
+  if(es.length!==PAIRS||es.some((e,j)=>!e||es.some((x,k)=>k!==j&&nah(x,e))))ok=false}home();
+ A('Memory: nie zwei bedeutungsnahe Wörter im selben Spiel (hour und lesson, mum und mother)',ok)}
 done();

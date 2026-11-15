@@ -317,7 +317,9 @@ const truheWeiter=()=>{if(X)X.i<TRUHE_N?truheQ():spielEnde('truhe',X.n,`von ${TR
 document.addEventListener('keydown',ev=>{if(X&&X.game==='truhe'&&!X.busy&&/^[a-z]$/i.test(ev.key)&&!ev.ctrlKey&&!ev.metaKey&&!ev.altKey){ev.preventDefault();truheRate(ev.key.toLowerCase())}});
 
 /* ---------- Memory: englisches Wort und deutsche Bedeutung als Paar ---------- */
-function memory(topic){memoryGame(pickEntries(topic,PAIRS).map(e=>({a:enShow(e),b:deShow(e)})),()=>memory(topic),'Finde die Paare: englisches Wort und deutsche Bedeutung.')}
+function memory(topic){ // ohne bedeutungsnahe Wörter (hour und lesson): sonst passt eine Karte zu zwei anderen
+  const es=[];for(const e of pickEntries(topic,40))if(es.length<PAIRS&&!es.some(x=>nah(x,e)||deShow(x)===deShow(e)))es.push(e);
+  memoryGame(es.map(e=>({a:enShow(e),b:deShow(e)})),()=>memory(topic),'Finde die Paare: englisches Wort und deutsche Bedeutung.')}
 
 
 home();

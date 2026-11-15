@@ -97,19 +97,19 @@ const W = [
  ['zahlen','twenty-four|twenty four','vierundzwanzig'],['zahlen','twenty-five|twenty five','fünfundzwanzig'],['zahlen','twenty-six|twenty six','sechsundzwanzig'],
  ['zahlen','thirty','dreißig'],['zahlen','thirty-one|thirty one','einunddreißig'],['zahlen','thirty-two|thirty two','zweiunddreißig'],
  ['zahlen','forty','vierzig'],['zahlen','fifty','fünfzig'],['zahlen','sixty','sechzig'],['zahlen','seventy','siebzig'],['zahlen','eighty','achtzig'],['zahlen','ninety','neunzig'],
- ['zahlen','a hundred|one hundred','hundert / einhundert'],['zahlen','zero','Null'],['zahlen','o','Null (in Telefonnummern)'],['zahlen','double','Doppel-'],['zahlen','telephone|phone','Telefon'],
+ ['zahlen','a hundred|one hundred','hundert / einhundert'],['zahlen','zero','Null'],['zahlen','o|oh','Null (in Telefonnummern)'],['zahlen','double','Doppel-'],['zahlen','telephone|phone','Telefon'],
  ['zeit','birthday','Geburtstag'],['zeit','September','September'],
  ['tag','subject|school subject','Schulfach'],['tag','art','Kunst'],['tag','design and technology','Design und Technik'],['tag','French','Französisch'],
- ['tag','geography','Geografie'],['tag','history','Geschichte'],['tag','ICT','Informations- und Kommunikationstechnologie'],['tag','maths','Mathematik'],
+ ['tag','geography','Geografie'],['tag','history','Geschichte (Schulfach)'],['tag','ICT','Informations- und Kommunikationstechnologie'],['tag','maths|mathematics','Mathematik'],
  ['tag','music','Musik'],['tag','PE','Sportunterricht / Turnen'],['tag','religion','Religion'],['tag','science','Naturwissenschaft'],
  ['tag','timetable','Stundenplan'],['tag','hour','Stunde'],['tag','lunch','Mittagessen'],['tag','break','Pause'],
- ['tag','quarter past ten','Viertel nach zehn'],['tag','half past ten','halb elf'],['tag','quarter to eleven','Viertel vor elf'],
+ ['tag','quarter past ten|a quarter past ten','Viertel nach zehn'],['tag','half past ten','halb elf'],['tag','quarter to eleven|a quarter to eleven','Viertel vor elf'],
  ['klasse','ball','Ball'],['klasse','football','Fußball'],
  ['schule','question','Frage'],['schule','answer','Antwort'],['schule','word','Wort'],['schule','letter','Buchstabe'],
  ['schule','in English','auf Englisch'],['schule','in German','auf Deutsch'],
  ['schule','Miss Bell','Frau Bell (Anrede für Lehrerinnen)'],['schule','Mr Brown','Herr Brown'],['schule','Mrs Brown','Frau Brown'],
  ['stadt','street','Straße'],
- ['verben','to help|help','helfen'],['verben','to come in|come in','hereinkommen'],['verben','to start|start','anfangen / beginnen'],['verben','to throw|throw','werfen'],
+ ['verben','to help|help','helfen'],['verben','to come in|come in','hereinkommen'],['verben','to start|start|to begin|begin','anfangen / beginnen'],['verben','to throw|throw','werfen'],
  ['verben','to ask|ask','fragen'],['verben','to catch|catch','fangen'],['verben','to answer|answer','antworten / beantworten'],['verben','to do|do','machen / tun'],
  ['verben','to live|live','leben / wohnen'],['verben','to learn|learn','lernen'],
  ['kleine','help','Hilfe'],['kleine','so','also / deshalb / daher'],['kleine','then','dann'],['kleine','again','wieder / noch einmal'],['kleine','only','nur / bloß'],['kleine','when?','wann?'],
@@ -140,7 +140,8 @@ const NAH=[['mum','mother'],['dad','father'],['pen','pencil'],['glue','glue stic
  ['map','card'],['picture','photo'],['to say','to speak','to talk to'],['to see','to look at'],['nice','good','great','big'],['strange','silly'],['navy','blue','dark','black'],['shoe','trainer'],
  ['pet','animal'],['Monday','on Monday'],['book','exercise book','library'],['town','hometown'],['to think','to know'],['to put','to give'],['clock','watch','time'],['to go','to come','to come in','to go home','to come home'],
  ['rabbit','guinea pig','rat'],['when','when?'],['help','to help'],['answer','to answer'],['zero','o'],['so','So?'],['hour','lesson'],['Miss Bell','Mrs Brown'],
- ['English','in English'],['ball','football'],['lunch','break']];
+ ['English','in English'],['ball','football'],['lunch','break'],
+ ...['art','design and technology','French','geography','history','ICT','maths','music','PE','religion','science'].map(f=>['subject',f])]; // jedes Fach ist ein Schulfach
 return {W,TOPICS,NOTYPE,NAH};
 })();
 const enShow=e=>e[1].split('|')[0];
