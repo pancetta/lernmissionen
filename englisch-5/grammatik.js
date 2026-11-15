@@ -14,7 +14,7 @@ const GRAMMATIK=[
   beispiele:[['a dog → two dog**s**','ein Hund → zwei Hunde'],['a girl → two girl**s**','ein Mädchen → zwei Mädchen'],['a book → two book**s**','ein Buch → zwei Bücher'],['a class → two class**es**','eine Klasse → zwei Klassen'],['a watch → two watch**es**','eine Armbanduhr → zwei Armbanduhren']],
   frage:'Wie bildet man im Englischen die Mehrzahl?',
   antworten:['Man hängt -s an, nach s, sh, ch oder x aber -es','Man hängt immer -en an, wie bei „Frauen“','Das Wort bleibt immer gleich'],
-  regel:'Mehrzahl = Wort + s: dogs, girls. Nach s, sh, ch oder x hängst du -es an, weil man es sonst nicht sprechen kann: classes, watches. Ein paar Wörter sind ganz anders, zum Beispiel people (Leute).',
+  regel:'Mehrzahl = Wort + s: dogs, girls. Nach s, sh, ch oder x hängst du -es an, weil man es sonst nicht sprechen kann: classes, watches. Aus -y nach einem Konsonanten wird -ies: library → libraries. Ein paar Wörter sind ganz anders, zum Beispiel people (Leute).',
   auftrag:'Wie heißt die Mehrzahl?',
   aufgaben:[['a bird','birds','birdes','bird'],['a class','classes','classs','class'],['a watch','watches','watchs','watch'],['a rabbit','rabbits','rabbites','rabbiten'],['a girl','girls','girles','girlen'],['a pencil case','pencil cases','pencils case','pencil casees']]},
  {id:'half',titel:'half past = halb?',
@@ -78,7 +78,7 @@ const SZENEN=[
    ['du',['Yes.','Bye.','Watch out!'],'Ja.'],
    ['a','What time is it?','Wie spät ist es?'],
    ['du',['It’s half past ten.','It’s a dog.','I’m from Germany.'],'Es ist halb elf.'],
-   ['a','Oh no! I’m late for my football game!','Oh nein! Ich bin zu spät für mein Fußballspiel!'],
+   ['a','Oh no! I’m late for football!','Oh nein! Ich komme zu spät zum Fußball!'],
    ['du',['Hurry up!','Nice to meet you.','Good morning.'],'Beeil dich!'],
    ['a','Thank you. See you.','Danke. Bis bald.'],
    ['du',['Bye.','Hello.','Welcome to our school.'],'Tschüs.']]}

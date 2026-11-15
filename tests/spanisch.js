@@ -49,7 +49,7 @@ sortWeiter();for(let k=0;k<3;k++){$(`[data-b="${1-ARTIKELSPIEL.bins.indexOf(X.it
 A('el oder la?: nach drei Fehlern Ende mit Rekord',!!$('.end')&&save.artikel===1);
 // Neue Wörter lernen: fünf Karten, dann drei Stufen; danach kennengelernt, die nächsten fünf folgen
 A('Ich kann: jede Insel hat einen Kann-Satz',TOPICS.every(t=>/^Ich kann /.test(t.can||'')));
-{save.gelernt={};save.round=null;home();$('#glern').click();A('Lernen: jede Insel mit Fortschritt',$$('[data-lt]').length===TOPICS.length&&/0 von 12/.test($('[data-lt="colores"]').textContent));
+{save.gelernt={};save.kasten={};save.round=null;home();$('#glern').click();A('Lernen: jede Insel mit Fortschritt',$$('[data-lt]').length===TOPICS.length&&/0 von 12/.test($('[data-lt="colores"]').textContent));
  $('[data-lt="colores"]').click();const CO=W.filter(e=>e[0]==='colores');let karten=[];while($('.lernkarte')){karten.push($('.lernkarte .big').textContent);$('#nx').click()}
  A('Lernen: fünf Karten mit den ersten Wörtern der Insel',karten.join()===CO.slice(0,5).map(enShow).join());
  A('Lernen: 15 Aufgaben in drei Stufen (erkennen, zuordnen, schreiben)',G.total===15&&G.queue.slice(0,5).every(q=>q.kind==='mc'&&q.dir==='en2de')&&G.queue.slice(5,10).every(q=>q.kind==='mc'&&q.dir==='de2en')&&G.queue.slice(10).every(q=>q.kind==='type')&&G.queue.every(q=>CO.slice(0,5).includes(q.e)));
@@ -74,8 +74,9 @@ A('Ich kann: jede Insel hat einen Kann-Satz',TOPICS.every(t=>/^Ich kann /.test(t
  W.filter(e=>e[0]==='colores').forEach(e=>{save.gelernt[key(e)]=1;save.kasten[key(e)]=3});save.best.colores=3;home();
  A('Lernweg: kennengelernt, geübt, sicher, behalten = alle vier Stationen',weg('colores')==='1111');
  save.best.colores=1;save.kasten[key(W.find(e=>e[0]==='colores'))]=2;home();A('Lernweg: 1 Stern und ein Wort in Fach 2 = Stationen 1 und 2',weg('colores')==='1100');
- save.gelernt={};home();A('Lernweg: Wörter aus dem Karteikasten zählen auch als kennengelernt',weg('colores')==='1100')}
-{save.best={numeros:2,cuerpo:1};save.gelernt={};home();$('#gkann').click();const f=id=>$(`tr[data-k="${id}"] .face`).textContent;
+ save.gelernt={};home();A('Lernweg: Wörter aus dem Karteikasten zählen auch als kennengelernt',weg('colores')==='1100');
+ $('#glern').click();A('Lernen: Wörter aus dem Karteikasten gelten als kennengelernt, die Insel bietet keine neuen Karten',/alle Wörter kennengelernt/.test($('[data-lt="colores"]').textContent))}
+{save.best={numeros:2,cuerpo:1};save.gelernt={};save.kasten={};home();$('#gkann').click();const f=id=>$(`tr[data-k="${id}"] .face`).textContent;
  A('Ich kann: 😀 ab zwei Sternen, 😐 bei einem Stern, sonst 🙁 mit Knopf „Lernen“',$$('tr[data-k]').length===TOPICS.length&&f('numeros')==='😀'&&f('cuerpo')==='😐'&&f('colores')==='🙁'&&!!$('[data-kl="colores"]'));
  $('[data-kl="colores"]').click();A('Ich kann: „Lernen“ startet die Wortkarten der Insel',!!$('.lernkarte'))}
 save.best={};save.gelernt={};save.round=null;

@@ -6,7 +6,7 @@ const LESETEXTE=(()=>{
 const GRUND={el:'der / das',la:'die',los:'die (Mehrzahl)',las:'die (Mehrzahl)',un:'ein',una:'eine',es:'ist',son:'sind',de:'von / aus',del:'vom',en:'in / an',a:'nach / zu / um',al:'zum',
  mi:'mein / meine',su:'sein / ihr',tu:'dein / deine',yo:'ich',ella:'sie',él:'er',le:'ihm / ihr',se:'sich',llama:'heißt',come:'isst',bebe:'trinkt',tiene:'hat',juega:'spielt',
  va:'geht',hay:'es gibt',dice:'sagt',pregunta:'fragt',habla:'spricht',haces:'machst',otro:'ein anderer',nada:'nichts / er schwimmt',bueno:'gut',para:'für',
- lucía:'Lucía (Name)',pablo:'Pablo (Name)',toby:'Toby (Name eines Hundes)',españa:'Spanien',tú:'du',ana:'Ana (Name)',tom:'Tom (Name)',está:'ist (wo?)',pequeña:'klein',bonita:'schön',alta:'groß / hoch',lenta:'langsam',rápida:'schnell',mia:'Mia (Name)',muchos:'viele',comen:'essen (sie)',roja:'rot',blanca:'weiß',madrid:'Madrid (Hauptstadt von Spanien)'};
+ lucía:'Lucía (Name)',pablo:'Pablo (Name)',toby:'Toby (Name eines Hundes)',españa:'Spanien',tú:'du',ana:'Ana (Name)',tom:'Tom (Name)',está:'ist (wo?)',pequeña:'klein',bonita:'schön',alta:'groß / hoch',lenta:'langsam',rápida:'schnell',mia:'Mia (Name)',muchos:'viele',comen:'essen (sie)',roja:'rot',blanca:'weiß',quieres:'willst du / möchtest du',madrid:'Madrid (Hauptstadt von Spanien)'};
 const TEXTE=[
  {id:'toby',art:'Geschichte',titel:'Mi perro Toby',text:"¡Hola! Me llamo Lucía y tengo ocho años.\nTengo un perro. Se llama Toby. Es pequeño y marrón.\nToby come mucho y bebe agua.\nPero no come chocolate: el chocolate no es bueno para perros.",
   fragen:[["Lucía tiene ocho años.",true],["Toby es grande.",false],["Toby come chocolate.",false]]},

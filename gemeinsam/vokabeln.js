@@ -338,10 +338,10 @@ const truheWeiter=()=>{if(X)X.i<TRUHE_N?truheQ():spielEnde('truhe',X.n,`von ${TR
 document.addEventListener('keydown',ev=>{if(X&&X.game==='truhe'&&!X.busy&&ev.key.length===1&&ABC_EN.includes(grund(ev.key))&&!ev.ctrlKey&&!ev.metaKey&&!ev.altKey){ev.preventDefault();truheRate(grund(ev.key))}});
 
 /* ---------- Neue Wörter lernen: anschauen und anhören, dann vom Wiedererkennen bis zum Schreiben; „Ich kann …“-Liste ---------- */
-const PORTION=5,gelernt=e=>!!(save.gelernt||{})[key(e)],fach=e=>(save.kasten||{})[key(e)]||0,inselW=t=>W.filter(e=>e[0]===t),inselName=t=>TOPICS.find(x=>x.id===t).name;
+const PORTION=5,gelernt=e=>!!(save.gelernt||{})[key(e)]||fach(e)>0,fach=e=>(save.kasten||{})[key(e)]||0,inselW=t=>W.filter(e=>e[0]===t),inselName=t=>TOPICS.find(x=>x.id===t).name;
 const lernStand=t=>{const ws=inselW(t);return {n:ws.length,k:ws.filter(gelernt).length}};
 const WEG=['kennengelernt','geübt (1 Stern)','sicher (3 Sterne)','behalten (alle Wörter mindestens in Fach 3)'];
-const lernweg=t=>{const ws=inselW(t),b=save.best[t]||0;return [ws.every(e=>gelernt(e)||fach(e)>0),b>=1,b>=3,inselW(t).every(e=>fach(e)>=3)]}; // die vier Stationen einer Insel
+const lernweg=t=>{const ws=inselW(t),b=save.best[t]||0;return [ws.every(gelernt),b>=1,b>=3,inselW(t).every(e=>fach(e)>=3)]}; // die vier Stationen einer Insel
 const wegHtml=t=>`<span class="weg" aria-label="Lernweg: ${lernweg(t).filter(Boolean).length} von 4 Stationen">${lernweg(t).map((x,i)=>`<i class="${x?'an':''}" title="${WEG[i]}">${i+1}</i>`).join('')}</span>`;
 function lernen(){ // Auswahl der Insel, Fortschritt je Insel
   G=null;M=null;stopSpiel();const g=W.filter(e=>fach(e)>0).length,F=[1,2,3,4,5].map(f=>W.filter(e=>fach(e)===f).length);
@@ -441,7 +441,7 @@ function regel(id){ // Beispiele und „Was fällt dir auf?“ (Fehler kosten ni
   const g=GRAMMATIK.find(x=>x.id===id),opts=shuffle(g.antworten.slice());
   $('#app').innerHTML=`${kopf('🔍 Regel-Detektiv')}<div class="qcard"><h2 style="margin:0 0 6px">${esc(g.titel)}</h2>
    <ul class="bsp">${g.beispiele.map(([f,d])=>`<li><span class="f">${fett(f)}</span><span class="d">${esc(d)}</span>${hoerBtn(f)}</li>`).join('')}</ul>
-   <div class="kind">Was fällt dir auf?</div><p class="prompt">${esc(g.frage)}</p>
+   <div class="kind">Was fällt dir auf?</div><p style="font-weight:800;font-size:1.15rem;margin:8px 0 12px">${esc(g.frage)}</p>
    <div class="opts">${opts.map((o,k)=>`<button class="opt" data-k="${k}">${esc(o)}</button>`).join('')}</div><div id="fb"></div></div>`;
   $('#bk').onclick=regeln;hoerBind();
   document.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{
