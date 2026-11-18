@@ -31,7 +31,7 @@ function show(){
   if(q.kind==='listen'&&!canSpeak()){q=G.queue[0]=Object.assign(makeQ(G.topic==='mix'?'mix':G.topic),{redo:q.redo})} // Ton inzwischen aus
   saveRound();
   const k=q.kind,pct=Math.round(G.done/G.total*100);
-  const prompt=k==='listen'?`<button class="btn" id="hear" type="button">🔊 Anhören</button> <button class="btn ghost small" id="slow" type="button">🐢 langsam</button>`:qHtml(q);
+  const prompt=k==='listen'?`${q.html||''}<button class="btn" id="hear" type="button">🔊 Anhören</button> <button class="btn ghost small" id="slow" type="button">🐢 langsam</button>`:qHtml(q);
   let body;
   if(k==='type'||k==='num'||k==='money'){
     const im=k==='num'?' inputmode="numeric"':k==='money'?' inputmode="decimal"':'';

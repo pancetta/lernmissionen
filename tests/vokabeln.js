@@ -78,15 +78,17 @@ leseText('mia');{const b=$$('.lw').find(x=>x.textContent==='throws');b.click();A
 home();
 // Lieferungen: Grenzen, neue Wörter, Schild „neu“, Herkunft, Fahrten nach Units
 A('Lieferungen: beginnen bei 0, aufsteigend, jede mit gefundenem ersten Wort',LIEF[0].von===0&&LIEF.every((l,i)=>l.von>=0&&(i===0||l.von>LIEF[i-1].von))&&LIEF[LIEF.length-1].bis===W.length);
-A('Lieferungen: „Unit 5“ beginnt bei twenty-one und enthält half past ten, keine Seitenzahlen',LIEFERUNGEN.every(l=>!('seiten' in l))&&LIEF.map(l=>l.name).join()==='Start,Unit 5'&&NEU.name==='Unit 5'&&W[NEU.von][1].startsWith('twenty-one')&&liefW(NEU).some(e=>e[1].startsWith('half past ten')));
+A('Lieferungen: „Unit 5“ beginnt bei twenty-one und enthält half past ten, „Unit 6“ (Seite 194) beginnt bei month, keine Seitenzahlen',LIEFERUNGEN.every(l=>!('seiten' in l))&&LIEF.map(l=>l.name).join()==='Start,Unit 5,Unit 6'&&W[LIEF[1].von][1].startsWith('twenty-one')&&liefW(LIEF[1]).some(e=>e[1].startsWith('half past ten'))
+  &&NEU.name==='Unit 6'&&W[NEU.von][1]==='month'&&['January','December','fifth','to watch|watch','hill','Are there any ...?'].every(w=>liefW(NEU).some(e=>e[1]===w)));
+A('Unit 6: alle zwölf Monate auf der Monats-Insel (September und birthday sind umgezogen)',['January','February','March','April','May','June','July','August','September','October','November','December','birthday','month','date'].every(w=>W.some(e=>e[1]===w&&e[0]==='monate')));
 {home();const mit=TOPICS.filter(t=>liefW(NEU).some(e=>e[0]===t.id)).map(t=>t.id),schild=$$('.map .isl').filter(g=>g.querySelector('.neu')).map(g=>g.dataset.t);
- A('Seekarte: Schild „neu“ genau an den Inseln mit Wörtern der neuesten Lieferung',schild.join()===mit.join()&&mit.includes('tag')&&!mit.includes('tiere'));
+ A('Seekarte: Schild „neu“ genau an den Inseln mit Wörtern der neuesten Lieferung',schild.join()===mit.join()&&mit.includes('monate')&&mit.includes('verben')&&!mit.includes('tiere')&&!mit.includes('tag'));
  start('zahlen');home();A('Schild „neu“ bleibt bis zur nächsten Unit, auch nach dem Spielen',!!$('.map .isl[data-t="zahlen"] .neu')&&!!$('.isles [data-t="zahlen"] .pill.neu'));
  const z=$('.isles [data-t="zahlen"]').textContent,tg=$('.isles [data-t="tag"]').textContent;
- A('Inselkacheln: Herkunft der Wörter nach Units',/Wörter aus: Start, Unit 5$/.test($('.isles [data-t="zahlen"] .herkunft').textContent)&&/Wörter aus: Unit 5$/.test($('.isles [data-t="tag"] .herkunft').textContent)&&!/S\./.test(z+tg));
+ A('Inselkacheln: Herkunft der Wörter nach Units',/Wörter aus: Start, Unit 5, Unit 6$/.test($('.isles [data-t="zahlen"] .herkunft').textContent)&&/Wörter aus: Unit 5, Unit 6$/.test($('.isles [data-t="monate"] .herkunft').textContent)&&/Wörter aus: Unit 5$/.test($('.isles [data-t="tag"] .herkunft').textContent)&&!/S\./.test(z+tg));
  $(`[data-t="${liefTopic([NEU.i])}"]`).click();A('„Neue Wörter“: nur Wörter der neuesten Unit',G.queue.every(q=>W.indexOf(q.e)>=NEU.von))}
-{home();$('#gbs').click();const chips=$$('[data-li]');chips[1].click();chips[0].click();$('#bsgo').click();
- A('Nach Units üben: Auswahl „Start“ übt nur Wörter vor Unit 5',G.topic==='L:0'&&G.queue.every(q=>W.indexOf(q.e)<NEU.von))}
+{home();$('#gbs').click();const chips=$$('[data-li]');chips[2].click();chips[0].click();$('#bsgo').click();
+ A('Nach Units üben: Auswahl „Start“ übt nur Wörter vor Unit 5',G.topic==='L:0'&&G.queue.every(q=>W.indexOf(q.e)<LIEF[1].von))}
 {const r=perfect(liefTopic([NEU.i]));home();A('Fahrt „Neue Wörter“ fehlerfrei = 3 Sterne, Sterne auf der Kachel',r.stars===3&&$(`[data-t="${liefTopic([NEU.i])}"] .stars`)!==null)}
 home();
 home();A('Englisch: kein Artikel-Spiel',!$('#gart')&&ART_W.length===0);

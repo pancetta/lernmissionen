@@ -98,7 +98,7 @@ const W = [
  ['zahlen','thirty','dreißig'],['zahlen','thirty-one|thirty one','einunddreißig'],['zahlen','thirty-two|thirty two','zweiunddreißig'],
  ['zahlen','forty','vierzig'],['zahlen','fifty','fünfzig'],['zahlen','sixty','sechzig'],['zahlen','seventy','siebzig'],['zahlen','eighty','achtzig'],['zahlen','ninety','neunzig'],
  ['zahlen','a hundred|one hundred','hundert / einhundert'],['zahlen','zero','Null'],['zahlen','o|oh','Null (in Telefonnummern)'],['zahlen','double','Doppel-'],['zahlen','telephone|phone','Telefon'],
- ['zeit','birthday','Geburtstag'],['zeit','September','September'],
+ ['monate','birthday','Geburtstag'],['monate','September','September'],
  ['tag','subject|school subject','Schulfach'],['tag','art','Kunst'],['tag','design and technology','Design und Technik'],['tag','French','Französisch'],
  ['tag','geography','Geografie'],['tag','history','Geschichte (Schulfach)'],['tag','ICT','Informations- und Kommunikationstechnologie'],['tag','maths|mathematics','Mathematik'],
  ['tag','music','Musik'],['tag','PE','Sportunterricht / Turnen'],['tag','religion','Religion'],['tag','science','Naturwissenschaft'],
@@ -116,10 +116,21 @@ const W = [
  ['hallo','Good morning.','Guten Morgen.'],['hallo','about yourself','über dich selbst'],
  ['saetze','Can you help me, please?','Kannst du mir bitte helfen?'],['saetze','Can you say that again, please?','Kannst du das bitte noch einmal sagen?'],
  ['saetze','Can I ask you a question?','Kann ich dir eine Frage stellen?'],['saetze','They live at 88 School Street.','Sie wohnen in der Schulstraße 88.'],
- ['saetze','When is the lunch break at your school?','Wann ist die Mittagspause an deiner Schule?']
+ ['saetze','When is the lunch break at your school?','Wann ist die Mittagspause an deiner Schule?'],
+ // Unit 6 (Seite 194)
+ ['monate','month','Monat'],
+ ['monate','January','Januar'],['monate','February','Februar'],['monate','March','März'],['monate','April','April'],['monate','May','Mai'],['monate','June','Juni'],
+ ['monate','July','Juli'],['monate','August','August'],['monate','October','Oktober'],['monate','November','November'],['monate','December','Dezember'],
+ ['zahlen','first','erste(r, s)'],['zahlen','second','zweite(r, s)'],['zahlen','third','dritte(r, s)'],['zahlen','fourth','vierte(r, s)'],['zahlen','fifth','fünfte(r, s)'],
+ ['saetze','My birthday is in May.','Ich habe im Mai Geburtstag.'],['saetze',"When's your birthday?|When is your birthday?",'Wann hast du Geburtstag?'],
+ ['saetze','My birthday is on 5th August.','Ich habe am 5. August Geburtstag.'],
+ ['monate','date','Datum'],['stadt','hill','Hügel'],['verben','to write|write','schreiben'],
+ ['verben','to find|find','finden'],['verben','to count|count|to count to|count to','zählen (bis)'],
+ ['saetze','Are there any ...?','Gibt es (irgendwelche) ...?'],['saetze','Are there any English students at your school?','Gibt es englische Schüler an deiner Schule?'],
+ ['verben','to spell|spell','buchstabieren'],['verben','to work|work','arbeiten'],['verben','to read|read','lesen'],['verben','to watch|watch','sich etwas anschauen / beobachten']
 ];
 const TOPICS = [
- {id:'zahlen',name:'Zahlen-Insel',map:'Zahlen',sub:'one bis a hundred, Telefonnummern',can:'Ich kann bis hundert zählen und Telefonnummern sagen.'},
+ {id:'zahlen',name:'Zahlen-Insel',map:'Zahlen',sub:'one bis a hundred, first bis fifth, Telefonnummern',can:'Ich kann bis hundert zählen, Ordnungszahlen und Telefonnummern sagen.'},
  {id:'zeit',name:'Uhren-Insel',map:'Uhren',sub:'Wochentage, Uhrzeit, Termine',can:'Ich kann Wochentage und Uhrzeiten nennen.'},
  {id:'farben',name:'Farben-Insel',map:'Farben',sub:'Farben und was man anzieht',can:'Ich kann Farben und Kleidung nennen.'},
  {id:'beschreiben',name:'Wie-ist-das-Insel',map:'Wie ist das?',sub:'groß, kurz, albern, freundlich ...',can:'Ich kann Dinge und Menschen beschreiben.'},
@@ -132,19 +143,20 @@ const TOPICS = [
  {id:'kleine',name:'Mini-Wörter-Insel',map:'Mini',sub:'mit, ohne, aber, wer, wo ...',can:'Ich kann kleine Wörter und Fragewörter verstehen.'},
  {id:'hallo',name:'Hallo-Insel',map:'Hallo',sub:'Sich vorstellen und begrüßen',can:'Ich kann jemanden begrüßen und mich vorstellen.'},
  {id:'saetze',name:'Plauder-Insel',map:'Plaudern',sub:'Sätze für jeden Tag',can:'Ich kann einfache Sätze für jeden Tag sagen.'},
- {id:'tag',name:'Stundenplan-Insel',map:'Stundenplan',sub:'Schulfächer, Pausen, Uhrzeiten',can:'Ich kann über meinen Stundenplan sprechen.'}
+ {id:'tag',name:'Stundenplan-Insel',map:'Stundenplan',sub:'Schulfächer, Pausen, Uhrzeiten',can:'Ich kann über meinen Stundenplan sprechen.'},
+ {id:'monate',name:'Monats-Insel',map:'Monate',sub:'January bis December, Datum, Geburtstag',can:'Ich kann die Monate nennen und sagen, wann ich Geburtstag habe.'}
 ];
 const NOTYPE=['hallo','saetze']; // Satz-Inseln: nicht zum Tippen, dafür Satzbaukasten
 // Bedeutungsnahe Wörter (englisch, wie angezeigt): nie gegeneinander als falsche Antwort, denn „mum = Mutter“ oder „photo = Bild“ ist nicht falsch
 const NAH=[['mum','mother'],['dad','father'],['pen','pencil'],['glue','glue stick'],['class','lesson','classroom'],['student','classmate'],['home','at home','flat'],
- ['map','card'],['picture','photo'],['to say','to speak','to talk to'],['to see','to look at'],['nice','good','great','big'],['strange','silly'],['navy','blue','dark','black'],['shoe','trainer'],
+ ['map','card'],['picture','photo'],['to say','to speak','to talk to'],['to see','to look at','to watch'],['watch','to watch'],['date','appointment'],['second','minute'],['nice','good','great','big'],['strange','silly'],['navy','blue','dark','black'],['shoe','trainer'],
  ['pet','animal'],['Monday','on Monday'],['book','exercise book','library'],['town','hometown'],['to think','to know'],['to put','to give'],['clock','watch','time'],['to go','to come','to come in','to go home','to come home'],
  ['rabbit','guinea pig','rat'],['when','when?'],['help','to help'],['answer','to answer'],['zero','o'],['so','So?'],['hour','lesson'],['Miss Bell','Mrs Brown'],
  ['English','in English'],['ball','football'],['lunch','break'],
  ...['art','design and technology','French','geography','history','ICT','maths','music','PE','religion','science'].map(f=>['subject',f])]; // jedes Fach ist ein Schulfach
 // Lieferungen (Units): ab welchem Wort (Englisch genau wie in W) neue Vokabeln dazukamen.
 // Neue Unit = Wörter hinten an W anhängen und hier eine Zeile ergänzen. Die letzte Zeile gilt bis zur nächsten Unit als „neu“.
-const LIEFERUNGEN=[{name:'Start',ab:'one'},{name:'Unit 5',ab:'twenty-one|twenty one'}];
+const LIEFERUNGEN=[{name:'Start',ab:'one'},{name:'Unit 5',ab:'twenty-one|twenty one'},{name:'Unit 6',ab:'month'}];
 return {W,TOPICS,NOTYPE,NAH,LIEFERUNGEN};
 })();
 const enShow=e=>e[1].split('|')[0];

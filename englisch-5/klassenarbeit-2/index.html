@@ -1,0 +1,402 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Class Test">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAIAAACyr5FlAAAD/ElEQVR4nO3dzU0cQRCG4cXizJ6ckmNAToEDhMIBUrAcg1PitBn4YGm0wvsN89Nd9VXP+5zsC1vdeqdAWPLcPTy/nYBbvmUPAF/EAYk4IBEHJOKARByQiAMScUAiDkjEAYk4IBEHJOKARByQiAMScUAiDkjEAYk4IBEHJOKARByQiAMScUAiDkj32QO4uLw+Xf/1/PKeNYkPNgck4oBEHJCIAxJx3Hb5+Tt7hHzEAYk4JJYHccw5eB/E8YUj90EckIjja4ddHsSxyDH7IA5IxLHUAZcHcaxwtD6IY51D9UEckIhjteMsD+LY4iB9EAck4tjoCMuDOLYbvg/igEQcu4y9PIhjr4H7II4GRu2DOCARRxtDLg/iaGa8PogDEnG0NNjyII7GRuqDONobpg/igEQcXYyxPIijlwH6IA5IxNFR9eVBHH2V7oM4uqvbB3FAIo4IRZcHcQSp2AdxQCKOOOWWB3GEqtUHcUQr1AdxQCKOBFWWB3HkKNEHcUAijjT+y4M4Mpn3QRzJnPsgDkjEkc92eRCHBc8+iAMScbgwXB7EYcStD+KARBxerJYHcdjx6YM4HJn0QRyQiMOUw/IgDl/pfRAHJOKwlrs8iMNdYh/EUUBWH8QBiThqSFkexFFGfB/EAYk4KgleHsRRTGQfxFFPWB/EAYk4SopZHvcBn1HR+ddj9gj52ByQiAMScUAiDkjEAenu4fktewaYYnNAIg5ICb8Eu3z8if/QMZy//4j8uITNEXzCYcTfG99WIOXEwfJYK+XG2ByQ0uJgeSyXdVeZm4M+lki8Jb6tQEqOg+UxL/d+2ByQ8uNgeSjpN5Mfx8ngFgw53IlFHPDkEofDg+LD5DZc4oAhozhMHpd0PvdgFMfJ6V6yWN2AVxywYheH1aMTzO3sdnHAh2Mcbg9QDMNTO8ZxsryprjzPaxoHHPjG4fkw9WB7Ut84kM46DttHqiHnM1rHcfK+u/3MT+ceBxIViMP88drM/1wF4kCWGnH4P2RrlThRmf+HtMRtDqbG5kAK4oBEHJCIAxJxQCIOSMQBadfvOS6vT9Ofzy/vu4fp6HrUSaGZU0Zlc0AiDki74rjedTf3tgm1nyvOHKnl5vC86/mpKs4cZm8cn6I2OdXk0zz/pq04c4oGm8P2rmduueLM8br8QOpw12tnqDhzby3f1PT/2VLCXzVGxZnDNH6Nl2o/4KibP7rizDHav+Ntfjc2P3aTj6s4c4BeLwBc/u1z1V10+rJdv3jXmbvq+3bIlJ+wdl5xxZk7CXp1aMCNBy//JjybmES/V7b5jSf+2LiZeROT/JcOr7p6k2utOPMG+XHAFv9kD4k4IBEHJOKARByQiAMScUAiDkh/ARSxEB9azzFAAAAAAElFTkSuQmCC">
+<link rel="icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAIAAACyr5FlAAAD/ElEQVR4nO3dzU0cQRCG4cXizJ6ckmNAToEDhMIBUrAcg1PitBn4YGm0wvsN89Nd9VXP+5zsC1vdeqdAWPLcPTy/nYBbvmUPAF/EAYk4IBEHJOKARByQiAMScUAiDkjEAYk4IBEHJOKARByQiAMScUAiDkjEAYk4IBEHJOKARByQiAMScUAiDkj32QO4uLw+Xf/1/PKeNYkPNgck4oBEHJCIAxJx3Hb5+Tt7hHzEAYk4JJYHccw5eB/E8YUj90EckIjja4ddHsSxyDH7IA5IxLHUAZcHcaxwtD6IY51D9UEckIhjteMsD+LY4iB9EAck4tjoCMuDOLYbvg/igEQcu4y9PIhjr4H7II4GRu2DOCARRxtDLg/iaGa8PogDEnG0NNjyII7GRuqDONobpg/igEQcXYyxPIijlwH6IA5IxNFR9eVBHH2V7oM4uqvbB3FAIo4IRZcHcQSp2AdxQCKOOOWWB3GEqtUHcUQr1AdxQCKOBFWWB3HkKNEHcUAijjT+y4M4Mpn3QRzJnPsgDkjEkc92eRCHBc8+iAMScbgwXB7EYcStD+KARBxerJYHcdjx6YM4HJn0QRyQiMOUw/IgDl/pfRAHJOKwlrs8iMNdYh/EUUBWH8QBiThqSFkexFFGfB/EAYk4KgleHsRRTGQfxFFPWB/EAYk4SopZHvcBn1HR+ddj9gj52ByQiAMScUAiDkjEAenu4fktewaYYnNAIg5ICb8Eu3z8if/QMZy//4j8uITNEXzCYcTfG99WIOXEwfJYK+XG2ByQ0uJgeSyXdVeZm4M+lki8Jb6tQEqOg+UxL/d+2ByQ8uNgeSjpN5Mfx8ngFgw53IlFHPDkEofDg+LD5DZc4oAhozhMHpd0PvdgFMfJ6V6yWN2AVxywYheH1aMTzO3sdnHAh2Mcbg9QDMNTO8ZxsryprjzPaxoHHPjG4fkw9WB7Ut84kM46DttHqiHnM1rHcfK+u/3MT+ceBxIViMP88drM/1wF4kCWGnH4P2RrlThRmf+HtMRtDqbG5kAK4oBEHJCIAxJxQCIOSMQBadfvOS6vT9Ofzy/vu4fp6HrUSaGZU0Zlc0AiDki74rjedTf3tgm1nyvOHKnl5vC86/mpKs4cZm8cn6I2OdXk0zz/pq04c4oGm8P2rmduueLM8br8QOpw12tnqDhzby3f1PT/2VLCXzVGxZnDNH6Nl2o/4KibP7rizDHav+Ntfjc2P3aTj6s4c4BeLwBc/u1z1V10+rJdv3jXmbvq+3bIlJ+wdl5xxZk7CXp1aMCNBy//JjybmES/V7b5jSf+2LiZeROT/JcOr7p6k2utOPMG+XHAFv9kD4k4IBEHJOKARByQiAMScUAiDkh/ARSxEB9azzFAAAAAAElFTkSuQmCC">
+<style>html{-webkit-text-size-adjust:100%;color-scheme:light}body{margin:0}[hidden]{display:none!important}</style>
+<title>Class-Test-Inseln</title>
+<link rel="stylesheet" href="../../gemeinsam/stil.css">
+
+</head>
+
+<body>
+<div id="app"></div>
+<script src="../wortschatz.js"></script>
+<script src="../../gemeinsam/gemeinsam.js"></script>
+<script src="../../gemeinsam/runde.js"></script>
+<script>
+const BRAND='Class-Test-Inseln',MISSED='Das üben wir noch',TYPE_PH='Antwort';
+const W=WORTSCHATZ.W;
+// Jede Insel ist ein Punkt der Checkliste für die 2. Englischarbeit. Alle englischen Sätze nur mit Wörtern aus der Wortliste (bis Seite 194);
+// ein Test prüft das. Ordnungszahlen ab sixth und Zahlen wie forty-five baut die Seite nach den Regeln aus dem Buch.
+const TOPICS=[
+ {id:'hoeren',name:'Hör-Insel',map:'Hören',sub:'Stundenplan: true or false?',can:'einen Hörtext über einen Stundenplan verstehen'},
+ {id:'woerter',name:'Wörter-Insel',map:'Wörter',sub:'Zahlen, Schulfächer, Vokabeln bis Seite 194',can:'die Vokabeln bis Seite 194 schreiben und anwenden, besonders Zahlen und Schulfächer'},
+ {id:'uhr',name:'Uhrzeit-Insel',map:'Uhrzeit',sub:'It’s quarter past seven.',can:'Uhrzeiten auf Englisch sagen und schreiben'},
+ {id:'datum',name:'Geburtstags-Insel',map:'Geburtstag',sub:'on the first of January',can:'ein Datum mit Ordnungszahlen sagen und schreiben'},
+ {id:'aan',name:'a-oder-an-Insel',map:'a oder an',sub:'a dog, an elephant, an hour',can:'a und an richtig verwenden'},
+ {id:'be',name:'be-Insel',map:'am, is, are',sub:'am, is, are, isn’t – Yes, I am.',can:'die Formen von be verwenden, Fragen und Kurzantworten bilden'},
+ {id:'there',name:'there-is-Insel',map:'there is',sub:'There is …, there are …, Are there any …?',can:'mit there is / there are beschreiben, was es gibt'},
+ {id:'schreiben',name:'Schreib-Insel',map:'Schreiben',sub:'Sätze über meine Schule',can:'einen kurzen Text über meine Schule schreiben'}
+];
+const MAP=[[45,42],[125,42],[205,42],[285,42],[285,118],[205,118],[125,118],[45,118]]; // Seekarte, Reihenfolge wie TOPICS
+
+/* ---------- Hilfen ---------- */
+const R=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const mc=o=>Object.assign({kind:'mc'},o);
+const opts4=(c,ws)=>shuffle([c].concat(shuffle([...new Set(ws)].filter(w=>w!==c)).slice(0,3)));
+const cap=t=>t[0].toUpperCase()+t.slice(1);
+const bindVar=t=>[...new Set([t,t.replace(/-/g,' ')])];              // forty-five oder forty five
+
+/* ---------- Zahlen, Ordnungszahlen, Uhrzeit ---------- */
+const ONES=['zero','one','two','three','four','five','six','seven','eight','nine','ten','eleven','twelve','thirteen','fourteen','fifteen','sixteen','seventeen','eighteen','nineteen'];
+const TENS=['','','twenty','thirty','forty','fifty','sixty','seventy','eighty','ninety'];
+const num=n=>n===100?'a hundred':n<20?ONES[n]:TENS[Math.floor(n/10)]+(n%10?'-'+ONES[n%10]:'');
+const numAlt=n=>n===100?['a hundred','one hundred']:bindVar(num(n));
+const ORD={1:'first',2:'second',3:'third',5:'fifth',8:'eighth',9:'ninth',12:'twelfth'};   // die Sonderfälle, sonst Zahl + th
+const ord=n=>ORD[n]||(n<20?ONES[n]+'th':n%10===0?TENS[n/10].slice(0,-1)+'ieth':TENS[Math.floor(n/10)]+'-'+ord(n%10));
+const endung=n=>n%100>=11&&n%100<=13?'th':['th','st','nd','rd'][n%10]||'th';  // 11th, 12th, 13th, aber 21st, 22nd, 23rd
+const abk=n=>n+endung(n);
+const ORDW=['first','second','third','fourth','fifth'];
+// Uhrzeit (britisch): quarter past seven, half past seven (= halb acht!), quarter to eight; digital: seven fifteen, seven oh five
+function uhr(h,m){const n=h%12+1;
+  return m===0?`${ONES[h]} o’clock`:m===15?`quarter past ${ONES[h]}`:m===30?`half past ${ONES[h]}`:m===45?`quarter to ${ONES[n]}`
+    :m<30?`${num(m)} past ${ONES[h]}`:`${num(60-m)} to ${ONES[n]}`}
+const digi=(h,m)=>m===0?`${ONES[h]} o’clock`:`${ONES[h]} ${m<10?'oh '+ONES[m]:num(m)}`;
+const zf=(h,m)=>`${h}:${String(m).padStart(2,'0')}`;
+const itis=t=>`It’s ${t}.`;
+const uhrAlle=(h,m)=>{const b=[uhr(h,m),digi(h,m)];if(m===15||m===45)b.push('a '+uhr(h,m));
+  return [...new Set(b.flatMap(bindVar).flatMap(t=>[`It’s ${t}`,`It's ${t}`,`It is ${t}`,t,cap(t)]))]};
+const MIN=[0,0,15,15,30,30,45,45,5,10,20,25,35,40,50,55];
+const zeitZufall=()=>[R(1,12),pick(MIN)];
+const nachbarn=(h,m)=>{const n=h%12+1,v=(h+10)%12+1;return [[h,(60-m)%60],[n,m],[v,m],[v,(60-m)%60],[h,(m+30)%60],[n,(60-m)%60]].filter(([a,b])=>!(a===h&&b===m))};
+function uhrSvg(h,m){ // Zifferblatt mit Stunden- und Minutenzeiger
+  const p=(deg,len)=>{const r=(deg-90)*Math.PI/180;return [(50+len*Math.cos(r)).toFixed(1),(50+len*Math.sin(r)).toFixed(1)]};
+  const striche=[...Array(12)].map((_,i)=>{const [a,b]=p(i*30,i%3?41:38),[c,d]=p(i*30,45);return `<line x1="${a}" y1="${b}" x2="${c}" y2="${d}" stroke-width="${i%3?1.5:3}"/>`}).join('');
+  const zahlen=[[12,0],[3,90],[6,180],[9,270]].map(([z,g])=>{const [x,y]=p(g,30);return `<text x="${x}" y="${(+y+4).toFixed(1)}" text-anchor="middle" font-size="11" font-weight="700" stroke="none" fill="currentColor">${z}</text>`}).join('');
+  const [mx,my]=p(m*6,37),[hx,hy]=p((h%12)*30+m/2,23);
+  return `<svg class="uhr" viewBox="0 0 100 100" width="150" height="150" role="img" aria-label="Uhr" stroke="currentColor" stroke-linecap="round" style="color:var(--ink)"><circle cx="50" cy="50" r="47" fill="var(--card)" stroke-width="3"/>${striche}${zahlen}<line class="std" x1="50" y1="50" x2="${hx}" y2="${hy}" stroke-width="5"/><line class="min" x1="50" y1="50" x2="${mx}" y2="${my}" stroke-width="3"/><circle cx="50" cy="50" r="3.5" fill="currentColor"/></svg>`;
+}
+const DEZ=['null','eins','zwei','drei','vier','fünf','sechs','sieben','acht','neun','zehn','elf','zwölf'];
+const deUhr=(h,m)=>{const n=h%12+1;return m===0?`${h===1?'ein':DEZ[h]} Uhr`:m===15?`Viertel nach ${DEZ[h]}`:m===30?`halb ${DEZ[n]}`:`Viertel vor ${DEZ[n]}`};
+const MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
+const MONATE=['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
+const TAGE=[31,28,31,30,31,30,31,31,30,31,30,31];   // Februar ohne den 29., den gibt es nicht jedes Jahr
+const SONDER=[1,2,3,5,8,9,11,12,13,20,21,22,23,30,31];
+const tagZufall=()=>Math.random()<.6?pick(SONDER):R(1,31);
+const datumZufall=()=>{for(;;){const d=tagZufall(),mo=R(0,11);if(d<=TAGE[mo])return [d,mo]}};
+
+/* ---------- Hör-Insel: Stundenplan ---------- */
+const FACH=['English','German','maths','art','music','PE','science','history','geography','French','ICT','religion'];
+const DAYS=['Monday','Tuesday','Wednesday','Thursday','Friday'];
+const hm=t=>[(Math.floor(t/60)+11)%12+1,t%60];       // Minuten seit Mitternacht → [Stunde 1–12, Minute]
+function plan(){ // drei Tage, fünf Stunden; Pause nach der 2., Mittagspause nach der 4. Stunde
+  const d0=R(0,2),tage=DAYS.slice(d0,d0+3),z=[];let t=pick([480,495,510,525]);
+  for(let i=0;i<5;i++){z.push(t);t+=60;if(i===1)t+=15;if(i===3)t+=60}
+  return {tage,z,pause:z[1]+60,mittag:z[3]+60,f:tage.map(()=>shuffle(FACH).slice(0,5))};
+}
+const planHtml=p=>{const zeile=(a,b)=>`<tr class="pz"><td>${zf(...hm(a))}</td><td colspan="3">${b}</td></tr>`;
+  return `<table class="plan"><tr><th></th>${p.tage.map(t=>`<th>${t}</th>`).join('')}</tr>${p.z.map((t,i)=>(i===2?zeile(p.pause,'break'):'')+(i===4?zeile(p.mittag,'lunch break'):'')
+    +`<tr><td>${abk(i+1)}<br>${zf(...hm(t))}</td>${p.f.map(f=>`<td>${f[i]}</td>`).join('')}</tr>`).join('')}</table>`};
+function aussage(p){ // [Satz, stimmt]
+  const wahr=Math.random()<.5,d=R(0,2),i=R(0,4),ist=p.f[d][i],day=p.tage[d],typ=pick(['fach','fach','fach2','start','pause','mittag','nicht']);
+  const anders=pick(FACH.filter(x=>x!==ist));
+  if(typ==='fach')return [`On ${day}, the ${ORDW[i]} lesson is ${wahr?ist:anders}.`,wahr];
+  if(typ==='fach2')return [`On ${day}, ${wahr?ist:anders} is in the ${ORDW[i]} lesson.`,wahr];
+  const falsch=t=>pick([t-15,t+15,t-60,t+60,t+30].filter(x=>x>=420));
+  if(typ==='start'){const t=wahr?p.z[i]:falsch(p.z[i]);return [`The ${ORDW[i]} lesson starts at ${uhr(...hm(t))}.`,wahr]}
+  if(typ==='pause'){const t=wahr?p.pause:falsch(p.pause);return [`The break is at ${uhr(...hm(t))}.`,wahr]}
+  if(typ==='mittag'){const t=wahr?p.mittag:falsch(p.mittag);return [`The lunch break is at ${uhr(...hm(t))}.`,wahr]}
+  const s=wahr?pick(FACH.filter(x=>!p.f[d].includes(x))):pick(p.f[d]);return [`There is no ${s} on ${day}.`,wahr];
+}
+const hoer=(o,text)=>canSpeak()?Object.assign({kind:'listen',label:o.label},o):mc(Object.assign(o,{label:o.labelLesen,html:o.html+`<p class="big">„${esc(text)}“</p>`}));
+const HO={
+ tf(){const p=plan(),[s,w]=aussage(p);
+  return hoer({label:'Hör zu und schau auf den Stundenplan: True or false?',labelLesen:'Lies und schau auf den Stundenplan: True or false?',html:planHtml(p),options:['True','False'],correct:w?'True':'False',
+   sol:`„${s}“ – ${w?'True':'False'}`,say:s},s)},
+ frage(){const p=plan(),d=R(0,2),i=R(0,4);
+  if(Math.random()<.6){const s=`What is the ${ORDW[i]} lesson on ${p.tage[d]}?`,c=p.f[d][i];
+   return hoer({label:'Hör die Frage und finde die Antwort im Stundenplan',labelLesen:'Lies die Frage und finde die Antwort im Stundenplan',html:planHtml(p),options:opts4(c,FACH),correct:c,sol:`${s} – ${c}`,say:s},s)}
+  const welche=pick([['lunch break',p.mittag],['break',p.pause],[`${ORDW[i]} lesson`,p.z[i]]]),s=`What time is the ${welche[0]}?`,c=zf(...hm(welche[1]));
+  return hoer({label:'Hör die Frage und finde die Antwort im Stundenplan',labelLesen:'Lies die Frage und finde die Antwort im Stundenplan',html:planHtml(p),
+   options:opts4(c,[p.mittag,p.pause,...p.z].map(t=>zf(...hm(t)))),correct:c,sol:`${s} – ${c} (${uhr(...hm(welche[1]))})`,say:s},s)}
+};
+
+/* ---------- Wörter-Insel: Zahlen, Schulfächer, Vokabeln ---------- */
+const FAECHER=[['Englisch','English'],['Deutsch','German'],['Französisch','French'],['Mathe','maths|mathematics'],['Kunst','art'],['Musik','music'],['Sport','PE'],
+ ['Naturwissenschaften','science'],['Geschichte (Schulfach)','history'],['Erdkunde','geography'],['Informatik (Computer)','ICT'],['Religion','religion'],['Design und Technik','design and technology']];
+const VERDREHT=[[/forty/,'fourty'],[/forty/,'forthy'],[/fifteen/,'fiveteen'],[/fifteen/,'fifeteen'],[/fifty/,'fivety'],[/fifty/,'fifthy'],[/twelve/,'twelf'],[/twelve/,'twelv'],
+ [/eighteen/,'eightteen'],[/eighteen/,'eigthteen'],[/eighty/,'eightty'],[/eighty/,'eigthy'],[/ninety/,'ninty'],[/ninety/,'ninetie'],[/nineteen/,'ninteen'],[/nineteen/,'nineten'],
+ [/thirteen/,'threeteen'],[/thirteen/,'thirdteen'],[/thirty/,'threety'],[/thirty/,'therty'],[/fourteen/,'fourten'],[/fourteen/,'forteen'],[/twenty/,'twendy'],[/twenty/,'tweenty'],[/-/,' and ']];
+const ZAHLEN_SONDER=[12,13,14,15,18,19,20,30,40,50,80,90,100,0,11,40+R(1,9),50+R(1,9),90+R(1,9),80+R(1,9)];
+const zahlZufall=()=>Math.random()<.6?pick(ZAHLEN_SONDER):R(0,100);
+const NEU=W.findIndex(e=>e[1]==='month');
+const TIPP=W.filter(e=>!['hallo','saetze'].includes(e[0]));       // Wörter zum Tippen (ohne die Satz-Inseln)
+const LUECKE=[ // Wörter anwenden: [Satz mit ___, richtig, falsche, Deutsch]
+ ['Can you ___ to a hundred?','count',['spell','read','watch'],'Kannst du bis hundert zählen?'],
+ ['Can you ___ your name, please? – Yes: M, I, A.','spell',['count','find','work'],'Kannst du bitte deinen Namen buchstabieren?'],
+ ['Let’s ___ the seals.','watch',['spell','work','read'],'Lass uns die Robben beobachten.'],
+ ['___ at the picture, please.','Look',['Watch','See','Count'],'Schau bitte auf das Bild.'],
+ ['Can you ___ the cat? – Yes, it’s there.','see',['look','spell','work'],'Siehst du die Katze?'],
+ ['Please ___ the date in your exercise book.','write',['count','work','watch'],'Schreib bitte das Datum in dein Heft.'],
+ ['My mum ___ at a school. She is a teacher.','works',['finds','counts','spells'],'Meine Mama arbeitet an einer Schule.'],
+ ['Can you ___ my pencil case? – Yes, here it is.','find',['count','spell','read'],'Findest du mein Mäppchen? – Ja, hier ist es.'],
+ ['There’s a castle on the ___.','hill',['date','month','word'],'Auf dem Hügel ist eine Burg.'],
+ ['September is a ___.','month',['date','hill','lesson'],'September ist ein Monat.'],
+ ['We ___ English at school.','learn',['count','spell','find'],'Wir lernen in der Schule Englisch.'],
+ ['I ___ a book in the library.','read',['count','spell','work'],'Ich lese ein Buch in der Bücherei.']];
+const WO={
+ zahlwort(){const n=zahlZufall();return {kind:'type',label:'Schreibe die Zahl auf Englisch',prompt:`**${n}**`,accept:numAlt(n),sol:`${n} = ${num(n)}`,say:num(n)}},
+ zahlmc(){let n,f;do{n=zahlZufall();f=[...new Set(VERDREHT.filter(([r])=>r.test(num(n))).map(([r,x])=>num(n).replace(r,x)))]}while(f.length<2||n===100); // mindestens drei Antworten
+  const v=[...f,num(n).replace(/-/g,'')].concat(n>20&&n%10?[num(10*(n%10)+Math.floor(n/10))]:[]).filter(x=>!numAlt(n).includes(x)&&x!==num(n));
+  return mc({label:'Welche Schreibweise ist richtig?',prompt:`**${n}**`,options:opts4(num(n),v),correct:num(n),sol:`${n} = ${num(n)}`,say:num(n)})},
+ zahllesen(){const n=zahlZufall();return {kind:'num',label:'Welche Zahl ist das?',prompt:`**${num(n)}**`,ans:n,sol:`${num(n)} = ${n}`,say:num(n)}},
+ fach(){const [de,en]=pick(FAECHER),a=en.split('|');
+  return {kind:'type',label:'Wie heißt das Schulfach auf Englisch?',prompt:`**${de}**`,accept:a,sol:`${de} = ${a[0]}${/^[A-Z][a-z]/.test(a[0])?' (Sprachen schreibt man groß)':''}`,say:a[0]}},
+ wort(){const e=Math.random()<.5?pick(TIPP.filter(x=>W.indexOf(x)>=NEU)):pick(TIPP),a=e[1].split('|');
+  return {kind:'type',label:'Schreibe das englische Wort',prompt:`**${deShow(e)}**`,accept:a,sol:`${deShow(e)} = ${enShow(e)}`,say:enShow(e)}},
+ luecke(){const [s,c,f,de]=pick(LUECKE),voll=s.replace('___',c);
+  return mc({label:'Welches Wort passt?',prompt:s.replace('___','**___**'),options:opts4(c,f),correct:c,sol:`${voll} (${de})`,say:voll})}
+};
+
+/* ---------- Uhrzeit-Insel ---------- */
+const UH={
+ analog(){const [h,m]=zeitZufall(),c=itis(uhr(h,m));
+  return mc({label:'Wie spät ist es?',html:uhrSvg(h,m),options:opts4(c,nachbarn(h,m).map(([a,b])=>itis(uhr(a,b)))),correct:c,sol:`${c} (${zf(h,m)})`,say:c})},
+ digital(){const [h,m]=[R(1,12),pick([5,5,10,15,20,25,30,35,40,45,50,55,7,8,13,18,22,48])],c=itis(digi(h,m));
+  const v=nachbarn(h,m).map(([a,b])=>itis(digi(a,b))).concat(m<10?[itis(`${ONES[h]} ${ONES[m]}`)]:[]).concat([itis(`${num(m)} ${ONES[h]}`)]);
+  return mc({label:'Wie sagt man das digital?',prompt:`**${zf(h,m)}**`,options:opts4(c,v),correct:c,sol:`${zf(h,m)}: ${c}${m<10?' (0 spricht man hier „oh“)':''}`,say:c})},
+ deutsch(){const h=R(1,12),m=pick([0,15,30,30,45]),c=itis(uhr(h,m)),n=h%12+1,v=nachbarn(h,m).map(([a,b])=>itis(uhr(a,b)));
+  const falle=m===30?[itis(uhr(n,30))]:[],rest=shuffle([...new Set(v)].filter(x=>x!==c&&!falle.includes(x))); // die Falle: halb acht ist NICHT half past eight
+  return mc({label:'Wie heißt das auf Englisch?',prompt:`Es ist **${deUhr(h,m)}**.`,options:shuffle([c,...falle,...rest].slice(0,4)),correct:c,sol:`${deUhr(h,m)} = ${uhr(h,m)}${m===30?' (halb = half past + die Stunde davor)':''}`,say:c})},
+ lesen(){const [h,m]=zeitZufall(),c=zf(h,m);
+  return mc({label:'Welche Uhrzeit ist das?',prompt:`**${itis(uhr(h,m))}**`,options:opts4(c,nachbarn(h,m).map(([a,b])=>zf(a,b))),correct:c,sol:`${uhr(h,m)} = ${c}`,say:itis(uhr(h,m))})},
+ schreiben(){const [h,m]=zeitZufall();
+  return {kind:'type',label:'Schreibe die Uhrzeit auf Englisch (mit It’s …)',prompt:`**${zf(h,m)}**`,accept:uhrAlle(h,m),sol:`${itis(uhr(h,m))} oder ${itis(digi(h,m))}`,say:itis(uhr(h,m))}},
+ bauen(){const [h,m]=[R(1,12),pick([15,30,45,5,10,20,40,50,55])],s=itis(uhr(h,m)),t=toks(s); // ohne twenty-five: Bindestrich-Wörter zerfallen in Kärtchen
+  return {kind:'build',label:'Bau den Satz zur Uhr',html:uhrSvg(h,m),tiles:scramble(t.concat([/ past /.test(s)?'to':'past'])),target:t.join(' '),extra:1,sol:s,say:s}}
+};
+
+/* ---------- Geburtstags-Insel: Datum und Ordnungszahlen ---------- */
+const naiv=n=>{const out=[];if(n<20)out.push(ONES[n]+'th');else if(n%10===0)out.push(TENS[n/10]+'th',TENS[n/10]+'eth');else out.push(TENS[Math.floor(n/10)]+'-'+ONES[n%10]+'th');
+  if(n===3)out.push('therd');if(n===12)out.push('twelveth','twelvth');if(n===9)out.push('nineth');if(n===5)out.push('fiveth');if(n===8)out.push('eightth','eigth');if(n===1)out.push('firstth');
+  return out.filter(x=>x!==ord(n))};
+const DA={
+ ordwort(){const n=tagZufall();return {kind:'type',label:'Schreibe die Ordnungszahl aus',prompt:`**${abk(n)}**`,accept:bindVar(ord(n)),sol:`${abk(n)} = ${ord(n)}`,say:ord(n)}},
+ ordmc(){let n;do n=pick([1,2,3,5,8,9,12,20,21,22,23,25,28,29,30,31]);while(!naiv(n).length);
+  return mc({label:'Welche Schreibweise ist richtig?',prompt:`**${abk(n)}**`,options:opts4(ord(n),naiv(n).concat([ord(n%10||n),ord(n+1),ord(n-1||4)].filter(x=>x!==ord(n)))),correct:ord(n),sol:`${abk(n)} = ${ord(n)}`,say:ord(n)})},
+ endung(){const n=tagZufall();return mc({label:'Welche Endung passt?',prompt:`**${n}__**`,options:['st','nd','rd','th'],correct:endung(n),sol:`${abk(n)} = ${ord(n)}${n>=11&&n<=13?' (11th, 12th, 13th sind Ausnahmen)':''}`,say:ord(n)})},
+ schreiben(){const [d,mo]=datumZufall(),M=MONTHS[mo];
+  return {kind:'type',label:'Schreibe das Datum auf Englisch, z. B. on 5th August',prompt:`am **${d}. ${MONATE[mo]}**`,accept:[`on ${abk(d)} ${M}`,`on the ${abk(d)} of ${M}`,...bindVar(`on the ${ord(d)} of ${M}`)],
+   sol:`on ${abk(d)} ${M} (sprich: on the ${ord(d)} of ${M})`,say:`on the ${ord(d)} of ${M}`}},
+ sagen(){const [d,mo]=datumZufall(),M=MONTHS[mo],c=`on the ${ord(d)} of ${M}`;
+  return mc({label:'So schreibt man es. Wie sagt man es?',prompt:`**on ${abk(d)} ${M}**`,options:shuffle([c,`on ${ord(d)} ${M}`,`on the ${num(d)} of ${M}`,`in the ${ord(d)} of ${M}`]),correct:c,sol:`on ${abk(d)} ${M}: gesprochen „${c}“`,say:c})},
+ inon(){const [d,mo]=datumZufall(),M=MONTHS[mo],t=pick([[`My birthday is ___ ${M}.`,'in'],[`My birthday is ___ ${abk(d)} ${M}.`,'on'],[`My birthday is ___ the ${ord(d)} of ${M}.`,'on'],[`We have English ___ ${DAYS[R(0,4)]}.`,'on']]),voll=t[0].replace('___',t[1]);
+  return mc({label:'in oder on?',prompt:t[0].replace('___','**___**'),options:['in','on','at'],correct:t[1],sol:`${voll} (Monat: in, Datum und Tag: on)`,say:voll})},
+ monat(){const mo=R(0,11);return {kind:'type',label:'Wie heißt der Monat auf Englisch? (Monatsnamen schreibt man groß)',prompt:`**${MONATE[mo]}**`,accept:[MONTHS[mo]],sol:`${MONATE[mo]} = ${MONTHS[mo]}`,say:MONTHS[mo]}},
+ folge(){const mo=R(0,11),nach=Math.random()<.5,c=MONTHS[(mo+(nach?1:11))%12];
+  return mc({label:`Welcher Monat kommt ${nach?'nach':'vor'} diesem Monat?`,prompt:`**${MONTHS[mo]}**`,options:opts4(c,[MONTHS[(mo+(nach?11:1))%12],MONTHS[(mo+2)%12],MONTHS[(mo+10)%12],MONTHS[mo]]),correct:c,sol:`${nach?MONTHS[mo]+' → '+c:c+' → '+MONTHS[mo]}`,say:c})},
+ satz(){let d,mo;do [d,mo]=datumZufall();while(ord(d).includes('-')); // Bindestrich-Wörter zerfallen in Kärtchen
+  const M=MONTHS[mo];
+  if(Math.random()<.5){const s=`My birthday is on the ${ord(d)} of ${M}.`,t=toks(s);return {kind:'build',label:`Bau den Satz: Ich habe am ${d}. ${MONATE[mo]} Geburtstag.`,prompt:'',tiles:scramble(t.concat(['in'])),target:t.join(' '),extra:1,sol:s,say:s}}
+  const c=`My birthday is in ${M}.`;
+  return mc({label:'Welche Antwort passt?',prompt:'**When’s your birthday?**',options:shuffle([c,`My birthday is on ${M}.`,'I’m ten years old.',`It’s ${uhr(R(1,12),pick([15,30,45]))}.`]),correct:c,sol:`When’s your birthday? – ${c}`,say:c})}
+};
+
+/* ---------- a-oder-an-Insel ---------- */
+// [Ausdruck, Artikel, Hinweis]: entscheidend ist der Klang des Wortes direkt nach a/an
+const AN=[['elephant'],['ant'],['animal'],['answer'],['exercise book'],['English book'],['English teacher'],['orange pen','Es kommt auf das Wort direkt danach an: orange'],
+ ['art lesson'],['ICT lesson','ICT spricht man „ai-si-ti“, also mit Vokal am Anfang'],['hour','Bei hour hört man das h nicht: an hour'],['old castle','Es kommt auf das Wort direkt danach an: old'],['orange ball'],['English lesson']].map(([w,t])=>[w,'an',t]);
+const AA=[['dog'],['cat'],['pen'],['pencil'],['ruler'],['rubber'],['book'],['desk'],['chair'],['window'],['door'],['clock'],['watch'],['ball'],['boat'],['castle'],['tower'],
+ ['river'],['map'],['photo'],['picture'],['teacher'],['student'],['girl'],['boy'],['hill'],['month'],['date'],['harbour','Bei harbour hört man das h: a harbour'],
+ ['uniform','uniform spricht man „ju…“, also a uniform'],['PE lesson','PE spricht man „pi-i“, also a PE lesson'],['big elephant','Es kommt auf das Wort direkt danach an: big'],
+ ['new exercise book','Es kommt auf das Wort direkt danach an: new'],['good answer','Es kommt auf das Wort direkt danach an: good'],['nice English teacher','Es kommt auf das Wort direkt danach an: nice']].map(([w,t])=>[w,'a',t]);
+const NP=AN.concat(AA),SPEZIAL=NP.filter(x=>x[2]);
+const npZufall=()=>Math.random()<.45?pick(SPEZIAL):pick(NP);
+const npSol=x=>`${x[1]} ${x[0]}${x[2]?' – '+x[2]:''}`;
+const AA_={
+ luecke(){const x=npZufall();return mc({label:'a oder an?',prompt:`**___** ${x[0]}`,options:['a','an'],correct:x[1],sol:npSol(x),say:`${x[1]} ${x[0]}`})},
+ tippen(){const x=npZufall(),s=pick(['This is ___ X.','There is ___ X in the picture.','I can see ___ X.']).replace('X',x[0]),voll=s.replace('___',x[1]);
+  return {kind:'type',label:'Schreibe a oder an',prompt:s.replace('___','**___**'),accept:[x[1]],sol:`${voll}${x[2]?' – '+x[2]:''}`,say:voll}},
+ fehler(){const xs=[pick(SPEZIAL)];while(xs.length<4){const y=pick(NP);if(!xs.some(z=>z[0]===y[0]))xs.push(y)}
+  const f=xs[0],falsch=`${f[1]==='a'?'an':'a'} ${f[0]}`,o=shuffle([falsch,...xs.slice(1).map(x=>`${x[1]} ${x[0]}`)]);
+  return mc({label:'Welcher Ausdruck ist falsch?',prompt:'Drei sind richtig, einer ist falsch.',options:o,correct:falsch,sol:`Richtig heißt es: ${npSol(f)}`,say:`${f[1]} ${f[0]}`})}
+};
+
+/* ---------- be-Insel: am, is, are, Verneinung, Fragen, Kurzantworten ---------- */
+// Subjekt, Form, Pronomen für die Kurzantwort, Art (p = Person, t = Ding/Tier)
+const SUBJ=[['I','am','you','p'],['you','are','I','p'],['he','is','he','p'],['she','is','she','p'],['it','is','it','t'],['we','are','you','p'],['they','are','they','p'],
+ ['Tim','is','he','p'],['Mia','is','she','p'],['my mum','is','she','p'],['my dad','is','he','p'],['the cat','is','it','t'],['Tim and Mia','are','they','p'],
+ ['the dogs','are','they','t'],['my friends','are','they','p'],['you and Ben','are','we','p']];
+const PRED={p:['ten years old','from Germany','late','at school','at home','nice','sad','friendly','in the classroom'],t:['black','big','nice','at home','here']};
+const kurz={am:'’m',is:'’s',are:'’re'},nicht={am:'’m not',is:' isn’t',are:' aren’t'};
+const neg=(s,f)=>`${s}${nicht[f]}`;
+const subjZufall=()=>{const s=pick(SUBJ);return {s:s[0],f:s[1],kp:s[2],p:pick(PRED[s[3]])}};
+const satzAnfang=s=>s==='I'?'I':cap(s);
+const BE={
+ form(){const x=subjZufall(),s=`${satzAnfang(x.s)} ___ ${x.p}.`,voll=s.replace('___',x.f),q={label:'am, is oder are?',prompt:s.replace('___','**___**'),options:['am','is','are'],correct:x.f,accept:[x.f],sol:voll,say:voll};
+  return Math.random()<.3?Object.assign(q,{kind:'type',label:'Schreibe am, is oder are'}):mc(q)},
+ nicht(){const x=subjZufall(),S=satzAnfang(x.s),c=`${neg(S,x.f)} ${x.p}.`,f=x.f==='am'?[`I amn’t ${x.p}.`,`I isn’t ${x.p}.`,`I don’t ${x.p}.`]
+   :[`${S}${nicht[x.f==='is'?'are':'is']} ${x.p}.`,`${S} not ${x.f} ${x.p}.`,`${S} ${x.f==='is'?'doesn’t':'don’t'} ${x.p}.`];
+  return mc({label:'Verneine den Satz. Welcher Satz ist richtig?',prompt:`**${S} ${x.f} ${x.p}.**`,options:shuffle([c,...f]),correct:c,sol:`${c}${x.f==='am'?' (I amn’t gibt es nicht)':''}`,say:c})},
+ kurzform(){const x=pick(SUBJ.filter(s=>/^(I|you|he|she|it|we|they)$/.test(s[0]))),n=Math.random()<.6,S=satzAnfang(x[0]);
+  const lang=`${S} ${x[1]}${n?' not':''}`,c=n?neg(S,x[1]):`${S}${kurz[x[1]]}`;
+  const f=n?(x[1]==='am'?['I amn’t','I’m n’t',"I aren’t"]:[`${S} ${x[1]}n’t not`,`${S}${nicht[x[1]==='is'?'are':'is']}`,`${S} not’${x[1]}`]):[`${S}${kurz[x[1]==='are'?'is':'are']}`,`${S}${kurz[x[1]==='am'?'is':'am']}`,`${S}’${x[1]}`];
+  return mc({label:'Wie heißt die Kurzform?',prompt:`**${lang}**`,options:opts4(c,f),correct:c,sol:`${lang} = ${c}`,say:c})},
+ frage(){let x;do x=subjZufall();while(x.s.includes(' and ')); // „Are Tim and Mia …?“ ginge auch als „Are Mia and Tim …?“
+  const S=x.s==='I'?'I':x.s,s=`${cap(x.f)} ${S} ${x.p}?`,t=toks(s);
+  return {kind:'build',label:'Mach eine Frage aus dem Satz',prompt:`**${satzAnfang(x.s)} ${x.f} ${x.p}.**`,tiles:scramble(t),target:t.join(' '),sol:s,say:s}},
+ kurz(){let x;do x=subjZufall();while(x.s==='we'); // „Are we late?“ – Yes, you are. oder Yes, we are.: beides möglich
+  const ja=Math.random()<.5,S=x.s==='I'?'I':x.s,frage=`${cap(x.f)} ${S} ${x.p}?`;
+  const P=cap(x.kp),f2={I:'am',you:'are',we:'are',they:'are',he:'is',she:'is',it:'is'}[x.kp],c=ja?`Yes, ${P==='I'?'I':P.toLowerCase()} ${f2}.`:`No, ${neg(P==='I'?'I':P.toLowerCase(),f2)}.`;
+  const andere=x.kp==='I'?'you':x.kp==='you'?'I':x.kp==='he'?'she':x.kp==='she'?'he':x.kp==='we'?'they':x.kp==='they'?'we':'he';
+  const fa={I:'am',you:'are',we:'are',they:'are',he:'is',she:'is',it:'is'}[andere],p=w=>w==='I'?'I':w;
+  const f=[ja?`No, ${neg(p(x.kp),f2)}.`:`Yes, ${p(x.kp)} ${f2}.`,ja?`Yes, ${p(andere)} ${fa}.`:`No, ${neg(p(andere),fa)}.`,
+   ja?(x.kp==='I'?'Yes, I’m.':`Yes, ${p(x.kp)}${kurz[f2]}.`):(x.kp==='I'?'No, I amn’t.':`No, ${p(x.kp)} not.`)];
+  return mc({label:`Kurzantwort: ${ja?'Ja':'Nein'}`,prompt:`**${frage}** (${ja?'Ja':'Nein'})`,options:shuffle([c,...f]),correct:c,
+   sol:`${frage} – ${c}${ja&&x.kp==='I'?' (in der Kurzantwort nie „I’m“)':''}`,say:`${frage} ${c}`})}
+};
+
+/* ---------- there-is-Insel: Bild zum Zählen ---------- */
+const ZOO=[['🐘','elephant','an'],['🦁','lion','a'],['🐒','monkey','a'],['🦒','giraffe','a'],['🐍','snake','a'],['🐦','bird','a'],['🐸','frog','a'],['🐻','bear','a']];
+const RAUM=[['✏️','pencil','a'],['📏','ruler','a'],['📕','book','a'],['🕒','clock','a'],['⚽','ball','a'],['🪑','chair','a'],['🎒','school bag','a'],['⌚','watch','a','watches']];
+const pl=x=>x[3]||x[1]+'s';
+function bild(){const zoo=Math.random()<.5,L=shuffle(zoo?ZOO:RAUM),da=L.slice(0,3).map(x=>({x,n:R(1,4)}));
+  return {zoo,da,fehlt:L.slice(3),html:`<div class="bild"><b>${zoo?'At the zoo':'In the classroom'}</b><div>${da.map(i=>`<span>${i.x[0].repeat(i.n)}</span>`).join('')}</div></div>`}}
+const ding=(b,n)=>n===0?{x:pick(b.fehlt),n:0}:pick(b.da.filter(i=>n===1?i.n===1:n===2?i.n>=2:true))||null;
+const thereSatz=(x,n)=>n===0?`There aren’t any ${pl(x)}.`:n===1?`There is ${x[2]} ${x[1]}.`:`There are ${num(n)} ${pl(x)}.`;
+const zeig=x=>`${x[0]} ${x[1]}`;
+const TH={
+ bild(){const b=bild(),i=Math.random()<.25?ding(b,0):pick(b.da),x=i.x,n=i.n,c=thereSatz(x,n);
+  const f=n===0?[`There isn’t any ${pl(x)}.`,`There are any ${pl(x)}.`,`There is ${x[2]} ${x[1]}.`]:n===1?[`There are ${x[2]} ${x[1]}.`,`There are two ${pl(x)}.`,`There aren’t any ${pl(x)}.`]
+   :[`There is ${num(n)} ${pl(x)}.`,thereSatz(x,n===4?3:n+1),`There aren’t any ${pl(x)}.`];
+  return mc({label:'Schau auf das Bild. Welcher Satz stimmt?',html:b.html+`<p>Welcher Satz über <b>${esc(zeig(x))}</b> stimmt?</p>`,options:shuffle([c,...f]),correct:c,sol:c,say:c})},
+ luecke(){const b=bild();let s,c;
+  if(Math.random()<.35){const x=pick(b.fehlt);if(Math.random()<.5){s=`There ___ ${x[2]} ${x[1]}.`;c='isn’t'}else{s=`There ___ any ${pl(x)}.`;c='aren’t'}}
+  else{const i=pick(b.da);if(i.n===1){s=`There ___ ${i.x[2]} ${i.x[1]}.`;c='is'}else{s=`There ___ ${num(i.n)} ${pl(i.x)}.`;c='are'}}
+  const voll=s.replace('___',c);
+  return mc({label:'Schau auf das Bild. Was passt in die Lücke?',html:b.html+`<p class="big">${esc(s).replace('___','<b>___</b>')}</p>`,options:['is','are','isn’t','aren’t'],correct:c,sol:voll,say:voll})},
+ frage(){const b=bild(),sg=Math.random()<.5;let i=Math.random()<.4?ding(b,0):ding(b,sg?1:2);if(!i)i=ding(b,0);
+  const x=i.x,f=sg?`Is there ${x[2]} ${x[1]}?`:`Are there any ${pl(x)}?`,c=sg?(i.n?'Yes, there is.':'No, there isn’t.'):(i.n?'Yes, there are.':'No, there aren’t.');
+  return mc({label:'Schau auf das Bild und antworte kurz',html:b.html+`<p class="big">${esc(f)}</p>`,options:['Yes, there is.','No, there isn’t.','Yes, there are.','No, there aren’t.'],correct:c,sol:`${f} – ${c}`,say:`${f} ${c}`})},
+ bauen(){const x=pick(ZOO.concat(RAUM)),wo=ZOO.includes(x)?'at the zoo':'in the classroom',sg=Math.random()<.5,s=sg?`Is there ${x[2]} ${x[1]} ${wo}?`:`Are there any ${pl(x)} ${wo}?`,t=toks(s);
+  return {kind:'build',label:'Bau die Frage (ein Kärtchen bleibt übrig)',prompt:`Gibt es ${sg?'ein':'mehrere'} ${x[0]}?`,tiles:scramble(t.concat([sg?'Are':'Is'])),target:t.join(' '),extra:1,sol:s,say:s}},
+ tippen(){const b=bild(),i=pick(b.da),s=i.n===1?`There ___ ${i.x[2]} ${i.x[1]}.`:`There ___ ${num(i.n)} ${pl(i.x)}.`,c=i.n===1?'is':'are';
+  return {kind:'type',label:'Schau auf das Bild und schreibe is oder are',html:b.html+`<p class="big">${esc(s).replace('___','<b>___</b>')}</p>`,accept:[c],sol:s.replace('___',c),say:s.replace('___',c)}}
+};
+
+/* ---------- Schreib-Insel: Sätze über meine Schule ---------- */
+// [Satz, Deutsch]: nur Sätze, die man mit den Kärtchen auf genau eine Weise bauen kann (Großbuchstabe am Anfang, kein „maths and English“)
+const SCHREIB=[['My school is great.','Meine Schule ist toll.'],['School starts at quarter to nine.','Die Schule fängt um Viertel vor neun an.'],['On Monday we have maths.','Am Montag haben wir Mathe.'],
+ ['On Friday we have PE.','Am Freitag haben wir Sport.'],['My favourite subject is art.','Mein Lieblingsfach ist Kunst.'],['I like music.','Ich mag Musik.'],['I don’t like history.','Ich mag Geschichte nicht.'],
+ ['The lunch break is at one o’clock.','Die Mittagspause ist um ein Uhr.'],['There is a library at my school.','An meiner Schule gibt es eine Bücherei.'],['There are lots of classrooms.','Es gibt viele Klassenzimmer.'],
+ ['There isn’t a swimming pool.','Es gibt kein Schwimmbad.'],['My teacher is nice.','Meine Lehrerin ist nett.'],['We wear a uniform.','Wir tragen eine Schuluniform.'],['Our classroom is big.','Unser Klassenzimmer ist groß.'],
+ ['There are thirty students in my class.','In meiner Klasse sind dreißig Schüler.'],['At break I talk to my friends.','In der Pause rede ich mit meinen Freunden.']];
+const RICHTIG=[ // [richtig, falsch, falsch, falsch, Tipp]
+ ['On Monday we have maths.','On Monday have we maths.','On monday we have maths.','On Monday we has maths.','Nach „On Monday“ kommt zuerst we, dann have – anders als im Deutschen. Wochentage schreibt man groß.'],
+ ['I don’t like history.','I like not history.','I not like history.','I doesn’t like history.','Verneinen mit don’t: I don’t like …'],
+ ['My favourite subject is art.','My favourite subject are art.','My favorite subject is art.','My favourite subjekt is art.','favourite schreibt man im britischen Englisch mit u.'],
+ ['We have English on Tuesday.','We have english on Tuesday.','We have English on tuesday.','We has English on Tuesday.','Sprachen und Wochentage schreibt man groß.'],
+ ['The lunch break is at one o’clock.','The lunch break is on one o’clock.','The lunch break is at one clock.','The lunch break are at one o’clock.','Uhrzeit mit at: at one o’clock.'],
+ ['There is a library at my school.','There are a library at my school.','It gives a library at my school.','There is an library at my school.','Es gibt = there is / there are (nicht „it gives“).'],
+ ['School starts at quarter to nine.','School start at quarter to nine.','School starts at quarter for nine.','School starts on quarter to nine.','Bei der Schule (it) muss das -s mit: starts.'],
+ ['There are thirty students in my class.','There is thirty students in my class.','It gives thirty students in my class.','There are thirty student in my class.','Mehrere: there are … students.'],
+ ['I like music and art.','I like music und art.','I likes music and art.','I like Music and Art.','und = and. Schulfächer (außer Sprachen) schreibt man klein.']];
+const ANTWORT=[['What’s your favourite subject?','My favourite subject is music.'],['When is the lunch break?','It’s at one o’clock.'],['Is there a library at your school?','Yes, there is.'],
+ ['Are there any English students at your school?','No, there aren’t.'],['Where is your school?','It’s in Plymouth.'],['When’s your birthday?','My birthday is in May.'],['Are you late?','Yes, I am. I’m sorry.']];
+const SC={
+ bauen(){const [s,de]=pick(SCHREIB),t=toks(s);return {kind:'build',label:'Bau den Satz für deinen Text „My school“',prompt:`**${de}**`,tiles:scramble(t),target:t.join(' '),sol:s,say:s}},
+ richtig(){const r=pick(RICHTIG);return mc({label:'Welcher Satz ist richtig?',prompt:'',options:shuffle(r.slice(0,4)),correct:r[0],sol:`${r[0]} – ${r[4]}`,say:r[0]})},
+ antwort(){const [f,c]=pick(ANTWORT);return mc({label:'Welche Antwort passt?',prompt:`**${f}**`,options:opts4(c,ANTWORT.map(a=>a[1])),correct:c,sol:`${f} – ${c}`,say:`${f} ${c}`})}
+};
+
+/* ---------- Auswahl der Fragen ---------- */
+const SUB={hoeren:HO,woerter:WO,uhr:UH,datum:DA,aan:AA_,be:BE,there:TH,schreiben:SC};
+function gen(isl,sub){ // eine Frage einer Insel; Unterart gewichtet nach Fehlern (wk = "insel.unterart")
+  const subs=Object.keys(SUB[isl]);
+  if(!sub){const w=subs.map(k=>1+Math.min(3,save.weak[isl+'.'+k]||0));let r=Math.random()*w.reduce((a,b)=>a+b,0);sub=subs.find((k,i)=>(r-=w[i])<0)||subs[0]}
+  return Object.assign(SUB[isl][sub](),{isl,sub,wk:isl+'.'+sub});
+}
+const makeQ=topic=>gen(SUB[topic]?topic:pick(TOPICS).id);
+const redoQ=q=>gen(q.isl,q.sub);
+function makeRound(topic){ // Ich-kann-Check: aus jedem Punkt der Checkliste zwei verschiedene Aufgaben
+  if(topic!=='check')return null;
+  return TOPICS.flatMap(t=>shuffle(Object.keys(SUB[t.id])).slice(0,2).map(s=>gen(t.id,s)));
+}
+function quickQ(){let q;do q=makeQ('mix');while(q.kind!=='mc'||q.isl==='hoeren');return q}
+function finishExtra(g){
+  if(g.topic!=='check')return '';
+  const face=k=>k===2?['😀','Kann ich']:k===1?['😐','Fast']:['🙁','Üben'];
+  return `<table class="cancheck"><tr><th>Ich kann …</th><th></th><th></th></tr>${TOPICS.map(t=>{const r=(g.res||[]).filter(x=>x.isl===t.id),k=r.filter(x=>x.ok).length,[f,w]=face(k);
+    return `<tr><td>${esc(t.can)}</td><td class="face" aria-label="${w}">${f}</td><td>${k<2?`<button class="theme" data-go="${t.id}">Üben</button>`:''}</td></tr>`}).join('')}</table>`;
+}
+function memory(){ // Paare: 21st – twenty-first, 7:15 – quarter past seven, Mai – May
+  const c=[],used=new Set();
+  for(let t=0;t<200&&c.length<PAIRS;t++){const k=t%3;let p;
+    if(k===0){const n=tagZufall();p={a:abk(n),b:ord(n)}}else if(k===1){const [h,m]=[R(1,12),pick([0,15,30,45])];p={a:zf(h,m),b:uhr(h,m)}}else{const mo=R(0,11);p={a:MONATE[mo],b:MONTHS[mo]}}
+    if(p.a===p.b||used.has(p.a)||used.has(p.b))continue;used.add(p.a);used.add(p.b);c.push(p)}
+  memoryGame(shuffle(c),memory,'Finde die Paare: 21st und twenty-first, 7:15 und quarter past seven, Mai und May.');
+}
+
+/* ---------- Speicher (nur Komfort, darf ausfallen) ---------- */
+let save={name:'',xp:0,best:{},weak:{},sound:true,blitz:0,memo:0};
+try{const s=localStorage.getItem('en5-ka2-v1');if(s)save=Object.assign(save,JSON.parse(s));
+  else{const v=JSON.parse(localStorage.getItem('en5-v1')||'null');if(v){if(v.name)save.name=v.name;if(v.sound===false)save.sound=false}} // Name und Ton von den Vokabel-Inseln
+}catch(e){}
+initRank();
+let storageOK=true;
+function persist(){try{localStorage.setItem('en5-ka2-v1',JSON.stringify(save));storageOK=true}catch(e){storageOK=false}}
+try{localStorage.setItem('en5-ka2-test','1');localStorage.removeItem('en5-ka2-test')}catch(e){storageOK=false}
+
+/* ---------- Startseite ---------- */
+const NAMES={check:'Ich-kann-Check',mix:'Große Rundfahrt'};
+const spick=`<details class="mist"><summary><b>Spickzettel für die Arbeit</b></summary>
+ <h3>Uhrzeit</h3><p>7:00 It’s seven o’clock · 7:15 It’s quarter past seven · 7:30 It’s half past seven (= halb <b>acht</b>!) · 7:45 It’s quarter to eight · 7:20 It’s twenty past seven · 7:50 It’s ten to eight.<br>Digital: 7:15 It’s seven fifteen · 7:05 It’s seven <b>oh</b> five.</p>
+ <h3>Datum und Geburtstag</h3><p>1st first · 2nd second · 3rd third · 4th fourth · 5th fifth · 8th eighth · 9th ninth · 11th eleventh · 12th twelfth · 13th thirteenth · 20th twentieth · 21st twenty-first · 22nd twenty-second · 23rd twenty-third · 30th thirtieth · 31st thirty-first.<br>
+  Du schreibst: on 5th August – du sagst: on the fifth of August. My birthday is <b>in</b> May. My birthday is <b>on</b> 5th August. Monatsnamen schreibt man groß.</p>
+ <h3>a oder an?</h3><p>Es zählt der Klang des Wortes direkt danach: an elephant, an orange pen, an hour, an ICT lesson – aber a big elephant, a uniform, a PE lesson.</p>
+ <h3>to be</h3><p>I am (I’m) · you are (you’re) · he/she/it is (he’s …) · we/you/they are (we’re …). Verneint: I’m not · he isn’t · they aren’t (nie „I amn’t“).<br>
+  Frage: Are you ten? – Yes, I am. / No, I’m not. Is Mia late? – Yes, she is. / No, she isn’t. In der Kurzantwort mit Yes nie „I’m“.</p>
+ <h3>there is / there are</h3><p>There is (There’s) a clock. There are two clocks. There isn’t a clock. There aren’t any clocks.<br>Is there a clock? – Yes, there is. / No, there isn’t. Are there any clocks? – Yes, there are. / No, there aren’t.</p>
+ <h3>Schreiben: My school</h3><p>My school is … · School starts at … · On Monday we have … · My favourite subject is … · I like … · I don’t like … · The lunch break is at … · There is a … at my school. · There are … · There isn’t a …<br>
+  Tipp: Nach „On Monday“ kommt we have (nicht have we). Sprachen und Wochentage schreibt man groß.</p></details>`;
+function home(){
+  G=null;M=null;if(B){clearTimeout(B.timer);B=null}
+  const hi=save.name?`Ahoi ${esc(save.name)}!`:'Ahoi!';
+  const tiles=TOPICS.map(t=>`<button class="tile" data-t="${t.id}"><h3>${t.name}</h3><span class="sub">${esc(t.sub)}</span>${starsHtml(save.best[t.id]||0)}</button>`).join('');
+  const chests=TOPICS.filter(t=>(save.best[t.id]||0)>=3).length;
+  const rg=save.round&&save.round.queue&&save.round.queue.length?save.round:null;
+  const resume=rg?`<div class="grid" style="margin-bottom:12px"><button class="tile resume" id="rs"><h3>Weiterspielen</h3><span class="sub">${esc(NAMES[rg.topic]||(TOPICS.find(t=>t.id===rg.topic)||{}).name)}, Frage ${Math.min(rg.done+1,rg.total)} von ${rg.total}</span></button></div>`:'';
+  $('#app').innerHTML=`
+  <div class="top"><a class="back" href="../../" style="text-decoration:none">Übersicht</a><span class="brand">${BRAND}</span>${themeBtn()}</div>
+  <section class="hero"><h1>${hi} Fit für den Class Test?</h1>
+   <p>Jede Insel ist ein Punkt der Checkliste für die 2. Englischarbeit: Hören, Vokabeln, Uhrzeit, Geburtstage, a oder an, be, there is / there are und Schreiben. Eine Fahrt hat ${ROUND} Aufgaben.</p>
+   <div class="rank"><span class="pill sun">${save.xp} Punkte</span><span class="pill">Rang: ${rank()}</span></div>${rankBar()}${hero}</section>
+  <div class="namebox"><label for="nm">Dein Name</label><input type="text" id="nm" maxlength="16" value="${esc(save.name)}" placeholder="z. B. Mia" autocomplete="off"></div>
+  ${resume}
+  <div class="grid"><button class="tile mix" data-t="check"><h3>Ich-kann-Check</h3><span class="sub">Probe-Arbeit: zwei Aufgaben zu jedem Punkt der Checkliste. Am Ende siehst du, was du schon kannst.</span>${starsHtml(save.best.check||0)}</button></div>
+  ${spick}
+  <div class="maphead"><h2 class="sec" style="margin:0">Seekarte</h2><span class="pill">Schätze: ${chests} von ${TOPICS.length}</span></div>
+  ${seaMap(MAP,170)}
+  <p class="tip" style="margin-top:4px">Drei Sterne auf einer Insel, und du findest ihren Schatz.</p>
+  <h2 class="sec">Spiele</h2><div class="grid">
+   <button class="tile" data-t="mix"><h3>Große Rundfahrt</h3><span class="sub">Aufgaben von allen Inseln gemischt</span>${starsHtml(save.best.mix||0)}</button>
+   <button class="tile" id="gb"><h3>Blitzrunde</h3><span class="sub">${BLITZ} Sekunden: Wie viele schaffst du?</span><span class="sub">Rekord: ${save.blitz||0} richtig</span></button>
+   <button class="tile" id="gm"><h3>Memory</h3><span class="sub">Finde ${PAIRS} Paare: 21st und twenty-first, 7:15 und quarter past seven</span><span class="sub">${save.memo?'Rekord: '+save.memo+' Züge':'Noch kein Rekord'}</span></button>
+  </div>
+  <h2 class="sec">Inseln</h2><div class="grid isles">${tiles}</div>
+  <p class="tip">${storageOK?'Dein Fortschritt wird automatisch auf diesem Gerät gespeichert.':'Speichern geht in diesem Browser gerade nicht (privates Fenster?). Dein Fortschritt geht beim Schließen verloren.'}</p>
+  <p class="tip">Sterne gibt es für richtige Antworten beim ersten Versuch: 5 von 10 = 1 Stern, 7 von 10 = 2 Sterne, 9 von 10 = 3 Sterne.</p>
+  <p class="tip">${VOICE?`<button class="theme" id="snd">${save.sound?'🔊 Ton an':'🔇 Ton aus'}</button> Die Hör-Insel liest mit der Stimme dieses Geräts vor. Ohne Ton stehen die Sätze zum Lesen da.`:'Auf diesem Gerät ist keine englische Stimme eingebaut: Auf der Hör-Insel stehen die Sätze deshalb zum Lesen da.'}</p>
+  <p class="tip"><button class="theme" id="rst">Alles zurücksetzen</button></p>`;
+  if(VOICE)$('#snd').onclick=()=>{save.sound=!save.sound;persist();say('Hello! Let’s go!');home()};
+  bindTheme();
+  $('#nm').oninput=e=>{save.name=e.target.value.trim();persist()};
+  document.querySelectorAll('[data-t]').forEach(b=>{b.onclick=()=>start(b.dataset.t);
+    if(b.tagName==='g')b.onkeydown=ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();start(b.dataset.t)}}});
+  $('#gb').onclick=blitz;$('#gm').onclick=memory;
+  if(rg)$('#rs').onclick=()=>{G=Object.assign({answered:false,res:[]},rg);show()};
+  let armed=false;$('#rst').onclick=ev=>{if(!armed){armed=true;ev.target.textContent='Wirklich alles löschen? Nochmal tippen.';return}save={name:'',xp:0,best:{},weak:{},round:null,sound:save.sound,blitz:0,memo:0};persist();home()};
+}
+
+home();
+</script>
+
+</body>
+</html>

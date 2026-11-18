@@ -48,7 +48,7 @@ const PERSON={boy:'he',girl:'she',mum:'she',mother:'she',dad:'he',father:'he',br
 const SKIP=['home','kid','people','colour','hometown'];
 const PHYS=['tiere','klasse','stadt','farben','leute']; // zum Ansehen und Anfassen: "is here", "is big"
 const isThing=e=>{const en=enShow(e);return /^[A-ZÄÖÜ]/.test(deShow(e))&&/^[a-z][a-z ]*$/.test(en)&&!/ of$/.test(en)
-  &&!['zeit','zahlen'].includes(e[0])&&!PERSON[en]&&!SKIP.includes(en)&&!/(\S+) \/ \1in\b/.test(deShow(e))};
+  &&!['zeit','zahlen','monate'].includes(e[0])&&!PERSON[en]&&!SKIP.includes(en)&&!/(\S+) \/ \1in\b/.test(deShow(e))};
 const THINGS=W.filter(isThing);
 const petLike=n=>!!(n.e&&(n.e[0]==='tiere'||enShow(n.e)==='boat')); // Tiere (und Boote) sind in der Schule "it", im Englischen aber auch he/she möglich
 
